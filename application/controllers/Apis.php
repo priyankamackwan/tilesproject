@@ -587,8 +587,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                     
                     $model = $this->model;
                     $data = $_POST;
-                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['quantity']) && (!empty($data['quantity']))) && (isset($data['price']) && (!empty($data['price']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
-                        
+                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['price']) && (!empty($data['price']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
+                      //  echo $data['product_id']; exit;
+                        $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
                         
                         $this->db->select('id');
@@ -605,9 +606,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                         
                             $orderData = array(
       
-                                    'product_id' => $data['product_id'],
                                     'user_id' => $this->user_id,
-                                    'quantity' => $data['quantity'],
                                     'lpo_no' => $lpo,
                                     'do_no' =>  $do,
                                     'invoice_no' => $invoice,
@@ -618,6 +617,14 @@ use PHPMailer\PHPMailer\PHPMailer;
                             );
                             $this->$model->insert('orders',$orderData);
                             $lastInsertedOrderId = $this->db->insert_id();
+                            
+                            
+                            for($k=0;$k<count($orderProductArray);$k++) {
+                                $product_orders= array();
+                                $product_orders = array('order_id'=>$lastInsertedOrderId,'product_id'=>$orderProductArray[$k]['product_id'],'quantity'=>$orderProductArray[$k]['quantity']);
+                            
+                                $this->$model->insert('order_products',$product_orders);
+                            }
                             
                             $this->db->select('*');
                             $this->db->where('login_status', 1);
@@ -686,7 +693,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide product id, quantity, price, tax and total price';
+                        $response['message'] = 'Please provide product id, price, tax and total price';
                     }
                     // Returning back the response in JSON
                     echo json_encode($response);
