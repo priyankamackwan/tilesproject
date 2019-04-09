@@ -65,34 +65,42 @@
                           <input type="text" name="design_no" value="<?php echo $result[0]->design_no;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Design No">
                         </div>
                       </div>
+                                     
                                                    	  <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="cash_rate">Cash Rate<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
+                            <?php if ($this->userhelper->current('role_id') == 1) { ?>
                           <input type="text" name="cash_rate" value="<?php echo $result[0]->cash_rate;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Cash Rate">
+                         <?php } else { ?>
+                          <input type="text" name="cash_rate" value="<?php echo $result[0]->cash_rate;?>" readonly="" class="form-control col-md-7 col-xs-12" placeholder="Enter Cash Rate">
+                         <?php } ?>
                         </div>
                       </div>
+                                    
                                        	  <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="credit_rate">Credit Rate<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
+                             <?php if ($this->userhelper->current('role_id') == 1) { ?>
                           <input type="text" name="credit_rate" value="<?php echo $result[0]->credit_rate;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Credit Rate">
+                             <?php } else { ?>
+                          <input type="text" name="credit_rate" value="<?php echo $result[0]->credit_rate;?>" readonly="" class="form-control col-md-7 col-xs-12" placeholder="Enter Credit Rate">
+                           <?php } ?>
                         </div>
                       </div>
                                        	  <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="walkin_rate">Walkin Rate<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
+                             <?php if ($this->userhelper->current('role_id') == 1) { ?>
                           <input type="text" name="walkin_rate" value="<?php echo $result[0]->walkin_rate;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Walkin Rate">
+                             <?php } else { ?>
+                      <input type="text" name="walkin_rate" value="<?php echo $result[0]->walkin_rate;?>" readonly="" class="form-control col-md-7 col-xs-12" placeholder="Enter Walkin Rate">
+                           <?php } ?>
                         </div>
                       </div>
-                                       	  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Expense<span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Purchase Expense">
-                        </div>
-                      </div>
+                                       	 
                          
                            
                       <div class="form-group">
@@ -127,20 +135,23 @@
 						</div>
 					  </div>
 					  <?php } ?>
-                                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Price">Price<span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" name="price" value="<?php echo $result[0]->price;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Price">
-                        </div>
-                      </div>
+                                       
                                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Quantity">Quantity<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Quantity">
                         </div>
+                                        </div>
+                      <?php if ($this->userhelper->current('role_id') ==1) { ?>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Expense<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Purchase Expense">
+                        </div>
                       </div>
+                      <?php } ?>
                                          <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="latitude">Unit<span class="required">*</span>
                         </label>

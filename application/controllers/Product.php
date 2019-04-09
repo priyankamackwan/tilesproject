@@ -35,8 +35,11 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
-   
+   if ($this->userhelper->current('role_id') ==1) {
 			$this->load->view($this->view.'/manage',$data);
+   } else {
+       $this->load->view($this->view.'/manage_sub',$data);
+   }
 		}
 		public function server_data()
 		{
@@ -83,6 +86,8 @@
 			{
                          
 				$q = $q->like('products.name', $s, 'both');
+                                $q = $q->or_like('products.design_no', $s, 'both');
+                                $q = $q->or_like('products.size', $s, 'both');
                    
 				if(!empty($order))
 				{
@@ -125,9 +130,18 @@
                                         $nestedData['cash_rate'] = $value->cash_rate;
                                         $nestedData['credit_rate'] = $value->credit_rate;
                                         $nestedData['walkin_rate'] = $value->walkin_rate;
-                                        $nestedData['price'] = $value->price;
+   
                                         $nestedData['size'] = $value->size;
-                                        $nestedData['unit'] = $value->unit;
+                                        if ($value->unit == 1) {
+                                            $nestedData['unit'] = 'CTN';
+                                        } elseif($value->unit == 2) {
+                                            $nestedData['unit'] = 'SQM';
+                                        } elseif($value->unit == 3) {
+                                            $nestedData['unit'] = 'PCS';
+                                        } else {
+                                            $nestedData['unit'] = 'SET';
+                                        }
+                                        
                                         $nestedData['purchase_expense'] = $value->purchase_expense;
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 1){
@@ -167,7 +181,6 @@
 			$model = $this->model;
 			$name = $this->input->post('name');
                         $size = $this->input->post('size');
-                        $price = $this->input->post('price');
                         $quantity = $this->input->post('quantity');
                         $cat_id = $this->input->post('categories');
                         $sub_cat_id = $this->input->post('subcategories');
@@ -197,7 +210,7 @@
                                 'walkin_rate' => $walkin_rate,
                                 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
-                                'price' => $price,
+                  
                                 'unit' => $unit,
                                 'image' => $image,
                                 'quantity' => $quantity,
@@ -230,7 +243,7 @@
                                         $arr = array(
 		    "registration_ids" => array($userData[$k]['firebase_token']),
 		    "notification" => [
-		        "body" => "{'notification_type':4,'name': $name,'size': $size,'price': $price,'quantity': $quantity,'created':$created}",
+		        "body" => "{'notification_type':4,'name': $name,'size': $size,'quantity': $quantity,'created':$created}",
 		        "title" => "New Product Added",
 		        // "icon" => "ic_launcher"
 		    ],
@@ -342,7 +355,7 @@
 			$id = $this->input->post('id');
 			$name = $this->input->post('name');
                         $size = $this->input->post('size');
-                        $price = $this->input->post('price');
+          
                         $quantity = $this->input->post('quantity');
                         $categories = $this->input->post('categories[]');
                         $subcategories = $this->input->post('subcategories[]');
@@ -380,7 +393,7 @@
                                 'walkin_rate' => $walkin_rate,
                                 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
-                                'price' => $price,
+                             
                                 'unit' => $unit,
                                 'image' => $image,
                                 'quantity' => $quantity,

@@ -80,7 +80,7 @@
                         $userData = $this->db->get("users")->result_array();
            
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-                     
+                                        $download = base_url($this->controller.'/download/'.$this->utility->encode($value->$id));
 
 					$nestedData['id'] = $key+1;
                                         $nestedData['user_name'] =$userData[0]['company_name'];
@@ -88,7 +88,7 @@
                                         $nestedData['do_no'] =$value->do_no;
                                         $nestedData['invoice_no'] =$value->invoice_no;
                                         $nestedData['sales_expense'] =$value->sales_expense;
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
+                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a><a href='$download' class='btn  btn-warning  btn-xs'>Download</a>";
                                      
 
 					$data[] = $nestedData;
@@ -151,7 +151,91 @@
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+                       // echo $id; exit;
+			$data['action'] = "update";
+			$data['msgName'] = $this->msgName;
+			$data['primary_id'] = $this->primary_id;
+			$data['controller'] = $this->controller;
+
+			$model = $this->model;
+                      /*  $multipleWhere = ['id' => $value->product_id];
+                        $this->db->where($multipleWhere);
+                        $data['Product'] = $this->db->get("products")->result_array();
+                    
+                         $multipleWhere2 = ['id' => $value->user_id];
+                        $this->db->where($multipleWhere2);
+                        $data['User'] = $this->db->get("orders")->result_array(); */
+
+			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+   
+                        $multipleWhere = ['order_id' => $id];
+                        $this->db->where($multipleWhere);
+                        $data['Product'] = $this->db->get("order_products")->result_array();
+                        for($k=0;$k<count($data['Product']);$k++) {
+                            $productIdArray = $data['Product'][$k]['product_id'];
+                            $multipleWhere2 = ['id' => $productIdArray];
+                        $this->db->where($multipleWhere2);
+                        $productData= $this->db->get("products")->result_array();
+                        $productNameArray[] = $productData[0]['name'];
+                        $quantityArray[]= $data['Product'][$k]['quantity'];
+                        }
+                        $data['Product']['name'] = implode(',',$productNameArray);
+                        $data['Product']['quantity'] = implode(',',$quantityArray);
+                      
+                        $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
+                        $this->db->where($multipleWhere2);
+                        $data['User'] = $this->db->get("users")->result_array();
+
+                      //  print_r($data); exit;
+			$this->load->view($this->view.'/view',$data);
+		}
+                
+                    public function download($id) {
+                    
+			$model = $this->model;
+			$id = $this->utility->decode($id);
+                        
+                          $multipleWhere = ['id' =>$id];
+                        $this->db->where($multipleWhere);
+                        $ordersData= $this->db->get("orders")->result_array();
+                      // echo '<pre>';
+                       // print_r($ordersData); exit;
+                        $do_no = $ordersData[0]['do_no'];
+                        $createdData = explode(' ',$ordersData[0]['created']);
+                        $finalDate = date("d-M-Y", strtotime($createdData[0]));
+                        
+                         $multipleWhere = ['id' =>$ordersData[0]['user_id']];
+                        $this->db->where($multipleWhere);
+                        $userData= $this->db->get("users")->result_array();
                         //echo $id; exit;
+                        include 'TCPDF/tcpdf.php';
+$pdf = new TCPDF();
+$pdf->AddPage('P', 'A4');
+$html = '<html>
+<head>Delivery Note</head>
+<body>
+<img src ="http://tiles.thewebpatriot.com/image.png">
+<h2><b><p align="center">Delivery Note</p></b></h2>
+D.O. No. : '.$do_no.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date : '.$finalDate.'<br>
+Customer : '.$userData[0]['company_name'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tel : '.$userData[0]['phone_no'].'<br>
+
+
+<table border="1">
+<tr><th>name</th>
+<th>company</th></tr>
+<tr>
+<td>hello</td>
+<td>xx technologies</td>
+</tr>
+</table>
+</body>
+</html>';
+
+$pdf->writeHTML($html, true, false, true, false, '');
+
+$pdf->Output();
+                        
+                        
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
@@ -185,18 +269,21 @@
 			$model = $this->model;
 
 			$id = $this->input->post('id');
-                      //  echo $id; exit;
+                     //  echo $id; exit;
 			$sales_expense = $this->input->post('sales_expense');
+                        $status = $this->input->post('status');
+                        //echo $sales_expense; exit;
 			$data = array(
 
-				'sales_expense' => $sales_expense,
+                            'sales_expense' => $sales_expense,
+                            'status' => $status,
 
 
 			);
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
                              
-			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
+			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
 			redirect($this->controller);
 		}
 		public function remove($id) {

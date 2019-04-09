@@ -127,7 +127,7 @@
                                         } elseif ($value->status == 1){
                                             $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
                                         } elseif ($value->status == 2) {
-                                            $nestedData['manage'] = "<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
+                                            $nestedData['manage'] = "<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
                                         } else {
                                             $nestedData['manage'] = "<a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
                                         }
@@ -296,19 +296,15 @@
 			$model = $this->model;
 			$id = $this->utility->decode($id);
 			$this->$model->select(array(),'users',array('id'=>$id),'','');
-                        $this->db->set('is_deleted',1);
-                        $this->db->where('id',$id);
-                        $this->db->update('users',$data);
                         
-                        $this->db->set('is_deleted',1);
-                        $this->db->where('user_id',$id); 
-                        $this->db->update('orders');
+                        $this->db->where('user_id', $id);
+                        $this->db->delete('orders'); 
                         
-                        $this->db->select('company_name');
                         $this->db->where('id', $id);
-                        $q = $this->db->get('users');
-                        $userdata = $q->result_array();
-                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['company_name'].' has been deleted successfully!</div>');
+                        $this->db->delete('users'); 
+                        
+                       
+                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contact has been deleted successfully!</div>');
                         redirect($this->controller);	
 		}
 	}

@@ -76,25 +76,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 
                 public function userRegister() {
                    
-                  /* $mail = new PHPMailer;
-                    $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com';
-                    $mail->Port = 587;
-                    $mail->SMTPAuth = true;
-                    $mail->Username = 'ravishahpersonel@gmail.com';
-                    $mail->Password = 'ilovedadmom';
-                    $mail->setFrom('cygnet.rsshah@gmail.com', 'Ravi');
-                    $mail->Subject = "A Transactional Email From Web App";
-                    $mail->MsgHTML('dd');
-                    $mail->addAddress('ravishah291089@gmail.com', 'Ravi');
-
-                    if (!$mail->send()) {
-
-                        echo 'Mailer Error: ' . $mail->ErrorInfo;
-                    } else {
-                        echo 'Message sent!';
-                    } 
-                   exit; */
+        
                     $model = $this->model;
                     $data = $_POST;
                     if ((isset($data['device_id']) && (!empty($data['device_id']))) && (isset($data['device_type']) && (!empty($data['device_type']))) && (isset($data['phone_no']) && (!empty($data['phone_no']))) && (isset($data['company_name']) && (!empty($data['company_name']))) && (isset($data['company_address']) && (!empty($data['company_address']))) && (isset($data['contact_person_name']) && (!empty($data['contact_person_name']))) && (isset($data['vat_number']) && (!empty($data['vat_number']))) && (isset($data['email']) && (!empty($data['email']))) && (isset($data['password']))) {
@@ -102,10 +84,12 @@ use PHPMailer\PHPMailer\PHPMailer;
                         // Checking Email exist in our application
                         
                         $this->db->where('email',$data['email']);
+                        $this->db->where('is_deleted', 0);
                         $users = $this->db->get('users');
                         $checkEmailExist = $users->result_array();
                         
                         $this->db->where('email',$data['email']);
+                        $this->db->where('is_deleted', 0);
                         $adminUsers = $this->db->get('admin_users');
                         $checkAdminEmailExist = $users->result_array();
 
@@ -486,6 +470,18 @@ use PHPMailer\PHPMailer\PHPMailer;
                             for($i=0;$i<count($productData);$i++) {
                                $categoryString = '';
                                 $productData[$i]['image']= base_url().'/assets/uploads/'.$productData[$i]['image'];
+                                if ($productData[$i]['unit'] == 1) {
+                                    $productData[$i]['unit'] = 'CTN';
+                                }
+                                if ($productData[$i]['unit'] == 2) {
+                                    $productData[$i]['unit'] = 'SQM';
+                                }
+                                if ($productData[$i]['unit'] == 3) {
+                                    $productData[$i]['unit'] = 'PCS';
+                                }
+                                if ($productData[$i]['unit'] == 4) {
+                                    $productData[$i]['unit'] = 'SET';
+                                }
                                 $this->db->select('s.*');
                                 $this->db->from('product_categories as s');
                                 $this->db->where('c.is_deleted =', 0);
@@ -512,6 +508,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 $productData[$i]['categories_name']= $categoryString;
 
                             }
+                 
                             $response['data'] = $productData;
                         } else {
                             $response['status'] = 'success';
@@ -539,7 +536,45 @@ use PHPMailer\PHPMailer\PHPMailer;
                         if ($productData) {
                             
                             $productData[0]['image']= base_url().'/assets/uploads/'.$productData[0]['image'];
-                            
+                            if ($productData[0]['unit'] == 1) {
+                                    $productData[0]['unit'] = 'CTN';
+                                }
+                                if ($productData[0]['unit'] == 2) {
+                                    $productData[0]['unit'] = 'SQM';
+                                }
+                                if ($productData[0]['unit'] == 3) {
+                                    $productData[0]['unit'] = 'PCS';
+                                }
+                                if ($productData[0]['unit'] == 4) {
+                                    $productData[0]['unit'] = 'SET';
+                                }
+                                
+                                   $this->db->select('s.*');
+                                $this->db->from('product_categories as s');
+                                $this->db->where('c.is_deleted =', 0);
+                                $this->db->where('c.status =', 1);
+                                $this->db->where('s.product_id', $data['product_id']);
+                                $this->db->join('categories as c', 'c.id = s.cat_id');
+                                $categoryData = $this->db->get()->result_array();
+                                
+                                     $categoryName= array();
+                                for($m=0;$m<count($categoryData);$m++) {
+                                        
+                                        $this->db->select('name');
+                                        $this->db->where('status', 1);
+                                        $this->db->where('is_deleted', 0);
+                                        $this->db->where('id', $categoryData[$m]['cat_id']);
+                                        $q = $this->db->get('categories');
+                                        $categoryies = $q->result_array();
+                                        $categoryName[] = $categoryies[0]['name'];
+                                }
+                                
+                                $categoryName = array_values(array_unique($categoryName));
+                             
+                                $categoryString = implode(',',$categoryName);
+                                
+                                $productData[0]['categories_name']= $categoryString;
+                                
                             $response['data'] = $productData;
                         } else {
                             $response['status'] = 'failure';
@@ -587,7 +622,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     
                     $model = $this->model;
                     $data = $_POST;
-                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['price']) && (!empty($data['price']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
+                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
                       //  echo $data['product_id']; exit;
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
@@ -610,9 +645,13 @@ use PHPMailer\PHPMailer\PHPMailer;
                                     'lpo_no' => $lpo,
                                     'do_no' =>  $do,
                                     'invoice_no' => $invoice,
-                                    'price' => $data['price'],
+       
                                     'tax' => $data['tax'],
                                     'total_price' => $data['total_price'],
+                                    'cargo' => $data['cargo'],
+                                'cargo_number' => $data['cargo_number'],
+                                'location' => $data['location'],
+                                'mark' => $data['mark'],
                                     'created' => date('Y-m-d h:i:s'),
                             );
                             $this->$model->insert('orders',$orderData);
@@ -634,8 +673,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                             
                             $productId = $data['product_id'];
                             $userId = $this->user_id;
-                            $quantity = $data['quantity'];
-                            $price = $data['price'];
+             
+           
                             $total_price = $data['total_price'];
                             $tax = $data['tax'];
                             $created = date('Y-m-d h:i:s');
@@ -647,7 +686,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                         $arr = array(
 		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
 		    "notification" => [
-		        "body" => "{'notification_type':2,'product_id': $productId,'user_id': $userId,'quantity': $quantity,'price': $price,'total_price': $total_price,'tax': $tax,'created':$created}",
+		        "body" => "{'notification_type':2,'product_id': $productId,'user_id': $userId,'total_price': $total_price,'tax': $tax,'created':$created}",
 		        "title" => "New Order Added",
 		        // "icon" => "ic_launcher"
 		    ],
@@ -693,7 +732,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide product id, price, tax and total price';
+                        $response['message'] = 'Please provide product id, tax and total price';
                     }
                     // Returning back the response in JSON
                     echo json_encode($response);

@@ -24,7 +24,6 @@
                  <table id="datatables" class="main-table table table-striped table-bordered">
                     <thead>
                           <th>Sr No.</th>
-                          <th>Product Name</th>
                           <th>Client Name</th>
                           <th>LPO No</th>
                           <th>Delivery No</th>
@@ -68,7 +67,6 @@
 				},
 			"columns": [
 				{ "data": "id"},
-				{ "data": "product_name"},
                                 { "data": "user_name"},
                                 { "data": "lpo_no"},
                                 { "data": "do_no"},

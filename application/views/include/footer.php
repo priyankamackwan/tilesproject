@@ -80,6 +80,12 @@
         warnBeforeDelete(linkURL);
     });
     
+    		$(document).on('click', '.confirm-delete-user', function(e) {
+        e.preventDefault(); // Prevent the href from redirecting directly
+        var linkURL = $(this).attr("href");
+        warnBeforeDeleteUser(linkURL);
+    });
+    
     $(document).on('click', '.confirm-statuschange', function(e) {
         e.preventDefault(); // Prevent the href from redirecting directly
         var linkURL = $(this).attr("href");
@@ -101,6 +107,18 @@
         swal({
             title: "Are You Sure to delete?",
             text: "Once Delete, Action Can Not Be Undone!!!",
+            type: "warning",
+            showCancelButton: true
+        }, function() {
+            // Redirect the user
+            window.location.href = linkURL;
+        });
+    }
+    
+     function warnBeforeDelete(linkURL) {
+        swal({
+            title: "Are You Sure to delete?",
+            text: "All Orders of the contact will also get deleted!!",
             type: "warning",
             showCancelButton: true
         }, function() {

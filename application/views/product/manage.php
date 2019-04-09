@@ -35,14 +35,13 @@
                           <th>Design No.</th>
                           <th>Name</th>
                       <th>Image</th>
-                          <th>Quantity</th>
+                       <th>Quantity</th>
                           <th>Cash Rate</th>
                         <th>Credit Rate</th>
                         <th>Walkin Rate</th>
-                        <th>Amount</th>
+                        <th>Purchase Price</th>
                         <th>Size</th>
                         <th>Unit</th>
-                         <th>Purchase Expense</th>
                           <th>Status</th>
                           <th>Manage</th>
                     </thead>
@@ -56,8 +55,7 @@
                           <th></th>
                           <th></th>
                           <th></th>
-                          <th></th>
-                          <th></th>
+                  
                           <th></th>
                           <th><select type="select" name="test" class="search-input-select" data-column="2">
                     <option value="">All</option>
@@ -101,15 +99,14 @@
                               { "data": "cash_rate"},
                               { "data": "credit_rate"},
                               { "data": "walkin_rate"},
-                                { "data": "price"},
+                              { "data": "purchase_expense"},
                                 { "data": "size"},
                                 { "data": "unit"},
-                                 { "data": "purchase_expense"},
                                 { "data": "status"},
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,12,13],
+				"targets": [0,11,12],
 				"orderable": false
 			} ],
 			"rowCallback": function( row, data, index ) {

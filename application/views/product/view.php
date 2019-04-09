@@ -70,7 +70,7 @@
                         </div>
                       </div>
                         		  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Expense<span class="required">*</span>
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Price<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <?php echo $result[0]->purchase_expense;?>
@@ -90,20 +90,22 @@
 							<img width="50px" height="50px" src="<?php echo base_url().'./assets/uploads/'.$result[0]->image;?>" style="background-color:navy;" >
 						</div>
 					  </div>
-                         <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Price<span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <?php echo $result[0]->price;?>
-                        </div>
-                      </div>
-                         <div class="form-group">
+                      <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Quantity<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <?php echo $result[0]->quantity;?>
                         </div>
                       </div>
+                       <?php if ($this->userhelper->current('role_id') ==1) { ?>
+                         <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Price<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <?php echo $result[0]->purchase_expense;?>
+                        </div>
+                      </div>
+                       <?php } ?>
                               <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="latitude">Categories<span class="required">*</span>
                         </label>
