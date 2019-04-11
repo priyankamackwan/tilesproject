@@ -1,5 +1,6 @@
 <?php
-
+//echo '<pre>';
+//print_r($productData); exit;
 	$this->load->view('include/header');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
@@ -27,10 +28,20 @@
 	<input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
 					  
 					  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Product Name
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Product Name/Quantity
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <?php echo $Product['name'];?>
+                      
+                            <table border ="1" width="100%"><tr><th style="text-align: center">Product Name</th><th style="text-align: center">Quantity</th></tr>
+                                
+                         
+   <?php 
+   for($p=0;$p<count($productData);$p++) { ?>
+                                <tr><td style="text-align: center"><?php echo $productData[$p]['name'];?></td><td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td></tr>
+                                
+                            <?php } ?>
+                            
+                            </table>
                         </div>
                       </div>
                         	  <div class="form-group">
@@ -47,13 +58,7 @@
                           <?php echo $result[0]->price;?>
                         </div>
                       </div>
-                        	  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Quantity
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <?php echo $Product['quantity'];?>
-                        </div>
-                      </div>
+       
         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Tax
                         </label>
@@ -137,17 +142,17 @@
                                 
                                 if ($result[0]->status == 0) { ?>
                                 <option value="0" selected="selected">Pending</option>
-                                } else { ?>
+                                <?php } else { ?>
                                 <option value="0">Pending</option>
                                 <?php } ?>
                                   <?php if ($result[0]->status == 1) { ?>
                                 <option value="1" selected="selected">In Progress</option>
-                                } else { ?>
+                               <?php } else { ?>
                                 <option value="1">In Progress</option>
                                 <?php } ?>
                                   <?php if ($result[0]->status == 2) { ?>
                                 <option value="2" selected="selected">Completed</option>
-                                } else { ?>
+                                <?php } else { ?>
                                <option value="2">Completed</option>
                                 <?php } ?>
                                 
@@ -172,38 +177,3 @@
 <?php
 	$this->load->view('include/footer');
 ?>
-	<script>
-		$(document).ready(function (){
-			var id = $('input[name = "id"]').val();
-			var action = $('input[name = "action"]').val();
-			$('#demo-form2').validate({
-				rules:{
-						name:{
-							required: true,
-							remote:{
-								url:"<?php echo base_url().$controller."/checkname";?>",
-								type:"post",
-								data:{
-									id:id,
-									action: action,
-									name: function(){
-										return $('input[name = "name"]').val();
-									},
-								},
-							}
-						}
-					
-					},
-					messages: {
-						name: {
-							required: "Please Enter Category",
-							remote: "Category Name Exist"
-						}
-						
-					},
-					submitHandler: function(form){
-						form.submit();
-					}
-		});
-	});
-	</script>

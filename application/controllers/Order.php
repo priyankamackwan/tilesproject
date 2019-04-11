@@ -85,10 +85,17 @@
 					$nestedData['id'] = $key+1;
                                         $nestedData['user_name'] =$userData[0]['company_name'];
                                         $nestedData['lpo_no'] =$value->lpo_no;
-                                        $nestedData['do_no'] =$value->do_no;
+                                        $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
                                         $nestedData['invoice_no'] =$value->invoice_no;
                                         $nestedData['sales_expense'] =$value->sales_expense;
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a><a href='$download' class='btn  btn-warning  btn-xs'>Download</a>";
+                                        if ($value->status == 0) {
+                                            $nestedData['status'] = 'Pending';
+                                        } elseif($value->status == 1) {
+                                            $nestedData['status'] ='In Progress';
+                                        } else {
+                                            $nestedData['status'] ='Completed';
+                                        }
+                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
                                      
 
 					$data[] = $nestedData;
@@ -179,9 +186,13 @@
                         $productNameArray[] = $productData[0]['name'];
                         $quantityArray[]= $data['Product'][$k]['quantity'];
                         }
-                        $data['Product']['name'] = implode(',',$productNameArray);
-                        $data['Product']['quantity'] = implode(',',$quantityArray);
-                      
+
+                        $data['productData'] = array();
+                        for($p=0;$p<count($productNameArray);$p++) {
+                            $data['productData'][$p]['name']= $productNameArray[$p];
+                             $data['productData'][$p]['quantity']= $quantityArray[$p];
+                        }
+                 
                         $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("users")->result_array();
@@ -207,6 +218,39 @@
                          $multipleWhere = ['id' =>$ordersData[0]['user_id']];
                         $this->db->where($multipleWhere);
                         $userData= $this->db->get("users")->result_array();
+                      //  echo '<pre>';
+                       // print_r($userData); exit;
+                        
+                             $multipleWhere = ['order_id' => $id];
+                        $this->db->where($multipleWhere);
+                        $productOrder = $this->db->get("order_products")->result_array();
+                     // echo '<pre>';
+                     // print_r($productOrder); exit;
+                      $finalOrderData = array();
+                      for($k=0;$k<count($productOrder);$k++) {
+                              $productIdArray = $productOrder[$k]['product_id'];
+                            $multipleWhere2 = ['id' => $productIdArray];
+                        $this->db->where($multipleWhere2);
+                        $productData= $this->db->get("products")->result_array();
+                        
+                        $finalOrderData[$k]['description'] = $productData[0]['name'];
+                        $finalOrderData[$k]['size'] = $productData[0]['size'];
+                        $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
+                        if ($productData[0]['unit'] == 1) {
+                            $finalOrderData[$k]['unit'] = 'CTN';
+                        }
+                        if ($productData[0]['unit'] == 2) {
+                            $finalOrderData[$k]['unit'] = 'SQM';
+                        }
+                        if ($productData[0]['unit'] == 3) {
+                            $finalOrderData[$k]['unit'] = 'PCS';
+                        }
+                        if ($productData[0]['unit'] == 4) {
+                            $finalOrderData[$k]['unit'] = 'SET';
+                        }
+                        $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
+                      }
+                  
                         //echo $id; exit;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -216,20 +260,31 @@ $html = '<html>
 <body>
 <img src ="http://tiles.thewebpatriot.com/image.png">
 <h2><b><p align="center">Delivery Note</p></b></h2>
-D.O. No. : '.$do_no.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date : '.$finalDate.'<br>
-Customer : '.$userData[0]['company_name'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tel : '.$userData[0]['phone_no'].'<br>
+<table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$ordersData[0]['lpo_no'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>
+    <br><br/>
+ <table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
+    <br><br/>
+ <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table>     
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
+<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">Size</th><th style="text-align: center">Design</th><th style="text-align: center">quantity</th><th style="text-align: center">Unit</th></tr>';
+for($p=0;$p<count($finalOrderData);$p++) {
+    $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
+                                
+                          }
 
-
-<table border="1">
-<tr><th>name</th>
-<th>company</th></tr>
-<tr>
-<td>hello</td>
-<td>xx technologies</td>
-</tr>
-</table>
-</body>
-</html>';
+$html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the above goods in good condition</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; text-align:right;">Delivered By [Sign] : </td></tr></table>     
+<br><br/>
+<table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%; text-align:right;">Name : </td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:100%;">Mobile : </td></tr></table>
+</table></body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
 

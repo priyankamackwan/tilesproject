@@ -212,6 +212,7 @@ return value == '' || value.trim().length != 0;
 						
 					},
 					submitHandler: function(form){
+                                            
                                                 var businessuser = $('#business_user:checkbox:checked').length;
                                                 var user = $('#user:checkbox:checked').length;
                                                 var category = $('#category:checkbox:checked').length;

@@ -137,7 +137,7 @@
                         $last_name = $this->input->post('last_name');
                         $email = $this->input->post('email');
 			$number = $this->input->post('number');
-                       // echo $number; exit;
+    
                         $permissionArray = array();
 
                        
@@ -231,6 +231,33 @@
                         
                        
 			if(count($check_query) > 0 || count($userData) > 0)
+			{
+				echo "false";
+			}
+			else
+			{
+				echo "true";
+			}
+		}
+                
+                public function checknumber()
+		{
+			$id = $this->input->post('id');
+			$number = $this->input->post('number');
+			$action = $this->input->post('action');
+                    //  echo $action; exit;
+
+			if($action == 'update')
+			{
+                            
+				$check_query = $this->db->select('*')->where_not_in('id',$id)->where('mobile_no',$number)->where('is_deleted',0)->get($this->table)->result();
+			}
+			else
+			{
+				$check_query = $this->db->select('*')->where('mobile_no',$number)->where('is_deleted',0)->get($this->table)->result();
+			}
+
+			if(count($check_query) > 0)
 			{
 				echo "false";
 			}

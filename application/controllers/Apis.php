@@ -504,11 +504,13 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 $categoryName = array_values(array_unique($categoryName));
                              
                                 $categoryString = implode(',',$categoryName);
-                                
+                                $productData[$i]['purchase_price']= $productData[$i]['purchase_expense'];
+                                unset($productData[$i]['purchase_expense']);
                                 $productData[$i]['categories_name']= $categoryString;
 
                             }
-                 
+                            
+         
                             $response['data'] = $productData;
                         } else {
                             $response['status'] = 'success';
@@ -572,9 +574,10 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 $categoryName = array_values(array_unique($categoryName));
                              
                                 $categoryString = implode(',',$categoryName);
-                                
+                                     $productData[0]['purchase_price']= $productData[0]['purchase_expense'];
+                                unset($productData[0]['purchase_expense']);
                                 $productData[0]['categories_name']= $categoryString;
-                                
+                          
                             $response['data'] = $productData;
                         } else {
                             $response['status'] = 'failure';

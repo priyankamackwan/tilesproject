@@ -145,7 +145,7 @@
                                         </div>
                       <?php if ($this->userhelper->current('role_id') ==1) { ?>
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Expense<span class="required">*</span>
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Price<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Purchase Expense">

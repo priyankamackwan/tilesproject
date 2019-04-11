@@ -358,7 +358,7 @@
           
                         $quantity = $this->input->post('quantity');
                         $categories = $this->input->post('categories[]');
-                        $subcategories = $this->input->post('subcategories[]');
+
                         $design_no = $this->input->post('design_no');
                         $unit = $this->input->post('unit');
                         $cash_rate = $this->input->post('cash_rate');
@@ -406,12 +406,10 @@
                         $this->db->where('product_id', $id);  
                         $this->db->delete('product_categories');  
                         $dataSub = array();
-                        for ($i=0;$i<count($subcategories);$i++) {
-                            $multipleWhere = ['id' => $subcategories[$i]];
-                            $this->db->where($multipleWhere);
-                            $categoryData = $this->db->get("sub_categories")->result_array();
-                            $dataSub[$i]['sub_cat_id'] = $subcategories[$i];
-                            $dataSub[$i]['cat_id'] = $categoryData[0]['category_id'];
+
+                        for ($i=0;$i<count($categories);$i++) {
+       
+                            $dataSub[$i]['cat_id'] = $categories[$i];
                             $dataSub[$i]['product_id'] = $id;
                             $dataSub[$i]['created'] = date('Y-m-d h:i:s');
                             $this->db->insert('product_categories',$dataSub[$i]);
