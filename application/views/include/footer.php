@@ -115,7 +115,7 @@
         });
     }
     
-     function warnBeforeDelete(linkURL) {
+     function warnBeforeDeleteUser(linkURL) {
         swal({
             title: "Are You Sure to delete?",
             text: "All Orders of the contact will also get deleted!!",

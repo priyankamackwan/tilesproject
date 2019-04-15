@@ -68,6 +68,8 @@
 			$data = array();
 			if(!empty($q))
 			{
+                               $startNo = $_POST['start'];
+                            $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
@@ -84,13 +86,13 @@
                                         $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->$id));
                                         $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($value->$id));
 
-					$nestedData['id'] = $key+1;
+					$nestedData['id'] = $srNo;
                                         $nestedData['user_name'] =$userData[0]['company_name'];
                                         $nestedData['lpo_no'] ="<a href='$downloadlpo'><b>$value->lpo_no</b></a>";
                                         $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
                                         $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
                                         $nestedData['sales_expense'] =$value->sales_expense;
-                                        if ($value->status == 0) {
+                                        if ($value->status == 0) { 
                                             $nestedData['status'] = 'Pending';
                                         } elseif($value->status == 1) {
                                             $nestedData['status'] ='In Progress';
@@ -101,7 +103,7 @@
                                      
 
 					$data[] = $nestedData;
-
+                                        $srNo++;
 				}
 			}
 
@@ -318,8 +320,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
 $html .='</body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$filename = 'test';
-$pdf->Output();
+$pdf->Output($ordersData[0]['invoice_no'], 'D');
                         
                         
 			$data['action'] = "update";
@@ -463,8 +464,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
 $html .='</body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$filename = 'test';
-$pdf->Output();
+$pdf->Output($ordersData[0]['lpo_no'], 'D');
                         
                         
 			$data['action'] = "update";
@@ -570,20 +570,23 @@ for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 
                           }
-                          $html .= '<tr><td></td><td></td><td colspan="2"></td><td></td></tr>';
+                          $html .= '<tr><td></td><td></td><td colspan="2"></td><td></td></tr></table>';
 
 $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the above goods in good condition</td></tr></table>
 <br><br/>
-<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; text-align:right;">Delivered By [Sign] : </td></tr></table>     
+<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table>     
 <br><br/>
-<table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%; text-align:right;">Name : </td></tr></table>
+<table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%;">Name : </td></tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:100%;">Mobile : </td></tr></table>
-</table></body></html>';
+<br><br/><br><br/><br><br/>
+<table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
+                            <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>
+
+</body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$filename = 'test';
-$pdf->Output();
+$pdf->Output($do_no, 'D');
                         
                         
 			$data['action'] = "update";

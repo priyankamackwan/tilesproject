@@ -80,6 +80,8 @@
 			$data = array();
 			if(!empty($q))
 			{
+                            $startNo = $_POST['start'];
+                            $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$model = $this->model;
@@ -94,7 +96,7 @@
                                         }
 					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-					$nestedData['id'] = $key+1;
+					$nestedData['id'] = $srNo;
 					$nestedData['first_name'] = "<a href='$view'><b>$value->first_name</b></a>";
 					$nestedData['last_name'] = $value->last_name;
                                         $nestedData['email'] = $value->email;
@@ -106,6 +108,7 @@
                                             $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a>";
                                         }
 					$data[] = $nestedData;
+                                        $srNo++;
 				}
 			}
      //  echo '<pre>';

@@ -102,6 +102,8 @@
 			$data = array();
 			if(!empty($q))
 			{
+                            $startNo = $_POST['start'];
+                            $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
@@ -116,7 +118,7 @@
                                         }
 					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
 
-					$nestedData['id'] = $key+1;
+					$nestedData['id'] = $srNo;
                                         $nestedData['design_no'] = $value->design_no;
 					$nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
                                         $test = base_url();
@@ -152,7 +154,7 @@
 					
 
 					$data[] = $nestedData;
-
+                                        $srNo++;
 				}
 			}
 

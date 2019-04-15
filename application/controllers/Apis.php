@@ -84,7 +84,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                         // Checking Email exist in our application
                         
                         $this->db->where('email',$data['email']);
-                        $this->db->where('is_deleted', 0);
+                     
                         $users = $this->db->get('users');
                         $checkEmailExist = $users->result_array();
                         
@@ -142,7 +142,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                         // For Android
                                         $arr = array(
 		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-		    "notification" => [
+		    "data" => [
 		        "body" => "{'notification_type':1,'company_name': $companyName,'contact_person_name': $contactPersonName,'company_add': $companyAdd,'email': $email,'vat_number': $vatNumber,'phone_no': $phone_no,'created':$created}",
 		        "title" => "New User Registered",
 		        // "icon" => "ic_launcher"
@@ -688,7 +688,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                         // For Android
                                         $arr = array(
 		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-		    "notification" => [
+		    "data" => [
 		        "body" => "{'notification_type':2,'product_id': $productId,'user_id': $userId,'total_price': $total_price,'tax': $tax,'created':$created}",
 		        "title" => "New Order Added",
 		        // "icon" => "ic_launcher"
@@ -880,7 +880,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     
                     $arr = array(
 		    "registration_ids" => array('ez3pt-a7bNw:APA91bGK8fXX7-NY4-Ams2ZYEwrRbEdDiG3vc-p5foj__pmWHcv3USwf5D_4rGjJTTUxj0qmQPE1HE51GWzweJZShm0QX1FGwjzvGzj_VuEFOiTBGM7Nb-fFPkMq9vvTWuq9b9d2nfLj'),
-		    "notification" => [
+		    "data" => [
 		        "body" => "{'notification_type':1,'company_name':'IOS'}",
 		        "title" => "Latest Code IOS",
 		        // "icon" => "ic_launcher"
@@ -922,7 +922,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     
                     $arr = array(
 		    "registration_ids" => array('fEOz1KhgT7s:APA91bFDymYI7iQZn2K0xEOimw-9lV8SPUaf5O4j7ZwjWFF_2R7HArck2DhjNiymwya7kWAuYRfuar9qmHUEa6osuc5FYV7_hNPEyGnE7SZHXge4-eLHjw7WxWP0spIHGbP65A6upDgQ'),
-		    "notification" => [
+		    "data" => [
 		        "body" => "{'notification_type':1,'company_name':'IOS''}",
 		        "title" => "Latest Code IOS",
 		        // "icon" => "ic_launcher"
@@ -958,6 +958,47 @@ use PHPMailer\PHPMailer\PHPMailer;
 		die("sent");
 		curl_close($ch);
                      
+                }
+                
+                public function getAllContacts() {
+                    
+                         $this->db->select('*');
+                 
+                            $q = $this->db->get('users');
+                            $userdata = $q->result_array();
+                            $response['data'] = $userdata;
+                                 // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+                }
+                
+                public function changeStatusOfUser() {
+                    
+                    $model = $this->model;
+                    $data = $_POST;
+                    if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
+                                if ($data['status'] == 1 || $data['status'] == 0) {
+                                    $newData['status'] = $data['status'];
+                                    $this->db->set('status', $data['status']);
+                                    $this->db->where('id',$data['user_id']);
+                                    $this->db->update('users',$newData);
+                                } else {
+                                    $this->db->where('user_id', $data['user_id']);
+                                    $this->db->delete('orders'); 
+                        
+                                    $this->db->where('id', $data['user_id']);
+                                    $this->db->delete('users'); 
+                                }
+                                $response['status'] = 'success';
+                          
+                    } else {
+                        // If any of the mandatory parameters are missing
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide role, old password and password';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
                 }
 	}
 ?>

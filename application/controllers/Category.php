@@ -97,6 +97,8 @@
 			$data = array();
 			if(!empty($q))
 			{
+                            $startNo = $_POST['start'];
+                            $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
@@ -111,7 +113,7 @@
                                         }
 					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
 
-					$nestedData['id'] = $key+1;
+					$nestedData['id'] = $srNo;
 					$nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
                                         $test = base_url();
                                         if (!empty($value->image)) {
@@ -128,6 +130,7 @@
 					
 
 					$data[] = $nestedData;
+                                        $srNo++;
 
 				}
 			}
@@ -325,19 +328,8 @@
                         $this->db->join('products as u', 'u.id = s.product_id');
                         $productData = $this->db->get()->result_array();
        
-                      /*  $this->db->select('*');
-                        $this->db->where('cat_id', $id);
-                        $this->db->where('cat_id', $id);
-                        $this->db->from('product_categories');
-                        $this->db->join('products', 'product_categories.product_id = products.id');
-                        $productData = $this->db->get()->result_array(); */
-                
-                        $this->db->select('id');
-                        $this->db->where('category_id', $id);
-                        $this->db->where('is_deleted', 0);
-                        $q = $this->db->get('sub_categories');
-                        $subData = $q->result_array();
-                        if (count($subData) ==0 && count($productData) == 0) {
+       
+                        if (count($productData) == 0) {
                             
                             $this->$model->select(array(),'categories',array('id'=>$id),'','');
                             $this->db->set('is_deleted',1);
@@ -351,7 +343,7 @@
                             $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been deleted successfully!</div>');
                             redirect($this->controller);
                         } else {
-                            $this->session->set_flashdata('dispMessage','<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Please delete subcategories and products related to this category first!</div>');
+                            $this->session->set_flashdata('dispMessage','<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Please delete products related to this category first!</div>');
                             redirect($this->controller);
                         }
 		}

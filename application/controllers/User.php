@@ -84,6 +84,8 @@
 			$data = array();
 			if(!empty($q))
 			{
+                             $startNo = $_POST['start'];
+                            $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$model = $this->model;
@@ -108,7 +110,7 @@
                                         }
                                         $delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-					$nestedData['id'] = $key+1;
+					$nestedData['id'] = $srNo;
 					$nestedData['company_name'] ="<a href='$view'><b>$value->company_name</b></a>";
 					$nestedData['contact_person_name'] = $value->contact_person_name;
                                         $nestedData['email'] = $value->email;
@@ -123,15 +125,16 @@
                                         }
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 0) {
-                                            $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
+                                            $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
                                         } elseif ($value->status == 1){
-                                            $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
+                                            $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
                                         } elseif ($value->status == 2) {
                                             $nestedData['manage'] = "<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
                                         } else {
                                             $nestedData['manage'] = "<a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
                                         }
 					$data[] = $nestedData;
+                                        $srNo++;
 				}
 			}
      //  echo '<pre>';
