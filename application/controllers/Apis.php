@@ -965,6 +965,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                          $this->db->select('*');
                  
                             $q = $this->db->get('users');
+
+                        $this->db->where('is_deleted',0);
+
                             $userdata = $q->result_array();
                             $response['data'] = $userdata;
                                  // Returning back the response in JSON
@@ -977,7 +980,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $model = $this->model;
                     $data = $_POST;
                     if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
-                                if ($data['status'] == 1 || $data['status'] == 0) {
+                                if ($data['status'] == 1 || $data['status'] == 0 || $data['status'] == 2) {
                                     $newData['status'] = $data['status'];
                                     $this->db->set('status', $data['status']);
                                     $this->db->where('id',$data['user_id']);

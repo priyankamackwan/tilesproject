@@ -244,7 +244,7 @@
                                         // For Android
                                         $arr = array(
 		    "registration_ids" => array($userData[$k]['firebase_token']),
-		    "notification" => [
+		    "data" => [
 		        "body" => "{'notification_type':4,'name': $name,'size': $size,'quantity': $quantity,'created':$created}",
 		        "title" => "New Product Added",
 		        // "icon" => "ic_launcher"
