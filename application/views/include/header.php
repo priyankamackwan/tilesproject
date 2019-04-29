@@ -69,6 +69,10 @@
                         <li><a href="<?php echo base_url();?>Product"><i class="fa fa-tag"></i>Items</a></li>
                         <?php } if (in_array('6',$this->userhelper->current('rights'))) { ?>
                         <li><a href="<?php echo base_url();?>Order"><i class="fa fa-tag"></i>Sales Order</a></li>
+                        <?php } if (in_array('6',$this->userhelper->current('rights'))) { ?>
+                        <li><a href="<?php echo base_url();?>Customer_report"><i class="fa fa-tag"></i>Customer Reports</a></li>
+                        <li><a href="<?php echo base_url();?>Sales_report"><i class="fa fa-tag"></i>Sales Reports</a></li>
+                        <li><a href="<?php echo base_url();?>Expense_report"><i class="fa fa-tag"></i>Expense Reports</a></li>
                         <?php } ?>
                 </ul>
               </div>

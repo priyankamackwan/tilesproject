@@ -21,21 +21,19 @@
                     
 				 <div class="x_content">
                 <div class="datatable-responsive">
+                    <p id="date_filter">
+                        <span id="date-label-from" class="date-label">From: </span><input class="date_range_filter date" type="text" id="ff" />
+    <span id="date-label-to" class="date-label">To:<input class="date_range_filter date"  type="text" id="datepicker_to" />
+</p>
                  <table id="datatables" class="main-table table table-striped table-bordered">
                     <thead>
                           <th>Sr No.</th>
-                          <th>Client Name</th>
-                          <th>LPO No</th>
-                          <th>Delivery No</th>
-                          <th>Invoice No</th>
-                          <th>Sales Expense</th>
-                          <th>Status</th>
-                          <th>Manage</th>
+                          <th>Company Name</th>
+                          <th>Invoice Number</th>
+                          <th>Amount</th>
+                          <th>Expense</th>
                     </thead>
                     <thead>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -69,16 +67,13 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "user_name"},
-                                { "data": "lpo_no"},
-                                { "data": "do_no"},
+                                { "data": "company_name"},
                                 { "data": "invoice_no"},
+                                { "data": "total_price"},
                                 { "data": "sales_expense"},
-                                { "data": "status"},
-				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4,5,6,7],
+				"targets": [0,1,2,3,4],
 				"orderable": false
 			} ],
 			"rowCallback": function( row, data, index ) {
@@ -88,11 +83,25 @@
                         
 		});
 
-            $('.search-input-select').on( 'change', function (e) {   
-                // for dropdown
-                var i =$(this).attr('data-column');  // getting column index
+        
+            
+      $('#ff').change(function(){
+ 
+   var i =1;  // getting column index
                 var v =$(this).val();  // getting search input value
                 dataTable1.api().columns(i).search(v).draw();
-            });
+});
+        $('#datepicker_to').change(function(){
+ 
+   var i =2;  // getting column index
+                var v =$(this).val();  // getting search input value
+                dataTable1.api().columns(i).search(v).draw();
+});
+
+
+
+            
 	});
+        
+
 </script>

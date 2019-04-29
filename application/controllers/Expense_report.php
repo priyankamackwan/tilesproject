@@ -1,11 +1,11 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
 
-	class Order extends CI_Controller
+	class Expense_report extends CI_Controller
 	{
 		public $msgName = "Order";
-		public $view = "order";
-		public $controller = "Order";
+		public $view = "expense_report";
+		public $controller = "Expense_report";
 		public $primary_id = "id";
 		public $table = "orders";
 		public $msgDisplay ='order';
@@ -26,8 +26,7 @@
 
 		}
 		public function index() {
-                      //  echo '<pre>';
-                   // print_r($this->session);die;
+         
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
@@ -41,24 +40,26 @@
 		public function server_data() {
                     
 			$model = $this->model;
-                      
+                     
                        // echo $this->model; exit;
 			$order_col_id = $_POST['order'][0]['column'];
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
-                 
+
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
+
+                        $startDate = $_POST['columns'][1]['search']['value'];
+                        $endDate = $_POST['columns'][2]['search']['value'];
       
 			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
-    
+                       
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
-
-                        $q = $this->db->select('*')->where('is_deleted', 0);
-       
-		
-                        if(empty($s))
+                        
+                         if (empty($startDate) || empty($endDate)){
+                            $q = $this->db->select('*')->where('is_deleted', 0);
+                                if(empty($s))
 			{
                            
 				if(!empty($order))
@@ -68,6 +69,33 @@
 				$q = $q->limit($limit, $start)->get($this->table)->result();
  
 				$totalFiltered = $totalData;
+			}
+			else
+			{
+                         
+				$q = $q->like('orders.total_price', $s, 'both');
+				if(!empty($order))
+				{
+					$q = $q->order_by($order);
+				}
+				//->limit($limit, $start)
+				$q = $q->get($this->table)->result();
+
+				$totalFiltered = count($q);
+			}
+                        }  else {
+                            $q= $this->db->select('*')->where('created >=', $startDate);
+                            $this->db->where('created <=', $endDate);
+                               if(empty($s))
+			{
+                           
+				if(!empty($order))
+				{
+					$q = $q->order_by($order);
+				}
+				$q = $q->get($this->table)->result();
+
+				$totalFiltered = count($q);
 			}
 			else
 			{
@@ -82,9 +110,11 @@
 
 				$totalFiltered = count($q);
 			}
-			
+                        }
+
              
 			$data = array();
+        
 			if(!empty($q))
 			{
                                $startNo = $_POST['start'];
@@ -92,33 +122,14 @@
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
-                              
+                                             
                     
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $userData = $this->db->get("users")->result_array();
-           
-                                        $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-                                        $download = base_url($this->controller.'/download/'.$this->utility->encode($value->$id));
-                                        $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->$id));
-                                        $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($value->$id));
-
 					$nestedData['id'] = $srNo;
-                                        $nestedData['user_name'] =$userData[0]['company_name'];
-                                        $nestedData['lpo_no'] ="<a href='$downloadlpo'><b>$value->lpo_no</b></a>";
-                                        $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
-                                        $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
+                                        $nestedData['invoice_no'] =$value->invoice_no;
                                         $nestedData['sales_expense'] =$value->sales_expense;
-                                        if ($value->status == 0) { 
-                                            $nestedData['status'] = 'Pending';
-                                        } elseif($value->status == 1) {
-                                            $nestedData['status'] ='In Progress';
-                                        } else {
-                                            $nestedData['status'] ='Completed';
-                                        }
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
-                                     
-
 					$data[] = $nestedData;
                                         $srNo++;
 				}
@@ -224,7 +235,7 @@
                 
                 
             public function downloadinvoice($id) {
-              
+                    
 			$model = $this->model;
 			$id = $this->utility->decode($id);
                         
@@ -297,9 +308,9 @@
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
-<head>Tax Invoice</head>
+<head>Delivery Note</head>
 <body>
-<img src = "'.base_url().'image.png">
+<img src ="http://tiles.thewebpatriot.com/image.png">
 <h2><b><p align="center">Tax Invoice</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
@@ -569,7 +580,7 @@ $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Delivery Note</head>
 <body>
-<img src ="'.base_url().'image.png">
+<img src ="http://tiles.thewebpatriot.com/image.png">
 <h2><b><p align="center">Delivery Note</p></b></h2>
 <table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>

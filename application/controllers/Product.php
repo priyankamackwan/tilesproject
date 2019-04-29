@@ -98,7 +98,7 @@
 
 				$totalFiltered = count($q);
 			}
-                   
+              
 			$data = array();
 			if(!empty($q))
 			{
@@ -184,6 +184,8 @@
 			$name = $this->input->post('name');
                         $size = $this->input->post('size');
                         $quantity = $this->input->post('quantity');
+                        $quantity_per = $this->input->post('quantity_per_unit');
+                        $factor = $this->input->post('factor');
                         $cat_id = $this->input->post('categories');
                         $sub_cat_id = $this->input->post('subcategories');
                         $design_no = $this->input->post('design_no');
@@ -193,7 +195,8 @@
                         $unit = $this->input->post('unit');
                         $purchase_expense = $this->input->post('purchase_expense');
                         $img = $_FILES['image']['name'];
-                      
+                      //  echo '<pre>';
+                        //print_r($_FILES); exit;
                         $ext = pathinfo($img,PATHINFO_EXTENSION);
 			$image = time().'.'.$ext;
 
@@ -204,6 +207,11 @@
 			$this->load->library('upload', $config);
 			$this->load->initialize($config);
 			$this->upload->do_upload('image');
+                        
+                        $small_thumbnail_path = "assets/uploads/small/";
+                        $this->createFolder($small_thumbnail_path);
+                        $small_thumbnail = $small_thumbnail_path . $image;
+                        $thumb1 = $this->createThumbnail($_FILES['image']['tmp_name'], $small_thumbnail,'jpg', 239, 238);
 			$data = array(
 				'name' => $name,
                                 'design_no' => $design_no,
@@ -212,21 +220,19 @@
                                 'walkin_rate' => $walkin_rate,
                                 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
-                  
                                 'unit' => $unit,
                                 'image' => $image,
                                 'quantity' => $quantity,
+                            'quantity_per_unit' => $quantity_per,
+                            'factor' => $factor,
                                 'created' => date('Y-m-d h:i:s'),
 			);
 			$this->$model->insert($this->table,$data);
                         $insert_id = $this->db->insert_id();
                         $dataSub = array();
-                        for ($i=0;$i<count($sub_cat_id);$i++) {
-                            $multipleWhere = ['id' => $sub_cat_id[$i]];
-                            $this->db->where($multipleWhere);
-                            $categoryData = $this->db->get("sub_categories")->result_array();
-                            $dataSub[$i]['sub_cat_id'] = $sub_cat_id[$i];
-                            $dataSub[$i]['cat_id'] = $categoryData[0]['category_id'];
+                        for ($i=0;$i<count($cat_id);$i++) {
+                          
+                            $dataSub[$i]['cat_id'] = $cat_id[$i];
                             $dataSub[$i]['product_id'] = $insert_id;
                             $dataSub[$i]['created'] = date('Y-m-d h:i:s');
                             $this->db->insert('product_categories',$dataSub[$i]);
@@ -244,7 +250,7 @@
                                         // For Android
                                         $arr = array(
 		    "registration_ids" => array($userData[$k]['firebase_token']),
-		    "data" => [
+		    "data"=> [
 		        "body" => "{'notification_type':4,'name': $name,'size': $size,'quantity': $quantity,'created':$created}",
 		        "title" => "New Product Added",
 		        // "icon" => "ic_launcher"
@@ -288,6 +294,33 @@
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
+                
+                public function createFolder($path)
+{		
+	if (!file_exists($path)) {
+		mkdir($path, 0755, TRUE);
+	}
+}
+                
+                public function  createThumbnail($sourcePath, $targetPath, $file_type, $thumbWidth, $thumbHeight){
+	
+    $source = imagecreatefromjpeg($sourcePath);
+	
+    $width = imagesx($source);
+	$height = imagesy($source);
+	
+	$tnumbImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
+	
+	imagecopyresampled($tnumbImage, $source, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $width, $height);
+	
+	if (imagejpeg($tnumbImage, $targetPath, 90)) {
+	    imagedestroy($tnumbImage);
+		imagedestroy($source);
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}	
 		public function edit($id)
 		{
                     
@@ -360,7 +393,8 @@
           
                         $quantity = $this->input->post('quantity');
                         $categories = $this->input->post('categories[]');
-
+                        $quantity_per = $this->input->post('quantity_per_unit');
+                        $factor = $this->input->post('factor');
                         $design_no = $this->input->post('design_no');
                         $unit = $this->input->post('unit');
                         $cash_rate = $this->input->post('cash_rate');
@@ -395,7 +429,8 @@
                                 'walkin_rate' => $walkin_rate,
                                 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
-                             
+                                'quantity_per_unit' => $quantity_per,
+                                'factor' => $factor,
                                 'unit' => $unit,
                                 'image' => $image,
                                 'quantity' => $quantity,
@@ -503,6 +538,21 @@
                 echo $term;
                 
                 }
+                
+                public function addUsers() {
+                    
+	
+require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+
+	require('spreadsheet-reader-master/SpreadsheetReader.php');
+
+	$Reader = new SpreadsheetReader('users.xlsx');
+	foreach ($Reader as $Row)
+	{
+                echo '<pre>';
+		print_r($Row);
+	}
+    }
     
 	}
 ?>

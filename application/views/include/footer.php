@@ -57,15 +57,18 @@
 
 	<script>
     $(document).ready(function(){
-      $('#timepicker1').timepicker();
-       $('.datetimepicker3').datetimepicker({
-                   //format: 'LT',
-                    format : 'HH:mm',
-                    
-                });
-      $('#datepicker').datepicker({
-        format: 'dd-mm-yyyy',
-       
+     
+     
+      
+         $('#datepicker_to').datepicker({
+       // format: 'dd-mm-yyyy',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true,
+      });
+        $('#ff').datepicker({
+       // format: 'dd-mm-yyyy',
+        format: 'yyyy-mm-dd',
         todayHighlight: true,
         autoclose: true,
       });

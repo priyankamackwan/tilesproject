@@ -140,7 +140,14 @@
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Quantity">Quantity<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" name="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Quantity">
+                            <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Quantity">
+                        </div>
+                                        </div>
+                                          <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Factor">Factor<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" name="factor" id="factor" value="<?php echo $result[0]->factor;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Factor">
                         </div>
                                         </div>
                       <?php if ($this->userhelper->current('role_id') ==1) { ?>
@@ -148,7 +155,7 @@
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="purchase_expense">Purchase Price<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Purchase Expense">
+                          <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Purchase Price">
                         </div>
                       </div>
                       <?php } ?>
@@ -157,15 +164,44 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="js-example-basic-multiple" name="unit"  id="unit">
+                              <option value="0">Select Unit</option>
                               
+                                 <?php if($result[0]->unit == 1) { ?>
+                              <option value="1" selected="">CTN</option>
+                                <?php } else { ?>
                               <option value="1">CTN</option>
+                                <?php } ?>
+                              
+                                 <?php if($result[0]->unit == 2) { ?>
+                              <option value="2" selected="">SQM</option>
+                                <?php } else { ?>
                               <option value="2">SQM</option>
-                              <option value="3">PCS</option>
-                              <option value="4">SET</option>
+                                <?php } ?>
+                                
+                                <?php if($result[0]->unit == 3) { ?>
+                              <option value="3" selected="">PCS</option>
+                                <?php } else { ?>
+                               <option value="3">PCS</option>
+                                <?php } ?>
+                             
+                                 <?php if($result[0]->unit == 3) { ?>
+                               <option value="4" selected="">SET</option>
+                                <?php } else { ?>
+                               <option value="4">SET</option>
+                                <?php } ?>
+                             
+                              
                               
 </select>
                         </div>
                       </div>
+                                       <div class="form-group" id="quanity_div">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="quantity_per">Quantity per <span id="unit_name"></span> unit<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo $result[0]->quantity_per;?>" class="form-control col-md-7 col-xs-12" placeholder="Quantity Per">
+                        </div>
+                                        </div>
                           <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="latitude">Categories<span class="required">*</span>
                         </label>
@@ -217,6 +253,8 @@
 ?>
 	<script>
 		$(document).ready(function (){
+                   
+                    $("#quanity_div").hide();
                         jQuery.validator.addMethod("noSpace", function(value, element) {
 return value == '' || value.trim().length != 0;  
     }, "No space please and don't leave it empty");
@@ -241,6 +279,84 @@ return value == '' || value.trim().length != 0;
   }
 });
     })});
+    
+    $("#quantity").blur(function(){
+ 
+  unit = $("#unit").val();
+  quantity =  $("#quantity").val();
+  factor =  $("#factor").val();
+  quantity_per = quantity*factor;
+ 
+  if (unit != '0' && unit != '' && quantity != '' && factor != '') {
+      $("#quanity_div").show();
+      $("#quantity_per").val(quantity_per);
+        if (unit == 1) {
+          unit_value = 'CTN';
+            } else if (unit == 2) {
+                 unit_value = 'SQM';
+            } else if (unit == 3) {
+                 unit_value = 'PCS';
+            } else if (unit == 4) {
+                 unit_value = 'SET';
+            }
+           
+      $("#unit_name").text(unit_value);
+        } else  {
+         $("#quanity_div").hide(); 
+        }
+}); 
+
+   $("#factor").blur(function(){
+ 
+  unit = $("#unit").val();
+  quantity =  $("#quantity").val();
+  factor =  $("#factor").val();
+  quantity_per = quantity*factor;
+ 
+  if (unit != '0' && unit != '' && quantity != '' && factor != '') {
+      $("#quanity_div").show();
+      $("#quantity_per").val(quantity_per);
+        if (unit == 1) {
+          unit_value = 'CTN';
+            } else if (unit == 2) {
+                 unit_value = 'SQM';
+            } else if (unit == 3) {
+                 unit_value = 'PCS';
+            } else if (unit == 4) {
+                 unit_value = 'SET';
+            }
+           
+      $("#unit_name").text(unit_value);
+        } else  {
+         $("#quanity_div").hide(); 
+        }
+}); 
+
+ $('#unit').on('change', function() {
+  unit = this.value;
+  quantity =  $("#quantity").val();
+  factor =  $("#factor").val();
+  quantity_per = quantity*factor;
+  
+  if (unit != '0' && unit != '' && quantity != '' && factor != '') {
+      $("#quanity_div").show();
+      $("#quantity_per").val(quantity_per);
+      if (unit == 1) {
+          unit_value = 'CTN';
+            } else if (unit == 2) {
+                 unit_value = 'SQM';
+            } else if (unit == 3) {
+                 unit_value = 'PCS';
+            } else if (unit == 4) {
+                 unit_value = 'SET';
+            }
+           
+      $("#unit_name").text(unit_value);
+        } 
+      else {
+         $("#quanity_div").hide(); 
+        }
+});
 			var id = $('input[name = "id"]').val();
 			var action = $('input[name = "action"]').val();
 			$('#demo-form2').validate({
@@ -270,6 +386,9 @@ return value == '' || value.trim().length != 0;
 							required: true,
 						},
                                                 quantity:{
+							required: true,
+						},
+                                                 unit:{
 							required: true,
 						}
 					

@@ -469,7 +469,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                          
                             for($i=0;$i<count($productData);$i++) {
                                $categoryString = '';
-                                $productData[$i]['image']= base_url().'/assets/uploads/'.$productData[$i]['image'];
+                               $img= $productData[$i]['image'];
+                                $productData[$i]['image']= base_url().'/assets/uploads/'.$img;
+                                $productData[$i]['thumbnail']= base_url().'/assets/uploads/small/'.$img;
                                 if ($productData[$i]['unit'] == 1) {
                                     $productData[$i]['unit'] = 'CTN';
                                 }
@@ -536,8 +538,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                         $productData = $q->result_array();
                
                         if ($productData) {
-                            
-                            $productData[0]['image']= base_url().'/assets/uploads/'.$productData[0]['image'];
+                            $img= $productData[0]['image'];
+                            $productData[0]['image']= base_url().'/assets/uploads/'.$img;
+                            $productData[0]['thumbnail']= base_url().'/assets/uploads/small/'.$img;
                             if ($productData[0]['unit'] == 1) {
                                     $productData[0]['unit'] = 'CTN';
                                 }
@@ -638,9 +641,15 @@ use PHPMailer\PHPMailer\PHPMailer;
                             $orderLast = $q->result_array();
 
                          $newOrder = end($orderLast)['id'] + 1;
-                         $lpo = 'LPO/'.$newOrder.'/18-19';
-                         $do = 'DO/'.$newOrder.'/18-19';
-                         $invoice = 'Invoice/'.$newOrder.'/18-19';
+                         if (date('m') <= 3) {//Upto June 2014-2015
+    $financial_year = (date('y')-1) . '-' . date('y');
+} else {//After June 2015-2016
+    $financial_year = date('y') . '-' . (date('y') + 1);
+}
+
+                         $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
+                         $do = 'DO/'.$newOrder.'/'.$financial_year;
+                         $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
                         
                             $orderData = array(
       
@@ -663,11 +672,218 @@ use PHPMailer\PHPMailer\PHPMailer;
                             
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
-                                $product_orders = array('order_id'=>$lastInsertedOrderId,'product_id'=>$orderProductArray[$k]['product_id'],'quantity'=>$orderProductArray[$k]['quantity']);
+                                $product_orders = array('order_id'=>$lastInsertedOrderId,'product_id'=>$orderProductArray[$k]['product_id'],'quantity'=>$orderProductArray[$k]['quantity'],'price'=>$orderProductArray[$k]['price'],'created' => date('Y-m-d h:i:s'));
                             
                                 $this->$model->insert('order_products',$product_orders);
                             }
                             
+                            
+                            
+                        $do_no = $do;
+
+                        $finalDate = date("d-M-Y");
+                        //echo $finalDate; exit;
+                         $multipleWhere = ['id' =>$this->user_id];
+                        $this->db->where($multipleWhere);
+                        $userData= $this->db->get("users")->result_array();
+                      //  echo '<pre>';
+                       // print_r($userData); exit;
+                        
+                             $multipleWhere = ['order_id' => $lastInsertedOrderId];
+                        $this->db->where($multipleWhere);
+                        $productOrder = $this->db->get("order_products")->result_array();
+                     // echo '<pre>';
+                     // print_r($productOrder); exit;
+                      $finalOrderData = array();
+                      $subTotal = 0;
+                      for($k=0;$k<count($productOrder);$k++) {
+                              $productIdArray = $productOrder[$k]['product_id'];
+                            $multipleWhere2 = ['id' => $productIdArray];
+                        $this->db->where($multipleWhere2);
+                        $productData= $this->db->get("products")->result_array();
+                        
+                        $finalOrderData[$k]['description'] = $productData[0]['name'];
+                        $finalOrderData[$k]['size'] = $productData[0]['size'];
+                        $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
+                        
+                            if ($userData[0]['client_type'] == 1) {
+                            $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
+                        }
+                        
+                        if ($userData[0]['client_type'] == 2) {
+                            $finalOrderData[$k]['rate'] = $productData[0]['credit_rate'];
+                        }
+                        
+                        if ($userData[0]['client_type'] == 3) {
+                            $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
+                        }
+                        if ($productData[0]['unit'] == 1) {
+                            $finalOrderData[$k]['unit'] = 'CTN';
+                        }
+                        if ($productData[0]['unit'] == 2) {
+                            $finalOrderData[$k]['unit'] = 'SQM';
+                        }
+                        if ($productData[0]['unit'] == 3) {
+                            $finalOrderData[$k]['unit'] = 'PCS';
+                        }
+                        if ($productData[0]['unit'] == 4) {
+                            $finalOrderData[$k]['unit'] = 'SET';
+                        }
+                             $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+                        
+                        $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
+                      }
+                        $vat = $subTotal*5/100;
+                        $finalTotal =$subTotal+$vat;
+                        //echo $id; exit;
+                        include 'TCPDF/tcpdf.php';
+$pdf = new TCPDF();
+$pdf->AddPage('P', 'A4');
+$html = '<html>
+<head>Delivery Note</head>
+<body>
+<img src ="'.base_url().'image.png">
+<h2><b><p align="center">Delivery Note</p></b></h2>
+<table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$lpo.'</td><td style="width:40%; text-align:right;">Invoice No. : '.$invoice.'</td></tr></table>
+    <br><br/>
+ <table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$data['cargo_number'].'</td></tr></table>  
+    <br><br/>
+ <table style="width:100%;"><tr><td style="width:60%;">Location : '.$data['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$data['mark'].'</td></tr></table>     
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
+<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">Size</th><th style="text-align: center">Design</th><th style="text-align: center">quantity</th><th style="text-align: center">Unit</th></tr>';
+for($p=0;$p<count($finalOrderData);$p++) {
+    $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
+                                
+                          }
+                          $html .= '<tr><td></td><td></td><td colspan="2"></td><td></td></tr></table>';
+
+$html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the above goods in good condition</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table>     
+<br><br/>
+<table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%;">Name : </td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:100%;">Mobile : </td></tr></table>
+<br><br/><br><br/><br><br/>
+<table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
+                            <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>
+
+</body></html>';
+
+$pdf->writeHTML($html, true, false, true, false, '');
+
+$filelocation = FCPATH.'assets\uploads';
+$filename_do = str_replace('/','_', $do_no).'.pdf';
+
+    $fileNL_do = $filelocation."\\".$filename_do;
+   //echo $fileNL; exit;
+$pdf->Output($fileNL_do, 'F');
+
+$pdf1 = new TCPDF();
+$pdf1->AddPage('P', 'A4');
+$html1 = '<html>
+<head>Local Purchase Order</head>
+<body>
+<h2><b><p align="center">Local Purchase Order</p></b></h2>
+<table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:40%;">From</td><td style="width:60%; text-align:center;">To</td> </tr></table>
+<table style="width:100%;"><tr><td style="width:40%;">Buyer : '.$userData[0]['company_name'].'</td><td style="width:60%; text-align:right;">Seller : PNP BUILDING MATERIAL TRADING LLC </td></tr></table>
+<table style="width:100%;"><tr><td style="width:40%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:60%; text-align:right;">Tel. : +97143531040 / +971558532631</td> </tr></table>
+<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br>
+    RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
+    <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+<br><br/>
+<table style="width:100%;" border="1"><tr><th style="text-align: center">SR No.</th><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">UNIT</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">RATE</th><th style="text-align: center">AMOUNT</th></tr>';
+$count = 0;
+for($p=0;$p<count($finalOrderData);$p++) {
+    $count++;
+    $html1 .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
+                                
+                          }
+                          $html1 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
+                                  
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td>'.$vat.'</td></tr>
+                                  
+<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
+    <br><br/>
+                                  <table style="width:100%;" border="1"><tr><th style="text-align:center">Terms and Conditions</th></tr>
+                                  <tr><td>1) Goods subject to lien of seller till full payment is made by buyer.</td></tr>
+                                  <tr><td>2) NO CLAIM for shortage/damage will be entertained after 24 hours of delivery.</td></tr>
+                                  <tr><td>3) Payment should be made by cash or A/C payees cheque only in the name of our company.</td></tr>
+                                  <tr><td></td></tr>
+</table><br><br/>
+<table style="width:100%;"><tr><td width="50%";>Buyer Signature:</td><td width="50%";>For PNP Building Materials Trading L.L.C</td></tr></table>
+<br><br/><br><br/>';
+$html1 .='</body></html>';
+
+$pdf1->writeHTML($html1, true, false, true, false, '');
+$filelocation = FCPATH.'assets\uploads';
+$filename_lpo = str_replace('/','_', $lpo).'.pdf';
+    $fileNL_lpo = $filelocation."\\".$filename_lpo;
+   //echo $fileNL; exit;
+$pdf1->Output($fileNL_lpo, 'F');
+
+
+$pdf2 = new TCPDF();
+$pdf2->AddPage('P', 'A4');
+$html2 = '<html>
+<head>Tax Invoice</head>
+<body>
+<img src ="'.base_url().'image.png">
+<h2><b><p align="center">Tax Invoice</p></b></h2>
+<table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:100%; text-align:right;">PNP BUILDING MATERIAL TRADING LLC<br>INDUSTRIAL AREA 2 , RAS AL KHOR<br>DUBAI, 103811, U.A.E<br>+97143531040 / +971558532631<br>Email: info@pnptiles.com</td></tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$invoice.'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$lpo.'</td> </tr></table>
+<br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+<br><br/>
+<table style="width:100%;" border="1"><tr><th style="text-align: center">SR No.</th><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">UNIT</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">RATE</th><th style="text-align: center">AMOUNT</th></tr>';
+$count = 0;
+for($p=0;$p<count($finalOrderData);$p++) {
+    $count++;
+    $html2 .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
+                                
+                          }
+                          $html2 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
+                                  
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td>'.$vat.'</td></tr>
+                                  
+<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
+    <br><br/>
+                                  <table style="width:100%;" border="1"><tr><th style="text-align:center">Terms and Conditions</th></tr>
+                                  <tr><td>1) Goods subject to lien of seller till full payment is made by buyer.</td></tr>
+                                  <tr><td>2) NO CLAIM for shortage/damage will be entertained after 24 hours of delivery.</td></tr>
+                                  <tr><td>3) Payment should be made by cash or A/C payees cheque only in the name of our company.</td></tr>
+                                  <tr><td></td></tr>
+</table><br><br/>
+<table style="width:100%;"><tr><td width="50%";>Buyer Signature:</td><td width="50%";>For PNP Building Materials Trading L.L.C</td></tr></table>
+<br><br/><br><br/>
+<table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
+                            <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>';
+$html2 .='</body></html>';
+
+$pdf2->writeHTML($html2, true, false, true, false, '');
+$filelocation = FCPATH.'assets\uploads';
+$filename_invoice = str_replace('/','_', $invoice).'.pdf';
+    $fileNL_invoice = $filelocation."\\".$filename_invoice;
+   //echo $fileNL; exit;
+$pdf2->Output($fileNL_invoice, 'F');
+                            $orderData['do_url'] = base_url().'/assets/uploads/'.$filename_do;
+                             $orderData['lpo_url'] = base_url().'/assets/uploads/'.$filename_lpo;
+                              $orderData['invoice_url'] = base_url().'/assets/uploads/'.$filename_invoice;
                             $this->db->select('*');
                             $this->db->where('login_status', 1);
                             $this->db->where('role', 2);
@@ -736,6 +952,41 @@ use PHPMailer\PHPMailer\PHPMailer;
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
                         $response['message'] = 'Please provide product id, tax and total price';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+                }
+                
+                public function removeFiles() {
+                    
+                    $data = $_POST;
+                    if ((isset($data['order_id']) && (!empty($data['order_id']))) ) {
+                        
+                    if (date('m') <= 3) {
+                        $financial_year = (date('y')-1) . '-' . date('y');
+                    } else {
+                        $financial_year = date('y') . '-' . (date('y') + 1);
+                    }
+                    $lpo = '\LPO/'.$data['order_id'].'/'.$financial_year;
+                    $do = '\DO/'.$data['order_id'].'/'.$financial_year;
+                    $invoice = '\Invoice/'.$data['order_id'].'/'.$financial_year;
+                    $filename_lpo = str_replace('/','_', $lpo).'.pdf';
+                    $filename_do = str_replace('/','_', $do).'.pdf';
+                    $filename_invoice = str_replace('/','_', $invoice).'.pdf';
+
+                    $pathLpo = FCPATH .'assets\uploads'.$filename_lpo;
+                    $pathDo = FCPATH .'assets\uploads'.$filename_do;
+                    $pathInvoice = FCPATH .'assets\uploads'.$filename_invoice;
+                    unlink($pathLpo);
+                    unlink($pathDo);
+                    unlink($pathInvoice);
+                    $response['status'] = 'success';
+                    $response['message'] = 'Files deleted successfully';
+                    } else {
+                        // If any of the mandatory parameters are missing
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide order id';
                     }
                     // Returning back the response in JSON
                     echo json_encode($response);
@@ -879,7 +1130,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 function sendGCM() {
                     
                     $arr = array(
-		    "registration_ids" => array('ez3pt-a7bNw:APA91bGK8fXX7-NY4-Ams2ZYEwrRbEdDiG3vc-p5foj__pmWHcv3USwf5D_4rGjJTTUxj0qmQPE1HE51GWzweJZShm0QX1FGwjzvGzj_VuEFOiTBGM7Nb-fFPkMq9vvTWuq9b9d2nfLj'),
+		    "registration_ids" => array('drm9VhyHnuU:APA91bEpohgHEEK8C72MP9pv2HZZyTSpXFOXyY-1pxdI_GTdyBGq44zxbvTxvbNyYNgqq7njEIEAWp8gtLQRTVGZCqRlZ-s9KIi8TzLaKnWXvBmRwM4XogiHEVMnwjWe0V99LW5C6FYD'),
 		    "data" => [
 		        "body" => "{'notification_type':1,'company_name':'IOS'}",
 		        "title" => "Latest Code IOS",
@@ -965,9 +1216,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                          $this->db->select('*');
                  
                             $q = $this->db->get('users');
-
-                        $this->db->where('is_deleted',0);
-
+                             $this->db->where('is_deleted', 0);
                             $userdata = $q->result_array();
                             $response['data'] = $userdata;
                                  // Returning back the response in JSON
@@ -980,7 +1229,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $model = $this->model;
                     $data = $_POST;
                     if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
-                                if ($data['status'] == 1 || $data['status'] == 0 || $data['status'] == 2) {
+                                if ($data['status'] == 1 || $data['status'] == 0) {
                                     $newData['status'] = $data['status'];
                                     $this->db->set('status', $data['status']);
                                     $this->db->where('id',$data['user_id']);
@@ -1003,5 +1252,6 @@ use PHPMailer\PHPMailer\PHPMailer;
                     echo json_encode($response);
                     exit();
                 }
+                
 	}
 ?>
