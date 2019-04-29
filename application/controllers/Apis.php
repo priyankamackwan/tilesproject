@@ -1229,7 +1229,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $model = $this->model;
                     $data = $_POST;
                     if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
-                                if ($data['status'] == 1 || $data['status'] == 0) {
+                                if ($data['status'] == 1 || $data['status'] == 2 || $data['status']== 3 ) {
                                     $newData['status'] = $data['status'];
                                     $this->db->set('status', $data['status']);
                                     $this->db->where('id',$data['user_id']);
