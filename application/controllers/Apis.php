@@ -1229,7 +1229,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $model = $this->model;
                     $data = $_POST;
                     if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
-                                if ($data['status'] == 1 || $data['status'] == 2 || $data['status']== 3 ) {
+                                if ($data['status'] == 1 || $data['status'] == 2 || $data['status'] == 3) {
                                     $newData['status'] = $data['status'];
                                     $this->db->set('status', $data['status']);
                                     $this->db->where('id',$data['user_id']);
@@ -1237,7 +1237,6 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 } else {
                                     $this->db->where('user_id', $data['user_id']);
                                     $this->db->delete('orders'); 
-                        
                                     $this->db->where('id', $data['user_id']);
                                     $this->db->delete('users'); 
                                 }
@@ -1253,5 +1252,115 @@ $pdf2->Output($fileNL_invoice, 'F');
                     exit();
                 }
                 
+                public function getCustomerReport() {
+                    
+                     $data = $_POST;
+                     if (empty($data)) {
+                    $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.created');
+                    $this->db->from('orders as o');
+                    $this->db->join('users as u', 'o.user_id = u.id');
+                    $finalOrderData = $this->db->get()->result_array();
+                 
+                     } else {
+                          $q= $this->db->select('*')->where('created >=', $data['start_date']);
+                            $this->db->where('created <=', $data['end_date']);
+                            // $orderData = $this->db->get('orders')->result_array();
+                            $q = $q->get('orders')->result();
+                            $orderData = array(); 
+                            for($k=0;$k<count($q);$k++) {
+                                  $multipleWhere2 = ['id' => $q[$k]->user_id];
+                        $this->db->where($multipleWhere2);
+                        $userData = $this->db->get("users")->result_array();
+                        
+                        $orderData['id'] = $q[$k]->id;
+                        $orderData['company_name'] = $userData[0]['company_name'];
+                        $orderData['contact_person_name'] = $userData[0]['contact_person_name'];
+                        $orderData['location'] = $q[$k]->location;
+                        $orderData['created'] = $q[$k]->created;
+                        $finalOrderData [] = $orderData;
+                            }
+                         
+                     } 
+                   // Returning back the response in JSON
+                    echo json_encode($finalOrderData);
+                    exit();
+                }
+                
+                public function getExpenseReport() {
+                    
+                     $data = $_POST;
+                     if (empty($data)) {
+                    $this->db->select('o.id,o.sales_expense,o.invoice_no,o.created');
+                    $this->db->from('orders as o');
+                    $finalOrderData = $this->db->get()->result_array();
+                 
+                     } else {
+                          $q= $this->db->select('*')->where('created >=', $data['start_date']);
+                            $this->db->where('created <=', $data['end_date']);
+                            // $orderData = $this->db->get('orders')->result_array();
+                            $q = $q->get('orders')->result();
+                            $orderData = array(); 
+                            for($k=0;$k<count($q);$k++) {
+                                 
+                        
+                        $orderData['id'] = $q[$k]->id;
+                      
+                        $orderData['sales_expense'] = $q[$k]->sales_expense;
+                        $orderData['invoice_no'] = $q[$k]->invoice_no;
+                        $orderData['created'] = $q[$k]->created;
+                        $finalOrderData [] = $orderData;
+                            }
+                         
+                     } 
+                 
+                   // Returning back the response in JSON
+                    echo json_encode($finalOrderData);
+                    exit();
+                }
+                
+                
+                public function getSalesReport() {
+                    
+                     $data = $_POST;
+                     if (empty($data)) {
+                         
+                         $q = $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
+                         
+                 
+                    $finalOrderData = $q->get('orders')->result_array();
+                    for($k=0;$k<count($finalOrderData);$k++) {
+                           $invoiceData = $this->db->order_by('id',"desc")
+
+		->limit(1)
+->where('user_id',$finalOrderData[$k]['user_id'])
+		->get('orders')
+
+		->row();
+                           $finalOrderData[$k]['invoice_no'] = $invoiceData->invoice_no;
+                    }
+              
+                     } else {
+                           $q= $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
+                            $this->db->where('created <=', $data['end_date']);
+                          
+                            $q = $q->get('orders')->result();
+                        for($k=0;$k<count($q);$k++) {
+                           $invoiceData = $this->db->order_by('id',"desc")
+
+		->limit(1)
+->where('user_id',$q[$k]->user_id)
+		->get('orders')
+
+		->row();
+                           $q[$k]->invoice_no = $invoiceData->invoice_no;
+                    }
+                         
+                      $finalOrderData = $q;
+                     } 
+                 
+                   // Returning back the response in JSON
+                    echo json_encode($finalOrderData);
+                    exit();
+                }
 	}
 ?>

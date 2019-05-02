@@ -59,7 +59,7 @@
 			$limit = $_POST['length'];
                         
                          if (empty($startDate) || empty($endDate)){
-                            $q = $this->db->select('*')->where('is_deleted', 0);
+                            $q = $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
                                 if(empty($s))
 			{
                            
@@ -69,7 +69,7 @@
 				}
 				$q = $q->limit($limit, $start)->get($this->table)->result();
  
-				$totalFiltered = $totalData;
+				$totalFiltered = count($q);
 			}
 			else
 			{
@@ -85,7 +85,7 @@
 				$totalFiltered = count($q);
 			}
                         }  else {
-                            $q= $this->db->select('*')->where('created >=', $startDate);
+                            $q= $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $startDate);
                             $this->db->where('created <=', $endDate);
                                if(empty($s))
 			{
@@ -113,9 +113,9 @@
 			}
                         }
 
-             
 			$data = array();
-        
+    
+                    
 			if(!empty($q))
 			{
                                $startNo = $_POST['start'];
@@ -128,11 +128,19 @@
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $userData = $this->db->get("users")->result_array();
+                        $invoiceData = $this->db->order_by('id',"desc")
+
+		->limit(1)
+->where('user_id',$value->user_id)
+		->get('orders')
+
+		->row();
+                        
 					$nestedData['id'] = $srNo;
                                         $nestedData['company_name'] =$userData[0]['company_name'];
-                                        $nestedData['invoice_no'] =$value->invoice_no;
-                                        $nestedData['total_price'] =$value->total_price;
-                                        $nestedData['sales_expense'] =$value->sales_expense;
+                                        $nestedData['invoice_no'] =$invoiceData->invoice_no;
+                                        $nestedData['total_price'] =$value->total_sales_expense;
+                                        $nestedData['sales_expense'] =$value->total_sales_expense;
 					$data[] = $nestedData;
                                         $srNo++;
 				}

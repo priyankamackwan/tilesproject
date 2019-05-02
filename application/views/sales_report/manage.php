@@ -72,6 +72,8 @@
                                 { "data": "total_price"},
                                 { "data": "sales_expense"},
 			],
+                                 "bInfo" : false,
+                                 "bFilter": false,
 			"columnDefs": [ {
 				"targets": [0,1,2,3,4],
 				"orderable": false
