@@ -14,24 +14,31 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
 				<div class="x_title">
-                    <h2>Expense Report</h2>
+                    <h2>Products Report</h2>
                     <div class="clearfix"></div>
                     
                  </div>
                     
 				 <div class="x_content">
                 <div class="datatable-responsive">
-                    <p id="date_filter">
-                        <span id="date-label-from" class="date-label">From: </span><input class="date_range_filter date" type="text" id="ff" />
-    <span id="date-label-to" class="date-label">To:<input class="date_range_filter date"  type="text" id="datepicker_to" />
-</p>
+
                  <table id="datatables" class="main-table table table-striped table-bordered">
                     <thead>
                           <th>Sr No.</th>
-                          <th>Invoice Number</th>
-                          <th>Expense</th>
+                          <th>Product Name</th>
+                          <th>Size</th>
+                          <th>Category</th>
+                          <th>Amount</th>
+                          <th>Purchase Price</th>
+                          <th>Sold Quantity</th>
+                          <th>Total Quantity Balance</th>
                     </thead>
                     <thead>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -63,11 +70,18 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "invoice_no"},
-                                { "data": "sales_expense"},
+                                { "data": "product_name"},
+                                { "data": "size"},
+                                { "data": "category"},
+                                { "data": "amount"},
+                                { "data": "purchase_expense"},
+                                { "data": "sold_quantity"},
+                                { "data": "total_left_quantity"},
 			],
+                                 "bInfo" : false,
+                                 "bFilter": false,
 			"columnDefs": [ {
-				"targets": [0,1,2],
+				"targets": [0,1,2,3,4,5,6,7],
 				"orderable": false
 			} ],
 			"rowCallback": function( row, data, index ) {

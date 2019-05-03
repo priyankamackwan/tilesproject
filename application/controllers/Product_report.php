@@ -1,13 +1,13 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
 
-	class Order extends CI_Controller
+	class Product_report extends CI_Controller
 	{
 		public $msgName = "Order";
-		public $view = "order";
-		public $controller = "Order";
+		public $view = "product_report";
+		public $controller = "Product_report";
 		public $primary_id = "id";
-		public $table = "orders";
+		public $table = "order_products";
 		public $msgDisplay ='order';
 		public $model;
 
@@ -46,19 +46,21 @@
 			$order_col_id = $_POST['order'][0]['column'];
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
-                 
+
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
+
+                        $startDate = $_POST['columns'][1]['search']['value'];
+                        $endDate = $_POST['columns'][2]['search']['value'];
       
-			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
-    
+			$totalData = $this->$model->countTableRecords($this->table,array());
+                       
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
-
-                        $q = $this->db->select('*')->where('is_deleted', 0);
-       
-		
-                        if(empty($s))
+                        
+                         if (empty($startDate) || empty($endDate)){
+                            $q = $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
+                                if(empty($s))
 			{
                            
 				if(!empty($order))
@@ -67,12 +69,12 @@
 				}
 				$q = $q->limit($limit, $start)->get($this->table)->result();
  
-				$totalFiltered = $totalData;
+				$totalFiltered = count($q);
 			}
 			else
 			{
                          
-				$q = $q->like('orders.sales_expense', $s, 'both');
+				$q = $q->like('orders.total_price', $s, 'both');
 				if(!empty($order))
 				{
 					$q = $q->order_by($order);
@@ -82,9 +84,37 @@
 
 				$totalFiltered = count($q);
 			}
-			
-             
+                        }  else {
+                            $q= $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
+                            if(empty($s))
+			{
+                           
+				if(!empty($order))
+				{
+					$q = $q->order_by($order);
+				}
+				$q = $q->get($this->table)->result();
+
+				$totalFiltered = count($q);
+			}
+			else
+			{
+                         
+				$q = $q->like('orders.total_price', $s, 'both');
+				if(!empty($order))
+				{
+					$q = $q->order_by($order);
+				}
+				//->limit($limit, $start)
+				$q = $q->get($this->table)->result();
+
+				$totalFiltered = count($q);
+			}
+                        }
+
 			$data = array();
+    
+                 
 			if(!empty($q))
 			{
                                $startNo = $_POST['start'];
@@ -92,33 +122,28 @@
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
-                              
+                                             
                     
-                         $multipleWhere2 = ['id' => $value->user_id];
+                         $multipleWhere2 = ['id' => $value->product_id];
                         $this->db->where($multipleWhere2);
-                        $userData = $this->db->get("users")->result_array();
-           
-                                        $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-                                        $download = base_url($this->controller.'/download/'.$this->utility->encode($value->$id));
-                                        $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->$id));
-                                        $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($value->$id));
-
+                        $productData = $this->db->get("products")->result_array();
+             
+                        $multipleWhere3 = ['product_id' => $value->product_id];
+                        $this->db->where($multipleWhere3);
+                        $productCategoryData = $this->db->get("product_categories")->result_array();
+              
+                        $multipleWhere4 = ['id' => $productCategoryData[0]['cat_id']];
+                        $this->db->where($multipleWhere4);
+                        $categoryData = $this->db->get("categories")->result_array();
+                        $totalQuantity = $value->totalQuantity;
 					$nestedData['id'] = $srNo;
-                                        $nestedData['user_name'] =$userData[0]['company_name'];
-                                        $nestedData['lpo_no'] ="<a href='$downloadlpo'><b>$value->lpo_no</b></a>";
-                                        $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
-                                        $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
-                                        $nestedData['sales_expense'] =$value->sales_expense;
-                                        if ($value->status == 0) { 
-                                            $nestedData['status'] = 'Pending';
-                                        } elseif($value->status == 1) {
-                                            $nestedData['status'] ='In Progress';
-                                        } else {
-                                            $nestedData['status'] ='Completed';
-                                        }
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
-                                     
-
+                                        $nestedData['product_name'] =$productData[0]['name'];
+                                        $nestedData['size'] =$productData[0]['size'];
+                                        $nestedData['category'] =$categoryData[0]['name'];
+                                        $nestedData['amount'] =$value->amount;
+                                        $nestedData['purchase_expense'] =$productData[0]['purchase_expense'];
+                                        $nestedData['sold_quantity'] = $value->totalQuantity;
+                                        $nestedData['total_left_quantity'] =$productData[0]['quantity']-$totalQuantity;
 					$data[] = $nestedData;
                                         $srNo++;
 				}
@@ -224,7 +249,7 @@
                 
                 
             public function downloadinvoice($id) {
-              
+                    
 			$model = $this->model;
 			$id = $this->utility->decode($id);
                         
@@ -297,9 +322,9 @@
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
-<head>Tax Invoice</head>
+<head>Delivery Note</head>
 <body>
-<img src = "'.base_url().'image.png">
+<img src ="http://tiles.thewebpatriot.com/image.png">
 <h2><b><p align="center">Tax Invoice</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
@@ -337,7 +362,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
 $html .='</body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output($ordersData[0]['invoice_no'], 'I');
+$pdf->Output($ordersData[0]['invoice_no'], 'D');
                         
                         
 			$data['action'] = "update";
@@ -481,7 +506,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
 $html .='</body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output($ordersData[0]['lpo_no'], 'I');
+$pdf->Output($ordersData[0]['lpo_no'], 'D');
                         
                         
 			$data['action'] = "update";
@@ -569,7 +594,7 @@ $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Delivery Note</head>
 <body>
-<img src ="'.base_url().'image.png">
+<img src ="http://tiles.thewebpatriot.com/image.png">
 <h2><b><p align="center">Delivery Note</p></b></h2>
 <table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
@@ -603,7 +628,7 @@ $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the abo
 </body></html>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output($do_no, 'I');
+$pdf->Output($do_no, 'D');
                         
                         
 			$data['action'] = "update";

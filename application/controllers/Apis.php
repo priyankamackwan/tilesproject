@@ -1130,7 +1130,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                 function sendGCM() {
                     
                     $arr = array(
-		    "registration_ids" => array('drm9VhyHnuU:APA91bEpohgHEEK8C72MP9pv2HZZyTSpXFOXyY-1pxdI_GTdyBGq44zxbvTxvbNyYNgqq7njEIEAWp8gtLQRTVGZCqRlZ-s9KIi8TzLaKnWXvBmRwM4XogiHEVMnwjWe0V99LW5C6FYD'),
+		    "registration_ids" => array('dno8AtTMSnU:APA91bEj_YXvr3T3iI0e3d2wXgDGTTrPpaa_hFHO5pJvOzfUqI9cE-wsKVW6myyCEtZMzj7EJxFnU0yPRe5ng-H2PJM8q2q2n9fySU8uMefMO34C6QAOGwgayNKjNQZdnmMtrPFOV2ue'),
 		    "data" => [
 		        "body" => "{'notification_type':1,'company_name':'IOS'}",
 		        "title" => "Latest Code IOS",
@@ -1215,8 +1215,10 @@ $pdf2->Output($fileNL_invoice, 'F');
                     
                          $this->db->select('*');
                  
+                         
+                        $this->db->where('is_deleted', 0);
+          
                             $q = $this->db->get('users');
-                             $this->db->where('is_deleted', 0);
                             $userdata = $q->result_array();
                             $response['data'] = $userdata;
                                  // Returning back the response in JSON
@@ -1360,6 +1362,46 @@ $pdf2->Output($fileNL_invoice, 'F');
                  
                    // Returning back the response in JSON
                     echo json_encode($finalOrderData);
+                    exit();
+                }
+                
+                public function getProductsReport() {
+                    
+                 
+                         
+                $q = $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
+                         
+                 
+                    $finalOrderData = $q->get('order_products')->result();
+                 		foreach ($finalOrderData as $key=>$value)
+				{
+
+                         $multipleWhere2 = ['id' => $value->product_id];
+                        $this->db->where($multipleWhere2);
+                        $productData = $this->db->get("products")->result_array();
+             
+                        $multipleWhere3 = ['product_id' => $value->product_id];
+                        $this->db->where($multipleWhere3);
+                        $productCategoryData = $this->db->get("product_categories")->result_array();
+              
+                        $multipleWhere4 = ['id' => $productCategoryData[0]['cat_id']];
+                        $this->db->where($multipleWhere4);
+                        $categoryData = $this->db->get("categories")->result_array();
+                        $totalQuantity = $value->totalQuantity;
+                                        $nestedData['product_name'] =$productData[0]['name'];
+                                        $nestedData['size'] =$productData[0]['size'];
+                                        $nestedData['category'] =$categoryData[0]['name'];
+                                        $nestedData['amount'] =$value->amount;
+                                        $nestedData['purchase_expense'] =$productData[0]['purchase_expense'];
+                                        $nestedData['sold_quantity'] = $value->totalQuantity;
+                                        $nestedData['total_left_quantity'] =$productData[0]['quantity']-$totalQuantity;
+					$data[] = $nestedData;
+				}
+    
+        
+                 
+                   // Returning back the response in JSON
+                    echo json_encode($data);
                     exit();
                 }
 	}

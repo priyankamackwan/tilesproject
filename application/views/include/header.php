@@ -73,6 +73,7 @@
                         <li><a href="<?php echo base_url();?>Customer_report"><i class="fa fa-tag"></i>Customer Reports</a></li>
                         <li><a href="<?php echo base_url();?>Sales_report"><i class="fa fa-tag"></i>Sales Reports</a></li>
                         <li><a href="<?php echo base_url();?>Expense_report"><i class="fa fa-tag"></i>Expense Reports</a></li>
+                        <li><a href="<?php echo base_url();?>Product_report"><i class="fa fa-tag"></i>Product Reports</a></li>
                         <?php } ?>
                 </ul>
               </div>
