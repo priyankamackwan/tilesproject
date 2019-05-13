@@ -206,14 +206,16 @@
                         $productData= $this->db->get("products")->result_array();
                         $productNameArray[] = $productData[0]['name'];
                         $quantityArray[]= $data['Product'][$k]['quantity'];
+                        $priceArray[]= $data['Product'][$k]['price'];
                         }
 
                         $data['productData'] = array();
                         for($p=0;$p<count($productNameArray);$p++) {
                             $data['productData'][$p]['name']= $productNameArray[$p];
                              $data['productData'][$p]['quantity']= $quantityArray[$p];
+                             $data['productData'][$p]['price']= $priceArray[$p];
                         }
-                 
+                       
                         $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("users")->result_array();

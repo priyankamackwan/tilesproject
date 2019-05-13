@@ -184,6 +184,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                             
                             
                             $userData['id'] = $lastInsertedUserId;
+                            $response['status'] = 'success';
                             $response['data'] = $userData;
                         } else {
                             // If email al'Error']['codeready exists
@@ -427,6 +428,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 $categories[$k]['image']= '';
                             }
                         }
+                        $response['status'] = 'success';
                         $response['data']= $categories;
                     } else {
                           // If any of the mandatory parameters are missing
@@ -512,7 +514,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                             }
                             
-         
+                            $response['status'] = 'success';
                             $response['data'] = $productData;
                         } else {
                             $response['status'] = 'success';
@@ -580,7 +582,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                      $productData[0]['purchase_price']= $productData[0]['purchase_expense'];
                                 unset($productData[0]['purchase_expense']);
                                 $productData[0]['categories_name']= $categoryString;
-                          
+                                $response['status'] = 'success';
                             $response['data'] = $productData;
                         } else {
                             $response['status'] = 'failure';
@@ -946,6 +948,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             
                             
                             $orderData['id'] = $lastInsertedOrderId;
+                            $response['status'] = 'success';
                             $response['data'] = $orderData;
                     } else {
                 
@@ -1005,6 +1008,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         for($i=0;$i<count($orderData);$i++) {
                             $orderData[$i]['image']= base_url().'/assets/uploads/'.$orderData[$i]['image'];
                         }
+                        $response['status'] = 'success';
                         $response['data'] = $orderData;
                     } else {
                         $response['status'] = 'success';
@@ -1053,6 +1057,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         
                         if ($orderData) { 
                             $orderData[0]['image']= base_url().'/assets/uploads/'.$orderData[0]['image'];
+                            $response['status'] = 'success';
                             $response['data'] = $orderData;
                         } else {
                             $response['status'] = 'failure';
@@ -1079,6 +1084,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         for($i=0;$i<count($orderData);$i++) {
                             $orderData[$i]['image']= base_url().'/assets/uploads/'.$orderData[$i]['image'];
                         }
+                        $response['status'] = 'success';
                         $response['data'] = $orderData;
                     } else {
                         $response['status'] = 'success';
@@ -1220,6 +1226,7 @@ $pdf2->Output($fileNL_invoice, 'F');
           
                             $q = $this->db->get('users');
                             $userdata = $q->result_array();
+                            $response['status'] = 'success';
                             $response['data'] = $userdata;
                                  // Returning back the response in JSON
                     echo json_encode($response);
@@ -1268,6 +1275,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $this->db->where('created <=', $data['end_date']);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
+                            
+                        if ($q) {
                             $orderData = array(); 
                             for($k=0;$k<count($q);$k++) {
                                   $multipleWhere2 = ['id' => $q[$k]->user_id];
@@ -1281,10 +1290,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData['created'] = $q[$k]->created;
                         $finalOrderData [] = $orderData;
                             }
-                         
+                        } else {
+                            $finalOrderData = array();
+                        }
                      } 
+                     $response['status'] = 'success';
+                     $response['data'] = $finalOrderData;
                    // Returning back the response in JSON
-                    echo json_encode($finalOrderData);
+                    echo json_encode($response);
                     exit();
                 }
                 
@@ -1295,12 +1308,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $this->db->select('o.id,o.sales_expense,o.invoice_no,o.created');
                     $this->db->from('orders as o');
                     $finalOrderData = $this->db->get()->result_array();
-                 
+                    
                      } else {
                           $q= $this->db->select('*')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
+                            if ($q) {
                             $orderData = array(); 
                             for($k=0;$k<count($q);$k++) {
                                  
@@ -1312,11 +1326,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData['created'] = $q[$k]->created;
                         $finalOrderData [] = $orderData;
                             }
-                         
+                            } else {
+                                $finalOrderData = array();
+                            }
                      } 
-                 
+                     $response['status'] = 'success';
+                 $response['data'] = $finalOrderData;
                    // Returning back the response in JSON
-                    echo json_encode($finalOrderData);
+                    echo json_encode($response);
                     exit();
                 }
                 
@@ -1326,10 +1343,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                      $data = $_POST;
                      if (empty($data)) {
                          
-                         $q = $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
+                         $q = $this->db->select('id,user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
                          
-                 
+          
                     $finalOrderData = $q->get('orders')->result_array();
+                       //  echo '<pre>';
+               //print_r($finalOrderData); exit;
+                    if ($finalOrderData) {
                     for($k=0;$k<count($finalOrderData);$k++) {
                            $invoiceData = $this->db->order_by('id',"desc")
 
@@ -1338,7 +1358,15 @@ $pdf2->Output($fileNL_invoice, 'F');
 		->get('orders')
 
 		->row();
+                            $multipleWhere2 = ['id' => $finalOrderData[$k]['user_id']];
+                        $this->db->where($multipleWhere2);
+                        $userData = $this->db->get("users")->result_array();
+                        
+                        $finalOrderData[$k]['company_name'] = $userData[0]['company_name'];
                            $finalOrderData[$k]['invoice_no'] = $invoiceData->invoice_no;
+                    }
+                    } else {
+                        $finalOrderData = array();
                     }
               
                      } else {
@@ -1346,6 +1374,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $this->db->where('created <=', $data['end_date']);
                           
                             $q = $q->get('orders')->result();
+                           // if ($q){
                         for($k=0;$k<count($q);$k++) {
                            $invoiceData = $this->db->order_by('id',"desc")
 
@@ -1359,9 +1388,10 @@ $pdf2->Output($fileNL_invoice, 'F');
                          
                       $finalOrderData = $q;
                      } 
-                 
+                     $response['status'] = 'success';
+                 $response['data'] = $finalOrderData;
                    // Returning back the response in JSON
-                    echo json_encode($finalOrderData);
+                    echo json_encode($response);
                     exit();
                 }
                 
@@ -1373,6 +1403,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                          
                  
                     $finalOrderData = $q->get('order_products')->result();
+                    if ($finalOrderData) {
                  		foreach ($finalOrderData as $key=>$value)
 				{
 
@@ -1398,10 +1429,13 @@ $pdf2->Output($fileNL_invoice, 'F');
 					$data[] = $nestedData;
 				}
     
-        
-                 
+                    } else {
+                        $data = array();
+                    }
+                    $response['status'] = 'success';
+                  $response['data'] = $data;
                    // Returning back the response in JSON
-                    echo json_encode($data);
+                    echo json_encode($response);
                     exit();
                 }
 	}
