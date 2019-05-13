@@ -32,12 +32,12 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                       
-                            <table border ="1" width="100%"><tr><th style="text-align: center">Product Name</th><th style="text-align: center">Quantity</th></tr>
+                            <table border ="1" width="100%"><tr><th style="text-align: center">Product Name</th><th style="text-align: center">Quantity</th><th style="text-align: center">Price</th></tr>
                                 
                          
    <?php 
    for($p=0;$p<count($productData);$p++) { ?>
-                                <tr><td style="text-align: center"><?php echo $productData[$p]['name'];?></td><td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td></tr>
+                                <tr><td style="text-align: center"><?php echo $productData[$p]['name'];?></td><td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td><td style="text-align: center"><?php echo $productData[$p]['price'];?></td></tr>
                                 
                             <?php } ?>
                             

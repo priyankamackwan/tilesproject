@@ -778,10 +778,10 @@ $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the abo
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-$filelocation = FCPATH.'assets\uploads';
+$filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
 $filename_do = str_replace('/','_', $do_no).'.pdf';
 
-    $fileNL_do = $filelocation."\\".$filename_do;
+    $fileNL_do = $filelocation.DIRECTORY_SEPARATOR.$filename_do;
    //echo $fileNL; exit;
 $pdf->Output($fileNL_do, 'F');
 
@@ -826,9 +826,9 @@ for($p=0;$p<count($finalOrderData);$p++) {
 $html1 .='</body></html>';
 
 $pdf1->writeHTML($html1, true, false, true, false, '');
-$filelocation = FCPATH.'assets\uploads';
+$filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
 $filename_lpo = str_replace('/','_', $lpo).'.pdf';
-    $fileNL_lpo = $filelocation."\\".$filename_lpo;
+    $fileNL_lpo = $filelocation.DIRECTORY_SEPARATOR.$filename_lpo;
    //echo $fileNL; exit;
 $pdf1->Output($fileNL_lpo, 'F');
 
@@ -876,9 +876,9 @@ for($p=0;$p<count($finalOrderData);$p++) {
 $html2 .='</body></html>';
 
 $pdf2->writeHTML($html2, true, false, true, false, '');
-$filelocation = FCPATH.'assets\uploads';
+$filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
 $filename_invoice = str_replace('/','_', $invoice).'.pdf';
-    $fileNL_invoice = $filelocation."\\".$filename_invoice;
+    $fileNL_invoice = $filelocation.DIRECTORY_SEPARATOR.$filename_invoice;
    //echo $fileNL; exit;
 $pdf2->Output($fileNL_invoice, 'F');
                             $orderData['do_url'] = base_url().'/assets/uploads/'.$filename_do;
@@ -975,9 +975,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $filename_do = str_replace('/','_', $do).'.pdf';
                     $filename_invoice = str_replace('/','_', $invoice).'.pdf';
 
-                    $pathLpo = FCPATH .'assets\uploads'.$filename_lpo;
-                    $pathDo = FCPATH .'assets\uploads'.$filename_do;
-                    $pathInvoice = FCPATH .'assets\uploads'.$filename_invoice;
+                    $pathLpo = FCPATH .'assets'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.$filename_lpo;
+                    $pathDo = FCPATH .'assets'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.$filename_do;
+                    $pathInvoice = FCPATH .'assets'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.$filename_invoice;
                     unlink($pathLpo);
                     unlink($pathDo);
                     unlink($pathInvoice);
@@ -1268,6 +1268,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $this->db->where('created <=', $data['end_date']);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
+                            
+                        if ($q) {
                             $orderData = array(); 
                             for($k=0;$k<count($q);$k++) {
                                   $multipleWhere2 = ['id' => $q[$k]->user_id];
@@ -1281,10 +1283,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData['created'] = $q[$k]->created;
                         $finalOrderData [] = $orderData;
                             }
-                         
+                        } else {
+                            $finalOrderData = array();
                      } 
+                     } 
+                     $response['data'] = $finalOrderData;
                    // Returning back the response in JSON
-                    echo json_encode($finalOrderData);
+                    echo json_encode($response);
                     exit();
                 }
                 
@@ -1301,6 +1306,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $this->db->where('created <=', $data['end_date']);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
+                            if ($q) {
                             $orderData = array(); 
                             for($k=0;$k<count($q);$k++) {
                                  
@@ -1312,11 +1318,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData['created'] = $q[$k]->created;
                         $finalOrderData [] = $orderData;
                             }
-                         
+                            } else {
+                                $finalOrderData = array();
                      } 
-                 
+                     } 
+                 $response['data'] = $finalOrderData;
                    // Returning back the response in JSON
-                    echo json_encode($finalOrderData);
+                    echo json_encode($response);
                     exit();
                 }
                 
@@ -1330,6 +1338,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                          
                  
                     $finalOrderData = $q->get('orders')->result_array();
+                    if ($finalOrderData) {
                     for($k=0;$k<count($finalOrderData);$k++) {
                            $invoiceData = $this->db->order_by('id',"desc")
 
@@ -1340,12 +1349,16 @@ $pdf2->Output($fileNL_invoice, 'F');
 		->row();
                            $finalOrderData[$k]['invoice_no'] = $invoiceData->invoice_no;
                     }
+                    } else {
+                        $finalOrderData = array();
+                    }
               
                      } else {
                            $q= $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
                           
                             $q = $q->get('orders')->result();
+                           // if ($q){
                         for($k=0;$k<count($q);$k++) {
                            $invoiceData = $this->db->order_by('id',"desc")
 
@@ -1359,9 +1372,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                          
                       $finalOrderData = $q;
                      } 
-                 
+                 $response['data'] = $finalOrderData;
                    // Returning back the response in JSON
-                    echo json_encode($finalOrderData);
+                    echo json_encode($response);
                     exit();
                 }
                 
@@ -1373,6 +1386,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                          
                  
                     $finalOrderData = $q->get('order_products')->result();
+                    if ($finalOrderData) {
                  		foreach ($finalOrderData as $key=>$value)
 				{
 
@@ -1398,10 +1412,12 @@ $pdf2->Output($fileNL_invoice, 'F');
 					$data[] = $nestedData;
 				}
     
-        
-                 
+                    } else {
+                        $data = array();
+                    }
+                  $response['data'] = $data;
                    // Returning back the response in JSON
-                    echo json_encode($data);
+                    echo json_encode($response);
                     exit();
                 }
 	}
