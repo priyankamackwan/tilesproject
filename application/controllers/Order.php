@@ -109,6 +109,11 @@
                                         $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
                                         $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
                                         $nestedData['sales_expense'] =$value->sales_expense;
+                                         if ($value->invoice_status == 0) { 
+                                            $nestedData['invoice_status'] = 'Unpaid';
+                                        } elseif($value->invoice_status == 1) {
+                                            $nestedData['invoice_status'] ='Paid';
+                                        } 
                                         if ($value->status == 0) { 
                                             $nestedData['status'] = 'Pending';
                                         } elseif($value->status == 1) {
@@ -205,6 +210,7 @@
                         $this->db->where($multipleWhere2);
                         $productData= $this->db->get("products")->result_array();
                         $productNameArray[] = $productData[0]['name'];
+                        $designNoArray[] = $productData[0]['design_no'];
                         $quantityArray[]= $data['Product'][$k]['quantity'];
                         $priceArray[]= $data['Product'][$k]['price'];
                         }
@@ -212,6 +218,7 @@
                         $data['productData'] = array();
                         for($p=0;$p<count($productNameArray);$p++) {
                             $data['productData'][$p]['name']= $productNameArray[$p];
+                            $data['productData'][$p]['design_no']= $designNoArray[$p];
                              $data['productData'][$p]['quantity']= $quantityArray[$p];
                              $data['productData'][$p]['price']= $priceArray[$p];
                         }
@@ -644,11 +651,13 @@ $pdf->Output($do_no, 'I');
                      //  echo $id; exit;
 			$sales_expense = $this->input->post('sales_expense');
                         $status = $this->input->post('status');
+                        $invoice_status = $this->input->post('invoice_status');
                         //echo $sales_expense; exit;
 			$data = array(
 
                             'sales_expense' => $sales_expense,
                             'status' => $status,
+                            'invoice_status' => $invoice_status,
 
 
 			);

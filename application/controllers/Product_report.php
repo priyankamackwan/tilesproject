@@ -138,6 +138,7 @@
                         $totalQuantity = $value->totalQuantity;
 					$nestedData['id'] = $srNo;
                                         $nestedData['product_name'] =$productData[0]['name'];
+                                        $nestedData['design_no'] =$productData[0]['design_no'];
                                         $nestedData['size'] =$productData[0]['size'];
                                         $nestedData['category'] =$categoryData[0]['name'];
                                         $nestedData['amount'] =$value->amount;

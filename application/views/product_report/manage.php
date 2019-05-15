@@ -26,6 +26,7 @@
                     <thead>
                           <th>Sr No.</th>
                           <th>Product Name</th>
+                          <th>Design No.</th>
                           <th>Size</th>
                           <th>Category</th>
                           <th>Amount</th>
@@ -34,6 +35,7 @@
                           <th>Total Quantity Balance</th>
                     </thead>
                     <thead>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -71,6 +73,7 @@
 			"columns": [
 				{ "data": "id"},
                                 { "data": "product_name"},
+                                { "data": "design_no"},
                                 { "data": "size"},
                                 { "data": "category"},
                                 { "data": "amount"},

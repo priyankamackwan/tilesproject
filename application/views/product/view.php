@@ -87,7 +87,7 @@
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="category_image">Uploaded Image
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<img width="50px" height="50px" src="<?php echo base_url().'./assets/uploads/'.$result[0]->image;?>" style="background-color:navy;" >
+							<img width="150px" height="150px" src="<?php echo base_url().'./assets/uploads/'.$result[0]->image;?>" style="background-color:navy;" >
 						</div>
 					  </div>
                       <div class="form-group">

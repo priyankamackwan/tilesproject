@@ -123,7 +123,7 @@
 					$nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
                                         $test = base_url();
                                         if (!empty($value->image)) {
-                                        $nestedData['image'] = "<img width='50px' height='50px' src='$test/assets/uploads/$value->image' style='background-color:navy;' >";
+                                        $nestedData['image'] = "<img width='100px' height='100px' src='$test/assets/uploads/$value->image' style='background-color:navy;' >";
                                         } else {
                                             $nestedData['image'] = '';
                                         }   
@@ -546,7 +546,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
 
-	$Reader = new SpreadsheetReader('users.xlsx');
+	$Reader = new SpreadsheetReader(dirname(__FILE__).'/users.xlsx');
 	foreach ($Reader as $Row)
 	{
                 echo '<pre>';

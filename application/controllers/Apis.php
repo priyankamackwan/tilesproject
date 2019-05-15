@@ -40,7 +40,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                         $userLoginData = $q->result_array();
                         if (count($userLoginData) == 0) {
                             $response['status'] = 'failure';
-                            $response['message'] = 'Wrong token used';
+                            $response['message'] = 'Wrong authentication parameters used';
                             // Returning back the response in JSON
                             echo json_encode($response);
                             exit();
@@ -666,6 +666,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 'cargo_number' => $data['cargo_number'],
                                 'location' => $data['location'],
                                 'mark' => $data['mark'],
+                                'invoice_status' => 0,
                                     'created' => date('Y-m-d h:i:s'),
                             );
                             $this->$model->insert('orders',$orderData);
@@ -1145,6 +1146,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 		    // "data" => json_encode(array())
 		);
     	$data = json_encode($arr);
+        echo $data; exit;
 		//FCM API end-point
 		$url = 'https://fcm.googleapis.com/fcm/send';
 		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
@@ -1240,6 +1242,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                     if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
                                 if ($data['status'] == 1 || $data['status'] == 2 || $data['status'] == 3) {
                                     $newData['status'] = $data['status'];
+                                    if ($data['client_type']) {
+                                        $this->db->set('client_type', $data['client_type']);
+                                    }
                                     $this->db->set('status', $data['status']);
                                     $this->db->where('id',$data['user_id']);
                                     $this->db->update('users',$newData);
@@ -1261,7 +1266,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     exit();
                 }
                 
-                public function getCustomerReport() {
+                   public function getCustomerReport() {
                     
                      $data = $_POST;
                      if (empty($data)) {
@@ -1288,6 +1293,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData['contact_person_name'] = $userData[0]['contact_person_name'];
                         $orderData['location'] = $q[$k]->location;
                         $orderData['created'] = $q[$k]->created;
+                        $orderData['total_price'] = $q[$k]->total_price;
                         $finalOrderData [] = $orderData;
                             }
                         } else {
@@ -1343,7 +1349,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                      $data = $_POST;
                      if (empty($data)) {
                          
-                         $q = $this->db->select('id,user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
+                         $q = $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
                          
           
                     $finalOrderData = $q->get('orders')->result_array();
@@ -1383,6 +1389,12 @@ $pdf2->Output($fileNL_invoice, 'F');
 		->get('orders')
 
 		->row();
+                           
+                            $multipleWhere2 = ['id' => $q[$k]->user_id];
+                        $this->db->where($multipleWhere2);
+                        $userData = $this->db->get("users")->result_array();
+                        
+                        $q[$k]->company_name = $userData[0]['company_name'];
                            $q[$k]->invoice_no = $invoiceData->invoice_no;
                     }
                          
@@ -1420,6 +1432,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $categoryData = $this->db->get("categories")->result_array();
                         $totalQuantity = $value->totalQuantity;
                                         $nestedData['product_name'] =$productData[0]['name'];
+                                        $nestedData['design_no'] =$productData[0]['design_no'];
                                         $nestedData['size'] =$productData[0]['size'];
                                         $nestedData['category'] =$categoryData[0]['name'];
                                         $nestedData['amount'] =$value->amount;

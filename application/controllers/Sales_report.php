@@ -139,7 +139,7 @@
 					$nestedData['id'] = $srNo;
                                         $nestedData['company_name'] =$userData[0]['company_name'];
                                         $nestedData['invoice_no'] =$invoiceData->invoice_no;
-                                        $nestedData['total_price'] =$value->total_sales_expense;
+                                        $nestedData['total_price'] =$value->totalValue;
                                         $nestedData['sales_expense'] =$value->total_sales_expense;
 					$data[] = $nestedData;
                                         $srNo++;

@@ -28,16 +28,16 @@
 	<input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
 					  
 					  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Product Name/Quantity
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Order Detail
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                       
-                            <table border ="1" width="100%"><tr><th style="text-align: center">Product Name</th><th style="text-align: center">Quantity</th><th style="text-align: center">Price</th></tr>
+                            <table border ="1" width="100%"><tr><th style="text-align: center">Product Name</th><th style="text-align: center">Design No</th><th style="text-align: center">Quantity</th><th style="text-align: center">Price</th></tr>
                                 
                          
    <?php 
    for($p=0;$p<count($productData);$p++) { ?>
-                                <tr><td style="text-align: center"><?php echo $productData[$p]['name'];?></td><td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td><td style="text-align: center"><?php echo $productData[$p]['price'];?></td></tr>
+                                <tr><td style="text-align: center"><?php echo $productData[$p]['name'];?></td><td style="text-align: center"><?php echo $productData[$p]['design_no'];?></td><td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td><td style="text-align: center"><?php echo $productData[$p]['price'];?></td></tr>
                                 
                             <?php } ?>
                             
@@ -51,13 +51,7 @@
                           <?php echo $User[0]['company_name'];?>
                         </div>
                       </div>
-                        	  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Price
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <?php echo $result[0]->price;?>
-                        </div>
-                      </div>
+    
        
         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Tax
@@ -155,6 +149,31 @@
                                 <?php } else { ?>
                                <option value="2">Completed</option>
                                 <?php } ?>
+                                
+                                
+                            </select>
+                        </div>
+                      </div>
+        
+        
+                <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="order_payment_status">Order Payment Status
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select name="invoice_status">
+                                <?php 
+                                
+                                if ($result[0]->invoice_status == 0) { ?>
+                                <option value="0" selected="selected">Unpaid</option>
+                                <?php } else { ?>
+                                <option value="0">Unpaid</option>
+                                <?php } ?>
+                                  <?php if ($result[0]->invoice_status == 1) { ?>
+                                <option value="1" selected="selected">Paid</option>
+                               <?php } else { ?>
+                                <option value="1">Paid</option>
+                                <?php } ?>
+                             
                                 
                                 
                             </select>

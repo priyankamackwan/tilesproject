@@ -34,20 +34,25 @@
                          <?php if ($client_type == 1) { ?>
                                 <option value="1" selected="">Cash</option>
                          <?php } else { ?>
-                              <option value="1">Cash</option>
+                                <option value="1">Cash</option>
                          <?php } ?>
                         <?php if ($client_type == 2) { ?>
                                 <option value="2" selected="">Credit</option>
                          <?php } else { ?>
-                              <option value="2">Credit</option>
+                               <option value="2">Credit</option>
                          <?php } ?>
                                 
                         <?php if ($client_type == 3) { ?>
                                <option value="3"selected="">Walkin</option>
                         <?php } else { ?>
-                              <option value="3">Walkin</option>
+                                 <option value="3">Walkin</option>
                         <?php } ?>
                              
+                        <?php if ($client_type == 4 && $this->userhelper->current('role_id') == 1)  { ?>
+                               <option value="4"selected="">Flexible Rate</option>
+                        <?php } else { ?>
+                                 <option value="4">Flexible Rate</option>
+                        <?php } ?>
                              
                              
 </select>

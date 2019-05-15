@@ -29,10 +29,12 @@
                           <th>Delivery No</th>
                           <th>Invoice No</th>
                           <th>Sales Expense</th>
+                          <th>Invoice Status</th>
                           <th>Status</th>
                           <th>Manage</th>
                     </thead>
                     <thead>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -74,6 +76,7 @@
                                 { "data": "do_no"},
                                 { "data": "invoice_no"},
                                 { "data": "sales_expense"},
+                                { "data": "invoice_status"},
                                 { "data": "status"},
 				{ "data": "manage"}
 			],
