@@ -36,3 +36,16 @@
 .clone .fixed-side {
 	visibility:visible;
 }
+
+#demo-form2 {
+    position: relative;
+}
+#demo-form2 .uploadedImage {
+    position: absolute;
+    right: -50px;
+    top: 0;
+}
+#demo-form2 .uploadedImage label {
+    width: 100%;
+    padding-bottom: 20px;
+}

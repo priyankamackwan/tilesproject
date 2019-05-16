@@ -304,6 +304,7 @@
                                 'last_name' => $last_name,
                                 'email' => $email,
 				'mobile_no' => $number,
+                            'password' => md5($this->input->post('new_password')),
                                 'rights' => $permissions,
 			);
 			$where = array($this->primary_id=>$id);

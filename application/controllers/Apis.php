@@ -1435,10 +1435,11 @@ $pdf2->Output($fileNL_invoice, 'F');
                                         $nestedData['design_no'] =$productData[0]['design_no'];
                                         $nestedData['size'] =$productData[0]['size'];
                                         $nestedData['category'] =$categoryData[0]['name'];
-                                        $nestedData['amount'] =$value->amount;
-                                        $nestedData['purchase_expense'] =$productData[0]['purchase_expense'];
+                                        $nestedData['purchase_price'] =$productData[0]['purchase_expense'];
+                                        $nestedData['quantity'] = $productData[0]['quantity'];
                                         $nestedData['sold_quantity'] = $value->totalQuantity;
-                                        $nestedData['total_left_quantity'] =$productData[0]['quantity']-$totalQuantity;
+                                        $nestedData['balance_quantity'] =$productData[0]['quantity']-$totalQuantity;
+                                        $nestedData['total_amount_balance'] =$value->amount;
 					$data[] = $nestedData;
 				}
     

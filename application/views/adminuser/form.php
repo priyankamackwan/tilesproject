@@ -66,6 +66,14 @@
                           <input type="password" name="password" value="" class="form-control col-md-7 col-xs-12" placeholder="Password">
                         </div>
                       </div>
+                                        <?php } else { ?>
+                                                             <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="email">Password
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="password" name="new_password" value="" class="form-control col-md-7 col-xs-12" placeholder="Password">
+                        </div>
+                      </div>
                                         <?php } ?>
 					  <div class="form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="Mobile">Mobile No <span class="required">*</span>
@@ -213,10 +221,11 @@ return value == '' || value.trim().length != 0;
 					},
 					submitHandler: function(form){
                                             
-                                                var businessuser = $('#business_user:checkbox:checked').length;
                                                 var user = $('#user:checkbox:checked').length;
                                                 var category = $('#category:checkbox:checked').length;
-                                                if (businessuser == 0 && user == 0 && category == 0) {
+                                                var product = $('#product:checkbox:checked').length;
+                                                var order = $('#order:checkbox:checked').length;
+                                                if (user == 0 && category == 0 && category == 0 && order == 0) {
                                                  alert('Please select atleast one module for access');
                                                  return false;
                                                 }

@@ -18,7 +18,7 @@
 			date_default_timezone_set('Asia/Kolkata');
 			$this->model = "My_model";
                     
-                      if (!in_array(4,$this->userhelper->current('rights'))) {
+                      if (!in_array(6,$this->userhelper->current('rights'))) {
                         $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
                         redirect('Change_password');
                       }
@@ -312,15 +312,13 @@ $html = '<html>
 <h2><b><p align="center">Tax Invoice</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
-<table style="width:100%;"><tr><td style="width:100%; text-align:right;">PNP BUILDING MATERIAL TRADING LLC<br>INDUSTRIAL AREA 2 , RAS AL KHOR<br>DUBAI, 103811, U.A.E<br>+97143531040 / +971558532631<br>Email: info@pnptiles.com</td></tr></table>
-<br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$ordersData[0]['lpo_no'].'</td> </tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">SR No.</th><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">UNIT</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">RATE</th><th style="text-align: center">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -452,7 +450,6 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
-<head>Local Purchase Order</head>
 <body>
 <h2><b><p align="center">Local Purchase Order</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
@@ -466,7 +463,7 @@ $html = '<html>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">SR No.</th><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">UNIT</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">RATE</th><th style="text-align: center">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align:center" width="5%" >SR No.</th><th style="text-align: center" width="30%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="12%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -591,7 +588,7 @@ $html = '<html>
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table>     
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">Size</th><th style="text-align: center">Design</th><th style="text-align: center">quantity</th><th style="text-align: center">Unit</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="60%">DESCRIPTION</th><th style="text-align: center" width="10%">Size</th><th style="text-align: center" width="10%">Design</th><th style="text-align: center" width="10%">quantity</th><th style="text-align: center" width="10%">Unit</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 

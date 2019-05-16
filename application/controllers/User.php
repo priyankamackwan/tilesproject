@@ -120,8 +120,10 @@
                                             $nestedData['client_type'] = 'Cash';
                                         } elseif($value->client_type == 2) {
                                             $nestedData['client_type'] = 'Credit';
-                                        } else {
+                                        } elseif($value->client_type == 3) {
                                             $nestedData['client_type'] = 'Walkin';
+                                        } else {
+                                            $nestedData['client_type'] = 'Flexible Rate';
                                         }
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 0) {

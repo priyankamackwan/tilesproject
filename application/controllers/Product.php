@@ -18,7 +18,7 @@
 			date_default_timezone_set('Asia/Kolkata');
 			$this->model = "My_model";
                     
-                      if (!in_array(4,$this->userhelper->current('rights'))) {
+                      if (!in_array(5,$this->userhelper->current('rights'))) {
                         $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
                         redirect('Change_password');
                       }
@@ -541,7 +541,7 @@
                 
                 public function addUsers() {
                     
-	
+	$model = $this->model;
 require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
@@ -549,9 +549,186 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 	$Reader = new SpreadsheetReader(dirname(__FILE__).'/users.xlsx');
 	foreach ($Reader as $Row)
 	{
-                echo '<pre>';
-		print_r($Row);
+               // echo '<pre>';
+		//print_r($Row);
+            
+            	$data = array(
+				'company_name' => $Row[0],
+                                'company_address' => $Row[1],
+                                'contact_person_name' => $Row[2],
+				'vat_number' => $Row[3],
+                                'email' => $Row[4],
+                                'phone_no' => $Row[5],
+                     'password' => md5($Row[6]),
+                     'client_type' => $Row[7],
+
+			);
+			$this->$model->insert('Users',$data);
 	}
+        echo 'done'; exit;
+    }
+    
+                    public function addProducts() {
+                    
+	$model = $this->model;
+require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+
+	require('spreadsheet-reader-master/SpreadsheetReader.php');
+
+	$Reader = new SpreadsheetReader(dirname(__FILE__).'/products.xlsx');
+	foreach ($Reader as $Row)
+	{
+               // echo '<pre>';
+		//print_r($Row);
+            
+                 $this->db->select('*');
+                        $this->db->where('name', $Row[12]);
+                        $q = $this->db->get('categories');
+            $categoryData = $q->result_array();
+            if ($categoryData) {
+            	$data = array(
+				'name' => $Row[0],
+                                'design_no' => $Row[1],
+                                'cash_rate' => $Row[2],
+				'credit_rate' => $Row[3],
+                                'walkin_rate' => $Row[4],
+                                'size' => $Row[5],
+                     'unit' => md5($Row[6]),
+                     'purchase_expense' => $Row[7],
+                     'image' => $Row[8],
+                    'quantity' => $Row[9],
+                    'factor' => $Row[10],
+                    'quantity_per_unit' => $Row[11],
+
+			);
+			$this->$model->insert('products',$data);
+                        
+                        $lastInsertedProductId = $this->db->insert_id();
+                        
+                          $productCategoryData = array(
+                                    'product_id' => $lastInsertedProductId,
+                                    'cat_id' =>$categoryData[0]['id'],
+                                    'created' => date('Y-m-d h:i:s'),
+                            );
+                            $this->$model->insert('product_categories',$productCategoryData); 
+            } else {
+           
+                	$categoryData = array(
+				'name' => $Row[12],
+			);
+			$this->$model->insert('categories',$categoryData);
+                    
+                        $lastInsertedCategoryId = $this->db->insert_id();
+                        
+                        
+                         	$data = array(
+				'name' => $Row[0],
+                                'design_no' => $Row[1],
+                                'cash_rate' => $Row[2],
+				'credit_rate' => $Row[3],
+                                'walkin_rate' => $Row[4],
+                                'size' => $Row[5],
+                     'unit' => $Row[6],
+                     'purchase_expense' => $Row[7],
+                     'image' => $Row[8],
+                    'quantity' => $Row[9],
+                    'factor' => $Row[10],
+                    'quantity_per_unit' => $Row[11],
+
+			);
+			$this->$model->insert('products',$data);
+                        
+                        $lastInsertedProductId = $this->db->insert_id();
+                        
+                          $productCategoryData = array(
+                                    'product_id' => $lastInsertedProductId,
+                                    'cat_id' =>$lastInsertedCategoryId,
+                                    'created' => date('Y-m-d h:i:s'),
+                            );
+                            $this->$model->insert('product_categories',$productCategoryData); 
+            }
+	}
+        echo 'done'; exit;
+    }
+    
+                        public function addOrders() {
+                    
+	$model = $this->model;
+require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+
+	require('spreadsheet-reader-master/SpreadsheetReader.php');
+
+	$Reader = new SpreadsheetReader(dirname(__FILE__).'/orders.xlsx');
+	foreach ($Reader as $Row)
+	{
+               // echo '<pre>';
+		//print_r($Row);
+             $this->db->select('*');
+                        $this->db->where('email', $Row[0]);
+                        $q = $this->db->get('users');
+            $userData = $q->result_array();
+        
+               if ($userData){
+                   
+                      $this->db->select('id');
+                        
+                       
+                            $q = $this->db->get('orders');
+                            
+                            $orderLast = $q->result_array();
+
+                         $newOrder = end($orderLast)['id'] + 1;
+               
+                                 if (date('m') <= 3) {//Upto June 2014-2015
+    $financial_year = (date('y')-1) . '-' . date('y');
+} else {//After June 2015-2016
+    $financial_year = date('y') . '-' . (date('y') + 1);
+}
+
+                         $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
+                         $do = 'DO/'.$newOrder.'/'.$financial_year;
+                         $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
+                         
+           	$data = array(
+				'user_id' => $userData[0]['id'],
+                                'tax' => $Row[4],
+                                'total_price' => $Row[5],
+				'lpo_no' => $lpo,
+                                'do_no' => $do,
+                                'invoice_no' => $invoice,
+                     'sales_expense' => $Row[6],
+                     'cargo' => $Row[7],
+                     'cargo_number' => $Row[8],
+                    'location' => $Row[9],
+                    'mark' => $Row[10],
+			);
+			$this->$model->insert('orders',$data); 
+                        
+                        $lastInsertedOrderId = $this->db->insert_id();
+                   
+                        $countProducts = explode(',', $Row[1]);
+                        $countQuantity = explode(',', $Row[2]);
+                        $countPrice = explode(',', $Row[3]);
+                     
+                        for($k=0;$k<count($countPrice);$k++) {
+                            
+                              $this->db->select('*');
+                        $this->db->where('design_no', $countProducts[$k]);
+                        $q = $this->db->get('products');
+            $productData = $q->result_array();
+                            
+                              $orderProductData = array(
+                                    'order_id' => $lastInsertedOrderId,
+                                    'product_id' =>$productData[0]['id'],
+                                    'quantity' => $countQuantity[$k],
+                              'price' => $countPrice[$k],
+                            );
+                            $this->$model->insert('order_products',$orderProductData); 
+                        }
+                        
+	}
+        }
+        echo 'done'; exit;
     }
     
 	}

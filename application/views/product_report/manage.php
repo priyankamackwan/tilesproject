@@ -29,12 +29,14 @@
                           <th>Design No.</th>
                           <th>Size</th>
                           <th>Category</th>
-                          <th>Amount</th>
                           <th>Purchase Price</th>
+                          <th>Total Quantity</th>
                           <th>Sold Quantity</th>
-                          <th>Total Quantity Balance</th>
+                          <th>Balance Quantity</th>
+                           <th>Total Amount Balance</th>
                     </thead>
                     <thead>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -76,15 +78,16 @@
                                 { "data": "design_no"},
                                 { "data": "size"},
                                 { "data": "category"},
-                                { "data": "amount"},
                                 { "data": "purchase_expense"},
+                                { "data": "quantity"},
                                 { "data": "sold_quantity"},
                                 { "data": "total_left_quantity"},
+                                { "data": "amount"},
 			],
                                  "bInfo" : false,
                                  "bFilter": false,
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4,5,6,7],
+				"targets": [0,1,2,3,4,5,6,7,8,9],
 				"orderable": false
 			} ],
 			"rowCallback": function( row, data, index ) {

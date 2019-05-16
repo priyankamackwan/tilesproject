@@ -58,8 +58,12 @@
                                                     redirect('User');
                                                     } elseif(in_array(4,$rights)) {
                                                     redirect('Category');
+                                                    } elseif(in_array(5,$rights)) {
+                                                    redirect('Product');
+                                                    } elseif(in_array(6,$rights)) {
+                                                    redirect('Order');
                                                     } else {
-                                                        redirect('Category');
+                                                        redirect('User');
                                                     }
                                                    
 						
