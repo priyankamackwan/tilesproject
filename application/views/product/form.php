@@ -100,7 +100,18 @@
                            <?php } ?>
                         </div>
                       </div>
-                                       	 
+                                
+          	  <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="flexible_rate">Flexible Rate<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                             <?php if ($this->userhelper->current('role_id') == 1) { ?>
+                          <input type="text" name="flexible_rate" value="<?php echo $result[0]->flexible_rate;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Flexible Rate">
+                             <?php } else { ?>
+                      <input type="text" name="flexible_rate" value="<?php echo $result[0]->flexible_rate;?>" readonly="" class="form-control col-md-7 col-xs-12" placeholder="Enter Flexible Rate">
+                           <?php } ?>
+                        </div>
+                      </div>                                       
                          
                            
                       <div class="form-group">
@@ -377,6 +388,9 @@ return value == '' || value.trim().length != 0;
 							required: true,
 						},
                                                 walkin_rate:{
+							required: true,
+						},
+                                                flexible_rate:{
 							required: true,
 						},
                                                 purchase_expense:{

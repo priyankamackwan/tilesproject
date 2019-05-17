@@ -423,7 +423,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     if ($categories) {
                         for ($k=0;$k<count($categories);$k++) {
                             if (!empty($categories[$k]['image'])) {
-                                $categories[$k]['image']= base_url().'/assets/uploads/'.$categories[$k]['image'];
+                                $categories[$k]['image']= base_url().'assets/uploads/'.$categories[$k]['image'];
                             } else {
                                 $categories[$k]['image']= '';
                             }
@@ -472,8 +472,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                             for($i=0;$i<count($productData);$i++) {
                                $categoryString = '';
                                $img= $productData[$i]['image'];
-                                $productData[$i]['image']= base_url().'/assets/uploads/'.$img;
-                                $productData[$i]['thumbnail']= base_url().'/assets/uploads/small/'.$img;
+                                $productData[$i]['image']= base_url().'assets/uploads/'.$img;
+                                $productData[$i]['thumbnail']= base_url().'assets/uploads/small/'.$img;
                                 if ($productData[$i]['unit'] == 1) {
                                     $productData[$i]['unit'] = 'CTN';
                                 }
@@ -541,8 +541,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                
                         if ($productData) {
                             $img= $productData[0]['image'];
-                            $productData[0]['image']= base_url().'/assets/uploads/'.$img;
-                            $productData[0]['thumbnail']= base_url().'/assets/uploads/small/'.$img;
+                            $productData[0]['image']= base_url().'assets/uploads/'.$img;
+                            $productData[0]['thumbnail']= base_url().'assets/uploads/small/'.$img;
                             if ($productData[0]['unit'] == 1) {
                                     $productData[0]['unit'] = 'CTN';
                                 }
@@ -720,6 +720,10 @@ use PHPMailer\PHPMailer\PHPMailer;
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
                         }
+                        
+                        if ($userData[0]['client_type'] == 4) {
+                            $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
+                        }
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -884,9 +888,9 @@ $filename_invoice = str_replace('/','_', $invoice).'.pdf';
     $fileNL_invoice = $filelocation.DIRECTORY_SEPARATOR.$filename_invoice;
    //echo $fileNL; exit;
 $pdf2->Output($fileNL_invoice, 'F');
-                            $orderData['do_url'] = base_url().'/assets/uploads/'.$filename_do;
-                             $orderData['lpo_url'] = base_url().'/assets/uploads/'.$filename_lpo;
-                              $orderData['invoice_url'] = base_url().'/assets/uploads/'.$filename_invoice;
+                            $orderData['do_url'] = base_url().'assets/uploads/'.$filename_do;
+                             $orderData['lpo_url'] = base_url().'assets/uploads/'.$filename_lpo;
+                              $orderData['invoice_url'] = base_url().'assets/uploads/'.$filename_invoice;
                             $this->db->select('*');
                             $this->db->where('login_status', 1);
                             $this->db->where('role', 2);
@@ -957,6 +961,40 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $response['status'] = 'failure';
                         $response['message'] = 'Please provide product id, tax and total price';
                     }
+                   // echo $orderData['do_url']; exit;
+                       $mail = new PHPMailer;
+                            $mail->isSMTP();
+                            $mail->Host = 'smtp.gmail.com';
+                            $mail->Port = 587;
+                            $mail->SMTPAuth = true;
+                            $mail->Username = 'cygnet.rsshah@gmail.com';
+                            $mail->Password = 'R$$@8926';
+                           // $mail->SMTPDebug  = 2;
+                            $mail->setFrom('cygnet.rsshah@gmail.com', 'Ravi');
+                            $mail->Subject = "Add Order";
+                            $mail->MsgHTML('New Order Arrived');
+                            $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
+                            $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
+                            $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
+                            $mail->addAddress('ravishah291089@gmail.com', 'Ravi');
+                            $mail->send();
+                            
+                               $new_mail = new PHPMailer;
+                            $new_mail->isSMTP();
+                            $new_mail->Host = 'smtp.gmail.com';
+                            $new_mail->Port = 587;
+                            $new_mail->SMTPAuth = true;
+                            $new_mail->Username = 'cygnet.rsshah@gmail.com';
+                            $new_mail->Password = 'R$$@8926';
+                           // $mail->SMTPDebug  = 2;
+                            $new_mail->setFrom('cygnet.rsshah@gmail.com', 'Ravi');
+                            $new_mail->Subject = "Add Order";
+                            $new_mail->MsgHTML('New Order Arrived');
+                            $new_mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
+                            $new_mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
+                            $new_mail->addAddress($userData[0]['email'],$userData[0]['company_name']);
+                            $new_mail->send();
+                    
                     // Returning back the response in JSON
                     echo json_encode($response);
                     exit();
@@ -1007,7 +1045,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $orderData = $this->db->get()->result_array();
                     if ($orderData) {
                         for($i=0;$i<count($orderData);$i++) {
-                            $orderData[$i]['image']= base_url().'/assets/uploads/'.$orderData[$i]['image'];
+                            $orderData[$i]['image']= base_url().'assets/uploads/'.$orderData[$i]['image'];
                         }
                         $response['status'] = 'success';
                         $response['data'] = $orderData;
@@ -1057,7 +1095,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData = $this->db->get()->result_array();
                         
                         if ($orderData) { 
-                            $orderData[0]['image']= base_url().'/assets/uploads/'.$orderData[0]['image'];
+                            $orderData[0]['image']= base_url().'assets/uploads/'.$orderData[0]['image'];
                             $response['status'] = 'success';
                             $response['data'] = $orderData;
                         } else {
@@ -1083,7 +1121,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $orderData = $this->db->get()->result_array();
                     if ($orderData) {
                         for($i=0;$i<count($orderData);$i++) {
-                            $orderData[$i]['image']= base_url().'/assets/uploads/'.$orderData[$i]['image'];
+                            $orderData[$i]['image']= base_url().'assets/uploads/'.$orderData[$i]['image'];
                         }
                         $response['status'] = 'success';
                         $response['data'] = $orderData;
@@ -1270,20 +1308,30 @@ $pdf2->Output($fileNL_invoice, 'F');
                     
                      $data = $_POST;
                      if (empty($data)) {
-                    $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.created');
+                    $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created');
                     $this->db->from('orders as o');
                     $this->db->join('users as u', 'o.user_id = u.id');
                     $finalOrderData = $this->db->get()->result_array();
-                 
+                    for($l=0;$l<count($finalOrderData);$l++) {
+                        if ($finalOrderData[$l]['invoice_status'] == 0) {
+                            $finalOrderData[$l]['invoice_status'] = 'Unpaid';
+                        } else {
+                            $finalOrderData[$l]['invoice_status'] = 'Paid';
+                        }
+                    }
+
                      } else {
                           $q= $this->db->select('*')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
-                            
+                         //   echo '<pre>';
+                         //   print_r($q); exit;
                         if ($q) {
                             $orderData = array(); 
+                         
                             for($k=0;$k<count($q);$k++) {
+                              
                                   $multipleWhere2 = ['id' => $q[$k]->user_id];
                         $this->db->where($multipleWhere2);
                         $userData = $this->db->get("users")->result_array();
@@ -1292,6 +1340,11 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $orderData['company_name'] = $userData[0]['company_name'];
                         $orderData['contact_person_name'] = $userData[0]['contact_person_name'];
                         $orderData['location'] = $q[$k]->location;
+                        if ($q[$k]->invoice_status == 0) {
+                            $orderData['invoice_status'] = 'Unpaid';
+                        } else {
+                            $orderData['invoice_status'] = 'Paid';
+                        }
                         $orderData['created'] = $q[$k]->created;
                         $orderData['total_price'] = $q[$k]->total_price;
                         $finalOrderData [] = $orderData;

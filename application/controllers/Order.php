@@ -281,6 +281,10 @@
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
                         }
                         
+                        if ($userData[0]['client_type'] == 4) {
+                            $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
+                        }
+                        
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -423,6 +427,10 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
+                        }
+                        
+                        if ($userData[0]['client_type'] == 4) {
+                            $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
                         }
                         
                         if ($productData[0]['unit'] == 1) {
@@ -719,6 +727,88 @@ $pdf->Output($do_no, 'I');
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
                         redirect($this->controller);	
 		}
+                
+                
+                                   public function addOrders() {
+                    
+	$model = $this->model;
+require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+
+	require('spreadsheet-reader-master/SpreadsheetReader.php');
+
+	$Reader = new SpreadsheetReader(dirname(__FILE__).'/orders.xlsx');
+	foreach ($Reader as $Row)
+	{
+               // echo '<pre>';
+		//print_r($Row);
+             $this->db->select('*');
+                        $this->db->where('email', $Row[0]);
+                        $q = $this->db->get('users');
+            $userData = $q->result_array();
+        
+               if ($userData){
+                   
+                      $this->db->select('id');
+                        
+                       
+                            $q = $this->db->get('orders');
+                            
+                            $orderLast = $q->result_array();
+
+                         $newOrder = end($orderLast)['id'] + 1;
+               
+                                 if (date('m') <= 3) {//Upto June 2014-2015
+    $financial_year = (date('y')-1) . '-' . date('y');
+} else {//After June 2015-2016
+    $financial_year = date('y') . '-' . (date('y') + 1);
+}
+
+                         $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
+                         $do = 'DO/'.$newOrder.'/'.$financial_year;
+                         $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
+                         
+           	$data = array(
+				'user_id' => $userData[0]['id'],
+                                'tax' => $Row[4],
+                                'total_price' => $Row[5],
+				'lpo_no' => $lpo,
+                                'do_no' => $do,
+                                'invoice_no' => $invoice,
+                     'sales_expense' => $Row[6],
+                     'cargo' => $Row[7],
+                     'cargo_number' => $Row[8],
+                    'location' => $Row[9],
+                    'mark' => $Row[10],
+			);
+			$this->$model->insert('orders',$data); 
+                        
+                        $lastInsertedOrderId = $this->db->insert_id();
+                   
+                        $countProducts = explode(',', $Row[1]);
+                        $countQuantity = explode(',', $Row[2]);
+                        $countPrice = explode(',', $Row[3]);
+                     
+                        for($k=0;$k<count($countPrice);$k++) {
+                            
+                              $this->db->select('*');
+                        $this->db->where('design_no', $countProducts[$k]);
+                        $q = $this->db->get('products');
+            $productData = $q->result_array();
+                            
+                              $orderProductData = array(
+                                    'order_id' => $lastInsertedOrderId,
+                                    'product_id' =>$productData[0]['id'],
+                                    'quantity' => $countQuantity[$k],
+                              'price' => $countPrice[$k],
+                            );
+                            $this->$model->insert('order_products',$orderProductData); 
+                        }
+                        
+	}
+        }
+        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Orders has been imported successfully!</div>');
+       redirect($this->controller);	
+    }
                 
 	}
 ?>

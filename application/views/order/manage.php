@@ -18,7 +18,11 @@
                     <div class="clearfix"></div>
                     
                  </div>
-                    
+                    <form action="<?php echo base_url().$this->controller.'/addOrders';?>" method="post">
+                    <div>
+                         <button type="submit" class="btn btn-primary" style="text-align: right">Import Orders</button>
+                        </div>
+                    </form>
 				 <div class="x_content">
                 <div class="datatable-responsive">
                  <table id="datatables" class="main-table table table-striped table-bordered">

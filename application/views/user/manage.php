@@ -16,6 +16,11 @@
                     <h2><?php echo $msgName;?> Detail</h2>
                     <div class="clearfix"></div>
                  </div>
+                    <form action="<?php echo base_url().$this->controller.'/addUsers';?>" method="post">
+                    <div>
+                         <button type="submit" class="btn btn-primary" style="text-align: right">Import Contacts</button>
+                        </div>
+                    </form>
 				 <div class="x_content">
                 <div class="datatable-responsive">
                  <table id="datatables" class="main-table table table-striped table-bordered">
@@ -97,5 +102,11 @@
                 var v =$(this).val();  // getting search input value
                 dataTable2.api().columns(i).search(v).draw();
             });
+            
+            
+       
+
+            
+            
 	});
 </script>

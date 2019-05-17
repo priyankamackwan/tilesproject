@@ -26,6 +26,11 @@
                     <div class="clearfix"></div>
                     
                  </div>
+                     <form action="<?php echo base_url().$this->controller.'/addProducts';?>" method="post">
+                    <div>
+                         <button type="submit" class="btn btn-primary" style="text-align: right">Import Products</button>
+                        </div>
+                    </form>
                     
 				 <div class="x_content">
                 <div class="datatable-responsive">

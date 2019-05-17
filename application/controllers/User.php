@@ -312,5 +312,35 @@
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contact has been deleted successfully!</div>');
                         redirect($this->controller);	
 		}
+                
+                                public function addUsers() {
+                    
+	$model = $this->model;
+require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+
+	require('spreadsheet-reader-master/SpreadsheetReader.php');
+
+	$Reader = new SpreadsheetReader(dirname(__FILE__).'/users.xlsx');
+	foreach ($Reader as $Row)
+	{
+               // echo '<pre>';
+		//print_r($Row);
+            
+            	$data = array(
+				'company_name' => $Row[0],
+                                'company_address' => $Row[1],
+                                'contact_person_name' => $Row[2],
+				'vat_number' => $Row[3],
+                                'email' => $Row[4],
+                                'phone_no' => $Row[5],
+                     'password' => md5($Row[6]),
+                     'client_type' => $Row[7],
+
+			);
+			$this->$model->insert('Users',$data);
+	}
+        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contacts has been imported successfully!</div>');
+       redirect($this->controller);	
+    }
 	}
 ?>

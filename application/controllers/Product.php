@@ -192,6 +192,7 @@
                         $cash_rate = $this->input->post('cash_rate');
                         $credit_rate = $this->input->post('credit_rate');
                         $walkin_rate = $this->input->post('walkin_rate');
+                        $flexible_rate = $this->input->post('flexible_rate');
                         $unit = $this->input->post('unit');
                         $purchase_expense = $this->input->post('purchase_expense');
                         $img = $_FILES['image']['name'];
@@ -218,6 +219,7 @@
                                 'cash_rate' => $cash_rate,
                                 'credit_rate' => $credit_rate,
                                 'walkin_rate' => $walkin_rate,
+                                'flexible_rate' => $flexible_rate,
                                 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
                                 'unit' => $unit,
@@ -400,6 +402,7 @@
                         $cash_rate = $this->input->post('cash_rate');
                         $credit_rate = $this->input->post('credit_rate');
                         $walkin_rate = $this->input->post('walkin_rate');
+                        $flexible_rate = $this->input->post('flexible_rate');
                         $purchase_expense = $this->input->post('purchase_expense');
                         if (!empty($_FILES['updated_image']['name'])) {
                             
@@ -427,6 +430,7 @@
                                 'cash_rate' => $cash_rate,
                                 'credit_rate' => $credit_rate,
                                 'walkin_rate' => $walkin_rate,
+                            'flexible_rate' => $flexible_rate,
                                 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
                                 'quantity_per_unit' => $quantity_per,
@@ -539,34 +543,7 @@
                 
                 }
                 
-                public function addUsers() {
-                    
-	$model = $this->model;
-require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
-	require('spreadsheet-reader-master/SpreadsheetReader.php');
-
-	$Reader = new SpreadsheetReader(dirname(__FILE__).'/users.xlsx');
-	foreach ($Reader as $Row)
-	{
-               // echo '<pre>';
-		//print_r($Row);
-            
-            	$data = array(
-				'company_name' => $Row[0],
-                                'company_address' => $Row[1],
-                                'contact_person_name' => $Row[2],
-				'vat_number' => $Row[3],
-                                'email' => $Row[4],
-                                'phone_no' => $Row[5],
-                     'password' => md5($Row[6]),
-                     'client_type' => $Row[7],
-
-			);
-			$this->$model->insert('Users',$data);
-	}
-        echo 'done'; exit;
-    }
     
                     public function addProducts() {
                     
@@ -648,88 +625,11 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                             $this->$model->insert('product_categories',$productCategoryData); 
             }
 	}
-        echo 'done'; exit;
+        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Products has been imported successfully!</div>');
+       redirect($this->controller);	
     }
     
-                        public function addOrders() {
-                    
-	$model = $this->model;
-require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
-
-	require('spreadsheet-reader-master/SpreadsheetReader.php');
-
-	$Reader = new SpreadsheetReader(dirname(__FILE__).'/orders.xlsx');
-	foreach ($Reader as $Row)
-	{
-               // echo '<pre>';
-		//print_r($Row);
-             $this->db->select('*');
-                        $this->db->where('email', $Row[0]);
-                        $q = $this->db->get('users');
-            $userData = $q->result_array();
-        
-               if ($userData){
-                   
-                      $this->db->select('id');
-                        
-                       
-                            $q = $this->db->get('orders');
-                            
-                            $orderLast = $q->result_array();
-
-                         $newOrder = end($orderLast)['id'] + 1;
-               
-                                 if (date('m') <= 3) {//Upto June 2014-2015
-    $financial_year = (date('y')-1) . '-' . date('y');
-} else {//After June 2015-2016
-    $financial_year = date('y') . '-' . (date('y') + 1);
-}
-
-                         $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
-                         $do = 'DO/'.$newOrder.'/'.$financial_year;
-                         $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
-                         
-           	$data = array(
-				'user_id' => $userData[0]['id'],
-                                'tax' => $Row[4],
-                                'total_price' => $Row[5],
-				'lpo_no' => $lpo,
-                                'do_no' => $do,
-                                'invoice_no' => $invoice,
-                     'sales_expense' => $Row[6],
-                     'cargo' => $Row[7],
-                     'cargo_number' => $Row[8],
-                    'location' => $Row[9],
-                    'mark' => $Row[10],
-			);
-			$this->$model->insert('orders',$data); 
-                        
-                        $lastInsertedOrderId = $this->db->insert_id();
-                   
-                        $countProducts = explode(',', $Row[1]);
-                        $countQuantity = explode(',', $Row[2]);
-                        $countPrice = explode(',', $Row[3]);
-                     
-                        for($k=0;$k<count($countPrice);$k++) {
-                            
-                              $this->db->select('*');
-                        $this->db->where('design_no', $countProducts[$k]);
-                        $q = $this->db->get('products');
-            $productData = $q->result_array();
-                            
-                              $orderProductData = array(
-                                    'order_id' => $lastInsertedOrderId,
-                                    'product_id' =>$productData[0]['id'],
-                                    'quantity' => $countQuantity[$k],
-                              'price' => $countPrice[$k],
-                            );
-                            $this->$model->insert('order_products',$orderProductData); 
-                        }
-                        
-	}
-        }
-        echo 'done'; exit;
-    }
+     
     
 	}
 ?>
