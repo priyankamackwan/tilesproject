@@ -793,6 +793,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                      'cargo_number' => $Row[8],
                     'location' => $Row[9],
                     'mark' => $Row[10],
+                    'invoice_status' => $Row[11],
 			);
 			$this->$model->insert('orders',$data); 
                         

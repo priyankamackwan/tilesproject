@@ -154,6 +154,15 @@
                             <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Quantity">
                         </div>
                                         </div>
+                                        <?php if($action == "update"){ ?>
+                                         <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Quantity">Sold Quantity
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" name="sold_quantity" disabled="" id="sold_quantity" value="<?php echo $result[0]->sold_quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="">
+                        </div>
+                                        </div>
+                                       <?php } ?>
                                           <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Factor">Factor<span class="required">*</span>
                         </label>

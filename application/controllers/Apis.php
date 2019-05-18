@@ -676,13 +676,23 @@ use PHPMailer\PHPMailer\PHPMailer;
                             );
                             $this->$model->insert('orders',$orderData);
                             $lastInsertedOrderId = $this->db->insert_id();
-                            
+                     
                             
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
                                 $product_orders = array('order_id'=>$lastInsertedOrderId,'product_id'=>$orderProductArray[$k]['product_id'],'quantity'=>$orderProductArray[$k]['quantity'],'price'=>$orderProductArray[$k]['price'],'created' => date('Y-m-d h:i:s'));
-                            
                                 $this->$model->insert('order_products',$product_orders);
+
+                                $this->db->select('*');
+                                $this->db->where('id', $orderProductArray[$k]['product_id']);
+                                $q = $this->db->get('products');
+                                $productData = $q->result_array();
+                                $oldSoldQuantity = $productData[0]['sold_quantity'];
+                                $newSoldQuantity = $oldSoldQuantity + $orderProductArray[$k]['quantity'];
+                                $dataUser['sold_quantity'] = $newSoldQuantity;
+                                $this->db->set('sold_quantity', $newSoldQuantity);
+                                $this->db->where('id',$orderProductArray[$k]['product_id']);
+                                $this->db->update('products',$dataUser);
                             }
                             
                             
