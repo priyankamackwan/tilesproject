@@ -19,7 +19,8 @@
                     <ul class="nav navbar-right panel_toolbox">
                         
 					  <li><a href="<?php echo base_url($this->controller);?>/add"><button class="btn btn-primary"><i class="fa fa-plus"></i> Add Product</button></a>
-                      </li>
+                                              <li><a href="<?php echo base_url($this->controller);?>/uploadProducts"><button class="btn btn-primary"><i class="fa fa-plus"></i> Import Products</button></a>
+                                          </li>
                       
                     </ul>
                     

@@ -314,17 +314,32 @@
 		}
                 
                                 public function addUsers() {
+                                  //  echo '<pre>';
+                                 //   print_r($_FILES); exit;
+                    $importFile = $_FILES['upload_contacts']['name'];
                     
+                    $ext = pathinfo($importFile,PATHINFO_EXTENSION);
+			$image = time().'.'.$ext;
+
+			$config['upload_path'] = 'assets/uploads/';
+			$config['file_name'] = $image;
+			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx";
+
+			$this->load->library('upload', $config);
+			$this->load->initialize($config);
+			$this->upload->do_upload('upload_contacts');
+                       
 	$model = $this->model;
 require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
 
-	$Reader = new SpreadsheetReader(dirname(__FILE__).'/users.xlsx');
+	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
+        $i=0;
 	foreach ($Reader as $Row)
 	{
-               // echo '<pre>';
-		//print_r($Row);
+            if ($i !=0) {
+              
             
             	$data = array(
 				'company_name' => $Row[0],
@@ -338,9 +353,17 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 			);
 			$this->$model->insert('Users',$data);
+            } 
+            $i++;
 	}
         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contacts has been imported successfully!</div>');
        redirect($this->controller);	
+    }
+    
+    public function uploadContacts(){
+       
+
+			$this->load->view($this->view.'/uploadContacts',array());
     }
 	}
 ?>

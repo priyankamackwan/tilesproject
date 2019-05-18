@@ -731,16 +731,30 @@ $pdf->Output($do_no, 'I');
                 
                                    public function addOrders() {
                     
+                                            $importFile = $_FILES['upload_orders']['name'];
+                    
+                    $ext = pathinfo($importFile,PATHINFO_EXTENSION);
+			$image = time().'.'.$ext;
+
+			$config['upload_path'] = 'assets/uploads/';
+			$config['file_name'] = $image;
+			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx";
+
+			$this->load->library('upload', $config);
+			$this->load->initialize($config);
+			$this->upload->do_upload('upload_orders');
 	$model = $this->model;
 require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
 
-	$Reader = new SpreadsheetReader(dirname(__FILE__).'/orders.xlsx');
+	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
+          $i=0;
 	foreach ($Reader as $Row)
 	{
                // echo '<pre>';
 		//print_r($Row);
+            if ($i !=0) {
              $this->db->select('*');
                         $this->db->where('email', $Row[0]);
                         $q = $this->db->get('users');
@@ -805,9 +819,17 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                         }
                         
 	}
+            } 
+            $i++;
         }
         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Orders has been imported successfully!</div>');
        redirect($this->controller);	
+    }
+    
+            public function uploadOrders(){
+       
+
+			$this->load->view($this->view.'/uploadOrders',array());
     }
                 
 	}

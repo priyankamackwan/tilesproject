@@ -377,12 +377,17 @@ use PHPMailer\PHPMailer\PHPMailer;
                             $mail->Host = 'smtp.gmail.com';
                             $mail->Port = 587;
                             $mail->SMTPAuth = true;
-                            $mail->Username = 'info.emailtest1@gmail.com';
+                           $mail->Username = 'info.emailtest1@gmail.com';
                             $mail->Password = 'rwnzucezczusfezs';
-                            $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
+                         $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
                             $mail->Subject = "Reset Password";
                             $mail->MsgHTML('Your new password is "'.$randomPassword.'"');
-                            $mail->addAddress('ravishah291089@gmail.com', 'Ravi');
+                             if ($data['role'] == 1) {
+                                $mail->addAddress($data['email'], $userdata[0]['company_name']);
+                            } else {
+                                $mail->addAddress($data['email'], $userdata[0]['first_name']);
+                            }
+                           
                             $mail->send();
                             /*if (!$mail->send()) {
 
@@ -765,7 +770,7 @@ $html = '<html>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
 <table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">Size</th><th style="text-align: center">Design</th><th style="text-align: center">quantity</th><th style="text-align: center">Unit</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
-    $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
+    $html .= '<tr><td style="text-align: center" width="60%">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 
                           }
                           $html .= '<tr><td></td><td></td><td colspan="2"></td><td></td></tr></table>';
@@ -809,7 +814,7 @@ $html1 = '<html>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">SR No.</th><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">UNIT</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">RATE</th><th style="text-align: center">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="30%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%".>RATE</th><th style="text-align: center" width="12%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -849,15 +854,13 @@ $html2 = '<html>
 <h2><b><p align="center">Tax Invoice</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
-<table style="width:100%;"><tr><td style="width:100%; text-align:right;">PNP BUILDING MATERIAL TRADING LLC<br>INDUSTRIAL AREA 2 , RAS AL KHOR<br>DUBAI, 103811, U.A.E<br>+97143531040 / +971558532631<br>Email: info@pnptiles.com</td></tr></table>
-<br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$invoice.'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$lpo.'</td> </tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">SR No.</th><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">UNIT</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">RATE</th><th style="text-align: center">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -969,14 +972,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->SMTPAuth = true;
                             $mail->Username = 'info.emailtest1@gmail.com';
                             $mail->Password = 'rwnzucezczusfezs';
-                           // $mail->SMTPDebug  = 2;
-                            $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
+                         $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
                             $mail->Subject = "Add Order";
                             $mail->MsgHTML('New Order Arrived');
                             $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
-                            $mail->addAddress('ravishah291089@gmail.com', 'Ravi');
+                            $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
                             $mail->send();
                             
                                $new_mail = new PHPMailer;
@@ -984,10 +986,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $new_mail->Host = 'smtp.gmail.com';
                             $new_mail->Port = 587;
                             $new_mail->SMTPAuth = true;
-                            $new_mail->Username = 'info.emailtest1@gmail.com';
-                            $new_mail->Password = 'rwnzucezczusfezs';
-                           // $mail->SMTPDebug  = 2;
-                            $new_mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
+                            $mail->Username = 'info.emailtest1@gmail.com';
+                            $mail->Password = 'rwnzucezczusfezs';
+                            $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
                             $new_mail->Subject = "Add Order";
                             $new_mail->MsgHTML('New Order Arrived');
                             $new_mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');

@@ -547,17 +547,31 @@
     
                     public function addProducts() {
                     
+                        
+                        $importFile = $_FILES['upload_products']['name'];
+                    
+                    $ext = pathinfo($importFile,PATHINFO_EXTENSION);
+			$image = time().'.'.$ext;
+
+			$config['upload_path'] = 'assets/uploads/';
+			$config['file_name'] = $image;
+			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx";
+
+			$this->load->library('upload', $config);
+			$this->load->initialize($config);
+			$this->upload->do_upload('upload_products');
 	$model = $this->model;
 require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
 
-	$Reader = new SpreadsheetReader(dirname(__FILE__).'/products.xlsx');
+	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
+         $i=0;
 	foreach ($Reader as $Row)
 	{
                // echo '<pre>';
 		//print_r($Row);
-            
+            if ($i !=0) {
                  $this->db->select('*');
                         $this->db->where('name', $Row[12]);
                         $q = $this->db->get('categories');
@@ -576,7 +590,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                     'quantity' => $Row[9],
                     'factor' => $Row[10],
                     'quantity_per_unit' => $Row[11],
-
+                    'flexible_rate' => $Row[13],      
 			);
 			$this->$model->insert('products',$data);
                         
@@ -611,7 +625,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                     'quantity' => $Row[9],
                     'factor' => $Row[10],
                     'quantity_per_unit' => $Row[11],
-
+                     'flexible_rate' => $Row[13],               
 			);
 			$this->$model->insert('products',$data);
                         
@@ -624,11 +638,18 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                             );
                             $this->$model->insert('product_categories',$productCategoryData); 
             }
+            }
+            $i++;
 	}
         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Products has been imported successfully!</div>');
        redirect($this->controller);	
     }
     
+        public function uploadProducts(){
+       
+
+			$this->load->view($this->view.'/uploadProducts',array());
+    }
      
     
 	}

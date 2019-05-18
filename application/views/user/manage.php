@@ -14,13 +14,15 @@
                 <div class="x_panel">
 				<div class="x_title">
                     <h2><?php echo $msgName;?> Detail</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        
+					  <li><a href="<?php echo base_url($this->controller);?>/uploadContacts"><button class="btn btn-primary"><i class="fa fa-plus"></i> Import Contacts</button></a>
+                      </li>
+                      
+                    </ul>
                     <div class="clearfix"></div>
                  </div>
-                    <form action="<?php echo base_url().$this->controller.'/addUsers';?>" method="post">
-                    <div>
-                         <button type="submit" class="btn btn-primary" style="text-align: right">Import Contacts</button>
-                        </div>
-                    </form>
+                 
 				 <div class="x_content">
                 <div class="datatable-responsive">
                  <table id="datatables" class="main-table table table-striped table-bordered">
