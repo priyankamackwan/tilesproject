@@ -11,7 +11,7 @@ class Logout extends CI_Controller
 	{   
 		$this->session->sess_destroy();
                 $this->session->set_flashdata('logout_msg','<span class="7"><div class="alert alert-danger"><strong>Logout Successfully!</strong></div></span>');
-		redirect('Login');
+		redirect('Adminpanel');
 	}
 }
 

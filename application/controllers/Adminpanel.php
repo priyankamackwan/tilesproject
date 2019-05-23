@@ -1,7 +1,7 @@
 <?php
 	if(! defined('BASEPATH')) exit('No direct script access allowed');
 	
-	class Login extends CI_Controller
+	class Adminpanel extends CI_Controller
 	{
 		public function __construct()
 		{
@@ -13,8 +13,7 @@
 		}
 		public function index()
 		{
-
-				$email = $this->input->post("email");
+			$email = $this->input->post("email");
 				$password = md5($this->input->post("txt_password"));
 				
 				/* Set Validations */
@@ -22,11 +21,13 @@
 				$this->form_validation->set_rules("txt_password", "password", "trim|required");
 				if ($this->form_validation->run() == FALSE)
 				{
+                                   // echo 'dd'; exit;
 				   /* Validation Fails */
 				   $this->load->view('login');
 				}
 				else
 				{
+                                  
 					/* Validation Succeeds */
 
 					/* Check If Username and Password is Correct*/
@@ -40,6 +41,7 @@
 					{
                                           
 						$user_row = $check_user->result();
+                                           
                                                 $rights = explode(',', $user_row[0]->rights);
 						$session_arr = array(
 							"id" => $user_row[0]->id,
@@ -53,7 +55,7 @@
 							"session_id" => session_id()
 						);
 						$this->session->set_userdata('logged_in',$session_arr);
-					
+				
                                                     if(in_array(3,$rights)) {
                                                     redirect('User');
                                                     } elseif(in_array(4,$rights)) {
@@ -72,7 +74,7 @@
 					{
   
 						$this->session->set_flashdata('dispMessage','<span class="7"><div class="alert alert-danger"><strong>Invalid Login Credential!</strong></div></span>');
-						redirect('Login');
+						redirect('Adminpanel');
 					}
 				}
 

@@ -31,7 +31,7 @@
                 echo $this->session->flashdata('dispMessage');?>
           <section class="login_content">
 			<?php
-				echo form_open(base_url().'Login');
+				echo form_open(base_url().'Adminpanel');
 			?>
               <h1>Login Here</h1>
               <div class="form-group">

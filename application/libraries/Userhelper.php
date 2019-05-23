@@ -73,6 +73,7 @@ class Userhelper
      {
         $ci =$this->CI;
         $model = $this->model;
+
         //unset($ci->session->userdata['logged_in']['id']); 
         if (isset($ci->session->userdata['logged_in']['id'])) {
         $return = [
@@ -93,7 +94,7 @@ class Userhelper
         
         return $return;
         } else {
-            redirect('Login');
+            redirect('Adminpanel');
         }
      }
      /*  By: Ravi Fefar

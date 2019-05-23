@@ -250,10 +250,18 @@
                                 for ($k=0;$k<count($userData);$k++) {
                                     if ($userData[$k]['device_type'] == 1) {
                                         // For Android
+                                                $notificationArray = array(
+                                            "notification_type" => 4,
+                                            "name" => $name,
+                                            "size" => $size,
+                                            "quantity" => $quantity,
+                                            "created" => $created,
+                                        );
+                                                
                                         $arr = array(
 		    "registration_ids" => array($userData[$k]['firebase_token']),
 		    "data"=> [
-		        "body" => "{'notification_type':4,'name': $name,'size': $size,'quantity': $quantity,'created':$created}",
+		        "body" => $notificationArray,
 		        "title" => "New Product Added",
 		        // "icon" => "ic_launcher"
 		    ],

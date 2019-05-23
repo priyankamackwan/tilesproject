@@ -13,11 +13,10 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $this->model = "My_model";
                     parent::__construct();
                     $headers = apache_request_headers();
-                   // echo '<pre>';
-                  //  print_r($headers); exit;
+                 
                     $actionName = $this->router->fetch_method();
                     $this->db->select('*');
-                    $this->db->where('value', $headers['x_api_key']);
+                    $this->db->where('value', $headers['Xapi']);
                     $q = $this->db->get('x_api_keys');
                     $apiKeyData = $q->result_array();
                     if (count($apiKeyData) == 0) {
@@ -29,12 +28,12 @@ use PHPMailer\PHPMailer\PHPMailer;
                     }
                     
                     if ($actionName == 'refreshToken') {
-                        $this->user_id = $headers['user_id'];
+                        $this->user_id = $headers['Userid'];
                     } elseif ($actionName != 'userLogin' && $actionName != 'userRegister' && $actionName != 'forgotpassword') {
-                        if ((isset($headers['user_id']) && (!empty($headers['user_id']))) && (isset($headers['firebase_token']) && (!empty($headers['firebase_token'])))) {
+                        if ((isset($headers['Userid']) && (!empty($headers['Userid']))) && (isset($headers['Firebasetoken']) && (!empty($headers['Firebasetoken'])))) {
                         $this->db->select('*');
-                        $this->db->where('user_id', $headers['user_id']);
-                        $this->db->where('firebase_token', $headers['firebase_token']);
+                        $this->db->where('user_id', $headers['Userid']);
+                        $this->db->where('firebase_token', $headers['Firebasetoken']);
                         $this->db->where('login_status', 1);
                         $q = $this->db->get('user_login_details');
                         $userLoginData = $q->result_array();
@@ -45,8 +44,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                             echo json_encode($response);
                             exit();
                         }
-                        $this->user_id = $headers['user_id'];
-                        $this->firebase_token = $headers['firebase_token'];
+                        $this->user_id = $headers['Userid'];
+                        $this->firebase_token = $headers['Firebasetoken'];
                         } else {
                             $response['status'] = 'failure';
                             $response['message'] = 'Please provide proper headers';
@@ -56,9 +55,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                         }
                     } else {
                         if ($actionName != 'forgotpassword') {
-                            if(isset($headers['firebase_token']) && (!empty($headers['firebase_token']))) {
+                            if(isset($headers['Firebasetoken']) && (!empty($headers['Firebasetoken']))) {
 
-                                $this->firebase_token = $headers['firebase_token'];
+                                $this->firebase_token = $headers['Firebasetoken'];
                             } else {
                                   $response['status'] = 'failure';
                                 $response['message'] = 'Please provide proper headers';
@@ -140,10 +139,20 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 for ($k=0;$k<count($adminUserdata);$k++) {
                                     if ($adminUserdata[$k]['device_type'] == 1) {
                                         // For Android
+                                           $notificationArray = array(
+                                            "notification_type" => 1,
+                                            "company_name" => $companyName,
+                                            "contact_person_name" => $contactPersonName,
+                                            "company_add" => $companyAdd,
+                                            "email" => $email,
+                                            "vat_number" => $vatNumber,
+                                            "phone_no" => $phone_no,
+                                            "created" => $created
+                                        );
                                         $arr = array(
 		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
 		    "data" => [
-		        "body" => "{'notification_type':1,'company_name': $companyName,'contact_person_name': $contactPersonName,'company_add': $companyAdd,'email': $email,'vat_number': $vatNumber,'phone_no': $phone_no,'created':$created}",
+		        "body" => $notificationArray,
 		        "title" => "New User Registered",
 		        // "icon" => "ic_launcher"
 		    ],
@@ -350,6 +359,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $data = $_POST;
                     if ((isset($data['role']) && (!empty($data['role']))) && (isset($data['email']) && (!empty($data['email'])))){
                          
+                      
                         $this->db->select('*');
                         $this->db->where('email', $data['email']);
                         $this->db->where('status', 1);
@@ -360,7 +370,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                             $q = $this->db->get('admin_users');
                         }
                         $userdata = $q->result_array();
-                   
+                      //  echo '<pre>';
+                        //print_r($userdata); exit;
                         if ($userdata) {
                             
                             $randomPassword = $this->generateRandomString(6);
@@ -373,15 +384,24 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 $this->db->update('admin_users',$dataUser);
                             }
                             $mail = new PHPMailer;
-                            $mail->isSMTP();
-                            $mail->Host = 'smtp.gmail.com';
-                            $mail->Port = 587;
-                            $mail->SMTPAuth = true;
-                           $mail->Username = 'info.emailtest1@gmail.com';
-                            $mail->Password = 'rwnzucezczusfezs';
-                         $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
-                            $mail->Subject = "Reset Password";
-                            $mail->MsgHTML('Your new password is "'.$randomPassword.'"');
+                            $mail->isMail();
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->Subject = "Password Reset Confirmation";
+                            $mail->MsgHTML('Dear '.$userdata[0]['company_name'].',<br/><br/>
+                                
+There was recently a request to reset the password for your account.<br/>
+	If you requested this password reset, please enter this new temporarily created password.<br/><br/>
+            New temporary password is "'.$randomPassword.'"<br/><br/>
+                
+You can change this password from mobile application after you are logged in once.<br/><br/>
+
+
+	Best Regards,<br/>
+	Customer Service<br/>
+	www.pnptiles.com<br/><br/>
+        
+        This is an automatically generated mail.Please do not reply.If you have any queries regarding your account, please contact us.
+');
                              if ($data['role'] == 1) {
                                 $mail->addAddress($data['email'], $userdata[0]['company_name']);
                             } else {
@@ -389,12 +409,12 @@ use PHPMailer\PHPMailer\PHPMailer;
                             }
                            
                             $mail->send();
-                            /*if (!$mail->send()) {
+                           if (!$mail->send()) {
 
                                 echo 'Mailer Error: ' . $mail->ErrorInfo;
                             } else {
                                 echo 'Message sent!';
-                            } */
+                            }
                             
                             $response['status'] = 'success';
                            // $response['random'] = $randomPassword;
@@ -636,7 +656,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $model = $this->model;
                     $data = $_POST;
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
-                      //  echo $data['product_id']; exit;
+                      
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
                         
@@ -917,15 +937,23 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $total_price = $data['total_price'];
                             $tax = $data['tax'];
                             $created = date('Y-m-d h:i:s');
-
+ 
                             if ($adminUserdata) {
                                 for ($k=0;$k<count($adminUserdata);$k++) {
                                     if ($adminUserdata[$k]['device_type'] == 1) {
                                         // For Android
+                                         $notificationArray = array(
+                                            "notification_type" => 2,
+                                            "product_id" => $productId,
+                                            "user_id" => $userId,
+                                            "total_price" => $total_price,
+                                            "tax" => $tax,
+                                            "created" => $created
+                                        );
                                         $arr = array(
 		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
 		    "data" => [
-		        "body" => "{'notification_type':2,'product_id': $productId,'user_id': $userId,'total_price': $total_price,'tax': $tax,'created':$created}",
+		        "body" => $notificationArray,
 		        "title" => "New Order Added",
 		        // "icon" => "ic_launcher"
 		    ],
@@ -953,6 +981,9 @@ $pdf2->Output($fileNL_invoice, 'F');
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($ch);
+        //echo '<pre>';print_r($result);
+        //echo '<pre>';print_r(curl_error($ch));
+        //die;
 		//echo "----".$result;
 		if ($result === FALSE) {
 		    //die('Oops! FCM Send Error: ' . curl_error($ch));
@@ -964,7 +995,6 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 }
                             }
                             
-                            
                             $orderData['id'] = $lastInsertedOrderId;
                             $response['status'] = 'success';
                             $response['data'] = $orderData;
@@ -974,33 +1004,63 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $response['status'] = 'failure';
                         $response['message'] = 'Please provide product id, tax and total price';
                     }
-                   // echo $orderData['do_url']; exit;
+                     $companyName = $userData[0]['company_name'];
+                   
                        $mail = new PHPMailer;
-                            $mail->isSMTP();
-                            $mail->Host = 'smtp.gmail.com';
-                            $mail->Port = 587;
-                            $mail->SMTPAuth = true;
-                            $mail->Username = 'info.emailtest1@gmail.com';
-                            $mail->Password = 'rwnzucezczusfezs';
-                         $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
-                            $mail->Subject = "Add Order";
-                            $mail->MsgHTML('New Order Arrived');
+                            //$mail->isSMTP();
+                            $mail->isMail();
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                   
+                            $mail->Subject = "New Order from $companyName";
+                 
+                             $mail->MsgHTML('
+                                Dear Admin,<br/><br/>
+	You have received a new Order from '.$userData[0]['company_name'].'<br/>
+	New order number is #'.$newOrder.'<br/><br/>
+	
+	Order Grand Total is '.$total_price.'<br/><br/>
+	
+	Your order is now being processed.<br/>
+	We are attaching a copy of LPO,DO and Invoice in this email. And your merchandise will be delivered to :<br/>
+    '.$userData[0]['company_address'].'<br/>
+	'.$userData[0]['phone_no'].'<br/><br/>
+	
+	For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+    
+	Best Regards,<br/>
+	Customer Service<br/>
+	www.pnptiles.com<br/><br/>
+	
+	This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
                             $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
                             $mail->send();
                             
-                               $new_mail = new PHPMailer;
-                            $new_mail->isSMTP();
-                            $new_mail->Host = 'smtp.gmail.com';
-                            $new_mail->Port = 587;
-                            $new_mail->SMTPAuth = true;
-                            $mail->Username = 'info.emailtest1@gmail.com';
-                            $mail->Password = 'rwnzucezczusfezs';
-                            $mail->setFrom('info.emailtest1@gmail.com', 'Tiles Admin');
-                            $new_mail->Subject = "Add Order";
-                            $new_mail->MsgHTML('New Order Arrived');
+                            $new_mail = new PHPMailer;
+                            $new_mail->isMail();
+                            $new_mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $new_mail->Subject = "Order Confirmation";
+                            $new_mail->MsgHTML('
+                                Dear '.$userData[0]['company_name'].',<br/><br/>
+	Thanks for your order.We hope you had a good time shopping with us.<br/>
+	Your order number is #'.$newOrder.'<br/><br/>
+	
+	Order Grand Total is '.$total_price.'<br/><br/>
+	
+	Your order is now being processed.<br/>
+	We are attaching a copy of LPO and Invoice in this email.And we will deliver your merchandise to :<br/>
+    '.$userData[0]['company_address'].'<br/>
+	'.$userData[0]['phone_no'].'<br/><br/>
+	
+	For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+    
+	Best Regards,<br/>
+	Customer Service<br/>
+	www.pnptiles.com<br/><br/>
+	
+	This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
                             $new_mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $new_mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $new_mail->addAddress($userData[0]['email'],$userData[0]['company_name']);

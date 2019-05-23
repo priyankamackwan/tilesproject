@@ -186,50 +186,67 @@
                         $q = $this->db->get('user_login_details');
                         $userData = $q->result_array();
                         $created = date('Y-m-d h:i:s');
-                                                    if ($userData) {
-                                for ($k=0;$k<count($userData);$k++) {
-                                    if ($userData[$k]['device_type'] == 1) {
-                                        // For Android
-                                        $arr = array(
-		    "registration_ids" => array($userData[$k]['firebase_token']),
-		    "data" => [
-		        "body" => "{'notification_type':3,'name': $name,'description': $description,'created':$created}",
-		        "title" => "New Category Added",
-		        // "icon" => "ic_launcher"
-		    ],
-		    // "data" => json_encode(array())
-		);
-    	$data = json_encode($arr);
-		//FCM API end-point
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-		//header with content_type api key
-		$headers = array(
-		    'Content-Type:application/json',
-		    'Authorization:key='.$server_key
-		);
-		//CURL request to route notification to FCM connection server (provided by Google)
-		
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $result = curl_exec($ch);
-		//echo "----".$result;
-		if ($result === FALSE) {
-		    //die('Oops! FCM Send Error: ' . curl_error($ch));
-		}
-		curl_close($ch);
-                                    } else {
-                                        // For IOS
-                                    }
+                        $androidToken = array();
+                        if ($userData) {
+                            for ($k=0;$k<count($userData);$k++) {
+                                if ($userData[$k]['device_type'] == 1) {
+                                    $androidToken[] = $userData[$k]['firebase_token'];
                                 }
+                            }
+                        }
+                        //  echo '<pre>';print_r($androidToken);
+                        if(count($androidToken)>0){
+                            // For Android
+                            $notificationArray = array(
+                                "notification_type" => 3,
+                                "name" => $name,
+                                "description" => $description,
+                                "created" => $created,
+                            );
+                                        
+                            $arr = array(
+		                        "registration_ids" => $androidToken,
+		                        "data" => [
+		                            "body" => $notificationArray,
+		                            "title" => "New Category Added",
+		                            // "icon" => "ic_launcher"
+		                        ],
+		                        // "data" => json_encode(array())
+		                    );
+    	                     $data = json_encode($arr);
+                    		//FCM API end-point
+                    		$url = 'https://fcm.googleapis.com/fcm/send';
+                    		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+                    		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+                    		//header with content_type api key
+                    		$headers = array(
+                    		    'Content-Type:application/json',
+                    		    'Authorization:key='.$server_key
+                    		);
+                    		//CURL request to route notification to FCM connection server (provided by Google)
+                    		
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_URL, $url);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                            curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+                            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                            $result = curl_exec($ch);
+                            // echo '<pre>';print_r($result);
+                            // echo curl_error($ch);
+                            // die;
+                    		//echo "----".$result;
+                    		if ($result === FALSE) {
+                    		    //die('Oops! FCM Send Error: ' . curl_error($ch));
+                    		}
+		                    curl_close($ch);
+                                //     } else {
+                                //         // For IOS
+                                //     }
+                                // }
                             }
                         
                         
