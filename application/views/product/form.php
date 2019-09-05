@@ -1,6 +1,6 @@
 <?php
 //echo '<pre>';
-//print_r($selected_categories); exit;
+//print_r($result[0]); exit;
 	$this->load->view('include/header');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
@@ -154,15 +154,6 @@
                             <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Quantity">
                         </div>
                                         </div>
-                                        <?php if($action == "update"){ ?>
-                                         <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Quantity">Sold Quantity
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" name="sold_quantity" disabled="" id="sold_quantity" value="<?php echo $result[0]->sold_quantity;?>" class="form-control col-md-7 col-xs-12" placeholder="">
-                        </div>
-                                        </div>
-                                       <?php } ?>
                                           <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="Factor">Factor<span class="required">*</span>
                         </label>
@@ -204,7 +195,7 @@
                                <option value="3">PCS</option>
                                 <?php } ?>
                              
-                                 <?php if($result[0]->unit == 3) { ?>
+                                 <?php if($result[0]->unit == 4) { ?>
                                <option value="4" selected="">SET</option>
                                 <?php } else { ?>
                                <option value="4">SET</option>
@@ -219,7 +210,7 @@
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="quantity_per">Quantity per <span id="unit_name"></span> unit<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo $result[0]->quantity_per;?>" class="form-control col-md-7 col-xs-12" placeholder="Quantity Per">
+                            <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo $result[0]->quantity_per_unit;?>" class="form-control col-md-7 col-xs-12" placeholder="Quantity Per">
                         </div>
                                         </div>
                           <div class="form-group">
@@ -273,8 +264,28 @@
 ?>
 	<script>
 		$(document).ready(function (){
-                   
+                   <?php if ($action == 'insert') { ?>
                     $("#quanity_div").hide();
+                   <?php } else { ?>
+                      $("#quanity_div").show();  
+                    <?php if($result[0]->unit == 1) { ?>
+                              $("#unit_name").text('CTN');
+                                <?php } ?>
+                              
+                                 <?php if($result[0]->unit == 2) { ?>
+                              $("#unit_name").text('SQM');
+                                <?php } ?>
+                                
+                                <?php if($result[0]->unit == 3) { ?>
+                             $("#unit_name").text('PCS');
+                                <?php }?>
+                             
+                                 <?php if($result[0]->unit == 3) { ?>
+                                $("#unit_name").text('SET');
+                                <?php }  ?>
+                      
+                   <?php } ?>
+                         
                         jQuery.validator.addMethod("noSpace", function(value, element) {
 return value == '' || value.trim().length != 0;  
     }, "No space please and don't leave it empty");
@@ -302,7 +313,7 @@ return value == '' || value.trim().length != 0;
     
     $("#quantity").blur(function(){
  
-  unit = $("#unit").val();
+
   quantity =  $("#quantity").val();
   factor =  $("#factor").val();
   quantity_per = quantity*factor;

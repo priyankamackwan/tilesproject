@@ -314,9 +314,7 @@
 		}
                 
                                 public function addUsers() {
-                                  // Report all errors
-error_reporting(E_ALL);
-ini_set("error_reporting", E_ALL);
+                                  
                     $importFile = $_FILES['upload_contacts']['name'];
                     
                     $ext = pathinfo($importFile,PATHINFO_EXTENSION);
@@ -324,26 +322,20 @@ ini_set("error_reporting", E_ALL);
 
 			$config['upload_path'] = 'assets/uploads/';
 			$config['file_name'] = $image;
-			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
+			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx";
 
 			$this->load->library('upload', $config);
 			$this->load->initialize($config);
 			$this->upload->do_upload('upload_contacts');
                       
 	$model = $this->model;
-require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'php-excel-reader'.DIRECTORY_SEPARATOR.'excel_reader2.php');
+require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
-	require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'SpreadsheetReader.php');
-	
-	ini_set("include_path", '/home/pnp1/php:' . ini_get("include_path") );
-	
-//echo FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image;die;
+	require('spreadsheet-reader-master/SpreadsheetReader.php');
+
 	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
-	
-	//die("here123");
-//FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image;
+
         $i=0;
-        
 	foreach ($Reader as $Row)
 	{
             if ($i !=0) {
@@ -360,7 +352,7 @@ require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'php-excel-reader'.DIREC
                      'client_type' => $Row[7],
 
 			);
-			$this->$model->insert('users',$data);
+			$this->$model->insert('Users',$data);
             } 
             $i++;
 	}

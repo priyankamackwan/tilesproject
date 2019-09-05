@@ -72,8 +72,8 @@
                                 { "data": "total_price"},
                                 { "data": "sales_expense"},
 			],
-                                 "bInfo" : false,
-                                 "bFilter": false,
+                                // "bInfo" : false,
+                               //  "bFilter": false,
 			"columnDefs": [ {
 				"targets": [0,1,2,3,4],
 				"orderable": false
@@ -88,9 +88,10 @@
         
             
       $('#ff').change(function(){
- 
+
    var i =1;  // getting column index
                 var v =$(this).val();  // getting search input value
+             
                 dataTable1.api().columns(i).search(v).draw();
 });
         $('#datepicker_to').change(function(){

@@ -145,6 +145,7 @@
                                         $nestedData['contact_person_name'] =$userData[0]['contact_person_name'];
                                         $nestedData['total_price'] =$value->total_price;
                                         $nestedData['location'] =$value->location;
+                                         $nestedData['invoice_no'] =$value->invoice_no;
                                         if ($value->invoice_status == 0) {
                                             $nestedData['invoice_status'] = 'Unpaid';
                                         } else {

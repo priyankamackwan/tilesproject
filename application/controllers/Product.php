@@ -563,7 +563,7 @@
 
 			$config['upload_path'] = 'assets/uploads/';
 			$config['file_name'] = $image;
-			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx";
+			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
 
 			$this->load->library('upload', $config);
 			$this->load->initialize($config);
@@ -592,7 +592,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 				'credit_rate' => $Row[3],
                                 'walkin_rate' => $Row[4],
                                 'size' => $Row[5],
-                     'unit' => md5($Row[6]),
+                     'unit' =>$Row[6],
                      'purchase_expense' => $Row[7],
                      'image' => $Row[8],
                     'quantity' => $Row[9],

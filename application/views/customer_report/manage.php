@@ -33,9 +33,11 @@
                           <th>Total Sales</th>
                            
                           <th>Location</th>
+                          <th>Invoice No</th>
                           <th>Invoice Status</th>
                     </thead>
                     <thead>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -74,10 +76,11 @@
                                 { "data": "contact_person_name"},
                                 { "data": "total_price"},
                                 { "data": "location"},
+                                { "data": "invoice_no"},
                                 { "data": "invoice_status"},
 			],
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4,5],
+				"targets": [0,1,2,3,4,5,6],
 				"orderable": false
 			} ],
 			"rowCallback": function( row, data, index ) {

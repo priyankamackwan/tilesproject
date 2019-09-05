@@ -1,0 +1,50 @@
+[21-May-2019 10:23:53 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/pnp1/public_html/application/controllers/User.php on line 63
+[24-May-2019 17:59:46 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/pnp1/public_html/application/controllers/User.php on line 63
+[25-May-2019 18:38:35 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 18:48:00 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 18:48:34 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 18:50:03 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 18:52:22 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 18:55:05 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 18:56:10 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[25-May-2019 19:10:11 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/pnp1/public_html/application/controllers/User.php on line 63
+[26-May-2019 11:17:34 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[26-May-2019 11:24:00 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[26-May-2019 11:31:57 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[26-May-2019 11:34:12 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[26-May-2019 11:39:13 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[26-May-2019 11:40:19 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 11:48:13 Asia/Kolkata] PHP Fatal error:  Call to a member function result_array() on boolean in /home/pnp1/public_html/application/controllers/Order.php on line 761
+[27-May-2019 11:55:42 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:13:40 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:14:58 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:15:54 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:17:41 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:17:52 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:22:24 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:22:41 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:22:56 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:23:26 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:24:03 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:34:10 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:40:18 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:45:39 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:53:31 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 12:55:13 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:09:45 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:09:59 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:19:20 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:23:27 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:25:06 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:31:34 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:32:16 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 13:32:48 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 15:38:08 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 15:38:57 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 15:40:54 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 18:30:55 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[27-May-2019 18:31:03 Asia/Kolkata] PHP Fatal error:  Class 'ZipArchive' not found in /home/pnp1/public_html/application/controllers/spreadsheet-reader-master/SpreadsheetReader_XLSX.php on line 217
+[29-May-2019 01:32:59 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/pnp1/public_html/application/config/config.php on line 26
+[21-Aug-2019 16:32:47 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/pnp1/public_html/application/controllers/User.php on line 63
+[21-Aug-2019 21:08:34 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/pnp1/public_html/application/controllers/User.php on line 63
+[29-Aug-2019 16:39:20 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/pnp1/public_html/application/controllers/User.php on line 63

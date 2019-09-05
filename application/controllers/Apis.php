@@ -495,6 +495,8 @@ You can change this password from mobile application after you are logged in onc
                      if ($productData) {
                          
                             for($i=0;$i<count($productData);$i++) {
+                 
+                             
                                $categoryString = '';
                                $img= $productData[$i]['image'];
                                 $productData[$i]['image']= base_url().'assets/uploads/'.$img;
@@ -536,9 +538,8 @@ You can change this password from mobile application after you are logged in onc
                                 $productData[$i]['purchase_price']= $productData[$i]['purchase_expense'];
                                 unset($productData[$i]['purchase_expense']);
                                 $productData[$i]['categories_name']= $categoryString;
-
                             }
-                            
+               
                             $response['status'] = 'success';
                             $response['data'] = $productData;
                         } else {
@@ -1287,9 +1288,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                 }
                 
                 function sendIOSGCM() {
-                    
+            
                     $arr = array(
-		    "registration_ids" => array('fEOz1KhgT7s:APA91bFDymYI7iQZn2K0xEOimw-9lV8SPUaf5O4j7ZwjWFF_2R7HArck2DhjNiymwya7kWAuYRfuar9qmHUEa6osuc5FYV7_hNPEyGnE7SZHXge4-eLHjw7WxWP0spIHGbP65A6upDgQ'),
+		    "registration_ids" => array('cs4h5yYUByU:APA91bEV6HqKsp2aLeCjJOq1jGOKefRCVsdDN4Imx9t-7WcteuushA_ILkRHzjlOoX2c0M25ciGQHV_EL1ucBkiA1SKoWuxcLZICWRnFw4Lm0FcnVfDkJ-LgXBIZJljHAPRlJpxpiDXq'),
 		    "data" => [
 		        "body" => "{'notification_type':1,'company_name':'IOS''}",
 		        "title" => "Latest Code IOS",
@@ -1351,7 +1352,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     if ((isset($data['user_id']) && (!empty($data['user_id']))) ){
                                 if ($data['status'] == 1 || $data['status'] == 2 || $data['status'] == 3) {
                                     $newData['status'] = $data['status'];
-                                    if ($data['client_type']) {
+                                    if (isset($data['client_type']) && (!empty($data['client_type']))) {
                                         $this->db->set('client_type', $data['client_type']);
                                     }
                                     $this->db->set('status', $data['status']);
@@ -1368,7 +1369,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     } else {
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide role, old password and password';
+                        $response['message'] = 'Please provide user id';
                     }
                     // Returning back the response in JSON
                     echo json_encode($response);

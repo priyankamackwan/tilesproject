@@ -738,7 +738,7 @@ $pdf->Output($do_no, 'I');
 
 			$config['upload_path'] = 'assets/uploads/';
 			$config['file_name'] = $image;
-			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx";
+			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
 
 			$this->load->library('upload', $config);
 			$this->load->initialize($config);
@@ -749,17 +749,17 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
 
 	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
+          
           $i=0;
 	foreach ($Reader as $Row)
 	{
-               // echo '<pre>';
-		//print_r($Row);
+         
             if ($i !=0) {
              $this->db->select('*');
                         $this->db->where('email', $Row[0]);
                         $q = $this->db->get('users');
             $userData = $q->result_array();
-        
+       
                if ($userData){
                    
                       $this->db->select('id');
@@ -794,6 +794,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                     'location' => $Row[9],
                     'mark' => $Row[10],
                     'invoice_status' => $Row[11],
+                    'created' => date('Y-m-d h:i:s'),
 			);
 			$this->$model->insert('orders',$data); 
                         
@@ -816,7 +817,13 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                                     'quantity' => $countQuantity[$k],
                               'price' => $countPrice[$k],
                             );
-                            $this->$model->insert('order_products',$orderProductData); 
+                            $this->$model->insert('order_products',$orderProductData);
+              
+                     
+                       $updatedSoldQuantity = $productData[0]['sold_quantity'] + $countQuantity[$k]; 
+                        $this->db->set('sold_quantity',$updatedSoldQuantity);
+                        $this->db->where('id',$productData[0]['id']);
+                        $this->db->update('products',$newdata);
                         }
                         
 	}
