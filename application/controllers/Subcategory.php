@@ -195,45 +195,49 @@
                         $created = date('Y-m-d h:i:s');
                                                     if ($userData) {
                                 for ($k=0;$k<count($userData);$k++) {
-                                    if ($userData[$k]['device_type'] == 1) {
+                                    if ($userData[$k]['device_type'] == 1) 
+                                    {
                                         // For Android
                                         $arr = array(
-		    "registration_ids" => array($userData[$k]['firebase_token']),
-		    "notification" => [
-		        "body" => "{'notification_type':5,'name': $name,'description': $description,'height': $height,'width': $width,'unit': $unit,'created':$created}",
-		        "title" => "New Sub Category Added",
-		        // "icon" => "ic_launcher"
-		    ],
-		    // "data" => json_encode(array())
-		);
-    	$data = json_encode($arr);
-		//FCM API end-point
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-		//header with content_type api key
-		$headers = array(
-		    'Content-Type:application/json',
-		    'Authorization:key='.$server_key
-		);
-		//CURL request to route notification to FCM connection server (provided by Google)
+										    "registration_ids" => array($userData[$k]['firebase_token']),
+										    "notification" => [
+										        "body" => "{'notification_type':5,'name': $name,'description': $description,'height': $height,'width': $width,'unit': $unit,'created':$created}",
+										        "title" => "New Sub Category Added",
+										        // "icon" => "ic_launcher"
+										    ],
+										    // "data" => json_encode(array())
+										);
+    									$data = json_encode($arr);
+    									$this->android_ios_notification($data,'Android');
 		
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $result = curl_exec($ch);
-		//echo "----".$result;
-		if ($result === FALSE) {
-		    //die('Oops! FCM Send Error: ' . curl_error($ch));
-		}
-		curl_close($ch);
-                                    } else {
+                                    } 
+                                    else 
+                                    {
+                                    	$notificationArray = array(
+			                                "notification_type" => 5,
+			                                "name" => $name,
+			                                "description" => $description,
+			                                "created" => $created,
+			                                "height"  =>$height,
+			                                "width" => $width,
+			                                'unit'=> $unit,
+			                                'created'=>$created
+
+			                            );
+			                                        
+			                            $arr = array(
+					                        "registration_ids" => $androidToken,
+					                        "body" => [
+					                            "data" => $notificationArray,
+					                            "title" => "New Sub Category Added",
+					                            'priority' => 'high',
+					                            // "icon" => "ic_launcher"
+					                        ],
+					                    );
+                                    	
+    									$data = json_encode($arr);
+
+                                    	$this->android_ios_notification($data,'Ios');
                                         // For IOS
                                     }
                                 }
@@ -416,5 +420,43 @@
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
                         redirect($this->controller);	
 		}
+		public function android_ios_notification($data,$type)
+        {
+            $url = 'https://fcm.googleapis.com/fcm/send';
+            //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+            if($type=="Androide")
+            {
+                $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+            }
+            if($type=="Ios")
+            {
+               $server_key="AIzaSyA-sjPOj001dkK6gHJztu4taMJeYXLBDrM";
+               // $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+            }
+            //header with content_type api key
+            $headers = array(
+                'Content-Type:application/json',
+                'Authorization:key='.$server_key
+            );
+            //CURL request to route notification to FCM connection server (provided by Google)
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            $result = curl_exec($ch);
+            //echo "----".$result;
+            if ($result === FALSE) {
+                //die('Oops! FCM Send Error: ' . curl_error($ch));
+            }
+            curl_close($ch);
+
+        }
+
 	}
 ?>

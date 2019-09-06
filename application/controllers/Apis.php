@@ -84,7 +84,6 @@ class Apis extends CI_Controller
     }
                 
     public function userRegister() {
-
         $model = $this->model;
         $data = $_POST;
 
@@ -165,7 +164,7 @@ class Apis extends CI_Controller
                             "email" => $email,
                             "vat_number" => $vatNumber,
                             "phone_no" => $phone_no,
-                            "created" => $created
+                            "created" => $created,
                             );
                             $arr = array(
                                     "registration_ids" => array($adminUserdata[$k]['firebase_token']),
@@ -177,12 +176,13 @@ class Apis extends CI_Controller
                                     // "data" => json_encode(array())
                             );
                             $data = json_encode($arr);
-                            $this->android_ios_notification($data);
-		                      //FCM API end-point
+                            $this->android_ios_notification($data,"Androide");
+		                  //FCM API end-point
 		
                         } 
                         else 
                         {
+                            //for ios
                             $notificationArray = array(
                             "notification_type" => 2,
                             "company_name" => $companyName,
@@ -191,24 +191,20 @@ class Apis extends CI_Controller
                             "email" => $email,
                             "vat_number" => $vatNumber,
                             "phone_no" => $phone_no,
-                            "created" => $created
+                            "created" => $created,
                             );
                             $arr = array(
                                     "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-                                    "data" => [
-                                    "body" => $notificationArray,
-                                    "title" => "New User Registered",
-                                    // "icon" => "ic_launcher"
-                                    ],
                                     "body" => [
                                     "data" => $notificationArray,
                                     "title" => "New User Registered",
+                                    'priority' => 'high',
                                     // "icon" => "ic_launcher"
                                     ],
                                     // "data" => json_encode(array())
                             );
                             $data = json_encode($arr);
-                           // $this->android_ios_notification($data);
+                           $this->android_ios_notification($data,"Ios");
                         }
                     }
                }
@@ -769,9 +765,10 @@ You can change this password from mobile application after you are logged in onc
                 }
                 
                 public function addOrder() {
-                    
+                 //   echo "<pre>"; print_r ($_REQUEST); echo "</pre>"; exit();
                     $model = $this->model;
                     $data = $_POST;
+
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
                       
                         $orderProductArray = json_decode($data['product_id'], true);
@@ -1068,7 +1065,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "user_id" => $userId,
                                             "total_price" => $total_price,
                                             "tax" => $tax,
-                                            "created" => $created
+                                            "created" => $created,
                                         );
                                         $arr = array(
                                             "registration_ids" => array($adminUserdata[$k]['firebase_token']),
@@ -1080,34 +1077,33 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             // "data" => json_encode(array())
                                         );
     	                                   $data = json_encode($arr);
-                                           $this->android_ios_notification($data);
+                                           $this->android_ios_notification($data,'Androide');
                                     } 
                                     else 
                                     {
+                                        //for ios
                                         $notificationArray = array(
                                             "notification_type" => 2,
                                             "product_id" => $productId,
                                             "user_id" => $userId,
                                             "total_price" => $total_price,
                                             "tax" => $tax,
-                                            "created" => $created
+                                            "created" => $created,
                                         );
                                         $arr = array(
                                             "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-                                            "data" => [
-                                            "body" => $notificationArray,
-                                            "title" => "New Order Added",
-                                            // "icon" => "ic_launcher"
-                                            ],
+                                            
                                             "body" => [
-                                            "body" => $notificationArray,
+                                            "data" => $notificationArray,
                                             "title" => "New Order Added",
+                                            'priority' => 'high',
+
                                             // "icon" => "ic_launcher"
                                             ],
                                             // "data" => json_encode(array())
                                         );
                                            $data = json_encode($arr);
-                                          // $this->android_ios_notification($data);
+                                           $this->android_ios_notification($data,'Ios');
                                     }
                                 }
                             }
@@ -1695,11 +1691,19 @@ $pdf2->Output($fileNL_invoice, 'F');
                     exit();
                 }
         
-        public function android_ios_notification($data)
+        public function android_ios_notification($data,$type)
         {
             $url = 'https://fcm.googleapis.com/fcm/send';
             //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-            $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+            if($type=="Androide")
+            {
+                $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+            }
+            if($type=="Ios")
+            {
+               $server_key="AIzaSyA-sjPOj001dkK6gHJztu4taMJeYXLBDrM";
+               // $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+            }
             //header with content_type api key
             $headers = array(
                 'Content-Type:application/json',
