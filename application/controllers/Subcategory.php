@@ -226,7 +226,7 @@
 			                            );
 			                                        
 			                            $arr = array(
-					                        "registration_ids" => $androidToken,
+					                        "registration_ids" => $userData[$k]['firebase_token'],
 					                        "body" => [
 					                            "data" => $notificationArray,
 					                            "title" => "New Sub Category Added",
@@ -424,7 +424,7 @@
         {
             $url = 'https://fcm.googleapis.com/fcm/send';
             //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-            if($type=="Androide")
+            if($type=="Android")
             {
                 $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
             }

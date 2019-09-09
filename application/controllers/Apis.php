@@ -176,7 +176,7 @@ class Apis extends CI_Controller
                                     // "data" => json_encode(array())
                             );
                             $data = json_encode($arr);
-                            $this->android_ios_notification($data,"Androide");
+                            $this->android_ios_notification($data,"Android");
 		                  //FCM API end-point
 		
                         } 
@@ -1077,7 +1077,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             // "data" => json_encode(array())
                                         );
     	                                   $data = json_encode($arr);
-                                           $this->android_ios_notification($data,'Androide');
+                                           $this->android_ios_notification($data,'Android');
                                     } 
                                     else 
                                     {
@@ -1695,7 +1695,7 @@ $pdf2->Output($fileNL_invoice, 'F');
         {
             $url = 'https://fcm.googleapis.com/fcm/send';
             //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-            if($type=="Androide")
+            if($type=="Android")
             {
                 $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
             }

@@ -186,11 +186,13 @@
                         $q = $this->db->get('user_login_details');
                         $userData = $q->result_array();
                         $created = date('Y-m-d h:i:s');
-                        $androidToken = array();
+                        $androidToken = $iosToken=array();
                         if ($userData) {
                             for ($k=0;$k<count($userData);$k++) {
                                 if ($userData[$k]['device_type'] == 1) {
                                     $androidToken[] = $userData[$k]['firebase_token'];
+                                }else{
+                                	$iosToken[] = $userData[$k]['firebase_token'];
                                 }
                             }
                         }
@@ -215,9 +217,9 @@
 		                        ],
 		                    );
     	                     $data = json_encode($arr);
-                    		$this->android_ios_notification($data,"Androide");
+                    		$this->android_ios_notification($data,"Android");
                         } 
-                        else 
+                        if(count($iosToken) > 0) 
                         {
                                      	//for ios
 	 							$notificationArray = array(
@@ -228,7 +230,7 @@
 	                            );
 	                                        
 	                            $arr = array(
-			                        "registration_ids" => $androidToken,
+			                        "registration_ids" => $iosToken,
 			                        "body" => [
 			                            "data" => $notificationArray,
 			                            "title" => "New Category Added",
@@ -446,7 +448,7 @@
         {
             $url = 'https://fcm.googleapis.com/fcm/send';
             //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-            if($type=="Androide")
+            if($type=="Android")
             {
                 $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
             }
