@@ -1,65 +1,65 @@
-<?php
-require 'PHPMailer/src/Exception.php';
+    <?php
+    require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
-defined('BASEPATH') OR exit('No direct script access allowed');
+	defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Apis extends CI_Controller
-{
-    public $model;
-    public function __construct() {
+	class Apis extends CI_Controller
+	{
+                public $model;
+		public function __construct() {
                     
-        $this->model = "My_model";
-        parent::__construct();
-        $headers = apache_request_headers();
+                    $this->model = "My_model";
+                    parent::__construct();
+                    $headers = apache_request_headers();
                  
-        $actionName = $this->router->fetch_method();
-        $this->db->select('*');
-        $this->db->where('value', $headers['Xapi']);
-        $q = $this->db->get('x_api_keys');
-        $apiKeyData = $q->result_array();
-        if (count($apiKeyData) == 0) {
-            $response['status'] = 'failure';
-            $response['message'] = 'API Key is not matching';
-            // Returning back the response in JSON
-            echo json_encode($response);
-            exit();
-        }
+                    $actionName = $this->router->fetch_method();
+                    $this->db->select('*');
+                    $this->db->where('value', $headers['Xapi']);
+                    $q = $this->db->get('x_api_keys');
+                    $apiKeyData = $q->result_array();
+                    if (count($apiKeyData) == 0) {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'API Key is not matching';
+                        // Returning back the response in JSON
+                        echo json_encode($response);
+                        exit();
+                    }
                     
         if ($actionName == 'refreshToken')
         {
-            $this->user_id = $headers['Userid'];
+                        $this->user_id = $headers['Userid'];
         }
         elseif ($actionName != 'userLogin' && $actionName != 'userRegister' && $actionName != 'forgotpassword') 
         {
             if ((isset($headers['Userid']) && (!empty($headers['Userid']))) && (isset($headers['Firebasetoken']) && (!empty($headers['Firebasetoken'])))) 
             {
-                $this->db->select('*');
-                $this->db->where('user_id', $headers['Userid']);
-                $this->db->where('firebase_token', $headers['Firebasetoken']);
-                $this->db->where('login_status', 1);
-                $q = $this->db->get('user_login_details');
-                $userLoginData = $q->result_array();
+                        $this->db->select('*');
+                        $this->db->where('user_id', $headers['Userid']);
+                        $this->db->where('firebase_token', $headers['Firebasetoken']);
+                        $this->db->where('login_status', 1);
+                        $q = $this->db->get('user_login_details');
+                        $userLoginData = $q->result_array();
                 if (count($userLoginData) == 0) 
                 {
-                    $response['status'] = 'failure';
-                    $response['message'] = 'Wrong authentication parameters used';
-                    // Returning back the response in JSON
-                    echo json_encode($response);
-                    exit();
-                }
-            $this->user_id = $headers['Userid'];
-            $this->firebase_token = $headers['Firebasetoken'];
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Wrong authentication parameters used';
+                            // Returning back the response in JSON
+                            echo json_encode($response);
+                            exit();
+                        }
+                        $this->user_id = $headers['Userid'];
+                        $this->firebase_token = $headers['Firebasetoken'];
             } 
             else 
             {
-                $response['status'] = 'failure';
-                $response['message'] = 'Please provide proper headers';
-                // Returning back the response in JSON
-                echo json_encode($response);
-                exit();
-            }
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Please provide proper headers';
+                            // Returning back the response in JSON
+                            echo json_encode($response);
+                            exit();
+                        }
         } 
         else 
         {
@@ -68,85 +68,85 @@ class Apis extends CI_Controller
                 if(isset($headers['Firebasetoken']) && (!empty($headers['Firebasetoken']))) 
                 {
 
-                    $this->firebase_token = $headers['Firebasetoken'];
+                                $this->firebase_token = $headers['Firebasetoken'];
                 } 
                 else 
                 {
-                    $response['status'] = 'failure';
-                    $response['message'] = 'Please provide proper headers';
-                    // Returning back the response in JSON
-                    echo json_encode($response);
-                    exit();
-                }
-            }
-             
-        }
-    }
+                                  $response['status'] = 'failure';
+                                $response['message'] = 'Please provide proper headers';
+                                // Returning back the response in JSON
+                                echo json_encode($response);
+                                exit();
+                            }
+                        }
+                         
+                    }
+		}
                 
-    public function userRegister() {
-        $model = $this->model;
-        $data = $_POST;
-
+                public function userRegister() {
+                    $model = $this->model;
+                    $data = $_POST;
+                        
         if ((isset($data['device_id']) && (!empty($data['device_id']))) && (isset($data['device_type']) && (!empty($data['device_type']))) && (isset($data['phone_no']) && (!empty($data['phone_no']))) && (isset($data['company_name']) && (!empty($data['company_name']))) && (isset($data['company_address']) && (!empty($data['company_address']))) && (isset($data['contact_person_name']) && (!empty($data['contact_person_name']))) && (isset($data['vat_number']) && (!empty($data['vat_number']))) && (isset($data['email']) && (!empty($data['email']))) && (isset($data['password']))) 
         {
 
-        // Checking Email exist in our application
-
-            $this->db->where('email',$data['email']);
+                        // Checking Email exist in our application
+                        
+                        $this->db->where('email',$data['email']);
                      
-            $users = $this->db->get('users');
-            $checkEmailExist = $users->result_array();
-
-            $this->db->where('email',$data['email']);
-            $this->db->where('is_deleted', 0);
-            $adminUsers = $this->db->get('admin_users');
-            $checkAdminEmailExist = $users->result_array();
+                        $users = $this->db->get('users');
+                        $checkEmailExist = $users->result_array();
+                        
+                        $this->db->where('email',$data['email']);
+                        $this->db->where('is_deleted', 0);
+                        $adminUsers = $this->db->get('admin_users');
+                        $checkAdminEmailExist = $users->result_array();
 
             if (count($checkEmailExist)<1 && count($checkAdminEmailExist)<1) 
             {
-                $userData = array(
-                'company_name' => $data['company_name'],
-                'company_address' => $data['company_address'],
-                'contact_person_name' => $data['contact_person_name'],
-                'vat_number' => $data['vat_number'],
-                'email' => $data['email'],
-                'phone_no' => $data['phone_no'],
-                'password' => md5($data['password']),
-                'created' => date('Y-m-d h:i:s'),
-                );
+                            $userData = array(
+                                    'company_name' => $data['company_name'],
+                                    'company_address' => $data['company_address'],
+                                    'contact_person_name' => $data['contact_person_name'],
+                                    'vat_number' => $data['vat_number'],
+                                    'email' => $data['email'],
+                                    'phone_no' => $data['phone_no'],
+                                    'password' => md5($data['password']),
+                                    'created' => date('Y-m-d h:i:s'),
+                            );
 
-                $this->$model->insert('users',$userData);
-                $lastInsertedUserId = $this->db->insert_id();
+                            $this->$model->insert('users',$userData);
+                            $lastInsertedUserId = $this->db->insert_id();
                             
-                // Adding data in user login details table
-                
-                $userLoginData = array(
-                        'user_id' => $lastInsertedUserId,
-                        'firebase_token' => $this->firebase_token,
-                        'login_status' => 1,
-                        'device_type' => $data['device_type'],
-                        'device_id' => $data['device_id'],
-                        'role' => 1,
-                        'created' => date('Y-m-d h:i:s'),
-                );
-                $this->$model->insert('user_login_details',$userLoginData); 
-                
-                $this->db->select('*');
-                $this->db->where('login_status', 1);
-                $this->db->where('role', 2);
-                $q = $this->db->get('user_login_details');
-                $adminUserdata = $q->result_array();
+                            // Adding data in user login details table
                             
-                $companyName = $data['company_name'];
-                $companyAdd = $data['company_address'];
-                $contactPersonName = $data['contact_person_name'];
-                $vatNumber = $data['vat_number'];
-                $email = $data['email'];
-                $phone_no = $data['phone_no'];
-                $created = date('Y-m-d h:i:s');
+                            $userLoginData = array(
+                                    'user_id' => $lastInsertedUserId,
+                                    'firebase_token' => $this->firebase_token,
+                                    'login_status' => 1,
+                                    'device_type' => $data['device_type'],
+                                    'device_id' => $data['device_id'],
+                                    'role' => 1,
+                                    'created' => date('Y-m-d h:i:s'),
+                            );
+                            $this->$model->insert('user_login_details',$userLoginData); 
+                            
+                            $this->db->select('*');
+                            $this->db->where('login_status', 1);
+                            $this->db->where('role', 2);
+                            $q = $this->db->get('user_login_details');
+                            $adminUserdata = $q->result_array();
+                            
+                            $companyName = $data['company_name'];
+                            $companyAdd = $data['company_address'];
+                            $contactPersonName = $data['contact_person_name'];
+                            $vatNumber = $data['vat_number'];
+                            $email = $data['email'];
+                            $phone_no = $data['phone_no'];
+                            $created = date('Y-m-d h:i:s');
                  
-                //   echo '<pre>';
-                //  print_r($adminUserdata); exit;
+                         //   echo '<pre>';
+                          //  print_r($adminUserdata); exit;
                 
                 if ($adminUserdata) 
                 {
@@ -154,36 +154,57 @@ class Apis extends CI_Controller
                     {
                         if ($adminUserdata[$k]['device_type'] == 1) 
                         {
-                        // For Android
-                        
-                            $notificationArray = array(
-                            "notification_type" => 1,
-                            "company_name" => $companyName,
-                            "contact_person_name" => $contactPersonName,
-                            "company_add" => $companyAdd,
-                            "email" => $email,
-                            "vat_number" => $vatNumber,
-                            "phone_no" => $phone_no,
-                            "created" => $created,
-                            );
-                            $arr = array(
-                                    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-                                    "data" => [
-                                    "body" => $notificationArray,
-                                    "title" => "New User Registered",
-                                    // "icon" => "ic_launcher"
-                                    ],
-                                    // "data" => json_encode(array())
-                            );
-                            $data = json_encode($arr);
+                                        // For Android
+                                           $notificationArray = array(
+                                            "notification_type" => 1,
+                                            "company_name" => $companyName,
+                                            "contact_person_name" => $contactPersonName,
+                                            "company_add" => $companyAdd,
+                                            "email" => $email,
+                                            "vat_number" => $vatNumber,
+                                            "phone_no" => $phone_no,
+                                            "created" => $created
+                                        );
+                                        $arr = array(
+		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+		    "data" => [
+		        "body" => $notificationArray,
+		        "title" => "New User Registered",
+		        // "icon" => "ic_launcher"
+		    ],
+		    // "data" => json_encode(array())
+		);
+    	$data = json_encode($arr);
                             $this->android_ios_notification($data,"Android");
-		                  //FCM API end-point
+		/*//FCM API end-point
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+		//header with content_type api key
+		$headers = array(
+		    'Content-Type:application/json',
+		    'Authorization:key='.$server_key
+		);
+		//CURL request to route notification to FCM connection server (provided by Google)
 		
-                        } 
-                        else 
-                        {
-                            //for ios
-                            $notificationArray = array(
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($ch);
+		//echo "----".$result;
+		if ($result === FALSE) {
+		    //die('Oops! FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);*/
+                                    } else {
+                                        // For IOS
+                                        $notificationArray = array(
                             "notification_type" => 2,
                             "company_name" => $companyName,
                             "contact_person_name" => $contactPersonName,
@@ -205,265 +226,223 @@ class Apis extends CI_Controller
                             );
                             $data = json_encode($arr);
                            $this->android_ios_notification($data,"Ios");
-                        }
-                    }
-               }
-                                        
-                $userData['id'] = $lastInsertedUserId;
-                $response['status'] = 'success';
-                $response['data'] = $userData;
+                                    }
+                                }
+                            }
+                            
+                            $userData['id'] = $lastInsertedUserId;
+                            $response['status'] = 'success';
+                            $response['data'] = $userData;
             } 
             else 
             {
-                // If email al'Error']['codeready exists
-                $response['status'] = 'failure';
-                $response['message'] = 'This email already exists. Please provide new email Id or login with existing one';
-            }
+                            // If email al'Error']['codeready exists
+                            $response['status'] = 'failure';
+                            $response['message'] = 'This email already exists. Please provide new email Id or login with existing one';
+                        }
         } 
         else 
         {
-            // If any of the mandatory parameters are missing
-            $response['status'] = 'failure';
-            $response['message'] = 'Please provide company name, company address, contact person name, contact person address, vat number, email and password';
-        }
-        // Returning back the response in JSON
-        echo json_encode($response);
-        exit();
-    }
+                        // If any of the mandatory parameters are missing
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide company name, company address, contact person name, contact person address, vat number, email and password';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+                }
                 
-    public function userLogin() {
-
-        $model = $this->model;
-        $data = $_POST;
+                public function userLogin() {
+                    
+                    $model = $this->model;
+                    $data = $_POST;
         if ((isset($data['device_id']) && (!empty($data['device_id']))) && (isset($data['device_type']) && (!empty($data['device_type']))) && (isset($data['email']) && (!empty($data['email']))) && (isset($data['password']) && (!empty($data['password']))))
         {
-            
-            $this->db->select('*');
-            $this->db->where('email', $data['email']);
-            $this->db->where('password', md5($data['password']));
-            $q = $this->db->get('users');
-            $userdata = $q->result_array();
+                            
+                        $this->db->select('*');
+                        $this->db->where('email', $data['email']);
+                        $this->db->where('password', md5($data['password']));
+                        $q = $this->db->get('users');
+                        $userdata = $q->result_array();
             
             if ($userdata) 
             {
                 if ($userdata[0]['is_deleted'] == 1) 
                 {
-                    $response['status'] = 'failure';
-                    $response['message'] = 'Your account is deleted. Please contact Administrator.';
+                                $response['status'] = 'failure';
+                                $response['message'] = 'Your account is deleted. Please contact Administrator.';
                 } 
                 elseif($userdata[0]['status'] == 0) 
                 {
                     $response['status'] = 'failure';
                     $response['message'] = 'Your account is inactivated. Please contact Administrator.';
-                } 
-                else 
-                {
+                } else {
+                                //check if user has login details. if exists then remove old and update with new one
+                                $this->db->select('*');
+                                $this->db->where('user_id', $userdata[0]['id']);
+                                $exist_query= $this->db->get('user_login_details');
+                                $exist_row=$exist_query->num_rows();
+                                if($exist_row > 0)
+                                {
+                                    $userData = array(
+                                        'firebase_token' => $this->firebase_token,
+                                        'device_type' => $data['device_type'],
+                                        'device_id' => $data['device_id'],
+                                        'login_status' => 1,
+                                        'role' => 1,
+                                        'created' => date('Y-m-d h:i:s'),
+                                    );
 
-                    $this->db->select('*');
-                    $this->db->where('user_id', $userdata[0]['id']);
-                    $exist_query= $this->db->get('user_login_details');
-                    $exist_row=$exist_query->num_rows();
-                    if($exist_row > 0)
-                    {
-                        $userData = array(
-                            'firebase_token' => $this->firebase_token,
-                            'device_type' => $data['device_type'],
-                            'device_id' => $data['device_id'],
-                            'login_status' => 1,
-                            'role' => 1,
-                            'created' => date('Y-m-d h:i:s'),
-                        );
+                                    $this->db->where('user_id',$userdata[0]['id']);
+                                    $this->db->update('user_login_details',$userData);
+                                }
+                                else
+                                {
+                                    //if not existing login details found then insert new
+                                    $userLoginData = array(
+                                        'user_id' => $userdata[0]['id'],
+                                        'firebase_token' => $this->firebase_token,
+                                        'device_type' => $data['device_type'],
+                                        'device_id' => $data['device_id'],
+                                        'login_status' => 1,
+                                        'role' => 1,
+                                        'created' => date('Y-m-d h:i:s'),
+                                );
+                                $this->$model->insert('user_login_details',$userLoginData);
+                                }
+                    
+                                $response['status'] = 'success';
+                                $response['message'] = 'You are successfully logged in.';
+                                $response['data']= $userdata[0];
+                                $response['role']= 1;
+                                // Adding data in user login details table
+                            
+                            }
+                        } else {
+                            $this->db->select('*');
+                            $this->db->where('email', $data['email']);
+                            $this->db->where('password', md5($data['password']));
+                            $q = $this->db->get('admin_users');
+                            $adminUserData = $q->result_array();
+                            
+                            if ($adminUserData){
+                                if ($adminUserData[0]['is_deleted'] == 1) {
+                                    $response['status'] = 'failure';
+                                    $response['message'] = 'Your account is deleted. Please contact Administrator.';
+                                } elseif($adminUserData[0]['status'] == 0) {
+                                    $response['status'] = 'failure';
+                                    $response['message'] = 'Your account is inactivated. Please contact Administrator.';
+                                } else {
+                                    $response['status'] = 'success';
+                                    $response['message'] = 'You are successfully logged in.';
+                                    $response['data']= $adminUserData[0];
+                                    $response['role']= 2;
+                                    
+                                    //check ig already login details exists
+                                    $this->db->select('*');
+                                    $this->db->where('user_id', $adminUserData[0]['id']);
+                                    $exist_query= $this->db->get('user_login_details');
+                                    $exist_row=$exist_query->num_rows();
+                                    if($exist_row > 0)
+                                    {
+                                        $userData = array(
+                                            'firebase_token' => $this->firebase_token,
+                                            'device_type' => $data['device_type'],
+                                            'device_id' => $data['device_id'],
+                                            'login_status' => 1,
+//                                            'role' => 2,
+                                            'created' => date('Y-m-d h:i:s'),
+                                        );
 
-                        $this->db->where('user_id',$userdata[0]['id']);
-                        $this->db->update('user_login_details',$userData);
+                                        $this->db->where('user_id',$userdata[0]['id']);
+                                        $this->db->update('user_login_details',$userData);
+                                    }else{
+                                    
+                                        $userLoginData = array(
+                                            'user_id' => $adminUserData[0]['id'],
+                                            'firebase_token' => $this->firebase_token,
+                                            'login_status' => 1,
+                                            'device_type' => $data['device_type'],
+                                            'device_id' => $data['device_id'],
+                                            'role' => 2,
+                                            'created' => date('Y-m-d h:i:s'),
+                                        );
+                                        $this->$model->insert('user_login_details',$userLoginData);
+                                    }
+                                }
+                            } else {
+                                // If any of the mandatory parameters are missing
+                                $response['status'] = 'failure';
+                                $response['message'] = 'Credentials are incorrect';
+                            }
+                        }
+                    } else {
+                        // If any of the mandatory parameters are missing
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide device_id, device_type, email and password';
                     }
-                    else
-                    {
-                        $userLoginData = array(
-                            'user_id' => $userdata[0]['id'],
-                            'firebase_token' => $this->firebase_token,
-                            'device_type' => $data['device_type'],
-                            'device_id' => $data['device_id'],
-                            'login_status' => 1,
-                            'role' => 1,
-                            'created' => date('Y-m-d h:i:s'),
-                        );
-                        $this->$model->insert('user_login_details',$userLoginData);
-                    }
-
-                    $response['status'] = 'success';
-                    $response['message'] = 'You are successfully logged in.';
-                    $response['data']= $userdata[0];
-                    $response['role']= 1;                      
-                    // Adding data in user login details table
-                                       
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
                 }
-            } 
-            else 
-            {
-                $this->db->select('*');
-                $this->db->where('email', $data['email']);
-                $this->db->where('password', md5($data['password']));
-                $q = $this->db->get('admin_users');
-                $adminUserData = $q->result_array();
-            
-                if ($adminUserData)
-                {
-                    if ($adminUserData[0]['is_deleted'] == 1) 
-                    {
-                        $response['status'] = 'failure';
-                        $response['message'] = 'Your account is deleted. Please contact Administrator.';
-                    } 
-                    elseif($adminUserData[0]['status'] == 0) 
-                    {
-                        $response['status'] = 'failure';
-                        $response['message'] = 'Your account is inactivated. Please contact Administrator.';
-                    } 
-                    else 
-                    {
-                        $response['status'] = 'success';
-                        $response['message'] = 'You are successfully logged in.';
-                        $response['data']= $adminUserData[0];
-                        $response['role']= 2;
-
+                
+                public function changeUserPassword() {
+                    
+                    $model = $this->model;
+                    $data = $_POST;
+                    if ((isset($data['role']) && (!empty($data['role']))) && (isset($data['old_password']) && (!empty($data['old_password']))) && (isset($data['password']) && (!empty($data['password'])))){
+                            
                         $this->db->select('*');
-                        $this->db->where('user_id', $adminUserData[0]['id']);
-                        $exist_query= $this->db->get('user_login_details');
-                        $exist_row=$exist_query->num_rows();
-                        if($exist_row > 0)
-                        {
-                            $userData = array(
-                                'firebase_token' => $this->firebase_token,
-                                'device_type' => $data['device_type'],
-                                'device_id' => $data['device_id'],
-                                'login_status' => 1,
-                                'role' => 2,
-                                'created' => date('Y-m-d h:i:s'),
-                            );
-
-                            $this->db->where('user_id',$userdata[0]['id']);
-                            $this->db->update('user_login_details',$userData);
+                        $this->db->where('id', $this->user_id);
+                        $this->db->where('status', 1);
+                        $this->db->where('is_deleted', 0);
+                        if ($data['role'] == 1) {
+                            $q = $this->db->get('users');
+                        } else {
+                            $q = $this->db->get('admin_users');
                         }
-                        else
-                        {
-                            $userLoginData = array(
-                                'user_id' => $adminUserData[0]['id'],
-                                'firebase_token' => $this->firebase_token,
-                                'device_type' => $data['device_type'],
-                                'device_id' => $data['device_id'],
-                                'login_status' => 1,
-                                'role' => 2,
-                                'created' => date('Y-m-d h:i:s'),
-                            );
-                            $this->$model->insert('user_login_details',$userLoginData);
+                        $userdata = $q->result_array();
+                        if ($userdata) {
+                            if ($userdata[0]['password'] != md5($data['old_password'])) {
+                                $response['status'] = 'failure';
+                                $response['message'] = 'Old password is incorrect';
+                            } else {
+                                $dataUser['password'] = md5($data['password']);
+                                $this->db->set('password', md5($data['password']));
+                                $this->db->where('id',$this->user_id);
+                                if ($data['role'] == 1) {
+                                    $this->db->update('users',$dataUser);
+                                } else {
+                                    $this->db->update('admin_users',$dataUser);
+                                }
+                                $response['status'] = 'success';
+                                $response['message'] = 'You password changed successfully';
+                            }
+                        } else {
+                            // If any of the mandatory parameters are missing
+                            $response['status'] = 'failure';
+                            $response['message'] = 'You cannot change password';
                         }
-                        
-                       /* $userLoginData = array(
-                            'user_id' => $adminUserData[0]['id'],
-                            'firebase_token' => $this->firebase_token,
-                            'login_status' => 1,
-                            'device_type' => $data['device_type'],
-                            'device_id' => $data['device_id'],
-                            'role' => 2,
-                            'created' => date('Y-m-d h:i:s'),
-                        );
-                        $this->$model->insert('user_login_details',$userLoginData);*/
-                    }
-                } 
-                else 
-                {
-                    // If any of the mandatory parameters are missing
-                    $response['status'] = 'failure';
-                    $response['message'] = 'Credentials are incorrect';
-                }
-            }
-        } 
-        else 
-        {
-            // If any of the mandatory parameters are missing
-            $response['status'] = 'failure';
-            $response['message'] = 'Please provide device_id, device_type, email and password';
-        }
-        // Returning back the response in JSON
-        echo json_encode($response);
-        exit();
-    }
-                
-    public function changeUserPassword() 
-    {        
-        $model = $this->model;
-        $data = $_POST;
-        if ((isset($data['role']) && (!empty($data['role']))) && (isset($data['old_password']) && (!empty($data['old_password']))) && (isset($data['password']) && (!empty($data['password']))))
-        {
-            $this->db->select('*');
-            $this->db->where('id', $this->user_id);
-            $this->db->where('status', 1);
-            $this->db->where('is_deleted', 0);
-
-            if ($data['role'] == 1) 
-            {
-                $q = $this->db->get('users');
-            } 
-            else 
-            {
-                $q = $this->db->get('admin_users');
-            }
-                        
-                $userdata = $q->result_array();
-                
-                if ($userdata) 
-                {
-                    if ($userdata[0]['password'] != md5($data['old_password'])) 
-                    {
+                    } else {
+                        // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Old password is incorrect';
-                    } 
-                    else 
-                    {
-                        $dataUser['password'] = md5($data['password']);
-                        $this->db->set('password', md5($data['password']));
-                        $this->db->where('id',$this->user_id);
-                        if ($data['role'] == 1) 
-                        {
-                            $this->db->update('users',$dataUser);
-                        } 
-                        else 
-                        {
-                            $this->db->update('admin_users',$dataUser);
-                        }
-                        $response['status'] = 'success';
-                        $response['message'] = 'You password changed successfully';
+                        $response['message'] = 'Please provide role, old password and password';
                     }
-                } 
-                else 
-                {
-                    // If any of the mandatory parameters are missing
-                    $response['status'] = 'failure';
-                    $response['message'] = 'You cannot change password';
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
                 }
-        } 
-        else 
-        {
-            // If any of the mandatory parameters are missing
-            $response['status'] = 'failure';
-            $response['message'] = 'Please provide role, old password and password';
-        }
-        // Returning back the response in JSON
-        echo json_encode($response);
-        exit();
-    }
                 
-    public function generateRandomString($length = 10) 
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) 
-        {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
+                public function generateRandomString($length = 10) {
+        
+                    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    $charactersLength = strlen($characters);
+                    $randomString = '';
+                    for ($i = 0; $i < $length; $i++) {
+                        $randomString .= $characters[rand(0, $charactersLength - 1)];
+                    }
+                    return $randomString;
+                }
                 
                 public function forgotpassword() {
                     
@@ -765,10 +744,9 @@ You can change this password from mobile application after you are logged in onc
                 }
                 
                 public function addOrder() {
-                 //   echo "<pre>"; print_r ($_REQUEST); echo "</pre>"; exit();
+                    
                     $model = $this->model;
                     $data = $_POST;
-
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
                       
                         $orderProductArray = json_decode($data['product_id'], true);
@@ -1052,12 +1030,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $tax = $data['tax'];
                             $created = date('Y-m-d h:i:s');
  
-                            if ($adminUserdata) 
-                            {
-                                for ($k=0;$k<count($adminUserdata);$k++) 
-                                {
-                                    if ($adminUserdata[$k]['device_type'] == 1) 
-                                    {
+                            if ($adminUserdata) {
+                                for ($k=0;$k<count($adminUserdata);$k++) {
+                                    if ($adminUserdata[$k]['device_type'] == 1) {
                                         // For Android
                                          $notificationArray = array(
                                             "notification_type" => 2,
@@ -1065,22 +1040,50 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "user_id" => $userId,
                                             "total_price" => $total_price,
                                             "tax" => $tax,
-                                            "created" => $created,
+                                            "created" => $created
                                         );
                                         $arr = array(
-                                            "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-                                            "data" => [
-                                            "body" => $notificationArray,
-                                            "title" => "New Order Added",
-                                            // "icon" => "ic_launcher"
-                                            ],
-                                            // "data" => json_encode(array())
-                                        );
-    	                                   $data = json_encode($arr);
-                                           $this->android_ios_notification($data,'Android');
-                                    } 
-                                    else 
-                                    {
+		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+		    "data" => [
+		        "body" => $notificationArray,
+		        "title" => "New Order Added",
+		        // "icon" => "ic_launcher"
+		    ],
+		    // "data" => json_encode(array())
+		);
+    	$data = json_encode($arr);
+        $this->android_ios_notification($data,'Android');
+		/*//FCM API end-point
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+		//header with content_type api key
+		$headers = array(
+		    'Content-Type:application/json',
+		    'Authorization:key='.$server_key
+		);
+		//CURL request to route notification to FCM connection server (provided by Google)
+		
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($ch);
+        //echo '<pre>';print_r($result);
+        //echo '<pre>';print_r(curl_error($ch));
+        //die;
+		//echo "----".$result;
+		if ($result === FALSE) {
+		    //die('Oops! FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);*/
+                                    } else {
+                                        // For IOS
                                         //for ios
                                         $notificationArray = array(
                                             "notification_type" => 2,
@@ -1698,7 +1701,7 @@ $pdf2->Output($fileNL_invoice, 'F');
             if($type=="Android")
             {
                 $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-            }
+	}
             if($type=="Ios")
             {
                $server_key="AIzaSyA-sjPOj001dkK6gHJztu4taMJeYXLBDrM";
