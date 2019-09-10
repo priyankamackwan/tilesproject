@@ -307,7 +307,7 @@
                                                 
                                         $arr = array(
                                             "registration_ids" => array($userData[$k]['firebase_token']),
-                                            "data"=> [
+                                            "notification"=> [
                                                 "body" => $notificationArray,
                                                 "title" => "New Product Added",
                                                 'priority' => 'high',

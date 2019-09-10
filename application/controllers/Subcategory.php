@@ -250,8 +250,8 @@
 			                                        
 			                            $arr = array(
 					                        "registration_ids" => $userData[$k]['firebase_token'],
-					                        "body" => [
-					                            "data" => $notificationArray,
+					                        "notification" => [
+					                            "body" => $notificationArray,
 					                            "title" => "New Sub Category Added",
 					                            'priority' => 'high',
 					                            // "icon" => "ic_launcher"

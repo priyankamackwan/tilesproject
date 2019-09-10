@@ -263,8 +263,8 @@
 	                                        
 	                            $arr = array(
 			                        "registration_ids" => $iosToken,
-			                        "body" => [
-			                            "data" => $notificationArray,
+			                        "notification" => [
+			                            "body" => $notificationArray,
 			                            "title" => "New Category Added",
 			                            'priority' => 'high',
 			                            // "icon" => "ic_launcher"

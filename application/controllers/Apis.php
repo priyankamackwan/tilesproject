@@ -216,8 +216,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                             );
                             $arr = array(
                                     "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-                                    "body" => [
-                                    "data" => $notificationArray,
+                                    "notification" => [
+                                    "body" => $notificationArray,
                                     "title" => "New User Registered",
                                     'priority' => 'high',
                                     // "icon" => "ic_launcher"
@@ -1096,8 +1096,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                                         $arr = array(
                                             "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                             
-                                            "body" => [
-                                            "data" => $notificationArray,
+                                            "notification" => [
+                                            "body" => $notificationArray,
                                             "title" => "New Order Added",
                                             'priority' => 'high',
 
