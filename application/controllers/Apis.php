@@ -278,26 +278,27 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $response['message'] = 'Your account is inactivated. Please contact Administrator.';
                 } else {
                                 //check if user has login details. if exists then remove old and update with new one
-                                $this->db->select('*');
-                                $this->db->where('user_id', $userdata[0]['id']);
-                                $exist_query= $this->db->get('user_login_details');
-                                $exist_row=$exist_query->num_rows();
-                                if($exist_row > 0)
-                                {
-                                    $userData = array(
-                                        'firebase_token' => $this->firebase_token,
-                                        'device_type' => $data['device_type'],
-                                        'device_id' => $data['device_id'],
-                                        'login_status' => 1,
-                                        'role' => 1,
-                                        'created' => date('Y-m-d h:i:s'),
-                                    );
 
-                                    $this->db->where('user_id',$userdata[0]['id']);
-                                    $this->db->update('user_login_details',$userData);
-                                }
-                                else
-                                {
+                                // $this->db->select('*');
+                                // $this->db->where('user_id', $userdata[0]['id']);
+                                // $exist_query= $this->db->get('user_login_details');
+                                // $exist_row=$exist_query->num_rows();
+                                // if($exist_row > 0)
+                                // {
+                                //     $userData = array(
+                                //         'firebase_token' => $this->firebase_token,
+                                //         'device_type' => $data['device_type'],
+                                //         'device_id' => $data['device_id'],
+                                //         'login_status' => 1,
+                                //         'role' => 1,
+                                //         'created' => date('Y-m-d h:i:s'),
+                                //     );
+
+                                //     $this->db->where('user_id',$userdata[0]['id']);
+                                //     $this->db->update('user_login_details',$userData);
+                                // }
+                                // else
+                                // {
                                     //if not existing login details found then insert new
                                     $userLoginData = array(
                                         'user_id' => $userdata[0]['id'],
@@ -309,7 +310,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                         'created' => date('Y-m-d h:i:s'),
                                 );
                                 $this->$model->insert('user_login_details',$userLoginData);
-                                }
+                                // }
                     
                                 $response['status'] = 'success';
                                 $response['message'] = 'You are successfully logged in.';
@@ -338,25 +339,25 @@ use PHPMailer\PHPMailer\PHPMailer;
                                     $response['data']= $adminUserData[0];
                                     $response['role']= 2;
                                     
-                                    //check ig already login details exists
-                                    $this->db->select('*');
-                                    $this->db->where('user_id', $adminUserData[0]['id']);
-                                    $exist_query= $this->db->get('user_login_details');
-                                    $exist_row=$exist_query->num_rows();
-                                    if($exist_row > 0)
-                                    {
-                                        $userData = array(
-                                            'firebase_token' => $this->firebase_token,
-                                            'device_type' => $data['device_type'],
-                                            'device_id' => $data['device_id'],
-                                            'login_status' => 1,
-//                                            'role' => 2,
-                                            'created' => date('Y-m-d h:i:s'),
-                                        );
+                                    // //check ig already login details exists
+                                    // $this->db->select('*');
+                                    // $this->db->where('user_id', $adminUserData[0]['id']);
+                                    // $exist_query= $this->db->get('user_login_details');
+                                    // $exist_row=$exist_query->num_rows();
+                                    // if($exist_row > 0)
+                                    // {
+                                    //     $userData = array(
+                                    //         'firebase_token' => $this->firebase_token,
+                                    //         'device_type' => $data['device_type'],
+                                    //         'device_id' => $data['device_id'],
+                                    //         'login_status' => 1,
+                                    //     //  'role' => 2,
+                                    //         'created' => date('Y-m-d h:i:s'),
+                                    //     );
 
-                                        $this->db->where('user_id',$userdata[0]['id']);
-                                        $this->db->update('user_login_details',$userData);
-                                    }else{
+                                    //     $this->db->where('user_id',$userdata[0]['id']);
+                                    //     $this->db->update('user_login_details',$userData);
+                                    // }else{
                                     
                                         $userLoginData = array(
                                             'user_id' => $adminUserData[0]['id'],
@@ -368,7 +369,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                             'created' => date('Y-m-d h:i:s'),
                                         );
                                         $this->$model->insert('user_login_details',$userLoginData);
-                                    }
+                                    // }
                                 }
                             } else {
                                 // If any of the mandatory parameters are missing
@@ -1250,14 +1251,18 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $data = $_POST;
                     
                     if ((isset($data['role']) && (!empty($data['role']))) ) {
-                        
-                        $dataUser['login_status'] = 0;
-                        $this->db->set('login_status', $dataUser['login_status']);
-                        $this->db->set('firebase_token', '');
-                        $this->db->where('user_id',$this->user_id);
-                       // $this->db->where('firebase_token',$this->firebase_token);
-                      //  $this->db->where('role',$data['role']);
-                        $this->db->update('user_login_details',$dataUser);
+                       
+                        $this->db->where('user_id', $this->user_id);
+                        $this->db->where('firebase_token',$this->firebase_token);
+                        $this->db->delete('user_login_details');
+
+                    //     $dataUser['login_status'] = 0;
+                    //     $this->db->set('login_status', $dataUser['login_status']);
+                    //     $this->db->set('firebase_token', '');
+                    //     $this->db->where('user_id',$this->user_id);
+                    //    // $this->db->where('firebase_token',$this->firebase_token);
+                    //   //  $this->db->where('role',$data['role']);
+                    //     $this->db->update('user_login_details',$dataUser);
                         $response['status'] = 'success';
                         $response['message'] = 'You are logged out successfully';
                     } else {
