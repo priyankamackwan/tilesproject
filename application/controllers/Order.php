@@ -99,6 +99,7 @@
                         $userData = $this->db->get("users")->result_array();
            
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
+                                        $edit = base_url($this->controller.'/editSalesOrder/'.$this->utility->encode($value->$id));
                                         $download = base_url($this->controller.'/download/'.$this->utility->encode($value->$id));
                                         $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->$id));
                                         $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($value->$id));
@@ -109,8 +110,12 @@
                                         $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
                                         $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
                                         $nestedData['sales_expense'] =$value->sales_expense;
+
+                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
+
                                          if ($value->invoice_status == 0) { 
                                             $nestedData['invoice_status'] = 'Unpaid';
+                                            $nestedData['manage'] .= "<a href='$edit' class='btn  btn-primary  btn-xs'>Edit</a>";
                                         } elseif($value->invoice_status == 1) {
                                             $nestedData['invoice_status'] ='Paid';
                                         } 
@@ -121,7 +126,6 @@
                                         } else {
                                             $nestedData['status'] ='Completed';
                                         }
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
                                      
 
 					$data[] = $nestedData;
@@ -145,6 +149,67 @@
                         $data['controller'] = $this->controller;
 
 			$this->load->view($this->view.'/form',$data);
+        }
+        
+        public function editSalesOrder($id) {
+                    
+            // Default model.
+            $model = $this->model;
+
+            // Decode sales order edit id.
+            $id = $this->utility->decode($id);
+            
+            // Action.
+            $data['action'] = "salesOrderUpdate";
+            
+            // Title name.
+            $data['msgName'] = $this->msgName;
+
+			$data['primary_id'] = $this->primary_id;
+            $data['controller'] = $this->controller;
+            
+            // Get data by id. 
+            $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+
+            // Get orderProduct data using edit id.
+            $multipleWhere = ['order_id' => $id];
+            $this->db->where($multipleWhere);
+            $data['Product'] = $this->db->get("order_products")->result_array();
+
+            for($k=0;$k<count($data['Product']);$k++) {
+                
+                // Get product Id's.
+                $productIdArray = $data['Product'][$k]['product_id'];
+               
+                // Get related product data.
+                $multipleWhere2 = ['id' => $productIdArray];
+                $this->db->where($multipleWhere2);
+                $productData= $this->db->get("products")->result_array();
+               
+                $productId[] = $productData[0]['id'];
+                $productNameArray[] = $productData[0]['name'];
+                $designNoArray[] = $productData[0]['design_no'];
+                $quantityArray[]= $data['Product'][$k]['quantity'];
+                $priceArray[]= $data['Product'][$k]['price'];
+
+            }
+            
+            $data['productData'] = array();
+            for($p=0;$p<count($productNameArray);$p++) {
+
+                $data['productData'][$p]['product_id']= $productId[$p];
+                $data['productData'][$p]['product_name']= $productNameArray[$p];
+                $data['productData'][$p]['product_design_no']= $designNoArray[$p];
+                $data['productData'][$p]['product_quantity']= $quantityArray[$p];
+                $data['productData'][$p]['product_price']= $priceArray[$p];
+
+            }
+            
+            // $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
+            // $this->db->where($multipleWhere2);
+            // $data['User'] = $this->db->get("users")->result_array();
+
+			$this->load->view($this->view.'/editOrder',$data);
 		}
                 
 		public function insert() {

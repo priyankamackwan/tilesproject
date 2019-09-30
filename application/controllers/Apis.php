@@ -1126,7 +1126,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                        $mail = new PHPMailer;
                             //$mail->isSMTP();
                             $mail->isMail();
-                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->setFrom(ADMIN_EMAIL, 'Tiles Admin');
                    
                             $mail->Subject = "New Order from $companyName";
                  

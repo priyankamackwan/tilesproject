@@ -86,3 +86,5 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 define('IMAGE_PATH','http://localhost/cake1/app/webroot/img/');
+
+define('ADMIN_EMAIL','pnpsales2019@gmail.com');
