@@ -1,21 +1,22 @@
 <?php
+  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
 ?>
 <!-- page content -->
-     <div class="right_col" role="main">
+     <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
             <div class="row">
 			<?php
-                                echo $this->session->flashdata('edit_profile');
-                                echo $this->session->flashdata('Change_msg');
-				echo $this->session->flashdata($this->msgDisplay);
+        //                         echo $this->session->flashdata('edit_profile');
+        //                         echo $this->session->flashdata('Change_msg');
+				// echo $this->session->flashdata($this->msgDisplay);
 			?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
 				<div class="x_title">
-                    <h2><?php echo $msgName;?> Detail</h2>
+                    <h2><?php //echo $msgName;?> Detail</h2>
                     <ul class="nav navbar-right panel_toolbox">
-					  <li><a href="<?php echo base_url($this->controller);?>/add"><button class="btn btn-primary"><i class="fa fa-plus"></i> Add Admin User</button></a>
+					  <li><a href="<?php //echo base_url($this->controller);?>/add"><button class="btn btn-primary"><i class="fa fa-plus"></i> Add Admin User</button></a>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -55,7 +56,63 @@
 			</div>
 		</div>
 	</div>
+</div> -->
+<!-- Main Container start-->
+<div class="content-wrapper">
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+
+    <?php
+      echo $this->session->flashdata('edit_profile');
+      echo $this->session->flashdata('Change_msg');
+      echo $this->session->flashdata($this->msgDisplay);
+    ?>
+
+    <!-- <h1>
+      <?php echo $msgName;?>
+    </h1> -->
+    <!-- <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+      <li class="active">Users</li>
+    </ol> -->
+  </section>
+
+  <!-- Main content section start-->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title"><?php echo $msgName;?></h3>
+            <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add Admin User</a>
+          </div>
+
+          <div class="box-body table-responsive">
+            <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+              <thead>
+                <th>Sr No.</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Mobile No</th>
+                <th>Status</th>
+                <th>Manage</th>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+  <!-- Main content section end-->
 </div>
+<!-- Main Container end-->
 <?php
 	$this->load->view('include/footer');
 ?>

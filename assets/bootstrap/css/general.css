@@ -1,0 +1,41 @@
+
+/*# sourceMappingURL=bootstrap.css.map */
+.skin-blue .main-header .logo {
+  background-color: #222d32 !important;
+}
+.skin-blue .main-sidebar {
+  background-color: #3a4246 !important;
+}
+.skin-blue .main-header .navbar {
+  background-color:#222d32 !important;
+}
+.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
+	border-left-color: #de1a22 !important;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+	background-color: #de1a22 !important;
+	border-color: #de1a22 !important;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+	background-color: #de1a22 !important;
+}
+.skin-blue .main-header li.user-header{
+	background-color: #3a4246 !important;
+}
+.btn-success, .btn-success:hover, .btn-success:active, .btn-success:focus  {
+	color: #fff !important;
+    background-color: #45B6AF !important;
+    border-color: #3ea49d !important;
+}
+.dataTables_filter {float: right;}
+.glyphicon-star { color:#f53b49 !important; }
+.review-rate-block  span { color:#777 ; }
+.toppadding7 { padding-top: 7px !important; }
+.btn-sm, .btn-xs { font-size: 14px; line-height: 1.5;  }
+
+.booking-booked-text { color:#7eb50b;font-weight: 600; }
+.booking-rejected-text { color:#f53b49;font-weight: 600; }
+.booking-pending-text { color:#ffb300;font-weight: 600; }
+.boking-openall-text { color:#0053f1;font-weight: 600; }
+.leftmargin40{ margin-left: 40px; }
+.topmargin10{ margin-top: 10px; }

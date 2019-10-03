@@ -1,13 +1,14 @@
 <?php
 //echo '<pre>';
 //print_r($result[0]); exit;
+  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
 
 <!-- page content -->
-        <div class="right_col" role="main">
+        <!-- <div class="right_col" role="main">
 		<div class="row">
             <div class="page-title">
               <div class="title_left">
@@ -92,8 +93,129 @@
               </div>
             </div>
             </div>
-            </div>
+            </div> -->
         <!-- /page content -->
+<!-- -------------------------------new design------------------------------- -->
+<!-- Main Container start-->
+<div class="content-wrapper">
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
+    <!-- <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+      <li class="active">Users</li>
+    </ol> -->
+  </section>
+
+  <!-- Main content section start-->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-9 col-sm-12 col-xs-12">
+
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title"><?php echo $this->msgName;?></h3>
+          </div>
+
+          <div class="box-body">
+            <form action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="first_name">
+                  Company Name :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->company_name;?>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
+                  Company Address :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->company_address;?>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
+                  Contact Person Name
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->contact_person_name;?>
+                </div>
+              </div>
+                  
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="email">
+                  Email :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->email;?>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="phone_no">
+                  Phone :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->phone_no;?>
+                </div>
+              </div>
+
+              <div class="form-group">
+						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                  Vat Number :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->vat_number;?>
+                </div>
+              </div>
+
+              <div class="form-group">
+						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                  Client Type :
+                </label>
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php
+                    if ($result[0]->client_type == 1) { 
+                  ?>
+                      Cash
+                  <?php
+                    } 
+                  ?>
+                  <?php 
+                    if ($result[0]->client_type == 2) { 
+                  ?>
+                      Credit
+                  <?php 
+                    } 
+                  ?>  
+                  <?php 
+                    if ($result[0]->client_type == 3) { 
+                  ?>
+                      Walkin
+                  <?php
+                    } 
+                  ?>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 <?php
 	$this->load->view('include/footer');
 ?>
