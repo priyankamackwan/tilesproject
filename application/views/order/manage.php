@@ -1,8 +1,9 @@
 <?php
+    $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
 ?>
 <!-- page content -->
-     <div class="right_col" role="main">
+     <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
             <div class="row">
 			<?php
@@ -57,6 +58,57 @@
 			</div>
 		</div>
 	</div>
+</div> -->
+
+<!-- Main Container start-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <?php
+            echo $this->session->flashdata('edit_profile');
+            echo $this->session->flashdata('Change_msg');
+            echo $this->session->flashdata($this->msgDisplay);
+        ?>
+        <!-- <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Users</li>
+        </ol> -->
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title"><?php echo $msgName;?></h3>
+                        
+                        <a href="<?php echo base_url($this->controller);?>/uploadOrders" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Import Orders</a>
+                    </div>
+
+                    <div class="box-body table-responsive">
+                        <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+                            <thead>
+                                <th>Sr No.</th>
+                                <th>Client Name</th>
+                                <th>LPO No</th>
+                                <th>Delivery No</th>
+                                <th>Invoice No</th>
+                                <th>Sales Expense</th>
+                                <th>Invoice Status</th>
+                                <th>Status</th>
+                                <th>Manage</th>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  <!-- Main content section end-->
+
 </div>
 <?php
 	$this->load->view('include/footer');

@@ -1,8 +1,9 @@
 <?php
+  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
 ?>
 <!-- page content -->
-     <div class="right_col" role="main">
+     <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
             <div class="row">
 			<?php
@@ -55,6 +56,61 @@
 			</div>
 		</div>
 	</div>
+</div> -->
+
+<!-- Main Container start-->
+<div class="content-wrapper">
+      <section class="content-header">
+        <?php
+          echo $this->session->flashdata('edit_profile');
+          echo $this->session->flashdata('Change_msg');
+          echo $this->session->flashdata($this->msgDisplay);
+        ?>
+        <!-- <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Users</li>
+        </ol> -->
+      </section>
+
+    <section class="content">
+      <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+
+              <div class="box box-primary">
+                  <div class="box-header">
+                      <div class="row">
+                          <div class="col-md-6 col-sm-12 col-xs-12">
+                              <h3 class="box-title">Products Report</h3>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="box-body table-responsive">
+                      <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+                          <thead>
+                            <th>Sr No.</th>
+                            <th>Product Name</th>
+                            <th>Design No.</th>
+                            <th>Size</th>
+                            <th>Category</th>
+                            <th>Purchase Price</th>
+                            <th>Total Quantity</th>
+                            <th>Sold Quantity</th>
+                            <th>Balance Quantity</th>
+                            <th>Total Amount Balance</th>
+                          </thead>
+
+                          <tbody>
+
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- Main content section end-->
+
 </div>
 <?php
 	$this->load->view('include/footer');

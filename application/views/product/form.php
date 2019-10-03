@@ -1,6 +1,7 @@
 <?php
 //echo '<pre>';
 //print_r($result[0]); exit;
+  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
@@ -28,7 +29,7 @@
 ?>
 
 <!-- page content -->
-        <div class="right_col" role="main">
+        <!-- <div class="right_col" role="main">
 		<div class="row">
             <div class="page-title">
               <div class="title_left">
@@ -226,8 +227,8 @@
                               <?php } }?>
 </select>
                         </div>
-                      </div>
-                                       
+                      </div> -->
+        <!-- ----------------------------------------------------            -->
                                            <!--  <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="latitude">SubCategories<span class="required">*</span>
                         </label>
@@ -245,7 +246,7 @@
 
                                         
 
-					  <div class="ln_solid"></div>
+					  <!-- <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-6 col-xs-12 col-md-offset-3">
                           <button type="submit" class="btn btn-primary"><?php echo $btn;?></button>
@@ -257,8 +258,337 @@
               </div>
             </div>
             </div>
-            </div>
+            </div> -->
         <!-- /page content -->
+
+        <!-- -------------------------------new design------------------------------- -->
+<!-- Main Container start-->
+<div class="content-wrapper">
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+  <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
+
+  <?php
+    echo $this->session->flashdata('edit_profile');
+    echo $this->session->flashdata('Change_msg');
+    echo $this->session->flashdata($this->msgDisplay);
+  ?>
+  <!-- <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+    <li class="active">Users</li>
+  </ol> -->
+  </section>
+  <!-- Main content section start-->
+  <section class="content">
+      <div class="row">
+        <div class="col-md-9 col-sm-12 col-xs-12">
+
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
+            </div>
+
+            <div class="box-body">
+              <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
+                <input type="hidden" id="action" name="action" value="<?php echo $action?>">
+                <input type="hidden" id="action" name="old_image" value="<?php echo $result[0]->image;?>">
+
+					      <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                    Product Name<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <input type="text" name="name" value="<?php echo $result[0]->name;?>" class="form-control" placeholder="Enter Product Name">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="design_no">
+                    Design No<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <input type="text" name="design_no" value="<?php echo $result[0]->design_no;?>" class="form-control" placeholder="Enter Design No">
+                  </div>
+                </div>
+                                     
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="cash_rate">
+                    Cash Rate<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <?php 
+                      if ($this->userhelper->current('role_id') == 1) { 
+                    ?>
+                        <input type="text" name="cash_rate" value="<?php echo $result[0]->cash_rate;?>" class="form-control" placeholder="Enter Cash Rate">
+                    <?php 
+                      } else { 
+                    ?>
+                        <input type="text" name="cash_rate" value="<?php echo $result[0]->cash_rate;?>" readonly="" class="form-control" placeholder="Enter Cash Rate">
+                    <?php 
+                      } 
+                    ?>
+                  </div>
+                </div>
+                                    
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="credit_rate">
+                    Credit Rate<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <?php 
+                      if ($this->userhelper->current('role_id') == 1) { 
+                    ?>
+                        <input type="text" name="credit_rate" value="<?php echo $result[0]->credit_rate;?>" class="form-control" placeholder="Enter Credit Rate">
+                    <?php 
+                      } else { 
+                    ?>
+                        <input type="text" name="credit_rate" value="<?php echo $result[0]->credit_rate;?>" readonly="" class="form-control" placeholder="Enter Credit Rate">
+                    <?php 
+                      } 
+                    ?>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="walkin_rate">
+                    Walkin Rate<font color="red"><span class="required">*</span></font> :
+                  </label>
+                
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <?php 
+                      if ($this->userhelper->current('role_id') == 1) { 
+                    ?>
+                        <input type="text" name="walkin_rate" value="<?php echo $result[0]->walkin_rate;?>" class="form-control" placeholder="Enter Walkin Rate">
+                    <?php
+                      } else { 
+                    ?>
+                        <input type="text" name="walkin_rate" value="<?php echo $result[0]->walkin_rate;?>" readonly="" class="form-control" placeholder="Enter Walkin Rate">
+                    <?php
+                      } 
+                    ?>
+                  </div>
+                </div>
+                                
+          	    <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="flexible_rate">
+                    Flexible Rate<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                      <?php
+                        if ($this->userhelper->current('role_id') == 1) { 
+                      ?>
+                          <input type="text" name="flexible_rate" value="<?php echo $result[0]->flexible_rate;?>" class="form-control" placeholder="Enter Flexible Rate">
+                      <?php
+                        } else { 
+                      ?>
+                          <input type="text" name="flexible_rate" value="<?php echo $result[0]->flexible_rate;?>" readonly="" class="form-control" placeholder="Enter Flexible Rate">
+                      <?php 
+                        } 
+                      ?>
+                    </div>
+                </div>   
+                           
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Size">
+                    Size :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <input type="text" name="size" value="<?php echo $result[0]->size;?>" class="form-control" placeholder="Enter Size">
+                  </div>
+                </div>
+
+                <?php 
+                  if($action == "insert") { 
+                ?>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
+                        Product Image<font color="red"><span class="required">*</span></font> :
+                      </label>
+
+                      <div class="col-md-9 col-sm-12 col-xs-12">
+                        <input type="file" name="image" class="form-control numberonl">
+                      </div>
+                    </div>
+                <?php 
+                  } 
+                ?>
+                <?php 
+                  if($action == "update") { 
+                ?>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
+                        Product Image<font color="red"><span class="required">*</span></font> :
+                      </label>
+
+                      <div class="col-md-9 col-sm-12 col-xs-12">
+                        <input type="file" name="updated_image" class="form-control numberonly">
+                      </div>
+                    </div>
+
+                    <div class="form-group uploadedImage">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
+                        Uploaded Image
+                      </label>
+
+                      <div class="col-md-9 col-sm-12 col-xs-12">
+                        <img width="150px" height="150px" src="<?php echo base_url().'./assets/uploads/'.$result[0]->image;?>" style="background-color:navy;" >
+                      </div>
+                    </div>
+                <?php 
+                  }
+                ?>
+                                       
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Quantity">
+                    Quantity<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control" placeholder="Enter Quantity">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Factor">
+                    Factor<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                      <input type="text" name="factor" id="factor" value="<?php echo $result[0]->factor;?>" class="form-control" placeholder="Enter Factor">
+                  </div>
+                </div>
+
+                <?php 
+                  if ($this->userhelper->current('role_id') ==1) { 
+                ?>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="purchase_expense">
+                        Purchase Price<font color="red"><span class="required">*</span></font> :
+                      </label>
+
+                      <div class="col-md-9 col-sm-12 col-xs-12">
+                        <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control" placeholder="Enter Purchase Price">
+                      </div>
+                    </div>
+                <?php
+                  } 
+                ?>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="latitude">
+                    Unit<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <select class="form-control select2" name="unit"  id="unit">
+
+                        <option value="0">Select Unit</option>
+                          
+                      <?php 
+                        if($result[0]->unit == 1) { 
+                      ?>
+                          <option value="1" selected="">CTN</option>
+                      <?php 
+                        } else { 
+                      ?>
+                          <option value="1">CTN</option>
+                      <?php 
+                        } 
+                      ?>
+                          
+                      <?php 
+                        if($result[0]->unit == 2) { 
+                      ?>
+                          <option value="2" selected="">SQM</option>
+                      <?php 
+                        } else { 
+                      ?>
+                          <option value="2">SQM</option>
+                      <?php
+                        } 
+                      ?>
+                            
+                      <?php 
+                        if($result[0]->unit == 3) { 
+                      ?>
+                          <option value="3" selected="">PCS</option>
+                      <?php 
+                        } else { 
+                      ?>
+                          <option value="3">PCS</option>
+                      <?php
+                        } 
+                      ?>
+                          
+                      <?php 
+                        if($result[0]->unit == 4) { 
+                      ?>
+                          <option value="4" selected="">SET</option>
+                      <?php
+                        } else { 
+                      ?>
+                          <option value="4">SET</option>
+                      <?php 
+                        } 
+                      ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group" id="quanity_div">
+                    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="quantity_per">
+                      Quantity per <span id="unit_name"></span> unit<font color="red"><span class="required">*</span></font> :
+                    </label>
+
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo $result[0]->quantity_per_unit;?>" class="form-control" placeholder="Quantity Per">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="latitude">
+                    Categories<font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <select class="form-control select2" name="categories[]" multiple="multiple" id="category">
+                      <?php 
+                        for($i=0;$i<count($categories);$i++) { 
+                          if (in_array($categories[$i]['id'], $choosen_categories)) { 
+                      ?>
+                            <option value="<?php echo $categories[$i]['id'];?>" selected=""><?php echo $categories[$i]['name'];?></option>
+                      <?php 
+                          } else { 
+                      ?>
+                            <option value="<?php echo $categories[$i]['id'];?>"><?php echo $categories[$i]['name'];?></option>
+                      <?php 
+                          } 
+                        }
+                      ?>
+                    </select>
+                  </div>
+                </div> 
+
+                <div class="box-footer">
+                  <input type="submit" class="btn btn-primary" value="<?php echo $btn;?>">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+</div>
 <?php
 	$this->load->view('include/footer');
 ?>
@@ -391,6 +721,7 @@ return value == '' || value.trim().length != 0;
 			var id = $('input[name = "id"]').val();
 			var action = $('input[name = "action"]').val();
 			$('#demo-form2').validate({
+        errorClass:"text-danger",
 				rules:{
                                            image:{
 							required: true,

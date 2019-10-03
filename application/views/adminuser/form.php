@@ -1,5 +1,7 @@
 <?php
-	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
+  $this->load->view('include/header');
+  
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
@@ -16,7 +18,7 @@
 ?>
 
 <!-- page content -->
-        <div class="right_col" role="main">
+        <!-- <div class="right_col" role="main">
 		<div class="row">
             <div class="page-title">
               <div class="title_left">
@@ -142,8 +144,206 @@
               </div>
             </div>
             </div>
-            </div>
+            </div> -->
         <!-- /page content -->
+
+<!-- -------------------------------new design------------------------------- -->
+<!-- Main Container start-->
+<div class="content-wrapper">
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
+    
+    <?php
+      echo $this->session->flashdata('edit_profile');
+      echo $this->session->flashdata('Change_msg');
+      echo $this->session->flashdata($this->msgDisplay);
+    ?>
+    <!-- <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+      <li class="active">Users</li>
+    </ol> -->
+  </section>
+
+  <!-- Main content section start-->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-9 col-sm-12 col-xs-12">
+
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
+          </div>
+
+          <div class="box-body">
+
+            <form action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+              <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
+              <input type="hidden" id="action" name="action" value="<?php echo $action?>">
+
+              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-12 col-xs-12" for="first_name">
+                    First Name <font color="red"><span class="required">*</span></font> :
+                  </label>
+
+                  <div class="col-md-9 col-sm-12 col-xs-12">
+                    <input type="text" name="first_name" value="<?php echo $result[0]->first_name;?>" class="form-control" placeholder="First Name">
+                  </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
+                  Last Name <font color="red">*</font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="last_name" value="<?php echo $result[0]->last_name;?>" class="form-control" placeholder="Last Name">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="email">
+                  Email <font color="red">*</font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="email" value="<?php echo $result[0]->email;?>" class="form-control email" placeholder="Email">
+                </div>
+              </div>
+
+              <?php
+                if($action == 'insert') { 
+              ?>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="password">
+                      Password <font color="red">*</font> :
+                    </label>
+
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                      <input type="password" name="password" value="" class="form-control" placeholder="Password">
+                    </div>
+                  </div>
+              <?php 
+                } else { 
+              ?>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="password">
+                      Password <font color="red">*</font> :
+                    </label>
+
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                      <input type="password" name="new_password" value="" class="form-control" placeholder="Password">
+                    </div>
+                  </div>
+              <?php 
+                } 
+              ?>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                  Mobile No <font color="red">*</font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" maxlength="10" name="number" value="<?php echo $result[0]->mobile_no;?>" class="form-control" placeholder="Mobile No">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="age_group">
+                  Client Rights :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php 
+                    if (in_array(3, $rightsArray)) 
+                    { 
+                  ?>
+                      <input type="checkbox" name="user" id="user" value="3" checked="">
+                  <?php 
+                    } else { 
+                  ?>
+                      <input type="checkbox" name="user" id="user" value="3">
+                  <?php 
+                    } 
+                  ?>
+                </div>
+					    </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="age_group">
+                  Category Rights :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php 
+                    if (in_array(4, $rightsArray)) { 
+                  ?>
+                      <input type="checkbox" name="category" id="category" value="4" checked="">
+                  <?php 
+                    } else { 
+                  ?>
+                      <input type="checkbox" name="category" id="category" value="4">
+                  <?php
+                    } 
+                  ?>
+                </div>
+					    </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age_group">
+                    Product Rights :
+                </label>
+
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <?php 
+                    if (in_array(5, $rightsArray)) { 
+                  ?>
+                      <input type="checkbox" name="product" id="product" value="5" checked="">
+                  <?php 
+                    } else { 
+                  ?>
+                      <input type="checkbox" name="product" id="product" value="5">
+                  <?php 
+                    } 
+                  ?>
+                </div>
+              </div>
+                                        
+              <div class="form-group">
+						    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age_group">
+                  Order Rights :
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <?php 
+                    if (in_array(6, $rightsArray)) {
+                  ?>
+                      <input type="checkbox" name="order" id="order" value="6" checked="">
+                  <?php 
+                    } else { 
+                  ?>
+                      <input type="checkbox" name="order" id="order" value="6">
+                  <?php 
+                    } 
+                  ?>
+                </div>
+					    </div>
+              <div class="box-footer">
+                <input type="submit" id="submit1" name="submit" class="btn btn-primary" value="<?php echo $btn;?>">
+              </div>
+            </form>
+
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+  <!-- Main content section end-->
+</div>
+<!-- Main Container end-->
 <?php
 	$this->load->view('include/footer');
 ?>
@@ -166,6 +366,7 @@ return value == '' || value.trim().length != 0;
 			var id = $('input[name = "id"]').val();
 			var action = $('input[name = "action"]').val();
 			$('#demo-form2').validate({
+        errorClass:"text-danger",
 				rules:{
                                                 first_name: {required: true,noSpace: true,},
                                                 last_name: {required: true,noSpace: true,},

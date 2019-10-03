@@ -121,7 +121,8 @@
                                         } else {
                                             $nestedData['status'] ='Completed';
                                         }
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
+                                        // $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
+                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
                                      
 
 					$data[] = $nestedData;
