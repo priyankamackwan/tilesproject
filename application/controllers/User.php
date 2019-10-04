@@ -327,15 +327,24 @@
                                   // Report all errors
 error_reporting(E_ALL);
 ini_set("error_reporting", E_ALL);
-                    $importFile = $_FILES['upload_contacts']['name'];
+					$importFile = $_FILES['upload_contacts']['name'];
+
+					$allowedFileType = ['application/vnd.ms-excel','text/xls','text/xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+
+					if(!in_array($_FILES["file"]["type"],$allowedFileType)){
+						
+						$this->session->set_flashdata('imagetype','<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>File type not valid</div>');
+						redirect($this->controller.'/uploadContacts');	
+					}
                     
                     $ext = pathinfo($importFile,PATHINFO_EXTENSION);
 			$image = time().'.'.$ext;
 
 			$config['upload_path'] = 'assets/uploads/';
 			$config['file_name'] = $image;
-			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
-
+			// $config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
+			$config['allowed_types'] = "txt|csv|xlsx|xls";
+			
 			$this->load->library('upload', $config);
 			$this->load->initialize($config);
 			$this->upload->do_upload('upload_contacts');
@@ -383,5 +392,5 @@ require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'php-excel-reader'.DIREC
 
 			$this->load->view($this->view.'/uploadContacts',array());
     }
-	}
+}
 ?>
