@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Panel Login</title>
 
-    <link rel="icon" href="<?php echo base_url().'./assets/webTitleIcon.png';?>" type="image/gif" sizes="16x16">
+    <link rel="icon" href="<?php echo base_url().'assets/webTitleIcon.png';?>" type="image/gif" sizes="16x16">
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -126,7 +126,7 @@
     <div class="login-box" style="margin-top: 0%;">
 
       <div class="login-logo" style="margin-bottom:0px;">
-        <img src="<?php echo base_url().'./assets/loginLogo.png';?>" alt="PNP Tiles" width="250px;">
+        <img src="<?php echo base_url().'assets/loginLogo.png';?>" alt="PNP Tiles" width="250px;">
       </div>
       
       <div class="login-box-body">
