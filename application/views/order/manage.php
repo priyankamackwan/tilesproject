@@ -71,9 +71,32 @@
     </section>
 
     <section class="content">
-        <div class="box box-primary">
+        <div class="box">
             <div class="box-body">
-                <div class="row">
+                <div class="row form-group">
+                    <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
+                        <table class="pull-right">
+                            <tbody>
+                                <tr>
+                                    <td><b>Total Invoice Amount </b></td>
+                                    <td>&nbsp;:&nbsp;</td>
+                                    <td><?php echo number_format($totalAmounts->invoiceAmount,2);?></td>
+                                </tr> 
+                                <tr>
+                                    <td><b>Total Paid Amount</b> </td>
+                                    <td>&nbsp;:&nbsp; </td>
+                                    <td><?php echo number_format($totalAmounts->paidAmount,2);?></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Total Unpaid  Amount</b> </td>
+                                    <td>&nbsp;:&nbsp; </td>
+                                    <td><?php echo number_format($totalAmounts->unpaidAmount,2);?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="row">
                             <div class="col-md-1 col-sm-12 col-xs-12">
@@ -240,10 +263,29 @@
 
         //Date range picker
         $('#salesOrderDate').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY',
+            },
+        });
 
-        },function(start, end, label) {
-            daterangeStartValue = start.format('YYYY-MM-DD');
-            daterangeEndValue= end.format('YYYY-MM-DD');
+        // ,function(start, end, label) {
+        //     daterangeStartValue = start.format('YYYY-MM-DD');
+        //     daterangeEndValue= end.format('YYYY-MM-DD');
+        //     dataTable1.draw();
+        // }
+
+        $('#salesOrderDate').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+
+            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
+            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
+
+            dataTable1.draw();
+        });
+
+        $('#salesOrderDate').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
             dataTable1.draw();
         });
 

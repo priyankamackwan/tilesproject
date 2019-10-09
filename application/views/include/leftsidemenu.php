@@ -46,7 +46,7 @@
                 if (in_array('6',$this->userhelper->current('rights'))) {
             ?>
                     <li class="treeview <?php echo $url == 'Order'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Order"><i class="fa fa-tag"></i><span>Sales Order</span></a>
+                        <a href="<?php echo base_url();?>Order"><i class="fa fa-tag"></i><span>Sales Orders</span></a>
                     </li>
             <?php
                 }

@@ -62,4 +62,16 @@
 
             return array('result' => $result,'count' => $count);
         }
+
+        // Get invoice paid total and unpaid amount
+        public function get_invoiceAmount()
+        {
+            $this->db->select('SUM('.$this->orders_table.'.total_price) as invoiceAmount,SUM(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,SUM(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+
+            $this->db->from($this->orders_table);
+
+            $Amountdata = $this->db->get()->row();
+            
+            return $Amountdata;
+        }
     }

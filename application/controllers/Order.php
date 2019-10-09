@@ -3,7 +3,7 @@
 
 	class Order extends CI_Controller
 	{
-		public $msgName = "Order";
+		public $msgName = "Sales Orders";
 		public $view = "order";
 		public $controller = "Order";
 		public $primary_id = "id";
@@ -42,9 +42,13 @@
 
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
-            $data['activeProducts'] = $this->db->get("products")->result_array();           
+            $data['activeProducts'] = $this->db->get("products")->result_array();
+
+            // Get all Amounts of Invoice. 
+            $data['totalAmounts'] = $this->orders_model->get_invoiceAmount();
+        
 			$this->load->view($this->view.'/manage',$data);
-		}
+        }
                 
 		public function server_data() {
 
