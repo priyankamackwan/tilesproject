@@ -440,7 +440,14 @@
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
-                        <img width="150px" height="150px" src="<?php echo base_url().'./assets/uploads/'.$result[0]->image;?>" style="background-color:navy;" >
+                        <?php
+                          if (!empty($result[0]->image) && file_exists(FCPATH.'assets/uploads/'.$result[0]->image)) {
+                            $image = base_url().'./assets/uploads/'.$result[0]->image;
+                          }else{
+                            $image =  base_url().'./assets/default.png';
+                          }
+                        ?>
+                        <img width="150px" height="150px" src="<?php echo $image;?>" style="background-color:navy;" >
                       </div>
                     </div>
                 <?php 

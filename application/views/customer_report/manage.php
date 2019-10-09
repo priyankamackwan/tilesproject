@@ -108,13 +108,13 @@
                     <div class="box-body table-responsive">
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
-                                <th>Sr No.</th>
-                                <th>Company Name</th>
-                                <th>Customer Name</th>
-                                <th>Total Sales</th>
-                                <th>Location</th>
-                                <th>Invoice No</th>
-                                <th>Invoice Status</th>
+                                <th width="5%" class="text-center">Sr No.</th>
+                                <th class="text-center">Company Name</th>
+                                <th class="text-center">Customer Name</th>
+                                <th class="text-center">Total Sales</th>
+                                <th class="text-center">Location</th>
+                                <th class="text-center">Invoice No</th>
+                                <th class="text-center">Invoice Status</th>
                             </thead>
 
                             <tbody>
@@ -147,17 +147,21 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "company_name"},
-                                { "data": "contact_person_name"},
-                                { "data": "total_price"},
-                                { "data": "location"},
-                                { "data": "invoice_no"},
-                                { "data": "invoice_status"},
+                { "data": "company_name"},
+                { "data": "contact_person_name"},
+                { "data": "total_price"},
+                { "data": "location"},
+                { "data": "invoice_no"},
+                { "data": "invoice_status"},
 			],
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4,5,6],
+				"targets": [1,2,3,4,5,6],
 				"orderable": false
-			} ],
+			},{
+                "className": 'text-center',
+                "targets":   [0,3],
+                "orderable": false
+            }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},

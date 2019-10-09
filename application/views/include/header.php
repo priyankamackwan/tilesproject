@@ -33,6 +33,12 @@
 
   <!-- sweetalert CSS -->
 	<link href="<?php echo base_url();?>assets/css/sweetalert.min.css" rel="stylesheet">
+
+  <style>
+    #dataTables {
+        font-size: 14px;
+    }
+  </style>
  
 </head>
 

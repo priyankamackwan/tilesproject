@@ -284,17 +284,12 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4,5,6,7,8,9],
+				"targets": [0,9],
 				"orderable": false
 			},{
-                    "className": 'text-center',
-                    "targets":   0,
-            }],
-			"rowCallback": function( row, data, index ) {
-				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
-			},
-			"order": [[ 0, "DESC"]],
-                        
+                "className": 'text-center',
+                "targets":   0
+            }]      
 		});
 
         $('.search-input-select').on( 'change', function (e) {   

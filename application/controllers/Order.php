@@ -47,6 +47,8 @@
 		}
                 
 		public function server_data() {
+
+            // Column array
             $columnArray = array(
                 0 => 'users.company_name' ,
                 1 => 'orders.lpo_no' ,
@@ -107,7 +109,7 @@
                 }
             }
 
-            if(!empty($salesOrderDate)){
+            if(!empty($salesOrderDate) && isset($_POST['startdate'])){
 
                 if($where == null){
                     $where .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
@@ -117,7 +119,6 @@
             }
             
             if(!empty($invoiceStatus)){
-                
                 
                 if(strtolower($invoiceStatus) == 'paid'){
                     $invoice_status = 1;
@@ -150,12 +151,12 @@
                 }
             }
 
-            // Get all records count 
+            // Get all records count. 
             $totalData = $this->orders_model->get_OrderDatatables();
 
             $totalFiltered = $totalData['count'];
 
-            // Filter data using serach
+            // Filter data using serach.
             if(!empty($this->input->post('search')['value']))
             {            
                 if($where != null){
@@ -193,27 +194,29 @@
            
             if($where == NULL){
                 
-                // Get all records with limit for data table
+                // Get all records with limit for data table.
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir);
                 
             }else{
                 
-                // Get all records with limit and using search for data table
+                // Get all records with limit and using search for data table.
                 $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where);
                       
-                // Get all records count using search for data table
+                // Get all records count using search for data table.
                 $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where);
 
                 $totalFiltered = $totalFiltered['count'];
             }
 
-            // Initialized blank array to push data of data table
+            // Initialized blank array to push data of data table.
             $data = array();
 
-            // Check for empty records
+            // Check for empty records.
             if(!empty($AlltotalFiltered['result'])){
                 
                 $startNo = $_POST['start'];
+
+                // Set serial number by 1.
                 $srNo = $startNo + 1;
                 
                 foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
@@ -230,9 +233,10 @@
                     // Download LPO Link.
                     $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($SingleOrderData['id']));
 
+                    // Set serial number.
                     $tabledata['id'] = $srNo;
 
-                    // User Company Name
+                    // User Company Name.
                     $tabledata['company_name'] = $SingleOrderData['company_name'];
 
                     // Create LPO link for table.
@@ -246,6 +250,7 @@
 
                     $tabledata['sales_expense'] =$SingleOrderData['sales_expense'];
 
+                    // Checking invoice stauts.
                     if ($SingleOrderData['invoice_status'] == 0) { 
 
                         $tabledata['invoice_status'] = 'Unpaid';
@@ -255,6 +260,7 @@
                         $tabledata['invoice_status'] ='Paid';
                     } 
 
+                    // Checking Delivery Status.
                     if ($SingleOrderData['status'] == 0) {
 
                         $tabledata['status'] = 'Pending';
@@ -268,12 +274,17 @@
                         $tabledata['status'] ='Completed';
                     }
 
+                    // Created date for sales order.
                     $tabledata['created'] = date('d/m/Y',strtotime($SingleOrderData['created']));
 
+                    // Manage buttons.
                     $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
 
-                    // Push table data in to array
+                    // Push table data in to array.
                     $data[] = $tabledata;
+
+                    // Increment serial number by 1.
+                    $srNo++;
                 }
             }
 

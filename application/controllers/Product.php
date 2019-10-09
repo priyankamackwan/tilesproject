@@ -120,14 +120,17 @@
 
 					$nestedData['id'] = $srNo;
                                         $nestedData['design_no'] = $value->design_no;
-					$nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
-                                        $test = base_url();
-                                        if (!empty($value->image)) {
-                                        $nestedData['image'] = "<img width='100px' height='100px' src='$test/assets/uploads/$value->image' style='background-color:navy;' >";
-                                        } else {
-                                            $nestedData['image'] = '';
-                                        }   
-                  
+                    $nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
+                    
+                    $test = base_url();
+
+                    if (!empty($value->image) && file_exists(FCPATH.'assets/uploads/'.$value->image)) {
+                        $image = "<img width='100px' height='100px' src='$test/assets/uploads/$value->image' style='background-color:navy;' >";
+                    } else {
+                        $image = "<img width='100px' height='100px' src='$base_url/assets/default.png' style='background-color:navy;' alt='No image'>";
+                    }   
+
+                    $nestedData['image'] = $image;
                                         $nestedData['quantity'] = $value->quantity;
                                         $nestedData['cash_rate'] = $value->cash_rate;
                                         $nestedData['credit_rate'] = $value->credit_rate;
