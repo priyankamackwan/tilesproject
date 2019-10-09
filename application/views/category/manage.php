@@ -86,11 +86,11 @@
           <div class="box-body table-responsive">
             <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
               <thead>
-                <th>Sr No.</th>
-                <th>Category Name</th>
-                <th>Category Image</th>
-                <th>Status</th>
-                <th>Manage</th>
+                <th width="5%" class="text-center">Sr No.</th>
+                <th class="text-center">Category Name</th>
+                <th class="text-center">Category Image</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Manage</th>
               </thead>
               <tbody>
 
@@ -124,14 +124,18 @@
 			"columns": [
 				{ "data": "id"},
 				{ "data": "name"},
-                                { "data": "image"},
-                                { "data": "status"},
+        { "data": "image"},
+        { "data": "status"},
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,2,3,4],
+				"targets": [2,3,4],
 				"orderable": false
-			} ],
+			},{
+        "className": 'text-center',
+        "targets":   0,
+        "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},

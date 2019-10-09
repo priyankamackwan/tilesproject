@@ -103,15 +103,15 @@
           <div class="box-body table-responsive">
             <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
               <thead>
-                    <th>Sr No.</th>
-                    <th>Company Name</th>
-                    <th>Contact Person Name</th>
-                    <th>Email</th>
-                    <th>Vat No</th>
-                    <th>Mobille No.</th>
-                    <th>Client Type</th>
-                    <th>Status</th>
-                    <th>Manage</th>
+                    <th width="5%" class="text-center">Sr No.</th>
+                    <th class="text-center">Company Name</th>
+                    <th class="text-center">Contact Person Name</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Vat No</th>
+                    <th class="text-center">Mobille No.</th>
+                    <th class="text-center">Client Type</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Manage</th>
               </thead>
               <!-- <thead>
                     <th></th>
@@ -161,21 +161,24 @@
 				"type": "POST"
 				},
 			"columns": [
-				{ "data": "id"},
-                                
+				{ "data": "id"},     
 				{ "data": "company_name"},
 				{ "data": "contact_person_name"},
-                                { "data": "email"},
-                                { "data": "vat_number"},
-                                { "data": "phone_no"},
-                                { "data": "client_type"},
-                                { "data": "status"},
+        { "data": "email"},
+        { "data": "vat_number"},
+        { "data": "phone_no"},
+        { "data": "client_type"},
+        { "data": "status"},
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,6,7,8],
+				"targets": [6,7,8],
 				"orderable": false,  
-			} ],
+			},{
+        "className": 'text-center',
+        "targets":   0,
+        "orderable": false
+      }],
 
 			"order": [[ 0, "DESC"]],
 		});

@@ -92,13 +92,13 @@
           <div class="box-body table-responsive">
             <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
               <thead>
-                <th>Sr No.</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Mobile No</th>
-                <th>Status</th>
-                <th>Manage</th>
+                <th width="5%" class="text-center">Sr No.</th>
+                <th class="text-center">First Name</th>
+                <th class="text-center">Last Name</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Mobile No</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Manage</th>
               </thead>
               <tbody>
 
@@ -127,19 +127,22 @@
 				"type": "POST"
 				},
 			"columns": [
-				{ "data": "id"},
-                               
+				{ "data": "id"},      
 				{ "data": "first_name"},
 				{ "data": "last_name"},
-                                { "data": "email"},
+        { "data": "email"},
 				{ "data": "mobile_no"},
-                                 { "data": "status"},
+        { "data": "status"},
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,5,6],
+				"targets": [5,6],
 				"orderable": false,  
-			} ],
+			},{
+        "className": 'text-center',
+        "targets":   0,
+        "orderable": false
+      }],
 
 			"order": [[ 0, "DESC"]],
 		});

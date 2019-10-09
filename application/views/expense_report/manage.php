@@ -100,9 +100,9 @@
                     <div class="box-body table-responsive">
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
-                                <th>Sr No.</th>
-                                <th>Invoice Number</th>
-                                <th>Expense</th>
+                                <th width="5%" class="text-center">Sr No.</th>
+                                <th class="text-center">Invoice Number</th>
+                                <th class="text-center">Expense</th>
                             </thead>
 
                             <tbody>
@@ -135,13 +135,17 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "invoice_no"},
-                                { "data": "sales_expense"},
+                { "data": "invoice_no"},
+                { "data": "sales_expense"},
 			],
 			"columnDefs": [ {
-				"targets": [0,1,2],
+				"targets": [1],
 				"orderable": false
-			} ],
+			},{
+                "className": 'text-center',
+                "targets":   [0,2],
+                "orderable": false
+            }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},

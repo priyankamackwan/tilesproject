@@ -309,8 +309,8 @@
       });
        
 	   $("select").select2({
-			  placeholder: "Select",
-			  allowClear: true
+			//   placeholder: "Select",
+			//   allowClear: true
 		});
 		$(document).on('click', '.confirm-delete', function(e) {
         e.preventDefault(); // Prevent the href from redirecting directly

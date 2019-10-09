@@ -115,12 +115,18 @@
 
 					$nestedData['id'] = $srNo;
 					$nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
-                                        $test = base_url();
-                                        if (!empty($value->image)) {
-                                        $nestedData['image'] = "<img width='50px' height='50px' src='$test/assets/uploads/$value->image' style='background-color:navy;' >";
-                                        } else {
-                                            $nestedData['image'] = '';
-                                        }       
+					$base_url = base_url();
+
+					if (!empty($value->image) && file_exists(FCPATH.'assets/uploads/'.$value->image)) {
+						$image = "<img width='50px' height='50px' src='$base_url/assets/uploads/$value->image' style='background-color:navy;' >";
+					// }
+					// if (!empty($value->image)) {
+					
+					} else {
+						$image = "<img width='50px' height='50px' src='$base_url/assets/default.png' style='background-color:navy;' alt='No image'>";
+					} 
+					// Set image   
+					$nestedData['image']= $image;				
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";

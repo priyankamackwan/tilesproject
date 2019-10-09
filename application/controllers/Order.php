@@ -16,127 +16,386 @@
                     
 			parent::__construct();
 			date_default_timezone_set('Asia/Kolkata');
-			$this->model = "My_model";
+            $this->model = "My_model";
+            $this->load->model('orders_model');
                     
-                      if (!in_array(6,$this->userhelper->current('rights'))) {
-                        $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
-                        redirect('Change_password');
-                      }
+            if (!in_array(6,$this->userhelper->current('rights'))) {
+                $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
+                redirect('Change_password');
+            }
                       
 
 		}
 		public function index() {
                       //  echo '<pre>';
                    // print_r($this->session);die;
-                   $this->userhelper->current('logged_in')['is_logged'] = 1;
+            $this->userhelper->current('logged_in')['is_logged'] = 1;
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
-			$data['msgDisplay'] = $this->msgDisplay;
-   
+            $data['msgDisplay'] = $this->msgDisplay;
+             
+            $this->db->where('status',1);
+            $this->db->where('is_deleted',0);
+            $data['activeUsers'] = $this->db->get("users")->result_array();
+
+            $this->db->where('status',1);
+            $this->db->where('is_deleted',0);
+            $data['activeProducts'] = $this->db->get("products")->result_array();           
 			$this->load->view($this->view.'/manage',$data);
 		}
                 
 		public function server_data() {
-                    
-			$model = $this->model;
+
+            // Column array
+            $columnArray = array(
+                0 => 'users.company_name' ,
+                1 => 'orders.lpo_no' ,
+                2 => 'orders.do_no' ,
+                3 => 'orders.invoice_no' ,
+                4 => 'orders.sales_expense' ,
+                5 => 'orders.invoice_status' ,
+                6 => 'orders.status',
+                7 => 'orders.created' ,
+            );
+
+            // Limit 
+            $limit = $this->input->post('length');
+
+            // Starting from
+            $start = $this->input->post('start');
+
+            // Order by
+            $order = $columnArray[$this->input->post('order')[0]['column']];
+
+            // set default order
+            $dir = $this->input->post('order')[0]['dir'];
+
+            $tableFieldData = [];
+
+            $where = '';
+
+            // User username for filter
+            $username = $this->input->post('userName');
+        
+            // User productId for filter
+            $productId = $this->input->post('productId');
+
+            // User salesOrderDate for filter
+            $salesOrderDate = $this->input->post('salesOrderDate');
+
+            // User invoiceStatus for filter
+            $invoiceStatus = $this->input->post('invoiceStatus');
+
+            // User status for filter
+            $status = $this->input->post('status');
+
+            if(!empty($username)){
+
+                if($where == null){
+                    $where .= 'LOWER(users.company_name) = "'.strtolower($username).'" ';
+                }else{
+                    $where .= ' AND LOWER(users.company_name) = "'.strtolower($username).'" ';
+                }
+            }
+           
+            if(!empty($productId) && $productId > 0){
+
+                if($where == null){
+                    $where .= 'order_products.product_id = "'.$productId.'"';
+                }else{
+                    $where .= ' AND order_products.product_id = "'.$productId.'"';
+                }
+            }
+
+            if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+
+                if($where == null){
+                    $where .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+                }else{
+                    $where .= ' AND (DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+                }
+            }
+            
+            if(!empty($invoiceStatus)){
+                
+                if(strtolower($invoiceStatus) == 'paid'){
+                    $invoice_status = 1;
+                }elseif (strtolower($invoiceStatus) == 'unpaid') {
+                    $invoice_status = 0;
+                }
+                
+                if($where == null){
+                    $where .= 'orders.invoice_status = "'.$invoice_status.'"';
+                }else{
+                    $where .= ' AND orders.invoice_status = "'.$invoice_status.'" ';
+                }
+            }
+           
+            
+            if(!empty($status)){
+
+                if(strtolower($status) == 'pending'){
+                    $order_status = 0;
+                }elseif (strtolower($status) == 'inprogress') {
+                    $order_status = 1;
+                }elseif (strtolower($status) == 'completed') {
+                    $order_status = 2;
+                }
+
+                if($where == null){
+                    $where .= 'orders.status = "'.$order_status.'"';
+                }else{
+                    $where .= ' AND orders.status = "'.$order_status.'"';
+                }
+            }
+
+            // Get all records count. 
+            $totalData = $this->orders_model->get_OrderDatatables();
+
+            $totalFiltered = $totalData['count'];
+
+            // Filter data using serach.
+            if(!empty($this->input->post('search')['value']))
+            {            
+                if($where != null){
+                    $where.= ' AND ';
+                }
+
+                if(strtolower($this->input->post('search')['value']) == 'paid'){
+                    $invoice_status == 0;
+                }elseif (strtolower($this->input->post('search')['value']) == 'unpaid') {
+                    $invoice_status == 1;
+                }
+
+                if(strtolower($this->input->post('search')['value']) == 'pending'){
+                    $status = 0;
+                }elseif (strtolower($this->input->post('search')['value']) == 'inprogress') {
+                    $status = 1;
+                }elseif (strtolower($this->input->post('search')['value']) == 'completed') {
+                    $status = 2;
+                }
+
+                $where .= '(users.company_name LIKE "'.$this->input->post('search')['value'].'%" or ';
+
+                $where .= 'orders.lpo_no LIKE "'.$this->input->post('search')['value'].'%" or ';
+
+                $where .= 'orders.do_no LIKE "'.$this->input->post('search')['value'].'%" or ';
+
+                $where .= 'orders.invoice_no LIKE "'.$this->input->post('search')['value'].'%" or ';
+
+                $where .= 'orders.sales_expense LIKE "'.$this->input->post('search')['value'].'%" or ';
+
+                $where .= 'orders.invoice_status LIKE "'.$invoice_status.'%" or ';
+
+                $where .= 'orders.status LIKE "'.$status.'%" )';
+            }
+           
+            if($where == NULL){
+                
+                // Get all records with limit for data table.
+                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir);
+                
+            }else{
+                
+                // Get all records with limit and using search for data table.
+                $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where);
                       
-                       // echo $this->model; exit;
-			$order_col_id = $_POST['order'][0]['column'];
+                // Get all records count using search for data table.
+                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where);
+
+                $totalFiltered = $totalFiltered['count'];
+            }
+
+            // Initialized blank array to push data of data table.
+            $data = array();
+
+            // Check for empty records.
+            if(!empty($AlltotalFiltered['result'])){
+                
+                $startNo = $_POST['start'];
+
+                // Set serial number by 1.
+                $srNo = $startNo + 1;
+                
+                foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
+                   
+                    // View Page Link.
+                    $view = base_url($this->controller.'/view/'.$this->utility->encode($SingleOrderData['id']));
+
+                    // Download Link.
+                    $download = base_url($this->controller.'/download/'.$this->utility->encode($SingleOrderData['id']));
+
+                    // Download Invoice Link.
+                    $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($SingleOrderData['id']));
+
+                    // Download LPO Link.
+                    $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($SingleOrderData['id']));
+
+                    // Set serial number.
+                    $tabledata['id'] = $srNo;
+
+                    // User Company Name.
+                    $tabledata['company_name'] = $SingleOrderData['company_name'];
+
+                    // Create LPO link for table.
+                    $tabledata['lpo_no'] = '<a href="'.$downloadlpo.'"><b>'.$SingleOrderData['lpo_no'].'</b></a>';
+
+                    // Create DP link for table.
+                    $tabledata['do_no'] ='<a href="'.$download.'"><b>'.$SingleOrderData['do_no'].'</b></a>';
+
+                    // Create Invoice link for table.
+                    $tabledata['invoice_no'] ='<a href="'.$downloadinvoice.'"><b>'.$SingleOrderData['invoice_no'].'</b></a>';
+
+                    $tabledata['sales_expense'] =$SingleOrderData['sales_expense'];
+
+                    // Checking invoice stauts.
+                    if ($SingleOrderData['invoice_status'] == 0) { 
+
+                        $tabledata['invoice_status'] = 'Unpaid';
+
+                    } elseif($SingleOrderData['invoice_status'] == 1) {
+
+                        $tabledata['invoice_status'] ='Paid';
+                    } 
+
+                    // Checking Delivery Status.
+                    if ($SingleOrderData['status'] == 0) {
+
+                        $tabledata['status'] = 'Pending';
+
+                    } elseif($SingleOrderData['status'] == 1) {
+
+                        $tabledata['status'] ='In Progress';
+
+                    } else {
+
+                        $tabledata['status'] ='Completed';
+                    }
+
+                    // Created date for sales order.
+                    $tabledata['created'] = date('d/m/Y',strtotime($SingleOrderData['created']));
+
+                    // Manage buttons.
+                    $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+
+                    // Push table data in to array.
+                    $data[] = $tabledata;
+
+                    // Increment serial number by 1.
+                    $srNo++;
+                }
+            }
+
+            // Combine all data in json
+            $json_data = array(
+                "draw"            => intval($this->input->post('draw')),  
+                "recordsTotal"    => intval($totalData['count']),  
+                "recordsFiltered" => intval($totalFiltered),
+                "data"            => $data   
+            );
+
+            // Convert all data into Json
+            echo json_encode($json_data);
+           
+			// $model = $this->model;
+                      
+            //            // echo $this->model; exit;
+			// $order_col_id = $_POST['order'][0]['column'];
                      
-			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
+			// $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
                  
-			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+			// $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
       
-			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+			// $totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
     
-			$start = $_POST['start'];
-			$limit = $_POST['length'];
+			// $start = $_POST['start'];
+			// $limit = $_POST['length'];
 
-                        $q = $this->db->select('*')->where('is_deleted', 0);
+            //             $q = $this->db->select('*')->where('is_deleted', 0);
        
 		
-                        if(empty($s))
-			{
+            //             if(empty($s))
+			// {
                            
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				$q = $q->limit($limit, $start)->get($this->table)->result();
+			// 	if(!empty($order))
+			// 	{
+			// 		$q = $q->order_by($order);
+			// 	}
+			// 	$q = $q->limit($limit, $start)->get($this->table)->result();
  
-				$totalFiltered = $totalData;
-			}
-			else
-			{
+			// 	$totalFiltered = $totalData;
+			// }
+			// else
+			// {
                          
-				$q = $q->like('orders.sales_expense', $s, 'both');
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				//->limit($limit, $start)
-				$q = $q->get($this->table)->result();
+			// 	$q = $q->like('orders.sales_expense', $s, 'both');
+			// 	if(!empty($order))
+			// 	{
+			// 		$q = $q->order_by($order);
+			// 	}
+			// 	//->limit($limit, $start)
+			// 	$q = $q->get($this->table)->result();
 
-				$totalFiltered = count($q);
-			}
+			// 	$totalFiltered = count($q);
+			// }
 			
              
-			$data = array();
-			if(!empty($q))
-			{
-                               $startNo = $_POST['start'];
-                            $srNo = $startNo + 1;
-				foreach ($q as $key=>$value)
-				{
-					$id = $this->primary_id;
+			// $data = array();
+			// if(!empty($q))
+			// {
+            //                    $startNo = $_POST['start'];
+            //                 $srNo = $startNo + 1;
+			// 	foreach ($q as $key=>$value)
+			// 	{
+			// 		$id = $this->primary_id;
                               
                     
-                         $multipleWhere2 = ['id' => $value->user_id];
-                        $this->db->where($multipleWhere2);
-                        $userData = $this->db->get("users")->result_array();
+            //              $multipleWhere2 = ['id' => $value->user_id];
+            //             $this->db->where($multipleWhere2);
+            //             $userData = $this->db->get("users")->result_array();
            
-                                        $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-                                        $download = base_url($this->controller.'/download/'.$this->utility->encode($value->$id));
-                                        $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->$id));
-                                        $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($value->$id));
+            //                             $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
+            //                             $download = base_url($this->controller.'/download/'.$this->utility->encode($value->$id));
+            //                             $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->$id));
+            //                             $downloadlpo = base_url($this->controller.'/downloadlpo/'.$this->utility->encode($value->$id));
 
-					$nestedData['id'] = $srNo;
-                                        $nestedData['user_name'] =$userData[0]['company_name'];
-                                        $nestedData['lpo_no'] ="<a href='$downloadlpo'><b>$value->lpo_no</b></a>";
-                                        $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
-                                        $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
-                                        $nestedData['sales_expense'] =$value->sales_expense;
-                                         if ($value->invoice_status == 0) { 
-                                            $nestedData['invoice_status'] = 'Unpaid';
-                                        } elseif($value->invoice_status == 1) {
-                                            $nestedData['invoice_status'] ='Paid';
-                                        } 
-                                        if ($value->status == 0) { 
-                                            $nestedData['status'] = 'Pending';
-                                        } elseif($value->status == 1) {
-                                            $nestedData['status'] ='In Progress';
-                                        } else {
-                                            $nestedData['status'] ='Completed';
-                                        }
-                                        // $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
-                                        $nestedData['manage'] = "<a href='$view' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+			// 		$nestedData['id'] = $srNo;
+            //                             $nestedData['user_name'] =$userData[0]['company_name'];
+            //                             $nestedData['lpo_no'] ="<a href='$downloadlpo'><b>$value->lpo_no</b></a>";
+            //                             $nestedData['do_no'] ="<a href='$download'><b>$value->do_no</b></a>";
+            //                             $nestedData['invoice_no'] ="<a href='$downloadinvoice'><b>$value->invoice_no</b></a>";
+            //                             $nestedData['sales_expense'] =$value->sales_expense;
+            //                              if ($value->invoice_status == 0) { 
+            //                                 $nestedData['invoice_status'] = 'Unpaid';
+            //                             } elseif($value->invoice_status == 1) {
+            //                                 $nestedData['invoice_status'] ='Paid';
+            //                             } 
+            //                             if ($value->status == 0) { 
+            //                                 $nestedData['status'] = 'Pending';
+            //                             } elseif($value->status == 1) {
+            //                                 $nestedData['status'] ='In Progress';
+            //                             } else {
+            //                                 $nestedData['status'] ='Completed';
+            //                             }
+            //                             // $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
+            //                             $nestedData['manage'] = "<a href='$view' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
                                      
 
-					$data[] = $nestedData;
-                                        $srNo++;
-				}
-			}
+			// 		$data[] = $nestedData;
+            //                             $srNo++;
+			// 	}
+			// }
 
-			$json_data = array(
-						"draw"            => intval($this->input->post('draw')),
-						"recordsTotal"    => intval($totalData),
-						"recordsFiltered" => intval($totalFiltered),
-						"data"            => $data
-						);
-			echo json_encode($json_data);
+			// $json_data = array(
+			// 			"draw"            => intval($this->input->post('draw')),
+			// 			"recordsTotal"    => intval($totalData),
+			// 			"recordsFiltered" => intval($totalFiltered),
+			// 			"data"            => $data
+			// 			);
+			// echo json_encode($json_data);
 		}
                 
 		public function add() {

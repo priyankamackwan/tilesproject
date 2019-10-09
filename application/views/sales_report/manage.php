@@ -102,11 +102,11 @@
                     <div class="box-body table-responsive">
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
-                                <th>Sr No.</th>
-                                <th>Company Name</th>
-                                <th>Invoice Number</th>
-                                <th>Amount</th>
-                                <th>Expense</th>
+                                <th width="5%" class="text-center">Sr No.</th>
+                                <th class="text-center">Company Name</th>
+                                <th class="text-center">Invoice Number</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Expense</th>
                             </thead>
 
                             <tbody>
@@ -139,17 +139,21 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "company_name"},
-                                { "data": "invoice_no"},
-                                { "data": "total_price"},
-                                { "data": "sales_expense"},
+                { "data": "company_name"},
+                { "data": "invoice_no"},
+                { "data": "total_price"},
+                { "data": "sales_expense"},
 			],
                                 // "bInfo" : false,
                                //  "bFilter": false,
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4],
+				"targets": [1,2,3],
 				"orderable": false
-			} ],
+			},{
+                "className": 'text-center',
+                "targets":   [0,4],
+                "orderable": false
+            }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},

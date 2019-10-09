@@ -178,7 +178,7 @@
 
           <div class="box-body">
 
-            <form action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+            <form action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" onsubmit="return formvalidate();" data-parsley-validate class="form-horizontal form-label-left">
 
               <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
               <input type="hidden" id="action" name="action" value="<?php echo $action?>">
@@ -363,9 +363,15 @@
            jQuery.validator.addMethod("noSpace", function(value, element) {
 return value == '' || value.trim().length != 0;  
     }, "No space please and don't leave it empty");
-			var id = $('input[name = "id"]').val();
-			var action = $('input[name = "action"]').val();
-			$('#demo-form2').validate({
+			
+			
+	});
+
+  function formvalidate() {
+    var id = $('input[name = "id"]').val();
+    var action = $('input[name = "action"]').val();
+  
+  $('#demo-form2').validate({
         errorClass:"text-danger",
 				rules:{
                                                 first_name: {required: true,noSpace: true,},
@@ -420,18 +426,34 @@ return value == '' || value.trim().length != 0;
 						}
 						
 					},
-					submitHandler: function(form){
+					// submitHandler: function(form){
                                             
-                                                var user = $('#user:checkbox:checked').length;
-                                                var category = $('#category:checkbox:checked').length;
-                                                var product = $('#product:checkbox:checked').length;
-                                                var order = $('#order:checkbox:checked').length;
-                                                if (user == 0 && category == 0 && category == 0 && order == 0) {
-                                                 alert('Please select atleast one module for access');
-                                                 return false;
-                                                }
-						form.submit();
-					}
+          //   var user = $('#user:checkbox:checked').length;
+          //   var category = $('#category:checkbox:checked').length;
+          //   var product = $('#product:checkbox:checked').length;
+          //   var order = $('#order:checkbox:checked').length;
+          //   if (user == 0 && category == 0 && category == 0 && order == 0) {
+          //     alert('Please select atleast one module for access');
+          //     return false;
+          //   }
+					// 	form.submit();
+					// }
 		});
-	});
+
+    if(!$('#demo-form2').valid())
+    {
+      return false;
+    }else{
+        var user = $('#user:checkbox:checked').length;
+        var category = $('#category:checkbox:checked').length;
+        var product = $('#product:checkbox:checked').length;
+        var order = $('#order:checkbox:checked').length;
+        if (user == 0 && category == 0 && category == 0 && order == 0) {
+          alert('Please select atleast one module for access');
+          return false;
+        }
+      return true;
+    }
+  }
+
 	</script>

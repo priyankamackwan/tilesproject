@@ -88,16 +88,16 @@
                   <div class="box-body table-responsive">
                       <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                           <thead>
-                            <th>Sr No.</th>
-                            <th>Product Name</th>
-                            <th>Design No.</th>
-                            <th>Size</th>
-                            <th>Category</th>
-                            <th>Purchase Price</th>
-                            <th>Total Quantity</th>
-                            <th>Sold Quantity</th>
-                            <th>Balance Quantity</th>
-                            <th>Total Amount Balance</th>
+                            <th width="5%" class="text-center">Sr No.</th>
+                            <th class="text-center">Product Name</th>
+                            <th class="text-center">Design No.</th>
+                            <th class="text-center">Size</th>
+                            <th class="text-center">Category</th>
+                            <th class="text-center">Purchase Price</th>
+                            <th class="text-center">Total Quantity</th>
+                            <th class="text-center">Sold Quantity</th>
+                            <th class="text-center">Balance Quantity</th>
+                            <th class="text-center">Total Amount Balance</th>
                           </thead>
 
                           <tbody>
@@ -130,22 +130,26 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "product_name"},
-                                { "data": "design_no"},
-                                { "data": "size"},
-                                { "data": "category"},
-                                { "data": "purchase_expense"},
-                                { "data": "quantity"},
-                                { "data": "sold_quantity"},
-                                { "data": "total_left_quantity"},
-                                { "data": "amount"},
+        { "data": "product_name"},
+        { "data": "design_no"},
+        { "data": "size"},
+        { "data": "category"},
+        { "data": "purchase_expense"},
+        { "data": "quantity"},
+        { "data": "sold_quantity"},
+        { "data": "total_left_quantity"},
+        { "data": "amount"},
 			],
-                                 "bInfo" : false,
-                                 "bFilter": false,
+      "bInfo" : false,
+      "bFilter": false,
 			"columnDefs": [ {
-				"targets": [0,1,2,3,4,5,6,7,8,9],
+				"targets": [1,4,9],
 				"orderable": false
-			} ],
+			},{
+          "className": 'text-center',
+          "targets":   [0,2,3,5,6,7,8],
+          "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},

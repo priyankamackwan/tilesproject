@@ -71,7 +71,11 @@
           </div>
 
           <div class="box-body">
-            <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/addUsers';?>" method="post" id="demo-form2" class="form-horizontal form-label-left">
+            <?php        
+              echo $this->session->flashdata('imagetype');
+            ?>
+
+            <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/addUsers';?>" onsubmit="return uplodContactFormValidation();" method="post" id="demo-form2" class="form-horizontal form-label-left">
 
               <div class="form-group">
 						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
@@ -79,8 +83,10 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <input type="file" name="upload_contacts" class="form-control numberonly col-md-7 col-xs-12">
+                  <input type="file" name="upload_contacts" class="form-control numberonly" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                  <p class="text-danger"><small>* only allow .xls, .xlsx and .csv files</small></p>
                 </div>
+                
 					    </div>
 
               <div class="box-footer">
@@ -99,21 +105,30 @@
 	$this->load->view('include/footer');
 ?>
 	<script>
-		$(document).ready(function (){
+  // $(document).ready(function (){
 
-			$('#demo-form2').validate({
-        errorClass:"text-danger",
-				rules:{
-						upload_contacts: {
-							required: true,
-                                                    }
+		
+	// });
+
+  function uplodContactFormValidation() {
+    $('#demo-form2').validate({
+      errorClass:"text-danger",
+      rules:{
+        upload_contacts: {
+          required: true,
+        }
+      },
 			
-					
-					},
-			
-					submitHandler: function(form){
-						form.submit();
-					}
+      // submitHandler: function(form){
+      // 	form.submit();
+      // }
 		});
-	});
+
+    if(!$('#demo-form2').valid()){
+      return false;
+    }else{
+      return true;
+    }
+  }
+ 
 	</script>

@@ -116,19 +116,19 @@
           <div class="box-body table-responsive">
             <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
               <thead>
-                <th>Sr No.</th>
-                <th>Design No.</th>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Quantity</th>
-                <th>Cash Rate</th>
-                <th>Credit Rate</th>
-                <th>Walkin Rate</th>
-                <th>Purchase Price</th>
-                <th>Size</th>
-                <th>Unit</th>
-                <th>Status</th>
-                <th>Manage</th>
+                <th width="5%" class="text-center">Sr No.</th>
+                <th class="text-center">Design No.</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Image</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center">Cash Rate</th>
+                <th class="text-center">Credit Rate</th>
+                <th class="text-center">Walkin Rate</th>
+                <th class="text-center">Purchase Price</th>
+                <th class="text-center">Size</th>
+                <th class="text-center">Unit</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Manage</th>
               </thead>
 
               <tbody>
@@ -162,23 +162,27 @@
 				},
 			"columns": [
 				{ "data": "id"},
-                                { "data": "design_no"},
+        { "data": "design_no"},
 				{ "data": "name"},
-                              { "data": "image"},
-                              { "data": "quantity"},
-                              { "data": "cash_rate"},
-                              { "data": "credit_rate"},
-                              { "data": "walkin_rate"},
-                              { "data": "purchase_expense"},
-                                { "data": "size"},
-                                { "data": "unit"},
-                                { "data": "status"},
+        { "data": "image"},
+        { "data": "quantity"},
+        { "data": "cash_rate"},
+        { "data": "credit_rate"},
+        { "data": "walkin_rate"},
+        { "data": "purchase_expense"},
+        { "data": "size"},
+        { "data": "unit"},
+        { "data": "status"},
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,11,12],
+				"targets": [11,12],
 				"orderable": false
-			} ],
+			},{
+        "className": 'text-center',
+        "targets":   0,
+        "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
