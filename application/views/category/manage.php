@@ -80,15 +80,15 @@
         <div class="box box-primary">
           <div class="box-header">
             <h3 class="box-title"><?php echo $msgName;?> Detail</h3>
-            <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add Category</a>
+            <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add Item Group </a>
           </div>
 
           <div class="box-body table-responsive">
             <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
               <thead>
                 <th width="5%" class="text-center">Sr No.</th>
-                <th class="text-center">Category Name</th>
-                <th class="text-center">Category Image</th>
+                <th class="text-center">Item Group  Name</th>
+                <th class="text-center">Item Group  Image</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Manage</th>
               </thead>
@@ -129,7 +129,7 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [2,3,4],
+				"targets": [2,4],
 				"orderable": false
 			},{
         "className": 'text-center',

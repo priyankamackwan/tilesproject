@@ -40,6 +40,7 @@
                           <th>Sr No.</th>
                           <th>Design No.</th>
                           <th>Name</th>
+                          <th>Item Group</th>
                       <th>Image</th>
                        <th>Quantity</th>
                           <th>Cash Rate</th>
@@ -52,6 +53,7 @@
                           <th>Manage</th>
                     </thead>
 <thead>
+                          <th></th>
                           <th></th>
                           <th></th>
                           <th></th>
@@ -100,6 +102,7 @@
 				{ "data": "id"},
                                 { "data": "design_no"},
 				{ "data": "name"},
+        { "data": "cate_name"},
                               { "data": "image"},
                               { "data": "quantity"},
                               { "data": "cash_rate"},

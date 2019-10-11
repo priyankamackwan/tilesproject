@@ -91,6 +91,69 @@
 
   <!-- Main content section start-->
   <section class="content">
+    <div class="box">
+            <div class="box-body">
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-md-1 col-sm-12 col-xs-12">
+                                <h4>Filters:</h4>
+                            </div>
+
+                            <div class="col-md-11 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <div class="row">
+
+                                        <!-- Contact Filter  -->
+                                        <div class="col-md-2 col-sm-12 col-xs-12" >
+                                            <label class="control-label" style="margin-top:7px;">Company Name</label>
+                                        </div>
+
+                                        <!-- Contact Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select name="clientList" class="form-control select2" style="width: 100%;" id="clientList">
+                                                <option value="" selected="selected">All</option>
+                                                <?php
+                                                    if(!empty($all_user) && count($all_user) > 0 ){
+                                                    
+                                                        foreach ($all_user as $all_userKey => $all_userValue) {
+                                                ?>
+                                                            <option value="<?php echo $all_userValue['company_name']; ?>"><?php echo $all_userValue['company_name']; ?></option>
+                                                <?php
+                                                        }
+                                                    }else{
+                                                ?>
+                                                    <option value="">-- No User Available --</option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Status Filter -->
+                                    <div class="col-md-2 col-sm-12 col-xs-12">
+                                        <label class="control-label" style="margin-top:7px;">Status:</label>
+                                    </div>
+                                    <!-- Status Filter Dropdown -->
+                                    <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <select class="form-control" name="status" style="width:100%;" id="status">
+                                            <option value="">All</option>
+                                            <option value="1">Active</option>
+                                            <option value="3">Rejected</option>
+                                            <option value="4">Pending</option>        
+                                            <option value="2">Block</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -158,7 +221,11 @@
 			"ajax":{
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
-				"type": "POST"
+				"type": "POST",
+        "data":function(data) {
+                    data.company_name = $('#clientList').val();
+                    data.status = $('#status').val();
+                },
 				},
 			"columns": [
 				{ "data": "id"},     
@@ -172,7 +239,7 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [6,7,8],
+				"targets": [6,8],
 				"orderable": false,  
 			},{
         "className": 'text-center',
@@ -190,8 +257,15 @@
                 dataTable2.api().columns(i).search(v).draw();
             });
             
-            
-       
+           
+    $('#clientList').on('change', function (e) {
+        // dataTable1.rows().deselect();
+        dataTable2.api().draw();
+    });
+    $('#status').on('change', function (e) {
+        // dataTable1.rows().deselect();
+        dataTable2.api().draw();
+    });
 
             
             

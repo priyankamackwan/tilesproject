@@ -35,6 +35,8 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+            $data['activeProducts'] = $this->db->get("products")->result_array();
+            $data['product_categories'] = $this->db->get("categories")->result_array();
    if ($this->userhelper->current('role_id') ==1) {
 			$this->load->view($this->view.'/manage',$data);
    } else {
@@ -45,7 +47,9 @@
 		{
                     
 			$model = $this->model;
-                      
+            $productid=$s=$cat_id=$where='';
+            $status=0;     
+            $units='SET';     
                        // echo $this->model; exit;
 			$order_col_id = $_POST['order'][0]['column'];
                      
@@ -55,51 +59,94 @@
                         
                         $statusFilter = $_POST['columns'][2]['search']['value'];
       
-			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+			//$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
     
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
 
-                        if (empty($statusFilter)){
-                            $q = $this->db->select('*')->where('is_deleted', 0);
-                        } elseif($statusFilter == 1) {
-                            $q = $this->db->select('*')->where('is_deleted', 0)->where('status', 1);
-                        } elseif($statusFilter == 2) {
-                            $q = $this->db->select('*')->where('is_deleted', 0)->where('status',0);
-                        } else {
-                            $q = $this->db->select('*')->where('is_deleted', 0);
-                        }
-				
-       
-			if(empty($s))
-			{
-                           
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				$q = $q->limit($limit, $start)->get($this->table)->result();
- 
-				$totalFiltered = $totalData;
-			}
-			else
-			{
-                         
-				$q = $q->like('products.name', $s, 'both');
-                                $q = $q->or_like('products.design_no', $s, 'both');
-                                $q = $q->or_like('products.size', $s, 'both');
-                   
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				//->limit($limit, $start)
-				$q = $q->get($this->table)->result();
+            $units = $this->input->post('units');
+            $productid = $this->input->post('productid');
+            $cat_id = $this->input->post('cat_id');
+            $status = $this->input->post('status');
 
-				$totalFiltered = count($q);
+
+            if(!empty($productid)){
+
+                if($where == null){
+                    $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
+                }else{
+                    $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
+                }
+            }
+            if(!empty($cat_id)){
+
+                if($where == null){
+                    $where .= 'c.id ="'.$cat_id.'"';
+                }else{
+                    $where .= ' AND c.id ="'.$cat_id.'"';
+                }
+            }
+            if(!empty($units)){
+                if ($units == 1) {
+                    $unit = 'CTN';
+                } elseif($units == 2) {
+                    $unit = 'SQM';
+                } elseif($units == 3) {
+                    $unit = 'PCS';
+                } else {
+                    $unit = 'SET';
+                }
+
+                if($where == null){
+                    $where .= '  p.unit ="'.$units.'"';
+                }else{
+                    $where .= ' AND p.unit ="'.$units.'"';
+                }
+            }
+            if(!empty($status)){
+                if($status=="Active"){
+                    $status=1;
+                }else{
+                    $status=0;
+                }
+
+
+                if($where == null){
+                    $where .= 'p.status = "'.$status.'"';
+                }else{
+                    $where .= ' AND p.status = "'.$status.'"';
+                }
+            }
+            $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name');
+            $this->db->from('products as p');
+            $this->db->join('product_categories as pc', 'pc.product_id = p.id');
+            $this->db->join('categories as c', 'c.id = pc.cat_id');
+            $this->db->where('p.is_deleted', 0);
+
+            if($statusFilter == 1) {
+                $this->db->where('status', 1);
+            } elseif($statusFilter == 2) {
+                 $this->db->where('status',0);
+            }
+            if(isset($where) && $where!=''){                
+                $this->db->where($where);
+            }elseif(isset($s) && $s!='' ){                         
+				$this->db->like('p.name', $s, 'both');
+                $this->db->or_like('p.design_no', $s, 'both');
+                $this->db->or_like('p.size', $s, 'both');
 			}
-              
-			$data = array();
+            if(!empty($order))
+            {
+                $this->db->order_by($order);
+            }
+            $this->db->limit($limit, $start);
+            $this->db->group_by('pc.product_id');
+
+            $q=$this->db->get()->result_array(); 
+
+            $totalFiltered = $this->$model->filtercountTableRecords($where,$s);
+            
+            $data = array();
 			if(!empty($q))
 			{
                             $startNo = $_POST['start'];
@@ -107,49 +154,50 @@
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
-					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value->$id));
-                                        $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-                                        if ($value->status == 1){
+					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['$id']));
+                                        $view = base_url($this->controller.'/view/'.$this->utility->encode($value['id']));
+                                        if ($value['status'] == 1){
                                             $statusText = 'Active';
-                                            $statusAction = base_url($this->controller.'/inactive/'.$this->utility->encode($value->$id));
+                                            $statusAction = base_url($this->controller.'/inactive/'.$this->utility->encode($value['$id']));
                                         } else {
                                             $statusText = 'Inactive';
-                                            $statusAction = base_url($this->controller.'/active/'.$this->utility->encode($value->$id));
+                                            $statusAction = base_url($this->controller.'/active/'.$this->utility->encode($value['$id']));
                                         }
-					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
+					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value['$id']));
 
 					$nestedData['id'] = $srNo;
-                                        $nestedData['design_no'] = $value->design_no;
-                    $nestedData['name'] = "<a href='$view'><b>$value->name</b></a>";
+                                        $nestedData['design_no'] = $value['design_no'];
+                    $nestedData['name'] = "<a href='$view'><b>".$value['name']."</b></a>";
+                    $nestedData['cate_name'] =$value['cate_name'];
                     
                     $test = base_url();
 
-                    if (!empty($value->image) && file_exists(FCPATH.'assets/uploads/'.$value->image)) {
-                        $image = "<img width='100px' height='100px' src='$test/assets/uploads/$value->image' style='background-color:navy;' >";
+                    if (!empty($value['image']) && file_exists(FCPATH.'assets/uploads/'.$value['image'])) {
+                        $image = "<img width='100px' height='100px' src='$test/assets/uploads/".$value['image']."'  style='background-color:navy;' >";
                     } else {
                         $image = "<img width='100px' height='100px' src='$base_url/assets/default.png' style='background-color:navy;' alt='No image'>";
                     }   
 
                     $nestedData['image'] = $image;
-                                        $nestedData['quantity'] = $value->quantity;
-                                        $nestedData['cash_rate'] = $value->cash_rate;
-                                        $nestedData['credit_rate'] = $value->credit_rate;
-                                        $nestedData['walkin_rate'] = $value->walkin_rate;
+                                        $nestedData['quantity'] = $value['quantity'];
+                                        $nestedData['cash_rate'] = $value['cash_rate'];
+                                        $nestedData['credit_rate'] = $value['credit_rate'];
+                                        $nestedData['walkin_rate'] = $value['walkin_rate'];
    
-                                        $nestedData['size'] = $value->size;
-                                        if ($value->unit == 1) {
+                                        $nestedData['size'] = $value['size'];
+                                        if ($value['unit'] == 1) {
                                             $nestedData['unit'] = 'CTN';
-                                        } elseif($value->unit == 2) {
+                                        } elseif($value['unit'] == 2) {
                                             $nestedData['unit'] = 'SQM';
-                                        } elseif($value->unit == 3) {
+                                        } elseif($value['unit'] == 3) {
                                             $nestedData['unit'] = 'PCS';
                                         } else {
                                             $nestedData['unit'] = 'SET';
                                         }
                                         
-                                        $nestedData['purchase_expense'] = $value->purchase_expense;
+                                        $nestedData['purchase_expense'] = $value['purchase_expense'];
 					$nestedData['status'] = $statusText;
-                                        if ($value->status == 1){
+                                        if ($value['status'] == 1){
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";
 
                                             $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a> &nbsp; <a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a> &nbsp; <a href='$statusAction' class='btn  btn-warning  btn-sm confirm-statuschange' style='padding: 8px;' data-toggle='tooltip' title='Inactive'><i class='fa fa-ban'></i></a>";
@@ -164,7 +212,6 @@
                                         $srNo++;
 				}
 			}
-
 			$json_data = array(
 						"draw"            => intval($this->input->post('draw')),
 						"recordsTotal"    => intval($totalData),

@@ -131,11 +131,11 @@
 
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
-									Category Name<font color="red"><span class="required">*</span></font> :
+									Item Group Name<font color="red"><span class="required">*</span></font> :
 								</label>
 
 								<div class="col-md-9 col-sm-12 col-xs-12">
-									<input type="text" name="name" value="<?php echo $result[0]->name;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Your Category Name">
+									<input type="text" name="name" value="<?php echo $result[0]->name;?>" class="form-control col-md-7 col-xs-12" placeholder="Enter Your Item Group Name">
 								</div>
 							</div>
 
@@ -154,7 +154,7 @@
 							?>
 									<div class="form-group">
 										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
-											Category Image<font color="red"><span class="required">*</span></font> :
+											Item Group Image<font color="red"><span class="required">*</span></font> :
 										</label>
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<input type="file" name="image" class="form-control numberonly col-md-7 col-xs-12">
@@ -168,7 +168,7 @@
 							?>
 									<div class="form-group">
 										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
-											Category Image<font color="red"><span class="required">*</span></font> :
+											Item Group Image<font color="red"><span class="required">*</span></font> :
 										</label>
 
 										<div class="col-md-9 col-sm-12 col-xs-12">
@@ -249,8 +249,8 @@ return value == '' || value.trim().length != 0;
 					messages: {
                                                 
 						name: {
-							required: "Please Enter Category",
-							remote: "Category Name Exist"
+							required: "Please Enter Item Group",
+							remote: "Item Group Name Exist"
 						}
 						
 					},

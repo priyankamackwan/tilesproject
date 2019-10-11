@@ -84,7 +84,7 @@
 
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
-									Category Name :
+									Item Group Name :
 								</label>
 								<div class="col-md-9 col-sm-12 col-xs-12">
 									<?php echo $result[0]->name;?>
@@ -152,8 +152,8 @@
 					},
 					messages: {
 						name: {
-							required: "Please Enter Category",
-							remote: "Category Name Exist"
+							required: "Please Enter Item Group",
+							remote: "Item Group Name Exist"
 						}
 						
 					},

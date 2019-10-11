@@ -25,11 +25,13 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+			$data['all_user'] = $this->db->get("users")->result_array();
 			$this->load->view($this->view.'/manage',$data);
 		}
 		public function server_data()
 		{
 			$model = $this->model;
+			$where =$company_name = $status= '';
 
 			$order_col_id = $_POST['order'][0]['column'];
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
@@ -40,7 +42,37 @@
 
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
-                      if (empty($statusFilter)){
+
+			$company_name = $this->input->post('company_name');
+			$status = $this->input->post('status');
+
+			if(!empty($company_name)){
+
+                if($where == null){
+                    $where .= 'LOWER(company_name) = "'.strtolower($company_name).'" ';
+                }else{
+                    $where .= ' AND LOWER(company_name) = "'.strtolower($company_name).'" ';
+                }
+            }
+            if(!empty($status)){
+
+                if($status == 4){
+                    $status = 0;
+                }
+
+                if($where == null){
+                    $where .= 'status = "'.$status.'"';
+                }else{
+                    $where .= ' AND status = "'.$status.'"';
+                }
+            }
+            
+            		  if(!empty($where)){
+            		  	
+            		  	$s='';
+            		  	$q = $this->db->select('*')->where('is_deleted', 0)->where($where);
+            		  }
+                      elseif (empty($statusFilter)){
                             $q = $this->db->select('*')->where('is_deleted', 0);
                         } elseif($statusFilter == 1) {
                             $q = $this->db->select('*')->where('is_deleted', 0)->where('status', 0);
@@ -53,7 +85,7 @@
                         }else {
                             $q = $this->db->select('*')->where('is_deleted', 0);
                         }
-
+                        
 			if(empty($s))
 			{
 				if(!empty($order))
@@ -62,6 +94,9 @@
 				}
 				$q = $q->limit($limit, $start)->get($this->table)->result();
 				$totalFiltered = $totalData;
+				if(!empty($where)){
+					 $totalFiltered = $this->db->select('*')->where('is_deleted', 0)->where($where)->get($this->table)->num_rows();
+				}
 			}
 			else
 			{

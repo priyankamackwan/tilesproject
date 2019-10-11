@@ -71,6 +71,97 @@
     </section>
 
     <section class="content">
+        <div class="box">
+            <div class="box-body">
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-md-1 col-sm-12 col-xs-12">
+                                <h4>Filters:</h4>
+                            </div>
+
+                            <div class="col-md-11 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <div class="row">
+
+                                        
+
+                                        <!-- Products Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
+                                        </div>
+
+                                        <!-- Products Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control select2" name="company_name" style="width:100%;" id="company_name">
+                                                <option value="" selected >All</option>
+                                                <?php
+                                                    if(!empty($order_list) && count($order_list) > 0 ){
+                                                    
+                                                        foreach ($order_list as $order_listKey => $order_listValue) {
+                                                ?>
+                                                            <option value="<?php echo $order_listValue['id']; ?>"><?php echo $order_listValue['company_name']; ?></option>
+                                                <?php
+                                                        }
+                                                    }else{
+                                                ?>
+                                                    <option value="">-- No Product Available --</option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Unit Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Customer Name:</label>
+                                        </div>
+
+                                        <!-- Unit Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control select2" name="contact_person_name" style="width:100%;" id="contact_person_name">
+                                                <option value="" selected >All</option>
+                                                <?php
+                                                    if(!empty($order_list) && count($order_list) > 0 ){
+                                                    
+                                                        foreach ($order_list as $order_listKey => $order_listValue) {
+                                                ?>
+                                                            <option value="<?php echo $order_listValue['id']; ?>"><?php echo $order_listValue['contact_person_name']; ?></option>
+                                                <?php
+                                                        }
+                                                    }else{
+                                                ?>
+                                                    <option value="">-- No Product Available --</option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Status Filter -->
+                                    <div class="col-md-1 col-sm-12 col-xs-12">
+                                        <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
+                                    </div>
+
+                                    <!-- Status Filter Dropdown -->
+                                    <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <select class="form-control" name="status" style="width:100%;" id="status">
+                                            <option value="">All</option>
+                                            <option value="Paid">Paid</option>
+                                            <option value="Unpaid">Unpaid</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -144,6 +235,11 @@
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
 				"type": "POST",
+                "data":function(data) {
+                    data.id = $('#company_name').val();
+                    data.cid = $('#contact_person_name').val();
+                    data.status = $('#status').val();
+                },
 				},
 			"columns": [
 				{ "data": "id"},
@@ -155,11 +251,11 @@
                 { "data": "invoice_status"},
 			],
 			"columnDefs": [ {
-				"targets": [1,2,3,4,5,6],
+				"targets": [5],
 				"orderable": false
 			},{
                 "className": 'text-center',
-                "targets":   [0,3],
+                "targets":   [0],
                 "orderable": false
             }],
 			"rowCallback": function( row, data, index ) {
@@ -185,7 +281,15 @@
 });
 
 
-
+            $(document).on("change","#company_name",function(evt){
+                dataTable1.api().draw();
+            });
+            $(document).on("change","#contact_person_name",function(evt){
+                dataTable1.api().draw();
+            });
+            $(document).on("change","#status",function(evt){
+                dataTable1.api().draw();
+            });
             
 	});
         

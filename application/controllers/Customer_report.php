@@ -28,12 +28,14 @@
 		public function index() {
                       //  echo '<pre>';
                    // print_r($this->session);die;
+      $model = $this->model;
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+      $data['order_list'] = $this->$model->order_list();
    
 			$this->load->view($this->view.'/manage',$data);
 		}
@@ -41,78 +43,85 @@
 		public function server_data() {
                     
 			$model = $this->model;
-                      
-                       // echo $this->model; exit;
+      $id=$cid=$where=$startDate=$endDate='';
+      $id = $this->input->post('id');
+      $cid = $this->input->post('cid');
+      $status = $this->input->post('status');
+      $startDate = $_POST['columns'][1]['search']['value'];
+      $endDate = $_POST['columns'][2]['search']['value'];
+      if(!empty($id) || !empty($cid)){
+        if($where == null){
+            if(!empty($cid) && !empty($id)){
+              $where .= '(o.id = "'.$id.'" or  o.id = "'.$cid.'" )';
+            }elseif(!empty($id)){
+              $where .= 'o.id = "'.$id.'" ';
+            }elseif(!empty($cid)){
+              $where .= 'o.id = "'.$cid.'" ';
+            }
+        }else{
+          if(!empty($id) && !empty($cid)){
+            $where .= '(o.id = "'.$id.'" or  o.id = "'.$cid.'" )';
+          }elseif(!empty($id)){
+            $where .= 'and o.id = "'.$id.'" ';
+          }elseif(!empty($cid)){
+            $where .= 'and o.id = "'.$cid.'" ';
+          }
+        }
+      }
+      if(!empty($status)){
+        if($status == "Paid"){
+            $status = 1;
+        }else{
+          $status=0;
+        }
+        if($where == null){
+            $where .= 'o.invoice_status = "'.$status.'"';
+        }else{
+            $where .= ' AND o.invoice_status = "'.$status.'"';
+        }
+      }
+      if(!empty($startDate) || !empty($endDate))
+      {
+        if($where == null){
+          $where .= '(o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
+        }else{
+            $where .= 'AND (o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
+        }
+      }
 			$order_col_id = $_POST['order'][0]['column'];
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
-
-                        $startDate = $_POST['columns'][1]['search']['value'];
-                        $endDate = $_POST['columns'][2]['search']['value'];
+      $startDate = $_POST['columns'][1]['search']['value'];
+      $endDate = $_POST['columns'][2]['search']['value'];
       
-			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+			$totalData = $this->$model->customer_reportTableRecords($where);
                        
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
-                        
-                         if (empty($startDate) || empty($endDate)){
-                            $q = $this->db->select('*')->where('is_deleted', 0);
-                                if(empty($s))
-			{
-                           
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				$q = $q->limit($limit, $start)->get($this->table)->result();
- 
-				$totalFiltered = $totalData;
-			}
-			else
-			{
-                         
-				$q = $q->like('orders.total_price', $s, 'both');
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				//->limit($limit, $start)
-				$q = $q->get($this->table)->result();
 
-				$totalFiltered = count($q);
-			}
-                        }  else {
-                            $q= $this->db->select('*')->where('created >=', $startDate);
-                            $this->db->where('created <=', $endDate);
-                               if(empty($s))
-			{
-                           
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				$q = $q->get($this->table)->result();
+      $this->db->select('o.*,u.company_name,u.contact_person_name');
+      $this->db->from('orders as o');
+      $this->db->join('users as u', 'u.id = o.user_id','left');
+      $this->db->where('o.is_deleted', 0);
 
-				$totalFiltered = count($q);
-			}
-			else
-			{
-                         
-				$q = $q->like('orders.total_price', $s, 'both');
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				//->limit($limit, $start)
-				$q = $q->get($this->table)->result();
+      if(!empty($where)){
+        $this->db->where($where);
+      }else {
+        if(!empty($s)){
+           $this->db->like('o.total_price', $s, 'both');
+           $this->db->or_like('u.company_name', $s, 'both');
+        }
+      }
+      if(!empty($order))
+      {
+        $this->db->order_by($order);
+      }
+      $this->db->limit($limit, $start);
 
-				$totalFiltered = count($q);
-			}
-                        }
-  
+      $q=$this->db->get()->result_array();
 		/* $customerArray = array();
                foreach ($q as $key=>$value)
 				{
@@ -127,40 +136,33 @@
         
 			if(!empty($q))
 			{
-                               $startNo = $_POST['start'];
-                            $srNo = $startNo + 1;
+        $startNo = $_POST['start'];
+        $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$id = $this->primary_id;
-                                             
-                    
-                         $multipleWhere2 = ['id' => $value->user_id];
-                        $this->db->where($multipleWhere2);
-                        $userData = $this->db->get("users")->result_array();
-           
-                                     
+          $nestedData['id'] = $srNo;
+          $nestedData['company_name'] =$value['company_name'];
+          $nestedData['contact_person_name'] =$value['contact_person_name'];
+          $nestedData['total_price'] =$value['total_price'];
+          $nestedData['location'] =$value['location'];
+          $nestedData['invoice_no'] =$value['invoice_no'];
 
-					$nestedData['id'] = $srNo;
-                                        $nestedData['company_name'] =$userData[0]['company_name'];
-                                        $nestedData['contact_person_name'] =$userData[0]['contact_person_name'];
-                                        $nestedData['total_price'] =$value->total_price;
-                                        $nestedData['location'] =$value->location;
-                                         $nestedData['invoice_no'] =$value->invoice_no;
-                                        if ($value->invoice_status == 0) {
-                                            $nestedData['invoice_status'] = 'Unpaid';
-                                        } else {
-                                            $nestedData['invoice_status'] = 'Paid';
-                                        }
+          if ($value['invoice_status'] == 0) {
+              $nestedData['invoice_status'] = 'Unpaid';
+          } else {
+              $nestedData['invoice_status'] = 'Paid';
+          }
                                         
 					$data[] = $nestedData;
-                                        $srNo++;
+          $srNo++;
 				}
 			}
 
 			$json_data = array(
 						"draw"            => intval($this->input->post('draw')),
 						"recordsTotal"    => intval($totalData),
-						"recordsFiltered" => intval($totalFiltered),
+						"recordsFiltered" => intval($totalData),
 						"data"            => $data
 						);
 			echo json_encode($json_data);
