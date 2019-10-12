@@ -35,6 +35,7 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+            // Add for dispaly in filter
             $data['activeProducts'] = $this->db->get("products")->result_array();
             $data['product_categories'] = $this->db->get("categories")->result_array();
    if ($this->userhelper->current('role_id') ==1) {
@@ -47,9 +48,11 @@
 		{
                     
 			$model = $this->model;
+            // Add for default value
             $productid=$s=$cat_id=$where='';
             $status=0;     
-            $units='SET';     
+            $units='SET'; 
+
                        // echo $this->model; exit;
 			$order_col_id = $_POST['order'][0]['column'];
                      
@@ -58,18 +61,30 @@
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
                         $statusFilter = $_POST['columns'][2]['search']['value'];
-      
+            // comment 
 			//$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
     
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
 
+            //Old code comment
+           /* if (empty($statusFilter)){
+                            $q = $this->db->select('*')->where('is_deleted', 0);
+                        } elseif($statusFilter == 1) {
+                            $q = $this->db->select('*')->where('is_deleted', 0)->where('status', 1);
+                        } elseif($statusFilter == 2) {
+                            $q = $this->db->select('*')->where('is_deleted', 0)->where('status',0);
+                        } else {
+                            $q = $this->db->select('*')->where('is_deleted', 0);
+                        } */
+
+            // Fetch data from filter            
             $units = $this->input->post('units');
             $productid = $this->input->post('productid');
             $cat_id = $this->input->post('cat_id');
             $status = $this->input->post('status');
 
-
+            // Add for where condition for filter
             if(!empty($productid)){
 
                 if($where == null){
@@ -117,6 +132,7 @@
                     $where .= ' AND p.status = "'.$status.'"';
                 }
             }
+            // Add new query 
             $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name');
             $this->db->from('products as p');
             $this->db->join('product_categories as pc', 'pc.product_id = p.id');
@@ -143,8 +159,37 @@
             $this->db->group_by('pc.product_id');
 
             $q=$this->db->get()->result_array(); 
-
+            //Total count 
             $totalFiltered = $this->$model->filtercountTableRecords($where,$s);
+
+            // Old Query comment
+           /* if(empty($s))
+            {
+                           
+                if(!empty($order))
+                {
+                    $q = $q->order_by($order);
+                }
+                $q = $q->limit($limit, $start)->get($this->table)->result();
+ 
+                $totalFiltered = $totalData;
+            }
+            else
+            {
+                         
+                $q = $q->like('products.name', $s, 'both');
+                                $q = $q->or_like('products.design_no', $s, 'both');
+                                $q = $q->or_like('products.size', $s, 'both');
+                   
+                if(!empty($order))
+                {
+                    $q = $q->order_by($order);
+                }
+                //->limit($limit, $start)
+                $q = $q->get($this->table)->result();
+
+                $totalFiltered = count($q);
+            }*/
             
             $data = array();
 			if(!empty($q))
@@ -153,6 +198,7 @@
                             $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
+                    // Chnage object to array value
 					$id = $this->primary_id;
 					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['$id']));
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value['id']));
@@ -168,6 +214,7 @@
 					$nestedData['id'] = $srNo;
                                         $nestedData['design_no'] = $value['design_no'];
                     $nestedData['name'] = "<a href='$view'><b>".$value['name']."</b></a>";
+                    // Add new Field  Item Group
                     $nestedData['cate_name'] =$value['cate_name'];
                     
                     $test = base_url();

@@ -35,6 +35,7 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+      // Add To display in filter
       $data['order_list'] = $this->$model->order_list();
    
 			$this->load->view($this->view.'/manage',$data);
@@ -43,12 +44,16 @@
 		public function server_data() {
                     
 			$model = $this->model;
+      // Set default value
       $id=$cid=$where=$startDate=$endDate='';
+      //Fetch from filter
       $id = $this->input->post('id');
       $cid = $this->input->post('cid');
       $status = $this->input->post('status');
+
       $startDate = $_POST['columns'][1]['search']['value'];
       $endDate = $_POST['columns'][2]['search']['value'];
+      //Where condition for filter
       if(!empty($id) || !empty($cid)){
         if($where == null){
             if(!empty($cid) && !empty($id)){
@@ -94,14 +99,16 @@
 
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
-      $startDate = $_POST['columns'][1]['search']['value'];
-      $endDate = $_POST['columns'][2]['search']['value'];
+     // $startDate = $_POST['columns'][1]['search']['value'];
+      //$endDate = $_POST['columns'][2]['search']['value'];
       
+      // Add new for total count
 			$totalData = $this->$model->customer_reportTableRecords($where);
                        
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
 
+      //Add new query 
       $this->db->select('o.*,u.company_name,u.contact_person_name');
       $this->db->from('orders as o');
       $this->db->join('users as u', 'u.id = o.user_id','left');

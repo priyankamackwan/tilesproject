@@ -91,6 +91,7 @@
 
   <!-- Main content section start-->
   <section class="content">
+    <!-- Add Filter -->
     <div class="box">
             <div class="box-body">
                 <div class="row form-group">
@@ -154,6 +155,7 @@
                 </div>
             </div>
         </div>
+        <!-- End Filter -->
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -222,6 +224,7 @@
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
 				"type": "POST",
+        // add data attribute for pass data of filter
         "data":function(data) {
                     data.company_name = $('#clientList').val();
                     data.status = $('#status').val();
@@ -257,7 +260,7 @@
                 dataTable2.api().columns(i).search(v).draw();
             });
             
-           
+    // change event of filetr       
     $('#clientList').on('change', function (e) {
         // dataTable1.rows().deselect();
         dataTable2.api().draw();
@@ -266,7 +269,6 @@
         // dataTable1.rows().deselect();
         dataTable2.api().draw();
     });
-
             
             
 	});

@@ -25,12 +25,14 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+			//Add for display in filter dropdown
 			$data['all_user'] = $this->db->get("users")->result_array();
 			$this->load->view($this->view.'/manage',$data);
 		}
 		public function server_data()
 		{
 			$model = $this->model;
+			// Define blank
 			$where =$company_name = $status= '';
 
 			$order_col_id = $_POST['order'][0]['column'];
@@ -43,6 +45,7 @@
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
 
+			//Fetch from filter and in where condition
 			$company_name = $this->input->post('company_name');
 			$status = $this->input->post('status');
 
@@ -66,7 +69,7 @@
                     $where .= ' AND status = "'.$status.'"';
                 }
             }
-            
+            //$where For filter data
             		  if(!empty($where)){
             		  	
             		  	$s='';
@@ -94,6 +97,8 @@
 				}
 				$q = $q->limit($limit, $start)->get($this->table)->result();
 				$totalFiltered = $totalData;
+
+				// add query for totalFiltered count for filter
 				if(!empty($where)){
 					 $totalFiltered = $this->db->select('*')->where('is_deleted', 0)->where($where)->get($this->table)->num_rows();
 				}

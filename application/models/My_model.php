@@ -18,6 +18,7 @@
 			$query =$this->db->where($condition)->get($table);
 			return $query->num_rows();
 		}
+		// Add for product filter count
 		public function filtercountTableRecords($condition,$s)
 		{
 			$this->db->select('*');
@@ -64,6 +65,7 @@
 			$query = $this->db->get_where($tableName,$condition);
 			return $query->num_rows();
 		}
+		// Add new for fetch order list displat in filter
 		public function order_list(){
 			$this->db->select('o.id,o.user_id,u.company_name,u.contact_person_name');
             $this->db->from('orders as o');
@@ -72,6 +74,7 @@
             $query = $this->db->get()->result_array();
 			return $query;
 		}
+		//count for customer report Records
 		public function customer_reportTableRecords($condition)
 		{
 			$this->db->select('o.*,u.company_name,u.contact_person_name');
