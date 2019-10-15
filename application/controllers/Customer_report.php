@@ -29,6 +29,7 @@
                       //  echo '<pre>';
                    // print_r($this->session);die;
       $model = $this->model;
+      $pagename='';
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
@@ -36,7 +37,7 @@
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
       // Add To display in filter
-      $data['order_list'] = $this->$model->order_list();
+      $data['order_list'] = $this->$model->order_list($pagename);
    
 			$this->load->view($this->view.'/manage',$data);
 		}
@@ -103,7 +104,7 @@
       //$endDate = $_POST['columns'][2]['search']['value'];
       
       // Add new for total count
-			$totalData = $this->$model->customer_reportTableRecords($where);
+			$totalData = $this->$model->report_table_tecords($where,$pagename='');
                        
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
@@ -154,6 +155,7 @@
           $nestedData['total_price'] =$value['total_price'];
           $nestedData['location'] =$value['location'];
           $nestedData['invoice_no'] =$value['invoice_no'];
+          $nestedData['created'] =$value['created'];
 
           if ($value['invoice_status'] == 0) {
               $nestedData['invoice_status'] = 'Unpaid';

@@ -34,6 +34,9 @@
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
+      // Add for dispaly in filter
+      $data['activeProducts'] = $this->db->get("products")->result_array();
+      $data['product_categories'] = $this->db->get("categories")->result_array();
    
 			$this->load->view($this->view.'/manage',$data);
 		}
@@ -43,6 +46,8 @@
 			$model = $this->model;
                       
                        // echo $this->model; exit;
+      // Add for default value
+            $productid=$s=$cat_id=$where='';
 			$order_col_id = $_POST['order'][0]['column'];
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
@@ -52,13 +57,36 @@
 
                         $startDate = $_POST['columns'][1]['search']['value'];
                         $endDate = $_POST['columns'][2]['search']['value'];
-      
-			$totalData = $this->$model->countTableRecords($this->table,array());
+      $productid = $this->input->post('productid');
+      $cat_id = $this->input->post('cat_id');
+      // Add for where condition for filter
+            if(!empty($productid)){
+
+                if($where == null){
+                    $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
+                }else{
+                    $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
+                }
+            }
+            if(!empty($cat_id)){
+
+                if($where == null){
+                    $where .= 'c.id ="'.$cat_id.'"';
+                }else{
+                    $where .= ' AND c.id ="'.$cat_id.'"';
+                }
+            }
+
+			//$totalData = $this->$model->countTableRecords($this->table,array());
+      // Total count new
+      $totalData = $this->$model->product_report_table_tecords($where);
                        
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
+
                         
-                         if (empty($startDate) || empty($endDate)){
+                     /* old query   
+                      if (empty($startDate) || empty($endDate)){
                             $q = $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
                                 if(empty($s))
 			{
@@ -110,10 +138,33 @@
 
 				$totalFiltered = count($q);
 			}
-                        }
+                        }*/
+      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+      $this->db->from('order_products o');
+      $this->db->join('products p','p.id=o.product_id','left');
+      $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+      $this->db->join('categories c','c.id=pc.cat_id','left');
+      $this->db->limit($limit, $start);
+      $this->db->group_by('o.product_id');
+      if(!empty($where)){
+        $this->db->where($where);
+      }else {
+        if(!empty($s)){
+           $this->db->like('o.total_price', $s, 'both');
+           $this->db->or_like('u.company_name', $s, 'both');
+        }
+      }
+      /*
+      if(isset($s) && $s!=''){
+        $this->db->like('orders.total_price', $s, 'both');
+      }                 
+     if(!empty($order)){
+        $this->db->order_by($order);
+      } */
+      $q=$this->db->get()->result_array();  
 
 			$data = array();
-    
+   // echo $this->db->last_query();die();
                  
 			if(!empty($q))
 			{
@@ -124,7 +175,7 @@
 					$id = $this->primary_id;
                                              
                     
-                         $multipleWhere2 = ['id' => $value->product_id];
+                       /*  $multipleWhere2 = ['id' => $value->product_id];
                         $this->db->where($multipleWhere2);
                         $productData = $this->db->get("products")->result_array();
              
@@ -135,8 +186,9 @@
                         $multipleWhere4 = ['id' => $productCategoryData[0]['cat_id']];
                         $this->db->where($multipleWhere4);
                         $categoryData = $this->db->get("categories")->result_array();
-                        $totalQuantity = $value->totalQuantity;
+                        $totalQuantity = $value->totalQuantity;*/
 					$nestedData['id'] = $srNo;
+                                      /* Old Array
                                         $nestedData['product_name'] =$productData[0]['name'];
                                         $nestedData['design_no'] =$productData[0]['design_no'];
                                         $nestedData['size'] =$productData[0]['size'];
@@ -146,6 +198,16 @@
                                         $nestedData['sold_quantity'] = $value->totalQuantity;
                                         $nestedData['total_left_quantity'] =$productData[0]['quantity']-$totalQuantity;
                                         $nestedData['amount'] =$value->amount;
+                                        */
+                                        $nestedData['product_name'] =$value['name'];
+                                        $nestedData['design_no'] =$value['design_no'];
+                                        $nestedData['size'] =$value['size'];
+                                        $nestedData['category'] =$value['cate_name'];
+                                        $nestedData['purchase_expense'] =$value['purchase_expense'];
+                                        $nestedData['quantity'] =$value['quantity'];
+                                        $nestedData['sold_quantity'] = $value['totalQuantity'];
+                                        $nestedData['total_left_quantity'] =$value['quantity']-$totalQuantity;
+                                        $nestedData['amount'] =$value['amount'];
 					$data[] = $nestedData;
                                         $srNo++;
 				}
@@ -154,7 +216,7 @@
 			$json_data = array(
 						"draw"            => intval($this->input->post('draw')),
 						"recordsTotal"    => intval($totalData),
-						"recordsFiltered" => intval($totalFiltered),
+						"recordsFiltered" => intval($totalData),
 						"data"            => $data
 						);
 			echo json_encode($json_data);

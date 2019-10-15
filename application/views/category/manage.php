@@ -112,10 +112,63 @@
 <script>
    
     jQuery(document).ready(function(){
+      // Add fr download data in excel all pages 
+      var oldExportAction = function (self, e, dt, button, config) {
+        if (button[0].className.indexOf('buttons-excel') >= 0) {
+            if ($.fn.dataTable.ext.buttons.excelHtml5.available(dt, config)) {
+                $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config);
+            }
+            else {
+                $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+            }
+        } else if (button[0].className.indexOf('buttons-print') >= 0) {
+            $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+        }
+      };
+        
+      var newExportAction = function (e, dt, button, config) {
+        var self = this;
+        var oldStart = dt.settings()[0]._iDisplayStart;
+        dt.one('preXhr', function (e, s, data) {
+            // Just this once, load all data from the server...
+            data.start = 0;
+            data.length = 2147483647;
+            dt.one('preDraw', function (e, settings) {
+                // Call the original action function 
+                oldExportAction(self, e, dt, button, config);
+                dt.one('preXhr', function (e, s, data) {
+                    // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+                    // Set the property to what it was before exporting.
+                    settings._iDisplayStart = oldStart;
+                    data.start = oldStart;
+                });
+                // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+                setTimeout(dt.ajax.reload, 0);
+                // Prevent rendering of the full data to the DOM
+                return false;
+            });
+        });
+        // Requery the server with the new one-time export settings
+        dt.ajax.reload();
+      };
+      //End For download
      
 	var dataTable1 = $('#datatables').dataTable({
 			"processing": true,
 			"serverSide": true,
+      'dom': 'lBfrtip',
+      "buttons": 
+      [{
+        extend:'excel',
+        text: window.excelButtonTrans,
+        title: '',
+        filename: 'Category List',
+        sheetName:'Category List',
+        action: newExportAction,
+        exportOptions: {
+          columns: [1,3],
+        }
+      }],
 			"ajax":{
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
@@ -139,15 +192,14 @@
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
-			"order": [[ 1, "DESC"]],
-                        
+			"order": [[ 1, "DESC"]],                        
 		});
 
-            $('.search-input-select').on( 'change', function (e) {   
-                // for dropdown
-                var i =$(this).attr('data-column');  // getting column index
-                var v =$(this).val();  // getting search input value
-                dataTable1.api().columns(i).search(v).draw();
-            });
+    $('.search-input-select').on( 'change', function (e) {   
+        // for dropdown
+        var i =$(this).attr('data-column');  // getting column index
+        var v =$(this).val();  // getting search input value
+        dataTable1.api().columns(i).search(v).draw();
+    });
 	});
 </script>

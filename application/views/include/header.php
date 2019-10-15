@@ -27,16 +27,22 @@
 
   <link rel="stylesheet" href="<?php echo base_url().'assets/dist/css/AdminLTE.min.css'?>"/>
 
-  <link rel="stylesheet" href="<?php echo base_url().'assets/plugins/datatables/dataTables.bootstrap.css'?>"/>
+  <link rel="stylesheet" type="text/css"  href ="<?php echo base_url();?>assets/plugins/datatables/dataTables.bootstrap.min.css">
 
+<!-- Use For export button -->
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/plugins/datatables/buttons.dataTables.min.css">
   <link rel="stylesheet" href="<?php echo base_url().'assets/dist/css/skins/_all-skins.min.css'?>"/>
 
   <!-- sweetalert CSS -->
-	<link href="<?php echo base_url();?>assets/css/sweetalert.min.css" rel="stylesheet">
-
+  <link href="<?php echo base_url();?>assets/css/sweetalert.min.css" rel="stylesheet">
+  <link href="<?php echo base_url();?>assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet">
+  
   <style>
     #dataTables {
         font-size: 14px;
+    }
+    .dt-buttons{
+      margin-left: 10px;
     }
   </style>
  

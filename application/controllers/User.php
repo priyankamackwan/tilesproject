@@ -33,7 +33,7 @@
 		{
 			$model = $this->model;
 			// Define blank
-			$where =$company_name = $status= '';
+			$where =$company_name=$client_type = $status= '';
 
 			$order_col_id = $_POST['order'][0]['column'];
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
@@ -48,6 +48,8 @@
 			//Fetch from filter and in where condition
 			$company_name = $this->input->post('company_name');
 			$status = $this->input->post('status');
+			$client_type = $this->input->post('client_type');
+			
 
 			if(!empty($company_name)){
 
@@ -69,6 +71,14 @@
                     $where .= ' AND status = "'.$status.'"';
                 }
             }
+            if(!empty($client_type)){
+                if($where == null){
+                    $where .= 'client_type = "'.$client_type.'"';
+                }else{
+                    $where .= ' AND client_type = "'.$client_type.'"';
+                }
+            }
+            
             //$where For filter data
             		  if(!empty($where)){
             		  	
