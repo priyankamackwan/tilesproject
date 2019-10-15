@@ -121,14 +121,15 @@
                             $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
-					$id = $this->primary_id;
+					//$id = $this->primary_id;
                                              
                     
-                         $multipleWhere2 = ['id' => $value->user_id];
-                        $this->db->where($multipleWhere2);
-                        $userData = $this->db->get("users")->result_array();
+                        // $multipleWhere2 = ['id' => $value->user_id];
+                       // $this->db->where($multipleWhere2);
+                       // $userData = $this->db->get("users")->result_array();
 					$nestedData['id'] = $srNo;
                                         $nestedData['invoice_no'] =$value->invoice_no;
+                                        $nestedData['created'] =$value->created; 
                                         $nestedData['sales_expense'] =$value->sales_expense;
 					$data[] = $nestedData;
                                         $srNo++;

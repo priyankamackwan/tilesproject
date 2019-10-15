@@ -48,7 +48,7 @@
 		{
                     
 			$model = $this->model;
-            // Add for default value
+            // Define default value
             $productid=$s=$cat_id=$where='';
             $status=0;     
             $units='SET'; 
@@ -61,7 +61,7 @@
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
                         $statusFilter = $_POST['columns'][2]['search']['value'];
-            // comment 
+            // Old Count query 
 			//$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
     
 			$start = $_POST['start'];
@@ -86,7 +86,6 @@
 
             // Add for where condition for filter
             if(!empty($productid)){
-
                 if($where == null){
                     $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
                 }else{
@@ -94,7 +93,6 @@
                 }
             }
             if(!empty($cat_id)){
-
                 if($where == null){
                     $where .= 'c.id ="'.$cat_id.'"';
                 }else{
@@ -124,8 +122,6 @@
                 }else{
                     $status=0;
                 }
-
-
                 if($where == null){
                     $where .= 'p.status = "'.$status.'"';
                 }else{
@@ -157,7 +153,6 @@
             }
             $this->db->limit($limit, $start);
             $this->db->group_by('pc.product_id');
-
             $q=$this->db->get()->result_array(); 
             //Total count 
             $totalFiltered = $this->$model->filtercountTableRecords($where,$s);
