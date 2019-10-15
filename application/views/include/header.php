@@ -73,9 +73,9 @@
             <ul class="dropdown-menu">
               <!-- Menu Footer-->
               <li class="user-footer">
-                <a href="<?php echo base_url();?>Change_password">Change Password</a>
+                <a href="<?php echo base_url();?>Change_password" class="btn btn-default btn-flat">Change Password</a>
               
-                <a href="<?php echo base_url();?>Logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                <a href="<?php echo base_url();?>Logout"class="btn btn-default btn-flat">Log Out  <i class="fa fa-sign-out"></i></a>
               </li>
             </ul>
           </li>
