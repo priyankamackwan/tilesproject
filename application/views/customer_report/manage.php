@@ -139,7 +139,6 @@
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Date:</label>
                                         </div>
-
                                         <!-- Date Range Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <div class="input-group">
@@ -152,6 +151,7 @@
                                     </div>
                                     <div class="row">
                                       <!-- Status Filter -->
+                                        <!-- Status Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                           <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
                                         </div>

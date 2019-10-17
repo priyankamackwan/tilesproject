@@ -344,6 +344,7 @@
 		});
 
 
+
         
             $('#salesOrderDates').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
@@ -361,8 +362,11 @@
 
         daterangeStartValue = moment($('#salesOrderDates').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
         daterangeEndValue = moment($('#salesOrderDates').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+         $(".dt-buttons").css("margin-top", "-4px");
 /*      $('#ff').change(function(){
 =======
+=======
+>>>>>>> 720672f55fb026a4e194f390e35b741a70120840
     $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
             
       $('#ff').change(function(){
