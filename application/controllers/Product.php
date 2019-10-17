@@ -200,16 +200,16 @@
 				{
                     // Chnage object to array value
 					$id = $this->primary_id;
-					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['$id']));
+					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['id']));
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value['id']));
                                         if ($value['status'] == 1){
                                             $statusText = 'Active';
-                                            $statusAction = base_url($this->controller.'/inactive/'.$this->utility->encode($value['$id']));
+                                            $statusAction = base_url($this->controller.'/inactive/'.$this->utility->encode($value['id']));
                                         } else {
                                             $statusText = 'Inactive';
-                                            $statusAction = base_url($this->controller.'/active/'.$this->utility->encode($value['$id']));
-                                        }
-					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value['$id']));
+                                            $statusAction = base_url($this->controller.'/active/'.$this->utility->encode($value['id']));
+                                        }//echo $value['id'];echo $this->utility->encode($value['id']);exit;
+					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value['id']));
 
 					$nestedData['id'] = $srNo;
                                         $nestedData['design_no'] = $value['design_no'];
