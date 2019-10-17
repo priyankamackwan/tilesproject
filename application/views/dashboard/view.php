@@ -21,7 +21,7 @@
 			<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-aqua">
 			<div class="inner">
-			<h3>5</h3><p>Total Orders</p>
+			<h3><?php if(isset($tatal_orders)){echo $tatal_orders;} ?></h3><p>Total Orders</p>
 			</div>
 			<div class="icon"><i class="ion ion-bag"></i></div>
 			<a class="small-box-footer" href="/admin/Order/List">More info
@@ -32,7 +32,7 @@
 			<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-yellow">
 			<div class="inner">
-			<h3>0</h3><p>Total Unpaid Orders</p>
+			<h3><?php if(isset($unpaid_orders)){echo $unpaid_orders;} ?></h3><p>Total Unpaid Orders</p>
 			</div>
 			<div class="icon">
 			<i class="ion ion-refresh"></i>
@@ -45,7 +45,7 @@
 			<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-green">
 			<div class="inner">
-			<h3>6</h3><p>Total Registered Users</p>
+			<h3><?php if(isset($all_user)){echo $all_user;} ?></h3><p>Total Registered Users</p>
 			</div>
 			<div class="icon">
 			<i class="ion ion-person-add"></i>
