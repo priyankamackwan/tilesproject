@@ -48,7 +48,7 @@
 		{
                     
 			$model = $this->model;
-            // Add for default value
+            // Define default value
             $productid=$s=$cat_id=$where='';
             $status=0;     
             $units='SET'; 
@@ -61,7 +61,7 @@
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
                         $statusFilter = $_POST['columns'][2]['search']['value'];
-            // comment 
+            // Old Count query 
 			//$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
     
 			$start = $_POST['start'];
@@ -86,15 +86,13 @@
 
             // Add for where condition for filter
             if(!empty($productid)){
-
                 if($where == null){
-                    $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
+                    $where .= 'p.id = "'.$productid.'" ';
                 }else{
-                    $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
+                    $where .= ' AND p.id = "'.$productid.'" ';
                 }
             }
             if(!empty($cat_id)){
-
                 if($where == null){
                     $where .= 'c.id ="'.$cat_id.'"';
                 }else{
@@ -124,13 +122,25 @@
                 }else{
                     $status=0;
                 }
-
-
                 if($where == null){
                     $where .= 'p.status = "'.$status.'"';
                 }else{
                     $where .= ' AND p.status = "'.$status.'"';
                 }
+            }
+            //Add new condition
+            if(isset($s) && $s!='' ){  
+                if($where != null){
+                    $where.= ' AND ';
+                }
+                $where .= '(p.name LIKE "'.$s.'%" or ';
+                $where .= 'p.design_no LIKE "'.$s.'%" or ';
+                $where .= 'p.size LIKE "'.$s.'%" or ';
+                $where .= 'p.credit_rate LIKE "'.$s.'%" or ';
+                $where .= 'p.walkin_rate LIKE "'.$s.'%" or ';
+                $where .= 'p.quantity LIKE "'.$s.'%" or ';
+                $where .= 'c.name LIKE "'.$s.'%" or ';
+                $where .= 'p.cash_rate LIKE "'.$s.'%" )'; 
             }
             // Add new query 
             $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name');
@@ -157,7 +167,6 @@
             }
             $this->db->limit($limit, $start);
             $this->db->group_by('pc.product_id');
-
             $q=$this->db->get()->result_array(); 
             //Total count 
             $totalFiltered = $this->$model->filtercountTableRecords($where,$s);
@@ -247,11 +256,11 @@
                                         if ($value['status'] == 1){
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";
 
-                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a> &nbsp; <a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a> &nbsp; <a href='$statusAction' class='btn  btn-warning  btn-sm confirm-statuschange' style='padding: 8px;' data-toggle='tooltip' title='Inactive'><i class='fa fa-ban'></i></a>";
+                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-warning  btn-sm confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Inactive'><i class='fa fa-ban'></i></a>";
                                         } else {
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a>";
 
-                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a> &nbsp; <a href='$delete' class='btn btn-danger btn-sm confirm-delete'style='padding: 8px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a> &nbsp; <a href='$statusAction' class='btn  btn-success  btn-sm confirm-statuschange' style='padding: 8px;' data-toggle='tooltip' title='Active'><i class='fa fa-check'></i></a>";
+                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete'style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-success  btn-sm confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Active'><i class='fa fa-check'></i></a>";
                                         }
 					
 

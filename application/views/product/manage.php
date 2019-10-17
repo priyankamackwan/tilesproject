@@ -106,8 +106,6 @@
                                 <div class="form-group">
                                     <div class="row">
 
-                                        
-
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Items:</label>
@@ -150,37 +148,36 @@
                                             </select>
                                         </div>
 
+                                        <!-- Invoice Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Items Group:</label>
+                                        </div>
+
+                                        <!-- Invoice Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
+                                                <option value="">All</option>
+                                                <?php
+                                                        if(!empty($product_categories) && count($product_categories) > 0 ){
+                                                        
+                                                            foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
+                                                    ?>
+                                                                <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                                    <?php
+                                                            }
+                                                        }else{
+                                                    ?>
+                                                        <option value="">-- No Product Available --</option>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                            </select>
+                                        </div>
+
                                     </div>
                                 </div>
 
                                 <div class="row">
-
-                                    <!-- Invoice Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Items Group:</label>
-                                    </div>
-
-                                    <!-- Invoice Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
-                                            <option value="">All</option>
-                                            <?php
-                                                    if(!empty($product_categories) && count($product_categories) > 0 ){
-                                                    
-                                                        foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
-                                                ?>
-                                                            <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
-                                                <?php
-                                                        }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Product Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
-                                        </select>
-                                    </div>
-
                                     <!-- Status Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
                                         <label class="control-label" style="margin-top:7px;">Status:</label>
@@ -214,7 +211,7 @@
                 <div class="box-tools pull-right">             
                   <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Product</a>
                             
-                  <a href="<?php echo base_url($this->controller);?>/uploadProducts" class="btn btn-primary"><i class="fa fa-plus"></i>Import Products</a>
+                  <a href="<?php echo base_url($this->controller);?>/uploadProducts" class="btn btn-primary"><i class="fa fa-plus"></i> Import Products</a>
                 </div>
               </div>
             </div>
@@ -260,21 +257,159 @@
 <script>
    
     jQuery(document).ready(function(){
+      // Add fr download data in excel all pages 
+      var oldExportAction = function (self, e, dt, button, config) {
+          if (button[0].className.indexOf('buttons-excel') >= 0) {
+              if ($.fn.dataTable.ext.buttons.excelHtml5.available(dt, config)) {
+                  $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config);
+              }
+              else {
+                  $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+              }
+          } else if (button[0].className.indexOf('buttons-print') >= 0) {
+              $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+          }
+      };
+        
+      var newExportAction = function (e, dt, button, config) {
+          var self = this;
+          var oldStart = dt.settings()[0]._iDisplayStart;
+          dt.one('preXhr', function (e, s, data) {
+              // Just this once, load all data from the server...
+              data.start = 0;
+              data.length = 2147483647;
+              dt.one('preDraw', function (e, settings) {
+                  // Call the original action function 
+                  oldExportAction(self, e, dt, button, config);
+                  dt.one('preXhr', function (e, s, data) {
+                      // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+                      // Set the property to what it was before exporting.
+                      settings._iDisplayStart = oldStart;
+                      data.start = oldStart;
+                  });
+                  // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+                  setTimeout(dt.ajax.reload, 0);
+                  // Prevent rendering of the full data to the DOM
+                  return false;
+              });
+          });
+          // Requery the server with the new one-time export settings
+          dt.ajax.reload();
+      };
+    //End For download
      
 	var dataTable1 = $('#datatables').dataTable({
 			"processing": true,
 			"serverSide": true,
+      'dom': 'lBfrtip',
+      "buttons": 
+      [{
+        extend:'excel',
+        text: window.excelButtonTrans,
+        title:'',
+        filename: 'Products List',
+        sheetName:'Products List',
+        action: newExportAction,
+        exportOptions: {
+          columns: [1,2,3,5,6,7,8,9,10,11,12]
+        },
+        customize: function (xlsx) {                            
+          // console.log(rels);
+          var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+          // To add new row count
+          var numrows = 6;
+
+          // Get row from sheet
+          var clRow = $('row', sheet);
+          
+          // Update Row
+          clRow.each(function () {
+              var attr = $(this).attr('r');
+              var ind = parseInt(attr);
+              ind = ind + numrows;
+              $(this).attr("r", ind);
+          });
+
+          // Create row before data
+          $('row c ', sheet).each(function (index) {
+              var attr = $(this).attr('r');
+
+              var pre = attr.substring(0, 1);
+              var ind = parseInt(attr.substring(1, attr.length));
+              ind = ind + numrows;
+              $(this).attr("r", pre + ind);
+          });
+
+          function Addrow(index, data) {
+
+              var row = sheet.createElement('row');
+
+              row.setAttribute("r", index);
+
+              for (i = 0; i < data.length; i++) {
+                  var key = data[i].key;
+                  var value = data[i].value;
+
+                  var c  = sheet.createElement('c');
+                  c.setAttribute("t", "inlineStr");
+                  c.setAttribute("s", "2");
+                  c.setAttribute("r", key + index);
+
+                  var is = sheet.createElement('is');
+                  var t = sheet.createElement('t');
+                  var text = sheet.createTextNode(value)
+
+                  t.appendChild(text);                                      
+                  is.appendChild(t);
+                  c.appendChild(is);
+
+                  row.appendChild(c);             
+              }
+              return row;
+          }          
+          // Add row data 
+          var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }, { key: 'B', value: '' }]);
+
+          var r2 = Addrow(2, [{ key: 'A', value: 'Items: ' }, { key: 'B', value: $("#productsList option:selected").html() }]);
+
+          var r3 = Addrow(3, [{ key: 'A', value: 'Items Group: ' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+
+          var r4 = Addrow(4, [{ key: 'A', value: 'Units: ' },{ key: 'B', value: $("#units option:selected").html() }]);
+
+          var r5 = Addrow(5, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
+          
+          var sheetData = sheet.getElementsByTagName('sheetData')[0];
+         
+          sheetData.insertBefore(r5,sheetData.childNodes[0]);
+          sheetData.insertBefore(r4,sheetData.childNodes[0]);
+          sheetData.insertBefore(r3,sheetData.childNodes[0]);
+          sheetData.insertBefore(r2,sheetData.childNodes[0]);
+          sheetData.insertBefore(r1,sheetData.childNodes[0]);
+
+          // Style of rows
+          //$('row c[c="A1"]', sheet).attr('s', '7');
+          $('row c[r="A2"]', sheet).attr('s', '7');
+          $('row c[r="A3"]', sheet).attr('s', '7');
+          $('row c[r="A5"]', sheet).attr('s', '7');
+          $('row c[r="B2"]', sheet).attr('s', '7');
+          $('row c[r="B3"]', sheet).attr('s', '7');
+          $('row c[r="B4"]', sheet).attr('s', '7');          
+          $('row c[r="B5"]', sheet).attr('s', '7'); 
+          $('row c[r="A4"]', sheet).attr('s', '7');          
+        },
+      }],
 			"ajax":{
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
 				"type": "POST",
         "data":function(data) {
-                    data.cat_id = $('#cat_id').val();
-                    data.productid = $('#productsList').val();
-                    data.units = $('#units').val();
-                    data.status = $('#status').val();
-                },
-				},
+              data.cat_id = $('#cat_id').val();
+              data.productid = $('#productsList').val();
+              data.units = $('#units').val();
+              data.status = $('#status').val();
+          },
+        },
 			"columns": [
 				{ "data": "id"},
         { "data": "design_no"},
@@ -294,9 +429,15 @@
 			"columnDefs": [ {
 				"targets": [4],
 				"orderable": false
-			},{
+			},
+      {
+        "className": 'text-right',
+        "targets":   [5,6,7,8,9],
+        "orderable": false
+      },
+      {
         "className": 'text-center',
-        "targets":   0,
+        "targets":   [0,10,11,12,13],
         "orderable": false
       }],
 			"rowCallback": function( row, data, index ) {
@@ -305,6 +446,8 @@
 			"order": [[ 1, "DESC"]],
                         
 		});
+
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
             $('.search-input-select').on( 'change', function (e) {   
                 // for dropdown

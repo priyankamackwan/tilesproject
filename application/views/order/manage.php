@@ -83,13 +83,13 @@
                                     <td><?php echo number_format($totalAmounts->invoiceAmount,2);?></td>
                                 </tr> 
                                 <tr>
-                                    <td><b>Total Paid Amount</b> </td>
-                                    <td>&nbsp;:&nbsp; </td>
+                                    <td><b>Total Paid Amount</b></td>
+                                    <td>&nbsp;:&nbsp;</td>
                                     <td><?php echo number_format($totalAmounts->paidAmount,2);?></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Total Unpaid  Amount</b> </td>
-                                    <td>&nbsp;:&nbsp; </td>
+                                    <td><b>Total Unpaid  Amount</b></td>
+                                    <td>&nbsp;:&nbsp;</td>
                                     <td><?php echo number_format($totalAmounts->unpaidAmount,2);?></td>
                                 </tr>
                             </tbody>
@@ -294,11 +294,160 @@
     });
 
     jQuery(document).ready(function(){
+    // Add fr download data in excel all pages 
+    var oldExportAction = function (self, e, dt, button, config) {
+        if (button[0].className.indexOf('buttons-excel') >= 0) {
+            if ($.fn.dataTable.ext.buttons.excelHtml5.available(dt, config)) {
+                $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config);
+            }
+            else {
+                $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+            }
+        } else if (button[0].className.indexOf('buttons-print') >= 0) {
+            $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+        }
+    };
+        
+    var newExportAction = function (e, dt, button, config) {
+        var self = this;
+        var oldStart = dt.settings()[0]._iDisplayStart;
+        dt.one('preXhr', function (e, s, data) {
+            // Just this once, load all data from the server...
+            data.start = 0;
+            data.length = 2147483647;
+            dt.one('preDraw', function (e, settings) {
+                // Call the original action function 
+                oldExportAction(self, e, dt, button, config);
+                dt.one('preXhr', function (e, s, data) {
+                    // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+                    // Set the property to what it was before exporting.
+                    settings._iDisplayStart = oldStart;
+                    data.start = oldStart;
+                });
+                // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+                setTimeout(dt.ajax.reload, 0);
+                // Prevent rendering of the full data to the DOM
+                return false;
+            });
+        });
+        // Requery the server with the new one-time export settings
+        dt.ajax.reload();
+    };
+    //End For download
         
         // Ajax for Order table data with filters
 	    dataTable1 = $('#datatables').DataTable({
-			"processing": true,
-			"serverSide": true,
+            "processing": true,
+            "serverSide": true,
+            'dom': 'lBfrtip',
+            "buttons": 
+            [{
+                extend:'excel',
+                text: 'Excel',
+                filename: 'Order',
+                title:'',
+                sheetName: 'Order List',                
+                exportOptions: {
+                    columns: [1,2,3,4,5,6,7,8]
+                },
+                action: newExportAction,
+                customize: function (xlsx) {                            
+                  // console.log(rels);
+                  var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                  // To add new row count
+                  var numrows = 11;
+                  // Get row from sheet
+                  var clRow = $('row', sheet);
+                  //console.log(clRow);
+                  // Update Row
+                  clRow.each(function () {
+                      var attr = $(this).attr('r');
+                      var ind = parseInt(attr);
+                      ind = ind + numrows;
+                      $(this).attr("r", ind);
+                  });
+                  // Create row before data
+                  $('row c ', sheet).each(function (index) {
+                      var attr = $(this).attr('r');
+
+                      var pre = attr.substring(0, 1);
+                      var ind = parseInt(attr.substring(1, attr.length));
+                      ind = ind + numrows;
+                      $(this).attr("r", pre + ind);
+                  });
+
+                  function Addrow(index, data) {
+
+                      var row = sheet.createElement('row');
+
+                      row.setAttribute("r", index);
+
+                      for (i = 0; i < data.length; i++) {
+                          var key = data[i].key;
+                          var value = data[i].value;
+                          var c  = sheet.createElement('c');
+                          c.setAttribute("t", "inlineStr");
+                          c.setAttribute("s", "2");
+                          c.setAttribute("r", key + index);
+
+                          var is = sheet.createElement('is');
+                          var t = sheet.createElement('t');
+                          var text = sheet.createTextNode(value);
+
+
+                          t.appendChild(text);                                      
+                          is.appendChild(t);
+                          c.appendChild(is);
+
+                          row.appendChild(c);  
+                             // console.log(c);       
+                      }
+                      return row;
+                  }          
+                  // Add row data 
+                  var r1 = Addrow(1, [{ key: 'G', value: 'Total Invoice Amount  ' }, { key: 'H', value: '<?php echo number_format($totalAmounts->invoiceAmount,2);?>'  }]);
+                  var r2 = Addrow(2, [{ key: 'G', value: 'Total Paid Amount' }, { key: 'H', value: '<?php echo number_format($totalAmounts->paidAmount,2);?>'  }]);
+                  
+                  var r3 = Addrow(3, [{ key: 'G', value: 'Total Unpaid Amount' }, { key: 'H', value: '<?php echo number_format($totalAmounts->unpaidAmount,2);?>'  }]);
+
+                  var r4 = Addrow(4, [{ key: '', value: '' }]);
+
+                  var r5 = Addrow(5, [{ key: 'A', value: 'Filters' }]);
+
+                  var r6 = Addrow(6, [{ key: 'A', value: 'Client: ' }, { key: 'B', value: $("#clientList option:selected").html() }]);
+
+                  var r7 = Addrow(7, [{ key: 'A', value: 'Product: ' },{ key: 'B', value: $("#productsList option:selected").html() },]);
+
+                  var r8 = Addrow(8, [{ key: 'A', value: 'Date: ' },{ key: 'B', value: $("#salesOrderDate").val() }]);
+                  
+                  var r9 = Addrow(9, [{ key: 'A', value: 'Invoice Status: ' },{ key: 'B', value: $("#invoiceStatus option:selected").html() }]);
+
+                  var r10 = Addrow(10, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
+                  
+                  var sheetData = sheet.getElementsByTagName('sheetData')[0];
+
+                  sheetData.insertBefore(r10,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r9,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r8,sheetData.childNodes[0]);                 
+                  sheetData.insertBefore(r7,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r6,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r6,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r5,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r4,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r3,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r2,sheetData.childNodes[0]);
+                  sheetData.insertBefore(r1,sheetData.childNodes[0]);
+
+                  // Style of rows
+                  $('row c[r="A6"]', sheet).attr('s', '7');
+                  $('row c[r="A7"]', sheet).attr('s', '7');
+                  $('row c[r="A8"]', sheet).attr('s', '7');
+                  $('row c[r="A9"]', sheet).attr('s', '7');                  
+                  $('row c[r="A10"]', sheet).attr('s', '7');
+                       
+                },
+                
+            }],
 			"ajax":{
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
@@ -330,9 +479,11 @@
 				"orderable": false
 			},{
                 "className": 'text-center',
-                "targets":   0
+                "targets":   [0,6,7,8,9]
             }]      
 		});
+
+        $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
         $('.search-input-select').on( 'change', function (e) {   
             // for dropdown
