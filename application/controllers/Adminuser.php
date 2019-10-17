@@ -105,7 +105,7 @@
                                         if ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a>";
 											
-											$nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a> &nbsp; <a href='".$delete."' style='padding: 8px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a> &nbsp; <a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange' style='padding: 8px;' data-toggle='tooltip' title='Block'><i class='fa fa-ban'></i></a>";
+											$nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Block'><i class='fa fa-ban'></i></a>";
 											
 											
                                         } else {

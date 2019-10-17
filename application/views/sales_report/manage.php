@@ -8,9 +8,9 @@
             <div class="row">
 			<?php
                         #echo '<pre>'.$this->msgDisplay;print_r($this->session->flashdata()); exit;
-				echo $this->session->flashdata('edit_profile');
+			/*	echo $this->session->flashdata('edit_profile');
                                 echo $this->session->flashdata('Change_msg');
-                                echo $this->session->flashdata($this->msgDisplay);
+                                echo $this->session->flashdata($this->msgDisplay);*/
 			?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -366,9 +366,15 @@
 			"columnDefs": [ {
 				"targets": [1,2,3],
 				"orderable": false
-			},{
+			},
+      {
+                "className": 'text-right',
+                "targets":   [4,5],
+                "orderable": false
+            },
+      {
                 "className": 'text-center',
-                "targets":   [0,4],
+                "targets":   [0,2],
                 "orderable": false
             }],
 			"rowCallback": function( row, data, index ) {
@@ -394,6 +400,7 @@ $('#salesOrderDates').on('apply.daterangepicker', function(ev, picker) {
         daterangeStartValue = moment($('#salesOrderDates').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
         daterangeEndValue = moment($('#salesOrderDates').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
         
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
             
 //       $('#ff').change(function(){
 

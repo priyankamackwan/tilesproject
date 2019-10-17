@@ -140,7 +140,7 @@
 				"orderable": false,  
 			},{
         "className": 'text-center',
-        "targets":   0,
+        "targets":   [0,5,6],
         "orderable": false
       }],
 

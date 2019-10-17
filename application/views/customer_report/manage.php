@@ -8,9 +8,9 @@
             <div class="row">
 			<?php
                         #echo '<pre>'.$this->msgDisplay;print_r($this->session->flashdata()); exit;
-				echo $this->session->flashdata('edit_profile');
+			/*	echo $this->session->flashdata('edit_profile');
                                 echo $this->session->flashdata('Change_msg');
-                                echo $this->session->flashdata($this->msgDisplay);
+                                echo $this->session->flashdata($this->msgDisplay); */
 			?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -83,9 +83,6 @@
                             <div class="col-md-11 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <div class="row">
-
-                                        
-
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Company Name:</label>
@@ -152,23 +149,21 @@
                                                 </label>
                                             </div>
                                         </div>
-
                                     </div>
-                                </div>
+                                    <div class="row">
+                                      <!-- Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                          <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
+                                        </div>
 
-                                <div class="row">
-                                    <!-- Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
-                                    </div>
-
-                                    <!-- Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="status" style="width:100%;" id="status">
-                                            <option value="">All</option>
-                                            <option value="Paid">Paid</option>
-                                            <option value="Unpaid">Unpaid</option>
-                                        </select>
+                                        <!-- Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="status" style="width:100%;" id="status">
+                                                <option value="">All</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="Unpaid">Unpaid</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -440,11 +435,17 @@
 			"columnDefs": [ {
 				"targets": [5],
 				"orderable": false
-			},{
-                "className": 'text-center',
-                "targets":   [0],
-                "orderable": false
-            }],
+			},
+      {
+          "className": 'text-right',
+          "targets":   3,
+          "orderable": false
+      },
+      {
+          "className": 'text-center',
+          "targets":   [0,6,7],
+          "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
@@ -467,6 +468,7 @@
 
         daterangeStartValue = moment($('#salesOrderDates').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
         daterangeEndValue = moment($('#salesOrderDates').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
         
             
 //       $('#ff').change(function(){
