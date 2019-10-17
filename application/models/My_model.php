@@ -29,11 +29,12 @@
             if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
             }
+            /* Set In where
             if(isset($s) && $s!=''){
 	            $this->db->like('p.name', $s, 'both');
 	            $this->db->or_like('p.design_no', $s, 'both');
 	            $this->db->or_like('p.size', $s, 'both');
-	        }
+	        }*/
 	         $this->db->group_by('pc.product_id');
             $query = $this->db->get()->num_rows();
 			return $query;
@@ -71,10 +72,12 @@
             $this->db->from('orders as o');
             $this->db->join('users as u', 'u.id = o.user_id','left');
             $this->db->where('o.is_deleted', 0);
-            if(isset($pagename) && $pagename!=''){
-            	$this->db->group_by('o.user_id');
-            }
+           // if(isset($pagename) && $pagename!=''){
+            	//$this->db->group_by('o.user_id');
+            	$this->db->group_by('u.id');
+           // }
             $query = $this->db->get()->result_array();
+          //  echo $this->db->last_query();die();
 			return $query;
 		}
 		//count for customer report Records

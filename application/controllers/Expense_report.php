@@ -43,14 +43,19 @@
                      
                        // echo $this->model; exit;
 			$order_col_id = $_POST['order'][0]['column'];
+      //For date picker
+      $salesOrderDate = $this->input->post('salesOrderDate');
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
-                        
+       if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+        $startDate = $_POST['startdate'];
+        $endDate = $_POST['enddate'];
+       }                 
 
-                        $startDate = $_POST['columns'][1]['search']['value'];
-                        $endDate = $_POST['columns'][2]['search']['value'];
+                        // $startDate = $_POST['columns'][1]['search']['value'];
+                        // $endDate = $_POST['columns'][2]['search']['value'];
       
 			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
                        
@@ -101,6 +106,7 @@
 			{
                          
 				$q = $q->like('orders.sales_expense', $s, 'both');
+        $q = $q->or_like('orders.invoice_no', $s, 'both');
 				if(!empty($order))
 				{
 					$q = $q->order_by($order);

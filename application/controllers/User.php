@@ -78,7 +78,35 @@
                     $where .= ' AND client_type = "'.$client_type.'"';
                 }
             }
-            
+            // Add new condition for serach datatable serach box
+            if(!empty($s)){
+            	if($where != null){
+                    $where.= ' AND ';
+                }
+            	$where .= '(users.company_name LIKE "'.$s.'%" or ';
+            	$where .= 'users.contact_person_name LIKE "'.$s.'%" or ';
+            	$where .= 'users.email LIKE "'.$s.'%" or ';
+            	//$where .= 'users.client_type LIKE "'.$s.'%" or ';
+            	$where .= 'users.vat_number LIKE "'.$s.'%" or ';
+            	$where .= 'users.phone_no LIKE "'.$s.'%" )';
+            }
+            if($statusFilter == 1) {
+            	$statusFilter=0;
+            }elseif($statusFilter == 2) {
+            	$statusFilter=1;
+            }elseif($statusFilter == 3) {
+            	$statusFilter=2;
+            }
+            elseif($statusFilter == 4) {
+            	$statusFilter=3;
+            }
+            if(!empty($statusFilter)){
+            	if($where != null){
+                    $where.= ' AND ';
+                }
+            	$where .= '(users.status LIKE "'.$statusFilter.'%" )';
+            }
+            // End New comdition
             //$where For filter data
             		  if(!empty($where)){
             		  	
@@ -129,8 +157,6 @@
 
 				$totalFiltered = count($q);
 			}
-
-                   
 			$data = array();
 			if(!empty($q))
 			{

@@ -87,9 +87,9 @@
             // Add for where condition for filter
             if(!empty($productid)){
                 if($where == null){
-                    $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
+                    $where .= 'p.id = "'.$productid.'" ';
                 }else{
-                    $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
+                    $where .= ' AND p.id = "'.$productid.'" ';
                 }
             }
             if(!empty($cat_id)){
@@ -127,6 +127,20 @@
                 }else{
                     $where .= ' AND p.status = "'.$status.'"';
                 }
+            }
+            //Add new condition
+            if(isset($s) && $s!='' ){  
+                if($where != null){
+                    $where.= ' AND ';
+                }
+                $where .= '(p.name LIKE "'.$s.'%" or ';
+                $where .= 'p.design_no LIKE "'.$s.'%" or ';
+                $where .= 'p.size LIKE "'.$s.'%" or ';
+                $where .= 'p.credit_rate LIKE "'.$s.'%" or ';
+                $where .= 'p.walkin_rate LIKE "'.$s.'%" or ';
+                $where .= 'p.quantity LIKE "'.$s.'%" or ';
+                $where .= 'c.name LIKE "'.$s.'%" or ';
+                $where .= 'p.cash_rate LIKE "'.$s.'%" )'; 
             }
             // Add new query 
             $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name');
