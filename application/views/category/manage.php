@@ -186,7 +186,7 @@
 				"orderable": false
 			},{
         "className": 'text-center',
-        "targets":   0,
+        "targets":   [0,3,4],
         "orderable": false
       }],
 			"rowCallback": function( row, data, index ) {
@@ -194,6 +194,8 @@
 			},
 			"order": [[ 1, "DESC"]],                        
 		});
+
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
     $('.search-input-select').on( 'change', function (e) {   
         // for dropdown

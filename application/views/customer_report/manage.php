@@ -138,22 +138,19 @@
                                             </select>
                                         </div>
 
-                                    </div>
-                                </div>
+                                        <!-- Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                          <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
+                                        </div>
 
-                                <div class="row">
-                                    <!-- Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
-                                    </div>
-
-                                    <!-- Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="status" style="width:100%;" id="status">
-                                            <option value="">All</option>
-                                            <option value="Paid">Paid</option>
-                                            <option value="Unpaid">Unpaid</option>
-                                        </select>
+                                        <!-- Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="status" style="width:100%;" id="status">
+                                                <option value="">All</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="Unpaid">Unpaid</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -399,11 +396,17 @@
 			"columnDefs": [ {
 				"targets": [5],
 				"orderable": false
-			},{
-                "className": 'text-center',
-                "targets":   [0],
-                "orderable": false
-            }],
+			},
+      {
+          "className": 'text-right',
+          "targets":   3,
+          "orderable": false
+      },
+      {
+          "className": 'text-center',
+          "targets":   [0,6,7],
+          "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
@@ -411,6 +414,7 @@
                         
 		});
 
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
         
             
       $('#ff').change(function(){

@@ -269,11 +269,12 @@
 			"columnDefs": [ {
 				"targets": [1],
 				"orderable": false
-			},{
-                "className": 'text-center',
-                "targets":   [0,2],
-                "orderable": false
-            }],
+			},
+      {
+          "className": 'text-center',
+          "targets":   [0,2],
+          "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
@@ -281,7 +282,7 @@
                         
 		});
 
-        
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
             
       $('#ff').change(function(){
  

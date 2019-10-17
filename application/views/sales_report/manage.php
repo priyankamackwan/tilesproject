@@ -329,9 +329,15 @@
 			"columnDefs": [ {
 				"targets": [1,2,3],
 				"orderable": false
-			},{
+			},
+      {
+                "className": 'text-right',
+                "targets":   [4,5],
+                "orderable": false
+            },
+      {
                 "className": 'text-center',
-                "targets":   [0,4],
+                "targets":   [0,2],
                 "orderable": false
             }],
 			"rowCallback": function( row, data, index ) {
@@ -341,7 +347,7 @@
                         
 		});
 
-        
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
             
       $('#ff').change(function(){
 
