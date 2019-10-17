@@ -9,6 +9,9 @@
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" id="menu">
+            <li class="treeview <?php echo $url == 'Dashboard'?'active':'';?>">
+                        <a href="<?php echo base_url();?>Dashboard"><i class="fa fa-desktop"></i><span>Dashboard</span></a>
+                    </li>
             <?php
                 // Show side menubar according to role
                 if ($this->userhelper->current('role_id') == 1) {
