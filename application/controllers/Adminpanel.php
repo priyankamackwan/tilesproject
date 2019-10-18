@@ -14,7 +14,9 @@
 		public function index()
 		{
 			$email = $this->input->post("email");
-				$password = md5($this->input->post("txt_password"));
+			$email = trim($email);
+			$password = md5($this->input->post("txt_password"));
+			$password = trim($password);
 				
 				/* Set Validations */
 				$this->form_validation->set_rules("email", "email", "trim|required");
@@ -33,16 +35,15 @@
 					/* Check If Username and Password is Correct*/
 
 
-					$check_user = $this->db->select('*')->from('admin_users')->where('email',$email)->where('password', $password)->get();
+					$check_user = $this->db->select('*')->from('admin_users')->where('email',$email)->where('password', $password)->where('status','1')->get();
                                           //  echo '<pre>';
                                          //   print_r($check_user); exit;
                                        // echo $check_user->num_rows(); exit;
 					if ($check_user->num_rows() > 0) //active user record is present
 					{
                                           
-						$user_row = $check_user->result();
-                                           
-                                                $rights = explode(',', $user_row[0]->rights);
+						$user_row = $check_user->result();                                           
+                        $rights = explode(',', $user_row[0]->rights);
 						$session_arr = array(
 							"id" => $user_row[0]->id,
 							"first_name" => $user_row[0]->first_name,
