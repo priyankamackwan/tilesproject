@@ -102,7 +102,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Company Available --</option>
                                                 <?php
                                                     }
                                                 ?>
@@ -129,7 +129,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Customer Available --</option>
                                                 <?php
                                                     }
                                                 ?>
@@ -486,6 +486,21 @@
 
 
             $(document).on("change","#company_name",function(evt){
+
+                company_name=$("#company_name").val();
+                $("#contact_person_name").html('');
+
+                $.ajax({
+                    url: "<?php echo base_url().$this->controller."/companytocustomer/" ?>",
+                    dataType: "json",
+                    type: "POST",
+                    data: {'company_name' : company_name},
+                    success:function(result)
+                    {
+                        $("#contact_person_name").html('');
+                        $("#contact_person_name").html(result.data);
+                    }
+                });
                 dataTable2.api().draw();
             });
             $(document).on("change","#contact_person_name",function(evt){
