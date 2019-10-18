@@ -269,7 +269,7 @@
    
     <script type = 'text/javascript' src = "<?php echo base_url();?>assets/plugins/datatables/buttons.html5.min.js"></script>
 
- 
+  
     <script type = 'text/javascript' src = "<?php echo base_url();?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 
     <script type = 'text/javascript' src = "<?php echo base_url();?>assets/plugins/fastclick/fastclick.js"></script>
@@ -292,8 +292,10 @@
     <script type = 'text/javascript' src = "<?php echo base_url();?>assets/dist/js/demo.js"></script>
     
     <script src="<?php echo base_url();?>assets/js/jquery.validate.min.js"></script>
-
+    <script src="<?php echo base_url();?>assets/js/chart.min.js"></script>
     <script src="<?php echo base_url();?>assets/js/sweetalert.min.js"></script>
+
+   
 
     <script>
     $(document).ready(function(){
