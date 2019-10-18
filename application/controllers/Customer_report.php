@@ -215,6 +215,43 @@
 						);
 			echo json_encode($json_data);
 		}
+
+
+    public function companytocustomer()
+    {
+        $model = $this->model;
+        
+        $company_name = $this->input->post('company_name');
+
+        if(!empty($company_name))
+        {
+          $where = 'LOWER(company_name) = "'.strtolower($company_name).'" ';
+        }
+
+        $this->db->select('contact_person_name');
+        $this->db->from('users');
+        $this->db->where('is_deleted', 0);
+        $this->db->where($where);
+        $query = $this->db->get();
+        $finalcustomer=$query->result_array();
+
+        if(count($finalcustomer)>0 && !empty($finalcustomer))
+        {
+          $output = '<option value="">All</option>';
+          foreach($finalcustomer as $row)
+          {
+           $output .= '<option value="'.$row['contact_person_name'].'">'.$row['contact_person_name'].'</option>';
+          }
+        }
+        else
+        {
+          $output = '<option value="">All</option>';
+        }
+
+        $json_data = array("data"=> $output);
+        echo json_encode($json_data);
+
+    }
                 
 		public function add() {
                     //echo '3'; exit;
