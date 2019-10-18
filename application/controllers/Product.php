@@ -87,9 +87,9 @@
             // Add for where condition for filter
             if(!empty($productid)){
                 if($where == null){
-                    $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
+                    $where .= 'p.id = "'.$productid.'" ';
                 }else{
-                    $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
+                    $where .= ' AND p.id = "'.$productid.'" ';
                 }
             }
             if(!empty($cat_id)){
@@ -127,6 +127,20 @@
                 }else{
                     $where .= ' AND p.status = "'.$status.'"';
                 }
+            }
+            //Add new condition
+            if(isset($s) && $s!='' ){  
+                if($where != null){
+                    $where.= ' AND ';
+                }
+                $where .= '(p.name LIKE "'.$s.'%" or ';
+                $where .= 'p.design_no LIKE "'.$s.'%" or ';
+                $where .= 'p.size LIKE "'.$s.'%" or ';
+                $where .= 'p.credit_rate LIKE "'.$s.'%" or ';
+                $where .= 'p.walkin_rate LIKE "'.$s.'%" or ';
+                $where .= 'p.quantity LIKE "'.$s.'%" or ';
+                $where .= 'c.name LIKE "'.$s.'%" or ';
+                $where .= 'p.cash_rate LIKE "'.$s.'%" )'; 
             }
             // Add new query 
             $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name');
@@ -195,16 +209,16 @@
 				{
                     // Chnage object to array value
 					$id = $this->primary_id;
-					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['$id']));
+					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['id']));
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value['id']));
                                         if ($value['status'] == 1){
                                             $statusText = 'Active';
-                                            $statusAction = base_url($this->controller.'/inactive/'.$this->utility->encode($value['$id']));
+                                            $statusAction = base_url($this->controller.'/inactive/'.$this->utility->encode($value['id']));
                                         } else {
                                             $statusText = 'Inactive';
-                                            $statusAction = base_url($this->controller.'/active/'.$this->utility->encode($value['$id']));
-                                        }
-					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value['$id']));
+                                            $statusAction = base_url($this->controller.'/active/'.$this->utility->encode($value['id']));
+                                        }//echo $value['id'];echo $this->utility->encode($value['id']);exit;
+					$delete = base_url($this->controller.'/remove/'.$this->utility->encode($value['id']));
 
 					$nestedData['id'] = $srNo;
                                         $nestedData['design_no'] = $value['design_no'];
@@ -242,11 +256,11 @@
                                         if ($value['status'] == 1){
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";
 
-                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a> &nbsp; <a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a> &nbsp; <a href='$statusAction' class='btn  btn-warning  btn-sm confirm-statuschange' style='padding: 8px;' data-toggle='tooltip' title='Inactive'><i class='fa fa-ban'></i></a>";
+                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-warning  btn-sm confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Inactive'><i class='fa fa-ban'></i></a>";
                                         } else {
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a>";
 
-                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a> &nbsp; <a href='$delete' class='btn btn-danger btn-sm confirm-delete'style='padding: 8px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a> &nbsp; <a href='$statusAction' class='btn  btn-success  btn-sm confirm-statuschange' style='padding: 8px;' data-toggle='tooltip' title='Active'><i class='fa fa-check'></i></a>";
+                                            $nestedData['manage'] = "<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete'style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-success  btn-sm confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Active'><i class='fa fa-check'></i></a>";
                                         }
 					
 

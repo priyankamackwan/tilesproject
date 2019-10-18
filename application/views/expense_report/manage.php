@@ -8,9 +8,9 @@
             <div class="row">
 			<?php
                         #echo '<pre>'.$this->msgDisplay;print_r($this->session->flashdata()); exit;
-				echo $this->session->flashdata('edit_profile');
+			/*	echo $this->session->flashdata('edit_profile');
                                 echo $this->session->flashdata('Change_msg');
-                                echo $this->session->flashdata($this->msgDisplay);
+                                echo $this->session->flashdata($this->msgDisplay); */
 			?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -62,10 +62,45 @@
     </section>
 
     <section class="content">
+      <div class="box">
+            <div class="box-body">
+      <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-md-1 col-sm-12 col-xs-12">
+                                <h4>Filters:</h4>
+                            </div>
+
+                            <div class="col-md-11 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <!-- Date Range Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Date:</label>
+                                        </div>
+
+                                        <!-- Date Range Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="" required="" id="salesOrderDates" name="salesOrderDates" type="text">
+                                                <label class="input-group-addon btn" for="salesOrderDates">
+                                                    <span class="fa fa-calendar"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div></div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
 
+
                 <div class="box box-primary">
+
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-6 col-sm-12 col-xs-12">
@@ -73,7 +108,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <?php /*  
                     <div class="box-body">
                         <p id="date_filter">
                             <div class="row">
@@ -96,7 +131,7 @@
                             </div>
                         </p>
                     </div>
-                   
+                   */ ?>
                     <div class="box-body table-responsive">
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
@@ -123,7 +158,27 @@
 ?>
 
 <script>
-   
+   var dataTable1 = '';
+    daterangeStartValue = '';
+            daterangeEndValue= '';
+            $(function(){
+
+        //Date range picker
+        $('#salesOrderDates').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY',
+            },
+        });
+
+        // ,function(start, end, label) {
+        //     daterangeStartValue = start.format('YYYY-MM-DD');
+        //     daterangeEndValue= end.format('YYYY-MM-DD');
+        //     dataTable2.draw();
+        // }
+
+        
+    });
     jQuery(document).ready(function(){
         // Add fr download data in excel all pages 
     var oldExportAction = function (self, e, dt, button, config) {
@@ -259,6 +314,12 @@
 				"url": "<?php echo base_url().$this->controller."/server_data/" ?>",
 				"dataType": "json",
 				"type": "POST",
+        "data":function(data) {
+                    data.uid = $('#company_name').val();
+                    data.salesOrderDate = $('#salesOrderDates').val();
+                    data.startdate = daterangeStartValue;
+                    data.enddate = daterangeEndValue;
+                    },
 				},
 			"columns": [
 				{ "data": "id"},
@@ -269,11 +330,12 @@
 			"columnDefs": [ {
 				"targets": [1],
 				"orderable": false
-			},{
-                "className": 'text-center',
-                "targets":   [0,2],
-                "orderable": false
-            }],
+			},
+      {
+          "className": 'text-center',
+          "targets":   [0,2],
+          "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
@@ -281,9 +343,34 @@
                         
 		});
 
+
+
         
+            $('#salesOrderDates').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+
+            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
+            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
+
+            dataTable1.api().draw();
+        });
+
+        $('#salesOrderDates').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            dataTable1.api().draw();
+        });
+
+        daterangeStartValue = moment($('#salesOrderDates').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
+        daterangeEndValue = moment($('#salesOrderDates').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+         $(".dt-buttons").css("margin-top", "-4px");
+/*      $('#ff').change(function(){
+=======
+=======
+>>>>>>> 720672f55fb026a4e194f390e35b741a70120840
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
             
       $('#ff').change(function(){
+>>>>>>> 720672f55fb026a4e194f390e35b741a70120840
  
    var i =1;  // getting column index
                 var v =$(this).val();  // getting search input value
@@ -296,7 +383,7 @@
                 dataTable1.api().columns(i).search(v).draw();
 });
 
-
+*/
 
             
 	});

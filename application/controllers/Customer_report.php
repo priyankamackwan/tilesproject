@@ -46,15 +46,36 @@
                     
 			$model = $this->model;
       // Set default value
-      $id=$cid=$where=$startDate=$endDate='';
+      $id=$company_name=$contact_person_name=$cid=$where=$startDate=$endDate='';
       //Fetch from filter
       $id = $this->input->post('id');
       $cid = $this->input->post('cid');
       $status = $this->input->post('status');
+      $company_name = $this->input->post('company_name');
+      $contact_person_name = $this->input->post('contact_person_name');
+      
+      // User salesOrderDate for filter
+      $salesOrderDate = $this->input->post('salesOrderDate');
 
       $startDate = $_POST['columns'][1]['search']['value'];
       $endDate = $_POST['columns'][2]['search']['value'];
       //Where condition for filter
+
+      if(!empty($company_name)){
+          if($where == null){
+              $where .= 'LOWER(u.company_name) = "'.strtolower($company_name).'" ';
+          }else{
+              $where .= ' AND LOWER(u.company_name) = "'.strtolower($company_name).'" ';
+          }
+      }
+      if(!empty($contact_person_name)){
+          if($where == null){
+              $where .= 'LOWER(u.contact_person_name) = "'.strtolower($contact_person_name).'" ';
+          }else{
+              $where .= ' AND LOWER(u.contact_person_name) = "'.strtolower($contact_person_name).'" ';
+          }
+      }
+      /*
       if(!empty($id) || !empty($cid)){
         if($where == null){
             if(!empty($cid) && !empty($id)){
@@ -74,6 +95,7 @@
           }
         }
       }
+      */
       if(!empty($status)){
         if($status == "Paid"){
             $status = 1;
@@ -86,14 +108,25 @@
             $where .= ' AND o.invoice_status = "'.$status.'"';
         }
       }
-      if(!empty($startDate) || !empty($endDate))
-      {
-        if($where == null){
-          $where .= '(o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
-        }else{
-            $where .= 'AND (o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
-        }
+      // if(!empty($startDate) || !empty($endDate))
+      // {
+      //   if($where == null){
+      //     $where .= '(o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
+      //   }else{
+      //       $where .= 'AND (o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
+      //   }
+      // }
+      
+      // Change new datepcikers
+      if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+
+          if($where == null){
+              $where .= '(DATE_FORMAT(o.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+          }else{
+              $where .= ' AND (DATE_FORMAT(o.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+          }
       }
+      
 			$order_col_id = $_POST['order'][0]['column'];
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
@@ -102,6 +135,17 @@
                         
      // $startDate = $_POST['columns'][1]['search']['value'];
       //$endDate = $_POST['columns'][2]['search']['value'];
+
+      if(!empty($s)){
+        if($where != null){
+              $where.= ' AND ';
+          }
+        $where .= '(u.company_name LIKE "'.$s.'%" or ';
+        $where .= 'u.contact_person_name LIKE "'.$s.'%" or ';
+        $where .= 'o.location LIKE "'.$s.'%" or ';
+        //$where .= 'users.client_type LIKE "'.$s.'%" or ';
+        $where .= 'o.total_price LIKE "'.$s.'%" ) ';
+      }
       
       // Add new for total count
 			$totalData = $this->$model->report_table_tecords($where,$pagename='');
@@ -117,11 +161,6 @@
 
       if(!empty($where)){
         $this->db->where($where);
-      }else {
-        if(!empty($s)){
-           $this->db->like('o.total_price', $s, 'both');
-           $this->db->or_like('u.company_name', $s, 'both');
-        }
       }
       if(!empty($order))
       {
@@ -139,7 +178,7 @@
                }	
                echo '<pre>';
                print_r($customerArray); exit; */
-             
+        //echo $this->db->last_query();     
 			$data = array();
         
 			if(!empty($q))
@@ -176,6 +215,43 @@
 						);
 			echo json_encode($json_data);
 		}
+
+
+    public function companytocustomer()
+    {
+        $model = $this->model;
+        
+        $company_name = $this->input->post('company_name');
+
+        if(!empty($company_name))
+        {
+          $where = 'LOWER(company_name) = "'.strtolower($company_name).'" ';
+        }
+
+        $this->db->select('contact_person_name');
+        $this->db->from('users');
+        $this->db->where('is_deleted', 0);
+        $this->db->where($where);
+        $query = $this->db->get();
+        $finalcustomer=$query->result_array();
+
+        if(count($finalcustomer)>0 && !empty($finalcustomer))
+        {
+          $output = '<option value="">All</option>';
+          foreach($finalcustomer as $row)
+          {
+           $output .= '<option value="'.$row['contact_person_name'].'">'.$row['contact_person_name'].'</option>';
+          }
+        }
+        else
+        {
+          $output = '<option value="">All</option>';
+        }
+
+        $json_data = array("data"=> $output);
+        echo json_encode($json_data);
+
+    }
                 
 		public function add() {
                     //echo '3'; exit;

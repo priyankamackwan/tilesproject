@@ -8,9 +8,9 @@
             <div class="row">
 			<?php
                         #echo '<pre>'.$this->msgDisplay;print_r($this->session->flashdata()); exit;
-				echo $this->session->flashdata('edit_profile');
+			/*	echo $this->session->flashdata('edit_profile');
                                 echo $this->session->flashdata('Change_msg');
-                                echo $this->session->flashdata($this->msgDisplay);
+                                echo $this->session->flashdata($this->msgDisplay); */
 			?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -83,9 +83,6 @@
                             <div class="col-md-11 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <div class="row">
-
-                                        
-
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Company Name:</label>
@@ -100,17 +97,18 @@
                                                     
                                                         foreach ($order_list as $order_listKey => $order_listValue) {
                                                 ?>
-                                                            <option value="<?php echo $order_listValue['id']; ?>"><?php echo $order_listValue['company_name']; ?></option>
+                                                            <option value="<?php echo $order_listValue['company_name']; ?>"><?php echo $order_listValue['company_name']; ?></option>
                                                 <?php
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Company Available --</option>
                                                 <?php
                                                     }
                                                 ?>
                                             </select>
                                         </div>
+
 
                                         <!-- Unit Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
@@ -126,34 +124,46 @@
                                                     
                                                         foreach ($order_list as $order_listKey => $order_listValue) {
                                                 ?>
-                                                            <option value="<?php echo $order_listValue['id']; ?>"><?php echo $order_listValue['contact_person_name']; ?></option>
+                                                            <option value="<?php echo $order_listValue['contact_person_name']; ?>"><?php echo $order_listValue['contact_person_name']; ?></option>
                                                 <?php
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Customer Available --</option>
                                                 <?php
                                                     }
                                                 ?>
                                             </select>
                                         </div>
-
+                                        <!-- Date Range Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Date:</label>
+                                        </div>
+                                        <!-- Date Range Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="" required="" id="salesOrderDates" name="salesOrderDates" type="text">
+                                                <label class="input-group-addon btn" for="salesOrderDates">
+                                                    <span class="fa fa-calendar"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                      <!-- Status Filter -->
+                                        <!-- Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                          <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
+                                        </div>
 
-                                <div class="row">
-                                    <!-- Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
-                                    </div>
-
-                                    <!-- Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="status" style="width:100%;" id="status">
-                                            <option value="">All</option>
-                                            <option value="Paid">Paid</option>
-                                            <option value="Unpaid">Unpaid</option>
-                                        </select>
+                                        <!-- Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="status" style="width:100%;" id="status">
+                                                <option value="">All</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="Unpaid">Unpaid</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +183,8 @@
                             </div>
                         </div>
                     </div>
-
+                    <?php 
+                    /* Old Date picker
                     <div class="box-body">
                         <p id="date_filter">
                             <div class="row">
@@ -195,7 +206,7 @@
                             </div>
                         </p>
                     </div>
-                   
+                   */ ?>
                     <div class="box-body table-responsive">
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
@@ -227,8 +238,30 @@
 ?>
 
 <script>
-   
+    var dataTable2 = '';
+    daterangeStartValue = '';
+    daterangeEndValue= '';
+
+    $(function(){
+
+        //Date range picker
+        $('#salesOrderDates').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY',
+            },
+        });
+
+        // ,function(start, end, label) {
+        //     daterangeStartValue = start.format('YYYY-MM-DD');
+        //     daterangeEndValue= end.format('YYYY-MM-DD');
+        //     dataTable2.draw();
+        // }
+
+        
+    });   
     jQuery(document).ready(function(){
+      
 
     // Add fr download data in excel all pages 
     var oldExportAction = function (self, e, dt, button, config) {
@@ -270,8 +303,27 @@
         dt.ajax.reload();
     };
     //End For download    
+
+    $(document).on("change","#company_name",function(evt){
+
+                company_name=$("#company_name").val();
+                $("#contact_person_name").html('');
+
+                $.ajax({
+                    url: "<?php echo base_url().$this->controller."/companytocustomer/" ?>",
+                    dataType: "json",
+                    type: "POST",
+                    data: {'company_name' : company_name},
+                    success:function(result)
+                    {
+                        $("#contact_person_name").html('');
+                        $("#contact_person_name").html(result.data);
+                    }
+                });
+                //dataTable2.api().draw();
+            });
      
-	var dataTable1 = $('#datatables').dataTable({
+	var dataTable2 = $('#datatables').dataTable({
 			"processing": true,
 			"serverSide": true,
             'dom': 'lBfrtip',
@@ -347,13 +399,13 @@
 
                   var r4 = Addrow(4, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
                   
-                  var r5 = Addrow(5, [{ key: 'A', value: 'From Date' },{ key: 'B', value: $("#ff").val() }]);
+                  var r5 = Addrow(5, [{ key: 'A', value: 'Date' },{ key: 'B', value: $("#salesOrderDates").val() }]);
 
 
-                  var r6 = Addrow(6, [{ key: 'A', value: 'To Date' },{ key: 'B', value: $("#datepicker_to").val() }]);
+                  //var r6 = Addrow(6, [{ key: 'A', value: 'To Date' },{ key: 'B', value: $("#datepicker_to").val() }]);
                   var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
-                  sheetData.insertBefore(r6,sheetData.childNodes[0]);
+                 // sheetData.insertBefore(r6,sheetData.childNodes[0]);
                   sheetData.insertBefore(r5,sheetData.childNodes[0]);
                   sheetData.insertBefore(r4,sheetData.childNodes[0]);
                   sheetData.insertBefore(r3,sheetData.childNodes[0]);
@@ -380,9 +432,12 @@
 				"dataType": "json",
 				"type": "POST",
                 "data":function(data) {
-                    data.id = $('#company_name').val();
-                    data.cid = $('#contact_person_name').val();
+                    data.company_name = $('#company_name').val();
+                    data.contact_person_name = $('#contact_person_name').val();
                     data.status = $('#status').val();
+                    data.salesOrderDate = $('#salesOrderDates').val();
+                    data.startdate = daterangeStartValue;
+                    data.enddate = daterangeEndValue;
                 },
 				},
 			"columns": [
@@ -399,42 +454,62 @@
 			"columnDefs": [ {
 				"targets": [5],
 				"orderable": false
-			},{
-                "className": 'text-center',
-                "targets":   [0],
-                "orderable": false
-            }],
+			},
+      {
+          "className": 'text-right',
+          "targets":   3,
+          "orderable": false
+      },
+      {
+          "className": 'text-center',
+          "targets":   [0,6,7],
+          "orderable": false
+      }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
 			"order": [[ 0, "DESC"]],
                         
 		});
+        $('#salesOrderDates').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
 
+            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
+            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
+
+            dataTable2.api().draw();
+        });
+
+        $('#salesOrderDates').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            dataTable2.api().draw();
+        });
+
+        daterangeStartValue = moment($('#salesOrderDates').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
+        daterangeEndValue = moment($('#salesOrderDates').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
         
             
-      $('#ff').change(function(){
+//       $('#ff').change(function(){
  
-   var i =1;  // getting column index
-                var v =$(this).val();  // getting search input value
-                dataTable1.api().columns(i).search(v).draw();
-});
-        $('#datepicker_to').change(function(){
+//    var i =1;  // getting column index
+//                 var v =$(this).val();  // getting search input value
+//                 dataTable2.api().columns(i).search(v).draw();
+// });
+//         $('#datepicker_to').change(function(){
  
-   var i =2;  // getting column index
-                var v =$(this).val();  // getting search input value
-                dataTable1.api().columns(i).search(v).draw();
-});
+//    var i =2;  // getting column index
+//                 var v =$(this).val();  // getting search input value
+//                 dataTable2.api().columns(i).search(v).draw();
+// });
 
 
-            $(document).on("change","#company_name",function(evt){
-                dataTable1.api().draw();
-            });
+            
             $(document).on("change","#contact_person_name",function(evt){
-                dataTable1.api().draw();
+                dataTable2.api().draw();
             });
             $(document).on("change","#status",function(evt){
-                dataTable1.api().draw();
+                dataTable2.api().draw();
             });
             
 	});

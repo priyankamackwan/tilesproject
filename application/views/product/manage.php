@@ -106,8 +106,6 @@
                                 <div class="form-group">
                                     <div class="row">
 
-                                        
-
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Items:</label>
@@ -150,37 +148,36 @@
                                             </select>
                                         </div>
 
+                                        <!-- Invoice Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Items Group:</label>
+                                        </div>
+
+                                        <!-- Invoice Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
+                                                <option value="">All</option>
+                                                <?php
+                                                        if(!empty($product_categories) && count($product_categories) > 0 ){
+                                                        
+                                                            foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
+                                                    ?>
+                                                                <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                                    <?php
+                                                            }
+                                                        }else{
+                                                    ?>
+                                                        <option value="">-- No Product Available --</option>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                            </select>
+                                        </div>
+
                                     </div>
                                 </div>
 
                                 <div class="row">
-
-                                    <!-- Invoice Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Items Group:</label>
-                                    </div>
-
-                                    <!-- Invoice Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
-                                            <option value="">All</option>
-                                            <?php
-                                                    if(!empty($product_categories) && count($product_categories) > 0 ){
-                                                    
-                                                        foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
-                                                ?>
-                                                            <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
-                                                <?php
-                                                        }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Product Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
-                                        </select>
-                                    </div>
-
                                     <!-- Status Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
                                         <label class="control-label" style="margin-top:7px;">Status:</label>
@@ -214,7 +211,7 @@
                 <div class="box-tools pull-right">             
                   <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Product</a>
                             
-                  <a href="<?php echo base_url($this->controller);?>/uploadProducts" class="btn btn-primary"><i class="fa fa-plus"></i>Import Products</a>
+                  <a href="<?php echo base_url($this->controller);?>/uploadProducts" class="btn btn-primary"><i class="fa fa-plus"></i> Import Products</a>
                 </div>
               </div>
             </div>
@@ -432,9 +429,15 @@
 			"columnDefs": [ {
 				"targets": [4],
 				"orderable": false
-			},{
+			},
+      {
+        "className": 'text-right',
+        "targets":   [5,6,7,8,9],
+        "orderable": false
+      },
+      {
         "className": 'text-center',
-        "targets":   0,
+        "targets":   [0,10,11,12,13],
         "orderable": false
       }],
 			"rowCallback": function( row, data, index ) {
@@ -443,6 +446,8 @@
 			"order": [[ 1, "DESC"]],
                         
 		});
+
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
             $('.search-input-select').on( 'change', function (e) {   
                 // for dropdown

@@ -86,8 +86,6 @@
                                 <div class="form-group">
                                     <div class="row">
 
-                                        
-
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Items:</label>
@@ -114,38 +112,33 @@
                                             </select>
                                         </div>
 
-                                        
+                                        <!-- Invoice Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Items Group:</label>
+                                        </div>
 
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    <!-- Invoice Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Items Group:</label>
-                                    </div>
-
-                                    <!-- Invoice Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
-                                            <option value="">All</option>
-                                            <?php
-                                                    if(!empty($product_categories) && count($product_categories) > 0 ){
-                                                    
-                                                        foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
-                                                ?>
-                                                            <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                        <!-- Invoice Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
+                                                <option value="">All</option>
                                                 <?php
+                                                        if(!empty($product_categories) && count($product_categories) > 0 ){
+                                                        
+                                                            foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
+                                                    ?>
+                                                                <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                                    <?php
+                                                            }
+                                                        }else{
+                                                    ?>
+                                                        <option value="">-- No Product Available --</option>
+                                                    <?php
                                                         }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Product Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
-                                        </select>
-                                    </div>                                    
+                                                    ?>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -353,9 +346,15 @@
 			"columnDefs": [ {
 				"targets": [1,4,9],
 				"orderable": false
-			},{
+			},
+      {
+          "className": 'text-right',
+          "targets":   [5,6,7,8,9],
+          "orderable": false
+      },
+      {
           "className": 'text-center',
-          "targets":   [0,2,3,5,6,7,8],
+          "targets":   [0,2,3],
           "orderable": false
       }],
 			"rowCallback": function( row, data, index ) {

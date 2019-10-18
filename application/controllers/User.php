@@ -78,7 +78,35 @@
                     $where .= ' AND client_type = "'.$client_type.'"';
                 }
             }
-            
+            // Add new condition for serach datatable serach box
+            if(!empty($s)){
+            	if($where != null){
+                    $where.= ' AND ';
+                }
+            	$where .= '(users.company_name LIKE "'.$s.'%" or ';
+            	$where .= 'users.contact_person_name LIKE "'.$s.'%" or ';
+            	$where .= 'users.email LIKE "'.$s.'%" or ';
+            	//$where .= 'users.client_type LIKE "'.$s.'%" or ';
+            	$where .= 'users.vat_number LIKE "'.$s.'%" or ';
+            	$where .= 'users.phone_no LIKE "'.$s.'%" )';
+            }
+            if($statusFilter == 1) {
+            	$statusFilter=0;
+            }elseif($statusFilter == 2) {
+            	$statusFilter=1;
+            }elseif($statusFilter == 3) {
+            	$statusFilter=2;
+            }
+            elseif($statusFilter == 4) {
+            	$statusFilter=3;
+            }
+            if(!empty($statusFilter)){
+            	if($where != null){
+                    $where.= ' AND ';
+                }
+            	$where .= '(users.status LIKE "'.$statusFilter.'%" )';
+            }
+            // End New comdition
             //$where For filter data
             		  if(!empty($where)){
             		  	
@@ -129,8 +157,6 @@
 
 				$totalFiltered = count($q);
 			}
-
-                   
 			$data = array();
 			if(!empty($q))
 			{
@@ -145,7 +171,7 @@
                                             $accept = base_url($this->controller.'/acceptform/'.$this->utility->encode($value->$id));
                                             $reject = base_url($this->controller.'/reject/'.$this->utility->encode($value->$id));
 											// $statusText = 'Pending';
-											$statusText = 'Pending <br /><a href="'.$accept.'" class="btn btn-success btn-xs" style="padding: 8px;" data-toggle="tooltip" title="Accept"><i class="fa fa-check"></i></a> &nbsp; <a href="'.$reject.'" class="btn btn-danger btn-xs" data-toggle="tooltip" style="padding: 8px;" title="Reject"><i class="fa fa-ban"></i></a>';
+											$statusText = 'Pending <br /><a href="'.$accept.'" class="btn btn-success btn-xs" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Accept"><i class="fa fa-check"></i></a>&nbsp;<a href="'.$reject.'" class="btn btn-danger btn-xs" data-toggle="tooltip" style="padding: 8px;margin-top:1px;" title="Reject"><i class="fa fa-ban"></i></a>';
                                         }
                                         if ($value->status == 3) {
                                             $statusText = 'Rejected';
@@ -180,20 +206,20 @@
                                         if ($value->status == 0) {
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
 											
-											$nestedData['manage'] = "<a href='$delete' class='btn  btn-danger  btn-sm confirm-delete-user' style='padding: 8px;'><i class='fa fa-trash'></i></a>";
+											$nestedData['manage'] = "<a href='$delete' class='btn  btn-danger  btn-sm confirm-delete-user' style='padding: 8px;margin-top:1px;'><i class='fa fa-trash'></i></a>";
 
 										} elseif ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
 											
-											$nestedData['manage'] = '<a class="btn btn-sm btn-primary" href="'.$accept.'" style="padding: 8px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; <a href="'.$statusAction.'" class="btn btn-warning btn-xs confirm-statuschange" style="padding: 8px;" data-toggle="tooltip" title="Block"><i class="fa fa-ban"></i></a> &nbsp; <a href="'.$delete.'" style="padding: 8px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
+											$nestedData['manage'] = '<a class="btn btn-sm btn-primary" href="'.$accept.'" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a href="'.$statusAction.'" class="btn btn-warning btn-xs confirm-statuschange" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Block"><i class="fa fa-ban"></i></a>&nbsp;<a href="'.$delete.'" style="padding: 8px;margin-top:1px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                                         } elseif ($value->status == 2) {
 											// $nestedData['manage'] = "<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
 											
-											$nestedData['manage'] = '<a style="padding: 8px;" href="'.$statusAction.'" class="btn btn-success btn-sm confirm-statuschange" data-toggle="tooltip" title="Active"><i class="fa fa-check"></i></a> &nbsp; <a href="'.$delete.'" style="padding: 8px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
+											$nestedData['manage'] = '<a style="padding: 8px;margin-top:1px;" href="'.$statusAction.'" class="btn btn-success btn-sm confirm-statuschange" data-toggle="tooltip" title="Active"><i class="fa fa-check"></i></a>&nbsp;<a href="'.$delete.'" style="padding: 8px;margin-top:1px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                                         } else {
 											// $nestedData['manage'] = "<a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
 
-											$nestedData['manage'] = '<a style="padding: 8px;" href="'.$delete.'" class="btn btn-danger btn-sm confirm-delete" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
+											$nestedData['manage'] = '<a style="padding: 8px;margin-top:1px;" href="'.$delete.'" class="btn btn-danger btn-sm confirm-delete" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                                         }
 					$data[] = $nestedData;
                                         $srNo++;

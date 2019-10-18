@@ -83,13 +83,13 @@
                                     <td><?php echo number_format($totalAmounts->invoiceAmount,2);?></td>
                                 </tr> 
                                 <tr>
-                                    <td><b>Total Paid Amount</b> </td>
-                                    <td>&nbsp;:&nbsp; </td>
+                                    <td><b>Total Paid Amount</b></td>
+                                    <td>&nbsp;:&nbsp;</td>
                                     <td><?php echo number_format($totalAmounts->paidAmount,2);?></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Total Unpaid  Amount</b> </td>
-                                    <td>&nbsp;:&nbsp; </td>
+                                    <td><b>Total Unpaid  Amount</b></td>
+                                    <td>&nbsp;:&nbsp;</td>
                                     <td><?php echo number_format($totalAmounts->unpaidAmount,2);?></td>
                                 </tr>
                             </tbody>
@@ -343,7 +343,7 @@
             "buttons": 
             [{
                 extend:'excel',
-                text: 'Order List',
+                text: 'Excel',
                 filename: 'Order',
                 title:'',
                 sheetName: 'Order List',                
@@ -418,7 +418,7 @@
 
                   var r7 = Addrow(7, [{ key: 'A', value: 'Product: ' },{ key: 'B', value: $("#productsList option:selected").html() },]);
 
-                  var r8 = Addrow(8, [{ key: 'A', value: 'Date: ' },{ key: 'B', value: $("#salesOrderDate").html() }]);
+                  var r8 = Addrow(8, [{ key: 'A', value: 'Date: ' },{ key: 'B', value: $("#salesOrderDate").val() }]);
                   
                   var r9 = Addrow(9, [{ key: 'A', value: 'Invoice Status: ' },{ key: 'B', value: $("#invoiceStatus option:selected").html() }]);
 
@@ -479,9 +479,11 @@
 				"orderable": false
 			},{
                 "className": 'text-center',
-                "targets":   0
+                "targets":   [0,6,7,8,9]
             }]      
 		});
+
+        $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
         $('.search-input-select').on( 'change', function (e) {   
             // for dropdown

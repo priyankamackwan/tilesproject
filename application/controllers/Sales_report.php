@@ -48,6 +48,8 @@
                        // echo $this->model; exit;
       $uid=$where=$startDate=$endDate='';
       $uid = $this->input->post('uid');
+      // User salesOrderDate for filter
+      $salesOrderDate = $this->input->post('salesOrderDate');
       $status = $this->input->post('status');
       if(!empty($uid)){
         if($where == null){
@@ -56,6 +58,7 @@
           $where .= 'and o.id = "'.$uid.'" ';
         }
       }
+      /*
       if(!empty($status)){
         if($status == "Paid"){
             $status = 1;
@@ -75,19 +78,36 @@
         }else{
             $where .= 'AND (o.created >= "'.$startDate.'" AND o.created <= "'.$endDate.'" )';
         }
+      }*/
+      if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+
+          if($where == null){
+              $where .= '(DATE_FORMAT(o.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+          }else{
+              $where .= ' AND (DATE_FORMAT(o.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+          }
       }
 
-      $startDate = $_POST['columns'][1]['search']['value'];
-      $endDate = $_POST['columns'][2]['search']['value'];
+
+      //$startDate = $_POST['columns'][1]['search']['value'];
+     // $endDate = $_POST['columns'][2]['search']['value'];
       $order_col_id = $_POST['order'][0]['column'];
                      
       $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
       $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
-                        
+      // Filter data using serach.
+      if(!empty($s)){
+        if($where != null){
+            $where.= ' AND ';
+        }
+         $where .= '(u.company_name LIKE "'.$s.'%" ) ';
+        // $where .= 'o.totalValue LIKE "'.$s.'%" or ';
+        // $where .= 'o.total_sales_expense LIKE "'.$s.'%" )';
+      }                  
 
-                        $startDate = $_POST['columns'][1]['search']['value'];
-                        $endDate = $_POST['columns'][2]['search']['value'];
+                       // $startDate = $_POST['columns'][1]['search']['value'];
+                        //$endDate = $_POST['columns'][2]['search']['value'];
       
       //$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
                        

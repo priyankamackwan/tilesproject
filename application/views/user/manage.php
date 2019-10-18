@@ -106,8 +106,8 @@
                                     <div class="row">
 
                                         <!-- Contact Filter  -->
-                                        <div class="col-md-2 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Company Name</label>
+                                        <div class="col-md-1 col-sm-12 col-xs-12" >
+                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
                                         </div>
 
                                         <!-- Contact Filter Dropdown -->
@@ -131,8 +131,8 @@
                                             </select>
                                         </div>
                                         <!-- Contact Filter  -->
-                                        <div class="col-md-2 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Client Type</label>
+                                        <div class="col-md-1 col-sm-12 col-xs-12" >
+                                            <label class="control-label" style="margin-top:7px;">Client Type:</label>
                                         </div>
 
                                         <!-- Contact Filter Dropdown -->
@@ -145,23 +145,22 @@
                                                 <option value="4">Flexible Rate</option>
                                             </select>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-                                    <!-- Status Filter -->
-                                    <div class="col-md-2 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Status:</label>
-                                    </div>
-                                    <!-- Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="status" style="width:100%;" id="status">
-                                            <option value="" selected="selected">All</option>
-                                            <option value="1">Active</option>
-                                            <option value="3">Rejected</option>
-                                            <option value="4">Pending</option>        
-                                            <option value="2">Block</option>
-                                        </select>
+                                        
+                                        <!-- Status Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Status:</label>
+                                        </div>
+                                        <!-- Status Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="status" style="width:100%;" id="status">
+                                                <option value="" selected="selected">All</option>
+                                                <option value="1">Active</option>
+                                                <option value="3">Rejected</option>
+                                                <option value="4">Pending</option>        
+                                                <option value="2">Block</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -279,6 +278,7 @@
       "buttons": 
       [{
         extend: 'excel',
+        //className: 'btn btn-sm btn-success',
         text: window.excelButtonTrans,
         title: '',
         filename: 'Contact List',
@@ -286,6 +286,10 @@
         exportOptions: {
           columns: [1,2,3,4,5,6,7]
         },
+        /*{
+          text: 'Red',
+          className: 'red'
+        },*/
         customize: function (xlsx) {                            
           // console.log(rels);
           var sheet = xlsx.xl.worksheets['sheet1.xml'];
@@ -333,11 +337,11 @@
                   var t = sheet.createElement('t');
                   var text = sheet.createTextNode(value)
 
-                  t.appendChild(text);                                      
+                  t.appendChild(text);
                   is.appendChild(t);
                   c.appendChild(is);
 
-                  row.appendChild(c);             
+                  row.appendChild(c);
               }
               return row;
           }          
@@ -396,12 +400,15 @@
         "orderable": false,  
       },{
         "className": 'text-center',
-        "targets":   0,
+        "targets":   [0,7,8],
         "orderable": false
       }],
 
       "order": [[ 0, "DESC"]],
     });
+
+
+    $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
             
              $('.search-input-select').on('change', function (e) {   
                 // for dropdown
