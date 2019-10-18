@@ -80,17 +80,17 @@
                                 <tr>
                                     <td><b>Total Invoice Amount </b></td>
                                     <td>&nbsp;:&nbsp;</td>
-                                    <td><?php echo number_format($totalAmounts->invoiceAmount,2);?></td>
+                                    <td style="text-align: right"><?php echo number_format($totalAmounts->invoiceAmount,2);?></td>
                                 </tr> 
                                 <tr>
                                     <td><b>Total Paid Amount</b></td>
                                     <td>&nbsp;:&nbsp;</td>
-                                    <td><?php echo number_format($totalAmounts->paidAmount,2);?></td>
+                                    <td style="text-align: right"><?php echo number_format($totalAmounts->paidAmount,2);?></td>
                                 </tr>
                                 <tr>
                                     <td><b>Total Unpaid  Amount</b></td>
                                     <td>&nbsp;:&nbsp;</td>
-                                    <td><?php echo number_format($totalAmounts->unpaidAmount,2);?></td>
+                                    <td style="text-align: right"><?php echo number_format($totalAmounts->unpaidAmount,2);?></td>
                                 </tr>
                             </tbody>
                         </table>
