@@ -1736,5 +1736,17 @@ $pdf2->Output($fileNL_invoice, 'F');
             curl_close($ch);
 
         }
+        public function udpate_last_activity() {
+            $data = $_POST;
+            $userData = array(
+                        'last_activity' => date('Y-m-d h:i:s'),
+                        );
+            $this->db->where('id',$this->user_id);
+            $this->db->update('users',$userData);
+            $response['status'] = 'success';
+            $response['message'] = 'Last activity updated successfully';
+            echo json_encode($response);
+            exit();
+        }
 	}
 ?>
