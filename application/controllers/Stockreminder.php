@@ -81,7 +81,7 @@
 	        $mail->addReplyTo('info.emailtest1@gmail.com', 'Low Stock Reminder');
 
 	        // Add a recipient
-	        $mail->addAddress('gaurav.webpatriot@gmail.com');
+	        //$mail->addAddress('gaurav.webpatriot@gmail.com');
 
 	        // Email subject
 	        $mail->Subject = 'Low Stock Reminder Mail';
@@ -96,7 +96,14 @@
 	        $mail->Body = $mailContent;
 	        $mail->AddAttachment(APPPATH.'stockreminderfile/'.$fileName);
 
-	        $mail->send();
+	        $sendmailto=$this->db->select('email')->from('admin_users')->get()->result_array();
+
+	        foreach ($sendmailto as $value)
+	        {
+	        	$sendto=trim($value['email']);
+	        	$mail->addAddress($sendto);
+	        	$mail->send();
+	        }
 		}
 	}
 ?>    
