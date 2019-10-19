@@ -13,8 +13,7 @@
 		}
 		public function index()
 		{
-			echo 'Landing'; exit;
-			
+			$this->load->view('landingpage/index');			
 		}
 	}
 ?>
