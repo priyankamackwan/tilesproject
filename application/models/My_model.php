@@ -77,7 +77,6 @@
             	$this->db->group_by('u.id');
            // }
             $query = $this->db->get()->result_array();
-          //  echo $this->db->last_query();die();
 			return $query;
 		}
 		//count for customer report Records

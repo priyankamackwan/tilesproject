@@ -415,7 +415,8 @@
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
-                        <input type="file" name="image" class="form-control numberonl">
+                        <input type="file" name="image" class="form-control numberonl" onchange="readURL(this);">
+						            <div><img  id="blah"></div>
                       </div>
                     </div>
                 <?php 
@@ -430,7 +431,8 @@
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
-                        <input type="file" name="updated_image" class="form-control numberonly">
+                        <input type="file" name="updated_image" class="form-control numberonly" onchange="readURL(this);">
+                        <div><img  id="blah"></div>
                       </div>
                     </div>
 
@@ -786,4 +788,24 @@ return value == '' || value.trim().length != 0;
 					}
 		});
 	});
+function readURL(input) {  
+  $('#updated_image').html('');
+  var file = input.files[0];
+  var fileType = file["type"];
+  var validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg","image/bmp"];
+  if ($.inArray(fileType, validImageTypes) < 0) {
+    $('#updated_image').html('The image must be a file of type: jpg, jpeg, gif, png. ').css("color", "red");
+    return flase;
+  }
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('#blah')
+      .attr('src', e.target.result)
+      .width(150)
+      .height(150);
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
 	</script>

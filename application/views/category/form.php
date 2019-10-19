@@ -157,9 +157,11 @@
 											Item Group Image<font color="red"><span class="required">*</span></font> :
 										</label>
 										<div class="col-md-9 col-sm-12 col-xs-12">
-											<input type="file" name="image" class="form-control numberonly col-md-7 col-xs-12">
-										</div>
+											<input type="file" name="image" class="form-control numberonly col-md-7 col-xs-12" onchange="readURL(this);"><br>
+											<div><img  id="blah"></div>
+										</div>										
 									</div>
+									
 							<?php 
 								} 
 							?>
@@ -172,9 +174,11 @@
 										</label>
 
 										<div class="col-md-9 col-sm-12 col-xs-12">
-											<input type="file" name="updated_image" class="form-control numberonly">
+											<input type="file" name="updated_image" class="form-control numberonly" onchange="readURL(this);">
+											<div><img  id="blah"></div>
 										</div>
 									</div>
+									
 
 									<div class="form-group">
 										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
@@ -189,7 +193,7 @@
 													$image =  base_url().'./assets/default.png';
 												}
 											?>
-											
+											<input type="hidden" name="old_image" id="old_image"value="<?php echo $result[0]->image;?>">
 											<img width="50px" height="50px" src="<?php echo $image;?>" style="background-color:navy;" >
 										</div>
 									</div>
@@ -259,4 +263,25 @@ return value == '' || value.trim().length != 0;
 					}
 		});
 	});
+function readURL(input) {  
+  $('#updated_image').html('');
+  var file = input.files[0];
+  var fileType = file["type"];
+  var validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg","image/bmp"];
+  if ($.inArray(fileType, validImageTypes) < 0) {
+    $('#updated_image').html('The image must be a file of type: jpg, jpeg, gif, png. ').css("color", "red");
+    return flase;
+  }
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('#blah')
+      .attr('src', e.target.result)
+      .width(50)
+      .height(50);
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 	</script>
