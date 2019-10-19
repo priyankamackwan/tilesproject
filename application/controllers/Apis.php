@@ -1736,7 +1736,7 @@ $pdf2->Output($fileNL_invoice, 'F');
             curl_close($ch);
 
         }
-        public function udpate_last_activity() {
+        public function update_last_activity() {
             $data = $_POST;
             $userData = array(
                         'last_activity' => date('Y-m-d h:i:s'),
