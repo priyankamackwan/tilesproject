@@ -14,14 +14,25 @@
 		public function __construct()
 		{
                     
-			parent::__construct();
-			date_default_timezone_set('Asia/Kolkata');
-			$this->model = "My_model";
-                    
-                      if (!in_array(5,$this->userhelper->current('rights'))) {
-                        $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
-                        redirect('Change_password');
-                      }
+            parent::__construct();
+            date_default_timezone_set('Asia/Kolkata');
+            $this->model = "My_model";
+                
+            if (!in_array(5,$this->userhelper->current('rights'))) {
+            $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
+            redirect('Change_password');
+            }
+
+            /****** if adminuser is blocked then redirect to login page start*****/
+                $dbuserid=$this->session->userdata['logged_in']['id'];
+
+                $check_userlogin=$this->db->select('status')->from('admin_users')->where('id',$dbuserid)->where('status',1)->get();
+                if ($check_userlogin->num_rows() == 0) // adminuser is blocked
+                {
+                    $this->session->set_flashdata('dispMessage','<span class="7"><div class="alert alert-danger"><strong>Invalid Login Credential!</strong></div></span>');
+                    redirect('Adminpanel');
+                }
+            /****** if adminuser is blocked then redirect to login page end*****/
                       
 
 		}

@@ -77,6 +77,7 @@
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
                   <input type="file" name="upload_products" class="form-control numberonly" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                  <p class="text-danger"><small>* only allow .xls, .xlsx and .csv files</small></p>
                 </div>
               </div>
 
