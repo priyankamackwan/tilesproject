@@ -18,7 +18,7 @@
         // All order Data.
         function get_OrderDatatables($where) {
             
-            $this->db->select('*');
+            $this->db->select($this->orders_table.'.id,SUM('.$this->orders_table.'.total_price) as invoiceAmount');
 
             // Select from Order main table
             $this->db->from($this->orders_table);
@@ -61,6 +61,17 @@
             $count = $allorderData->num_rows();
 
             return $count;
+        }
+        function count_price($where) {
+            
+            $this->db->select('SUM('.$this->orders_table.'.total_price) as invoiceAmount');
+            $this->db->from($this->orders_table);
+            if(!empty($where)){
+                $this->db->where($where);
+            }
+            $allorderData=$this->db->get();
+            $result = $allorderData->row();
+            return $result;
         }
        /* function get_OrderDatatables($where) {
             
@@ -127,9 +138,11 @@
             $this->db->join('order_products AS o','p.id=o.product_id');
             $this->db->where('p.status',1);
             $this->db->group_by('o.product_id');
-            $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>p.quantity-SUM(o.quantity)');
+            $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
             $this->db->order_by('p.name,p.design_no asc');
             $listInfo=$this->db->get()->num_rows();
+
+
             //$listInfo=$this->db->last_query();
             //$listInfo=$listInfo->result_array();
 
@@ -171,11 +184,13 @@
         function selling_product($order_by){
             $this->db->select('*');
             $this->db->from($this->products_table);
+            $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->products_table.'.id');
             $this->db->where($this->products_table.'.is_deleted',0);
             $this->db->limit(5);
             $this->db->order_by($order_by,'desc');
             $allorderData = $this->db->get();
             $count = $allorderData->result_array();
+            //echo '<pre>';print_r($count);die();
             return $count;
 
         }
@@ -185,12 +200,10 @@
               $this->db->join('products p','p.id=o.product_id','left');
               $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
               $this->db->join('categories c','c.id=pc.cat_id','left');
-            $this->db->limit($limit, $start);
-            $this->db->group_by('o.product_id');
+              $this->db->limit($limit, $start);
+              $this->db->group_by('o.product_id');
              $this->db->limit(5);
              $this->db->order_by('o.price','desc');
-
-    
             //$this->db->where($this->users_table.'.status',1);
             $allorderData = $this->db->get();
             $count = $allorderData->result_array();

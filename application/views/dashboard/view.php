@@ -2,6 +2,39 @@
   $this->load->view('include/leftsidemenu');
   $this->load->view('include/header');
 ?>
+<style type="text/css">
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+#loadingDiv{
+  position:absolute;
+  top:0px;
+  background-color:#666;
+  background-repeat:no-repeat;
+  background-position:center;
+  z-index:10000000;
+  opacity: 0.4;
+  filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
 <!-- Main Container start-->
 <div class="content-wrapper">
   <section class="content">
@@ -333,7 +366,7 @@
 																<span class="grid-report-item green"><?php echo $value['sold_quantity'];?></span>
 															</td>
 															
-															<td><?php echo $value['sold_quantity']* $value['walkin_rate'];?></td>
+															<td><?php echo $value['sold_quantity']* $value['price'];?></td>
 															<td class=" button-column">
 																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i>View
 																</a>
@@ -436,6 +469,7 @@
 <?php
 $this->load->view('include/footer');
 ?>
+	<!-- <div class="loader" id="loadingDiv" ></div> -->
 <script>
 $(document).ready(function () {
   $('#nopcommerce-common-statistics-box').on('click', 'button[data-widget="collapse"]', function () {
@@ -460,11 +494,12 @@ $(document).ready(function () {
                 $('#order-statistics-box button[data-chart-role="toggle-chart"]').attr('disabled', 'disabled');
             }
         });
-
+var footerLine1 =[];
         var osConfig = {
             type: 'line',
             data: {
                 labels: [],
+                
                 datasets: [
                     {
                         label: "Orders",
@@ -483,10 +518,26 @@ $(document).ready(function () {
                     }
                 ]
             },
+            
             options: {
                 legend: {
-                    display: false
+                    display: true,
+		            position: "bottom",
+		            labels: {
+		                fontColor: "#333",
+		                fontSize: 16
+		            }
                 },
+	            tooltips: {
+	                enabled: true,
+	                mode: 'single',
+	                callbacks: {
+	                    footer: function(tooltipItems, data) {
+	                    	console.log(footerLine1[tooltipItems[0].index]);
+	                    	return 'Order Amount  ' + footerLine1[tooltipItems[0].index];
+    					}
+	                }
+	            },
                 scales: {
                     xAxes: [{
                         display: true,
@@ -509,6 +560,8 @@ $(document).ready(function () {
                         }
                     }]
                 },
+               
+            	
                 showScale: true,
                 scaleShowGridLines: false,
                 scaleGridLineColor: "rgba(0,0,0,.05)",
@@ -530,28 +583,34 @@ $(document).ready(function () {
         function changeOsPeriod(period) {
             var osLabels = [];
             var osData = [];
+            var osfooterLine1=[];
 
             $.ajax({
                 cache: false,
                 type: "POST",
                 url: "<?php echo base_url();?>Dashboard/orderStatistics",
+                dataType: "json",
                 data: {
                     period: period
                 },
                 success: function (data, textStatus, jqXHR) {
+                	
                     for (var i = 0; i < data.length; i++) {
                         osLabels.push(data[i].date);
                         osData.push(data[i].value);
+                        footerLine1.push(data[i].amount);
                     }
-
                     if (!window.orderStatistics) {
                         osConfig.data.labels = osLabels;
                         osConfig.data.datasets[0].data = osData;
+                       // osConfig.footerLine1 = osfooterLine1;
+                        //console.log(osConfig);
                         osConfig.data.scales =
                         window.orderStatistics = new Chart(document.getElementById("order-statistics-chart").getContext("2d"), osConfig);
                     } else {
                         window.orderStatistics.config.data.labels = osLabels;
                         window.orderStatistics.config.data.datasets[0].data = osData;
+                      //  window.orderStatistics.config.footerLine1 = osfooterLine1;
                         window.orderStatistics.update();
                     }
                 },
@@ -664,9 +723,16 @@ $(document).ready(function () {
                 cache: false,
                 type: "POST",
                 url: "<?php echo base_url();?>Dashboard/userStatistics",
+                dataType: "json",
                 data: {
                     period: period
                 },
+                beforeSend: function(){
+			        $('#image').show();
+			    },
+			    complete: function(){
+			        $('#image').hide();
+			    },
                 success: function (data, textStatus, jqXHR) {
                     for (var i = 0; i < data.length; i++) {
                         csLabels.push(data[i].date);
