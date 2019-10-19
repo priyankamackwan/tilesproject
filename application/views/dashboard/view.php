@@ -108,7 +108,7 @@
 						<div class="box box-info " id="order-statistics-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-shopping-cart"></i>Orders
+									<i class="fa fa-shopping-cart"></i> Orders
 								</h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-xs btn-info btn-flat margin-r-5 bg-light-blue" data-chart-role="toggle-chart" data-chart-period="year">Year</button>
@@ -137,7 +137,7 @@
 						<div class="box box-info " id="customer-statistics-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-user"></i>New customers
+									<i class="fa fa-user"></i> New customers
 								</h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-xs btn-info btn-flat margin-r-5" data-chart-role="toggle-chart" data-chart-period="year">Year</button>
@@ -194,10 +194,10 @@
 												<table class="table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
 													<thead>
 															<tr role="row">
-																<th rowspan="1" colspan="1" style="width: 81px;">Order #</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 103px;">Order status</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 261px;">Customer</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 104px;">Created on</th>
-																<th class="sorting_disabled button-column" rowspan="1" colspan="1" style="width: 69px;">View</th>
+																<th rowspan="1" colspan="1" style="width: 81px;" class="text-center">Order #</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Order status</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Customer</th><th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 104px;">Created on</th>
+																<th class="sorting_disabled button-column text-center" text-center rowspan="1" colspan="1" style="width: 69px;">View</th>
 															</tr>
 														</thead>
 													<tbody>
@@ -214,15 +214,15 @@
 											                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
 														?>
 														<tr role="row" class="odd">
-															<td><?php echo $key+1;?></td>
-															<td>
+															<td class="text-center"><?php echo $key+1;?></td>
+															<td class="text-center">
 																<span class="grid-report-item green"><?php echo $status;?></span>
 															</td>
 															<td><?php echo $value['company_name'];?>					
 															</td>
-															<td><?php echo date('d/m/Y',strtotime($value['created']));?></td>
-															<td class=" button-column">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i>View
+															<td class="text-center"><?php echo date('d/m/Y',strtotime($value['created']));?></td>
+															<td class=" button-column text-center">
+																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
 																</a>
 															</td>
 														</tr>
@@ -269,10 +269,10 @@
 												<table class=" table-responsive table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
 													<thead>
 															<tr role="row">
-																<th rowspan="1" colspan="1" style="width: 81px;">Order #</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 103px;">Order status</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 261px;">Customer</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 104px;">Created on</th>
-																<th class="sorting_disabled button-column" rowspan="1" colspan="1" style="width: 69px;">View</th>
+																<th rowspan="1" colspan="1" style="width: 81px;" class="text-center">Order #</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Order status</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Customer</th><th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 104px;">Created on</th>
+																<th class="sorting_disabled button-column text-center" rowspan="1" colspan="1" style="width: 69px;">View</th>
 															</tr>
 														</thead>
 													<tbody>
@@ -289,15 +289,15 @@
 											                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
 														?>
 														<tr role="row" class="odd">
-															<td><?php echo $key+1;?></td>
-															<td>
+															<td class="text-center"><?php echo $key+1;?></td>
+															<td class="text-center">
 																<span class="grid-report-item green"><?php echo $status;?></span>
 															</td>
 															<td><?php echo $value['company_name'];?>					
 															</td>
-															<td><?php echo date('d/m/Y',strtotime($value['created']));?></td>
-															<td class=" button-column">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i>View
+															<td class="text-center" ><?php echo date('d/m/Y',strtotime($value['created']));?></td>
+															<td class=" button-column text-center">
+																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
 																</a>
 															</td>
 														</tr>
@@ -346,11 +346,11 @@
 												<table class=" table-responsive table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
 													<thead>
 															<tr role="row">
-																<th rowspan="1" colspan="1" style="width: 81px;">Name</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 103px;">Total quantity</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 261px;">Total amount (excl tax)	</th>
+																<th rowspan="1" class="text-center" colspan="1" style="width: 81px;">Name</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Total quantity</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Total amount (excl tax)	</th>
 
-																<th class="sorting_disabled button-column" rowspan="1" colspan="1" style="width: 69px;">View</th>
+																<th class="sorting_disabled button-column text-center" rowspan="1" colspan="1" style="width: 69px;">View</th>
 															</tr>
 														</thead>
 													<tbody>
@@ -362,13 +362,13 @@
 														?>
 														<tr role="row" class="odd">
 															<td><?php echo $value['name'];?></td>
-															<td>
+															<td class="text-right">
 																<span class="grid-report-item green"><?php echo $value['sold_quantity'];?></span>
 															</td>
 															
-															<td><?php echo $value['sold_quantity']* $value['price'];?></td>
-															<td class=" button-column">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i>View
+															<td class="text-right"><?php echo $value['sold_quantity']* $value['price'];?></td>
+															<td class=" button-column text-center">
+																<a class="btn btn-default" href="<?php echo $view;?>"> <i class="fa fa-eye"></i> View
 																</a>
 															</td>
 														</tr>
@@ -415,11 +415,11 @@
 												<table class=" table-responsive table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
 													<thead>
 															<tr role="row">
-																<th rowspan="1" colspan="1" style="width: 81px;">Name</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 103px;">Total quantity</th>
-																<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 261px;">Total amount (excl tax)	</th>
+																<th rowspan="1" class="text-center" colspan="1" style="width: 81px;">Name</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Total quantity</th>
+																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Total amount (excl tax)	</th>
 
-																<th class="sorting_disabled button-column" rowspan="1" colspan="1" style="width: 69px;">View</th>
+																<th class="sorting_disabled button-column text-center" rowspan="1" colspan="1" style="width: 69px;">View</th>
 															</tr>
 														</thead>
 													<tbody>
@@ -431,13 +431,13 @@
 														?>
 														<tr role="row" class="odd">
 															<td><?php echo $value['name'];?></td>
-															<td>
+															<td class="text-right">
 																<span class="grid-report-item green"><?php echo $value['totalQuantity'];?></span>
 															</td>
 															
-															<td><?php echo $value['amount'];?></td>
-															<td class=" button-column">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i>View
+															<td class="text-right"><?php echo $value['amount'];?></td>
+															<td class=" button-column text-center">
+																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
 																</a>
 															</td>
 														</tr>
