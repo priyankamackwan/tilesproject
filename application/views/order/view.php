@@ -293,6 +293,18 @@
                   <?php echo $result[0]->lpo_no;?>
                 </div>
               </div>
+              
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                  Customer LPO No :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $customer_lpo[0]['customer_lpo'];?>
+                </div>
+              </div>
+
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">

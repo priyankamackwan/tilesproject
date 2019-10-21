@@ -45,7 +45,7 @@
 	        $this->db->where('p.status',1);
 	        $this->db->group_by('o.product_id');
 	        $this->db->having('ROUND((p.quantity*'.Stock_Reminder.')/100)>=p.quantity-SUM(o.quantity)');
-	        $this->db->order_by('p.name,p.design_no asc');
+	        $this->db->order_by('rem asc');
 	        $listInfo=$this->db->get()->result_array();
 	        $rowCount = 2;
 	        $srno1=1;

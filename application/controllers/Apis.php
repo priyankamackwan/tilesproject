@@ -748,13 +748,30 @@ You can change this password from mobile application after you are logged in onc
                     
                     $model = $this->model;
                     $data = $_POST;
-                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
+                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price']))) && isset($data['placed_by']) && (!empty($data['placed_by']))) {
 
                         $customer_id=trim($data['customer_id']);
                         $placed_by=trim($data['placed_by']);
                         $placed_by=strtolower($placed_by);
                         $customer_lpo=trim($data['customer_lpo']);
-                        //$customer_lpo=mysql_real_escape_string($customer_lpo);
+                       
+                       $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
+
+                       if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
+                       {
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Invalid customer id or customer is not active.';
+                            echo json_encode($response);
+                            exit();
+                       }
+
+                       if($placed_by=="customer" && $data['customer_id']!=$this->user_id) // if order is placed by customer then need to check order is placed by that customer only 
+                       {
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Invalid customer id.';
+                            echo json_encode($response);
+                            exit();
+                       }
                       
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
@@ -787,13 +804,13 @@ You can change this password from mobile application after you are logged in onc
                                     'tax' => $data['tax'],
                                     'total_price' => $data['total_price'],
                                     'cargo' => $data['cargo'],
-                                'cargo_number' => $data['cargo_number'],
-                                'location' => $data['location'],
-                                'mark' => $data['mark'],
-                                'placed_by'=>$placed_by,
-                                'customer_lpo'=>$customer_lpo,
-                                'admin_id'=>$this->user_id,
-                                'invoice_status' => 0,
+                                    'cargo_number' => $data['cargo_number'],
+                                    'location' => $data['location'],
+                                    'mark' => $data['mark'],
+                                    'placed_by'=>$placed_by,
+                                    'customer_lpo'=>$customer_lpo,
+                                    'admin_id'=>$this->user_id,
+                                    'invoice_status' => 0,
                                     'created' => date('Y-m-d h:i:s'),
                             );
                         }
@@ -807,25 +824,17 @@ You can change this password from mobile application after you are logged in onc
                                     'tax' => $data['tax'],
                                     'total_price' => $data['total_price'],
                                     'cargo' => $data['cargo'],
-                                'cargo_number' => $data['cargo_number'],
-                                'location' => $data['location'],
-                                'mark' => $data['mark'],
-                                'placed_by'=>$placed_by,
-                                'customer_lpo'=>$customer_lpo,
-                                'invoice_status' => 0,
+                                    'cargo_number' => $data['cargo_number'],
+                                    'location' => $data['location'],
+                                    'mark' => $data['mark'],
+                                    'placed_by'=>$placed_by,
+                                    'customer_lpo'=>$customer_lpo,
+                                    'invoice_status' => 0,
                                     'created' => date('Y-m-d h:i:s'),
                             );
                         }
                             $this->$model->insert('orders',$orderData);
                             $lastInsertedOrderId = $this->db->insert_id();
-
-                            /*if($placed_by=='admin')
-                            {
-                                $update_data = array('user_id'=>$customer_id);
-
-                                $this->db->where('id',$lastInsertedOrderId);
-                                $this->db->update('orders',$update_data);
-                            }*/
                      
                             
                             for($k=0;$k<count($orderProductArray);$k++) {
@@ -1156,7 +1165,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                 
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide product id, tax and total price';
+                        $response['message'] = 'Please provide product id, tax , total price and customer id ';
                     }
                      $companyName = $userData[0]['company_name'];
                    

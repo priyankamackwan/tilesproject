@@ -143,7 +143,7 @@
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
-                  Contact Person Name
+                  Contact Person Name :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
@@ -178,6 +178,27 @@
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
                   <?php echo $result[0]->vat_number;?>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                  Created On  :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->created;?>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                  Last Activity On :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php echo $result[0]->modified;?>
                 </div>
               </div>
 
