@@ -109,5 +109,22 @@
             $query = $this->db->get()->num_rows();
 			return $query;
 		}
+		// Count for low stock product less than 25 %
+		public function low_product_counts($condition)
+		{
+			$stocklimit=Stock_Reminder;
+			$this->db->select('p.name,p.design_no,p.size,p.sold_quantity,p.quantity,ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity)');
+            $this->db->from('products AS p');
+            $this->db->join('order_products AS o','p.id=o.product_id');
+            $this->db->where('p.status',1);
+            $this->db->group_by('o.product_id');
+            $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
+            $this->db->order_by('p.name,p.design_no asc');
+            if(!empty($condition)){
+                $this->db->where($condition);
+            }
+            $query = $this->db->get()->num_rows();
+			return $query;
+		}
 	}
 ?>
