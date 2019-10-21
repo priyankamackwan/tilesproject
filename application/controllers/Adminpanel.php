@@ -56,7 +56,9 @@
 							"session_id" => session_id()
 						);
 						$this->session->set_userdata('logged_in',$session_arr);
-				
+						// New redirect
+						redirect('Dashboard');
+													/* Old redirect
                                                     if(in_array(3,$rights)) {
                                                     redirect('User');
                                                     } elseif(in_array(4,$rights)) {
@@ -68,7 +70,7 @@
                                                     } else {
                                                         redirect('User');
                                                     }
-                                                   
+                                                   */
 						
 					}
 					else

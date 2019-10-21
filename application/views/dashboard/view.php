@@ -34,6 +34,9 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.small-box .icon {
+	    top: 0px !important;
+}
 </style>
 <!-- Main Container start-->
 <div class="content-wrapper">
@@ -41,7 +44,7 @@
     <div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="box box-primary">
-				<div class="box-header">
+				<div class="box-header with-border clearfix">
 					<div class="row">
 						<div class="col-md-6 col-sm-12 col-xs-12">
 							<div class="box-title">
@@ -51,6 +54,7 @@
 					</div>
 				</div>
 				<div class="box-body">
+
 					<div class="col-lg-3 col-xs-6">
 						<div class="small-box bg-aqua">
 							<div class="inner">
@@ -96,7 +100,7 @@
 							<div class="icon">
 								<i class="ion ion-refresh"></i>
 							</div>
-							<a class="small-box-footer" href="/admin/Report/LowStock">More info
+							<a class="small-box-footer" href="<?php echo base_url();?>Low_stock">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>	
 						</div>
@@ -595,6 +599,8 @@ var footerLine1 =[];
                 },
                 success: function (data, textStatus, jqXHR) {
                 	
+					footerLine1=[];
+
                     for (var i = 0; i < data.length; i++) {
                         osLabels.push(data[i].date);
                         osData.push(data[i].value);

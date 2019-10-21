@@ -67,8 +67,9 @@ class Dashboard extends CI_Controller
 				for ($date = $from_date; $date <= $to_date; $date->modify('+1 month')) {
 
 					$startdate=$date->format('Y-m');
-					$where = '(DATE_FORMAT(users.created,"%Y-%m") BETWEEN "'.$startdate.'" AND "'.$startdate.'")';
+					$where = '(DATE_FORMAT(orders.created,"%Y-%m") BETWEEN "'.$startdate.'" AND "'.$startdate.'")';
 					$rr=$this->Dashboard_model->get_OrderDatatables($where);
+					$count_price=$this->Dashboard_model->count_price($where);
 					if(isset($period) && $period!='' && $period=="week"){
 						$orderStatistics[$i]['date']=$date->format('d l');
 					}
@@ -80,6 +81,7 @@ class Dashboard extends CI_Controller
 	    			}
   				
   					$orderStatistics[$i]['value']=$rr;
+  					$orderStatistics[$i]['amount']=round($count_price->invoiceAmount);
   					$i++;
 					}
 				}

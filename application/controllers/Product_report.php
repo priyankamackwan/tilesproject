@@ -206,7 +206,7 @@
                                         $nestedData['purchase_expense'] =$value['purchase_expense'];
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
-                                        $nestedData['total_left_quantity'] =$value['quantity']-$totalQuantity;
+                                        $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
                                         $nestedData['amount'] =$value['amount'];
 					$data[] = $nestedData;
                                         $srNo++;

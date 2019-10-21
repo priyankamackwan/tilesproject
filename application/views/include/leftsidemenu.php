@@ -43,6 +43,9 @@
                     <li class="treeview <?php echo $url == 'Product'?'active':'';?>">
                         <a href="<?php echo base_url();?>Product"><i class="fa fa-tag"></i><span>Items</span></a>
                     </li>
+                    <li class="treeview <?php echo $url == 'Low_stock'?'active':'';?>">
+                        <a href="<?php echo base_url();?>Low_stock"><i class="fa fa-tag"></i><span>Low Stock Items</span></a>
+                    </li>
             <?php   
                 }
 

@@ -132,7 +132,7 @@
             return $Amountdata;
         }
         function lowdata(){
-            $stocklimit=25;
+            $stocklimit=Stock_Reminder;
             $this->db->select('p.name,p.design_no,p.quantity,ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity)');
             $this->db->from('products AS p');
             $this->db->join('order_products AS o','p.id=o.product_id');
