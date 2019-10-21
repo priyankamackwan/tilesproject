@@ -595,6 +595,8 @@ var footerLine1 =[];
                 },
                 success: function (data, textStatus, jqXHR) {
                 	
+					footerLine1=[];
+
                     for (var i = 0; i < data.length; i++) {
                         osLabels.push(data[i].date);
                         osData.push(data[i].value);
