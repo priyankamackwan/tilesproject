@@ -109,7 +109,7 @@
 
                                         <!-- Client Filter  -->
                                         <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Clients:</label>
+                                            <label class="control-label" style="margin-top:7px;">Customer:</label>
                                         </div>
 
                                         <!-- Client Filter Dropdown -->
@@ -135,7 +135,7 @@
 
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Products:</label>
+                                            <label class="control-label" style="margin-top:7px;">Product:</label>
                                         </div>
 
                                         <!-- Products Filter Dropdown -->
@@ -194,7 +194,7 @@
 
                                     <!-- Status Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Status:</label>
+                                        <label class="control-label" style="margin-top:7px;">Delivery Status:</label>
                                     </div>
 
                                     <!-- Status Filter Dropdown -->

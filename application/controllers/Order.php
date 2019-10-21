@@ -176,13 +176,13 @@
                 if($where != null){
                     $where.= ' AND ';
                 }
-
+                $invoice_status=$status=strtolower($this->input->post('search')['value']);
                 if(strtolower($this->input->post('search')['value']) == 'paid'){
-                    $invoice_status == 0;
+                    $invoice_status = 1;
                 }elseif (strtolower($this->input->post('search')['value']) == 'unpaid') {
-                    $invoice_status == 1;
+                    $invoice_status = 0;
                 }
-
+                
                 if(strtolower($this->input->post('search')['value']) == 'pending'){
                     $status = 0;
                 }elseif (strtolower($this->input->post('search')['value']) == 'inprogress') {
@@ -191,21 +191,24 @@
                     $status = 2;
                 }
 
-                $where .= '(users.company_name LIKE "'.$this->input->post('search')['value'].'%" or ';
+                // Serch bar value
+                $search=$this->input->post('search')['value'];
 
-                $where .= 'orders.lpo_no LIKE "'.$this->input->post('search')['value'].'%" or ';
+                $where .= '(users.company_name LIKE "'.$search.'%" or ';
 
-                $where .= 'orders.do_no LIKE "'.$this->input->post('search')['value'].'%" or ';
+                $where .= 'orders.lpo_no LIKE "%'.$search.'%" or ';
 
-                $where .= 'orders.invoice_no LIKE "'.$this->input->post('search')['value'].'%" or ';
+                $where .= 'orders.do_no LIKE "%'.$search.'%" or ';
 
-                $where .= 'orders.sales_expense LIKE "'.$this->input->post('search')['value'].'%" or ';
+                $where .= 'orders.invoice_no LIKE "%'.$search.'%" or ';
+
+                $where .= 'orders.sales_expense LIKE "%'.$search.'%" or ';
 
                 $where .= 'orders.invoice_status LIKE "'.$invoice_status.'%" or ';
 
                 $where .= 'orders.status LIKE "'.$status.'%" )';
             }
-           
+            //echo $where;exit;
             if($where == NULL){
                 
                 // Get all records with limit for data table.
