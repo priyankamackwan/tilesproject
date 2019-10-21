@@ -86,3 +86,14 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 define('IMAGE_PATH','http://localhost/cake1/app/webroot/img/');
+
+
+
+/*********** Mail Credential **********/
+define('Mail_Host','smtp.gmail.com');
+define('Mail_Username','info.emailtest1@gmail.com');
+define('Mail_Password','iqlwlulzkmvohcrs');
+
+
+/*********** Stock % for reminder  **********/
+define('Stock_Reminder','25');
