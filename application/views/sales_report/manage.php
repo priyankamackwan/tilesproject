@@ -94,7 +94,7 @@
                                                     
                                                         foreach ($order_list as $order_listKey => $order_listValue) {
                                                 ?>
-                                                            <option value="<?php echo $order_listValue['id']; ?>"><?php echo $order_listValue['company_name']; ?></option>
+                                                            <option value="<?php echo $order_listValue['company_name']; ?>"><?php echo $order_listValue['company_name']; ?></option>
                                                 <?php
                                                         }
                                                     }else{
@@ -346,7 +346,7 @@
 				"dataType": "json",
 				"type": "POST",
                 "data":function(data) {
-                    data.uid = $('#company_name').val();
+                    data.company_name = $('#company_name').val();
                     data.salesOrderDate = $('#salesOrderDates').val();
                     data.startdate = daterangeStartValue;
                     data.enddate = daterangeEndValue;

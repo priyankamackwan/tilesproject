@@ -46,16 +46,16 @@
       $model = $this->model;
                       
                        // echo $this->model; exit;
-      $uid=$where=$startDate=$endDate='';
-      $uid = $this->input->post('uid');
+      $company_name=$where=$startDate=$endDate='';
+      $company_name = $this->input->post('company_name');
       // User salesOrderDate for filter
       $salesOrderDate = $this->input->post('salesOrderDate');
       $status = $this->input->post('status');
-      if(!empty($uid)){
+      if(isset($company_name) && $company_name!=''){
         if($where == null){
-          $where .= 'o.id = "'.$uid.'" ';
+          $where .= 'LOWER(company_name) = "'.strtolower($company_name).'" ';
         }else{
-          $where .= 'and o.id = "'.$uid.'" ';
+            $where .= ' AND LOWER(company_name) = "'.strtolower($company_name).'" ';
         }
       }
       /*
@@ -87,7 +87,8 @@
               $where .= ' AND (DATE_FORMAT(o.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
           }
       }
-
+      // Serach text condition
+       
 
       //$startDate = $_POST['columns'][1]['search']['value'];
      // $endDate = $_POST['columns'][2]['search']['value'];
@@ -101,7 +102,7 @@
         if($where != null){
             $where.= ' AND ';
         }
-         $where .= '(u.company_name LIKE "'.$s.'%" ) ';
+            $where .= 'u.company_name LIKE "'.$s.'%"';
         // $where .= 'o.totalValue LIKE "'.$s.'%" or ';
         // $where .= 'o.total_sales_expense LIKE "'.$s.'%" )';
       }                  
@@ -175,11 +176,6 @@ echo $this->db->last_query();*/
       $this->db->where('o.is_deleted', 0);   
       if(!empty($where)){
         $this->db->where($where);
-      }else {
-        if(!empty($s)){
-           $this->db->like('o.total_price', $s, 'both');
-           $this->db->or_like('u.company_name', $s, 'both');
-        }
       }
       /*if(!empty($order))
       {
