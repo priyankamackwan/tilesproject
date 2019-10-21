@@ -1,6 +1,11 @@
 <?php
     $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+    // Save Status from dashboard page unpaid orders
+    $dash_status='';
+    if(isset($_REQUEST['dash_status']) && $_REQUEST['dash_status']!='' && $_REQUEST['dash_status']=="unpaid"){
+        $dash_status='selected';
+    }
 ?>
 <!-- page content -->
      <!-- <div class="right_col" role="main">
@@ -187,7 +192,7 @@
                                     <div class="col-md-3 col-sm-12 col-xs-12">
                                         <select class="form-control" name="invoiceStatus" style="width:100%;" id="invoiceStatus">
                                             <option value="">All</option>
-                                            <option value="unpaid">Unpaid</option>
+                                            <option value="unpaid" <?php echo $dash_status;?>>Unpaid</option>
                                             <option value="paid">Paid</option>
                                         </select>
                                     </div>

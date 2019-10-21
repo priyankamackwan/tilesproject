@@ -37,6 +37,10 @@
 .small-box .icon {
 	    top: 0px !important;
 }
+/* on hover unpiad orders dashboard */
+.small-box>.small-box-footer:hover {
+    cursor: pointer;
+}
 </style>
 <!-- Main Container start-->
 <div class="content-wrapper">
@@ -74,9 +78,14 @@
 							<div class="icon">
 								<i class="ion ion-bag"></i>
 							</div>
-							<a class="small-box-footer" href="<?php echo base_url();?>Order">More info
+							<a class="small-box-footer" onclick="submit_form()">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
+							<!-- Pass data for unpaid order status -->
+							<form id="testForm" method="POST" action="<?php echo base_url();?>Order">  
+								<input type="hidden"  name="dash_status" value="unpaid">
+							</form>
+							<!-- End form -->
 						</div>
 					</div>
 					<div class="col-lg-3 col-xs-6">
@@ -789,4 +798,8 @@ var footerLine1 =[];
                     saveUserPreferences('/admin/Preferences/SavePreference', 'Reports.HideLatestOrdersPanel', collapsed);
                 });
             });
+            // unpaid order for msubmit
+            function submit_form(){
+            	$("#testForm").submit();
+            }
         </script>
