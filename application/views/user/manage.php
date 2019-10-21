@@ -402,7 +402,7 @@
         "orderable": false,  
       },{
         "className": 'text-center',
-        "targets":   [0,8,9],
+        "targets":   [0,7,8,9],
         "orderable": false
       }],
 
