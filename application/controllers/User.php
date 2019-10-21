@@ -117,7 +117,7 @@
                 }
             	$where .= '(users.status LIKE "'.$statusFilter.'%" )';
             }
-            // End New comdition
+            // End New condition
             //$where For filter data
             		  if(!empty($where)){
             		  	
@@ -157,8 +157,8 @@
 				$q = $q->like('users.company_name', $s, 'both');
 				$q = $q->or_like('users.contact_person_name', $s, 'both');
 				$q = $q->or_like('users.email', $s, 'both');
-                                $q = $q->or_like('users.vat_number', $s, 'both');
-                                $q = $q->or_like('users.phone_no', $s, 'both');
+                $q = $q->or_like('users.vat_number', $s, 'both');
+                $q = $q->or_like('users.phone_no', $s, 'both');
 				if(!empty($order))
 				{
 					$q = $q->order_by($order);
@@ -168,11 +168,12 @@
 
 				$totalFiltered = count($q);
 			}
+			//print_r($q);
 			$data = array();
 			if(!empty($q))
 			{
-                             $startNo = $_POST['start'];
-                            $srNo = $startNo + 1;
+                $startNo = $_POST['start'];
+                $srNo = $startNo + 1;
 				foreach ($q as $key=>$value)
 				{
 					$model = $this->model;
@@ -213,6 +214,7 @@
                                         } else {
                                             $nestedData['client_type'] = 'Flexible Rate';
                                         }
+                    $nestedData['created'] = $value->created;
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 0) {
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
@@ -281,7 +283,7 @@
 		}
 
                 
-                public function view($id)
+        public function view($id)
 		{
 			$model = $this->model;
 			$id = $this->utility->decode($id);
@@ -291,7 +293,6 @@
 			$data['controller'] = $this->controller;
 
 			$model = $this->model;
-                        
 
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
 			$a = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
@@ -300,7 +301,7 @@
 		}
 
                 
-                public function inactive($id)
+        public function inactive($id)
 		{
                    
 			$model = $this->model;
@@ -319,7 +320,7 @@
 		}
                
                 
-                public function active($id)
+        public function active($id)
 		{
                    
 			$model = $this->model;
@@ -338,7 +339,8 @@
                         redirect($this->controller);	
 		}
                 
-                public function accept(){
+        public function accept()
+        {
                    
 			$model = $this->model;
                         $id = $this->input->post('id');
@@ -357,10 +359,12 @@
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata[0]['company_name'].' has been approved successfully!</div>');
                         redirect($this->controller);	
 		}
+
                 
-                    public function acceptform($id){
+        public function acceptform($id)
+        {
                    
-				$model = $this->model;
+			$model = $this->model;
 			$id = $this->utility->decode($id);
 			$data['action'] = "block";
                         $data['id'] = $id;
@@ -371,54 +375,57 @@
                         $this->db->where('id', $id);
                         $q = $this->db->get('users');
                         $userdata = $q->result_array();
-        $data['client_type'] = $userdata[0]['client_type'];
+       		$data['client_type'] = $userdata[0]['client_type'];
 			$this->load->view($this->view.'/acceptform',$data);
 		}
                 
-                public function reject($id) {
+        public function reject($id) 
+        {
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
-                        $this->$model->select(array(),'users',array('id'=>$id),'','');
-                        $this->db->set('status',3);
-                        $this->db->where('id',$id);
-                        $this->db->update('users',$data);
-                        
-                        $this->db->select('company_name');
-                        $this->db->where('id', $id);
-                        $q = $this->db->get('users');
-                        $userdata = $q->result_array();
-                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata[0]['company_name'].' has been rejected successfully!</div>');
-                        redirect($this->controller);
+            $this->$model->select(array(),'users',array('id'=>$id),'','');
+            $this->db->set('status',3);
+            $this->db->where('id',$id);
+            $this->db->update('users',$data);
+            
+            $this->db->select('company_name');
+            $this->db->where('id', $id);
+            $q = $this->db->get('users');
+            $userdata = $q->result_array();
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata[0]['company_name'].' has been rejected successfully!</div>');
+            redirect($this->controller);
 		}
-                
-                public function remove($id)
+            
+
+        public function remove($id)
 		{
                    
 			$model = $this->model;
 			$id = $this->utility->decode($id);
 			$this->$model->select(array(),'users',array('id'=>$id),'','');
                         
-                        $this->db->where('user_id', $id);
-                        $this->db->delete('orders'); 
-                        
-                        $this->db->where('id', $id);
-                        $this->db->delete('users'); 
-                        
-                       
-                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contact has been deleted successfully!</div>');
-                        redirect($this->controller);	
+            $this->db->where('user_id', $id);
+            $this->db->delete('orders'); 
+            
+            $this->db->where('id', $id);
+            $this->db->delete('users'); 
+            
+           
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contact has been deleted successfully!</div>');
+            redirect($this->controller);
 		}
                 
-                                public function addUsers() {
+        public function addUsers() {
                                   // Report all errors
-error_reporting(E_ALL);
-ini_set("error_reporting", E_ALL);
+				error_reporting(E_ALL);
+				ini_set("error_reporting", E_ALL);
 					$importFile = $_FILES['upload_contacts']['name'];
 
 					$allowedFileType = ['application/vnd.ms-excel','text/xls','text/xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 
-					if(!in_array($_FILES["file"]["type"],$allowedFileType)){
+					if(!in_array($_FILES["upload_contacts"]["type"],$allowedFileType))
+					{
 						
 						$this->session->set_flashdata('imagetype','<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>File type not valid</div>');
 						redirect($this->controller.'/uploadContacts');	
@@ -437,47 +444,53 @@ ini_set("error_reporting", E_ALL);
 			$this->upload->do_upload('upload_contacts');
                       
 	$model = $this->model;
-require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'php-excel-reader'.DIRECTORY_SEPARATOR.'excel_reader2.php');
+	require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'php-excel-reader'.DIRECTORY_SEPARATOR.'excel_reader2.php');
 
 	require('spreadsheet-reader-master'.DIRECTORY_SEPARATOR.'SpreadsheetReader.php');
 	
 	ini_set("include_path", '/home/pnp1/php:' . ini_get("include_path") );
 	
-//echo FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image;die;
+	//echo FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image;die;
 	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
-	
+
 	//die("here123");
-//FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image;
-        $i=0;
-        
+	//FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image;
+
+    $i=0;
 	foreach ($Reader as $Row)
 	{
-            if ($i !=0) {
-              
-            
-            	$data = array(
-				'company_name' => $Row[0],
-                                'company_address' => $Row[1],
-                                'contact_person_name' => $Row[2],
-				'vat_number' => $Row[3],
-                                'email' => $Row[4],
-                                'phone_no' => $Row[5],
-                     'password' => md5($Row[6]),
-                     'client_type' => $Row[7],
-
-			);
-			$this->$model->insert('users',$data);
-            } 
-            $i++;
+		if($i!=0)
+		{
+			if($Row[$i]=="")
+			{
+				break;
+			}
+			else
+			{
+	        	$data = array(
+						'company_name' => $Row[0],
+						'company_address' => $Row[1],
+						'contact_person_name' => $Row[2],
+						'vat_number' => $Row[3],
+						'email' => $Row[4],
+						'phone_no' => $Row[5],
+						'password' => md5($Row[6]),
+						'client_type' => $Row[7],
+						'created' => date('Y-m-d H:i:s')
+				);
+				$this->$model->insert('users',$data);		        
+			}
+		}
+		$i++;       
 	}
-        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contacts has been imported successfully!</div>');
-       redirect($this->controller);	
+
+    	$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Contacts has been imported successfully!</div>');
+       	redirect($this->controller);	
     }
     
-    public function uploadContacts(){
-       
-
-			$this->load->view($this->view.'/uploadContacts',array());
+    public function uploadContacts()
+    {
+		$this->load->view($this->view.'/uploadContacts',array());
     }
 }
 ?>

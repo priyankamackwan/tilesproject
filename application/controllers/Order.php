@@ -54,6 +54,9 @@
             $this->db->where('is_deleted',0);
             $data['activeProducts'] = $this->db->get("products")->result_array();
 
+            //get oder is placed by
+
+
             // Get all Amounts of Invoice. 
             $data['totalAmounts'] = $this->orders_model->get_invoiceAmount();
         
@@ -68,11 +71,23 @@
                 1 => 'orders.lpo_no' ,
                 2 => 'orders.do_no' ,
                 3 => 'orders.invoice_no' ,
+                4 => 'orders.placed_by',
+                5 => 'orders.sales_expense' ,
+                6 => 'orders.invoice_status' ,
+                7 => 'orders.status',
+                8 => 'orders.created' ,
+            );
+
+            /*$columnArray = array(
+                0 => 'users.company_name' ,
+                1 => 'orders.lpo_no' ,
+                2 => 'orders.do_no' ,
+                3 => 'orders.invoice_no' ,
                 4 => 'orders.sales_expense' ,
                 5 => 'orders.invoice_status' ,
                 6 => 'orders.status',
                 7 => 'orders.created' ,
-            );
+            );*/
 
             // Limit 
             $limit = $this->input->post('length');
@@ -237,6 +252,19 @@
                 $srNo = $startNo + 1;
                 
                 foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
+                    //print_r($SingleOrderData);
+                    
+                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then disply admin name
+                    {
+                        $adminid=$SingleOrderData['admin_id'];
+                        $admindbdata=$this->db->select('first_name,last_name')->from('admin_users')->where('id',$adminid)->get()->result_array();
+                        $placed_by_name=$admindbdata[0]['first_name'].' '.$admindbdata[0]['last_name'];
+                    }
+                    else
+                    {
+                        $placed_by_name=$SingleOrderData['contact_person_name'];
+                    }
+                    
                    
                     // View Page Link.
                     $view = base_url($this->controller.'/view/'.$this->utility->encode($SingleOrderData['id']));
@@ -264,6 +292,8 @@
 
                     // Create Invoice link for table.
                     $tabledata['invoice_no'] ='<a href="'.$downloadinvoice.'"><b>'.$SingleOrderData['invoice_no'].'</b></a>';
+
+                    $tabledata['placed_by'] = $placed_by_name;
 
                     $tabledata['sales_expense'] =$SingleOrderData['sales_expense'];
 
@@ -457,10 +487,13 @@
 			$this->load->view($this->view.'/form',$data);
 		}
                 
-                public function view($id) {
+            public function view($id) {
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+
+            //echo $id;
+            //exit();
                        // echo $id; exit;
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
@@ -503,6 +536,9 @@
                         $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("users")->result_array();
+
+                        //$this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
+                        $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
 
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);

@@ -189,6 +189,7 @@
                     <th class="text-center">Vat No</th>
                     <th class="text-center">Mobille No.</th>
                     <th class="text-center">Client Type</th>
+                    <th class="text-center">Created On</th>
                     <th class="text-center">Status</th>
                     <th class="text-center">Manage</th>
               </thead>
@@ -284,7 +285,7 @@
         filename: 'Contact List',
         sheetName:'Contact List',
         exportOptions: {
-          columns: [1,2,3,4,5,6,7]
+          columns: [1,2,3,4,5,6,7,8]
         },
         /*{
           text: 'Red',
@@ -392,6 +393,7 @@
         { "data": "vat_number"},
         { "data": "phone_no"},
         { "data": "client_type"},
+        { "data": "created"},
         { "data": "status"},
         { "data": "manage"}
       ],
@@ -400,7 +402,7 @@
         "orderable": false,  
       },{
         "className": 'text-center',
-        "targets":   [0,7,8],
+        "targets":   [0,8,9],
         "orderable": false
       }],
 

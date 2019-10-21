@@ -233,6 +233,7 @@
                                 <th class="text-center">LPO No</th>
                                 <th class="text-center">Delivery No</th>
                                 <th class="text-center">Invoice No</th>
+                                <th class="text-center">Placed By</th>
                                 <th class="text-center">Sales Expense</th>
                                 <th class="text-center">Invoice Status</th>
                                 <th class="text-center">Delivery Status</th>
@@ -468,6 +469,7 @@
                 { "data": "lpo_no"},
                 { "data": "do_no"},
                 { "data": "invoice_no"},
+                { "data": "placed_by"},
                 { "data": "sales_expense"},
                 { "data": "invoice_status"},
                 { "data": "status"},
@@ -475,11 +477,11 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,9],
+				"targets": [0,10],
 				"orderable": false
 			},{
                 "className": 'text-center',
-                "targets":   [0,6,7,8,9]
+                "targets":   [0,7,8,9,10]
             }]      
 		});
 
