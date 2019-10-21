@@ -320,7 +320,7 @@
                         $("#contact_person_name").html(result.data);
                     }
                 });
-                //dataTable2.api().draw();
+                dataTable2.api().draw();
             });
      
 	var dataTable2 = $('#datatables').dataTable({
