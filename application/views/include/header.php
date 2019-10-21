@@ -35,7 +35,8 @@
 
   <!-- sweetalert CSS -->
   <link href="<?php echo base_url();?>assets/css/sweetalert.min.css" rel="stylesheet">
-  <link href="<?php echo base_url();?>assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet">
+  <!-- Fro Two icons show commnet below css -->
+  <!-- <link href="<?php //echo base_url();?>assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet"> -->
   
   <style>
     #dataTables {
