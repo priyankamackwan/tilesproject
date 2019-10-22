@@ -69,7 +69,7 @@
                         <a href="<?php echo base_url();?>Expense_report"><i class="fa fa-tag"></i><span>Expense Reports</span></a>
                     </li>
                     <li class="treeview <?php echo $url == 'Product_report'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Product_report"><i class="fa fa-tag"></i><span>Product Reports</span></a>
+                        <a href="<?php echo base_url();?>Product_report"><i class="fa fa-tag"></i><span>Item Reports</span></a>
                     </li>
             <?php
                 }
