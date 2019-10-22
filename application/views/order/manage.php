@@ -206,7 +206,7 @@
 
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Product:</label>
+                                            <label class="control-label" style="margin-top:7px;">Item:</label>
                                         </div>
 
                                         <!-- Products Filter Dropdown -->
@@ -223,7 +223,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Item Available --</option>
                                                 <?php
                                                     }
                                                 ?>

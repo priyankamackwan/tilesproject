@@ -72,7 +72,7 @@
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
-                  Upload Products<font color="red"><span class="required">*</span></font> :
+                  Upload Items<font color="red"><span class="required">*</span></font> :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">

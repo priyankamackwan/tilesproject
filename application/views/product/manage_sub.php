@@ -125,7 +125,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Item Available --</option>
                                                 <?php
                                                     }
                                                 ?>
@@ -167,7 +167,7 @@
                                                             }
                                                         }else{
                                                     ?>
-                                                        <option value="">-- No Product Available --</option>
+                                                        <option value="">-- No Items Group Available --</option>
                                                     <?php
                                                         }
                                                     ?>
@@ -209,9 +209,9 @@
               </div>
               <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                 <div class="box-tools pull-right">             
-                  <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Product</a>
+                  <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Item</a>
                             
-                  <a href="<?php echo base_url($this->controller);?>/uploadProducts" class="btn btn-primary"><i class="fa fa-plus"></i> Import Products</a>
+                  <a href="<?php echo base_url($this->controller);?>/uploadProducts" class="btn btn-primary"><i class="fa fa-plus"></i> Import Items</a>
                 </div>
               </div>
             </div>
@@ -307,8 +307,8 @@
         extend:'excel',
         text: window.excelButtonTrans,
         title:'',
-        filename: 'Products List',
-        sheetName:'Products List',
+        filename: 'Items List',
+        sheetName:'Items List',
         action: newExportAction,
         exportOptions: {
           columns: [1,2,3,5,6,7,8,9,10,11,12]

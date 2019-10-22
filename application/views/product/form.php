@@ -298,11 +298,11 @@
 
 					      <div class="form-group">
                   <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
-                    Product Name<font color="red"><span class="required">*</span></font> :
+                    Item Name<font color="red"><span class="required">*</span></font> :
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
-                    <input type="text" name="name" value="<?php echo $result[0]->name;?>" class="form-control" placeholder="Enter Product Name">
+                    <input type="text" name="name" value="<?php echo $result[0]->name;?>" class="form-control" placeholder="Enter Item Name">
                   </div>
                 </div>
 
@@ -411,7 +411,7 @@
                 ?>
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
-                        Product Image<font color="red"><span class="required">*</span></font> :
+                        Item Image<font color="red"><span class="required">*</span></font> :
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
@@ -427,7 +427,7 @@
                 ?>
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
-                        Product Image<font color="red"><span class="required">*</span></font> :
+                        Item Image<font color="red"><span class="required">*</span></font> :
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
@@ -770,7 +770,7 @@ return value == '' || value.trim().length != 0;
 					messages: {
                                                 
 						name: {
-							required: "Please Enter Product",
+							required: "Please Enter Item",
                                                         noSpace: true,
 						},
                                                 price: {
