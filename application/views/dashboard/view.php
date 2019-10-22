@@ -413,7 +413,7 @@
 												<tr role="row" class="odd">
 													<td><?php echo $value['company_name'];?>
 													</td>
-													<td style="align:right;"><?php echo number_format($value['totalValue'],2);?></td>	
+													<td style="text-align:right;"><?php echo number_format($value['totalValue'],2);?></td>	
 													<td class="text-right"><a href="<?php echo $view;?>" class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a></td>
 												</tr>
 												<?php
