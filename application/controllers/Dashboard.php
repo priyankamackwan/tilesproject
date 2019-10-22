@@ -48,7 +48,7 @@ class Dashboard extends CI_Controller
 				$rr=$this->Dashboard_model->get_OrderDatatables($where);
 				$count_price=$this->Dashboard_model->count_price($where);
 				if(isset($period) && $period!='' && $period=="week"){
-					$orderStatistics[$i]['date']=$date->format('d l');
+					$orderStatistics[$i]['date']=$date->format('d F');
 				}
 				if(isset($period) && $period!='' && $period=="month"){
 					$orderStatistics[$i]['date']=$date->format('d F');
@@ -71,7 +71,7 @@ class Dashboard extends CI_Controller
 					$rr=$this->Dashboard_model->get_OrderDatatables($where);
 					$count_price=$this->Dashboard_model->count_price($where);
 					if(isset($period) && $period!='' && $period=="week"){
-						$orderStatistics[$i]['date']=$date->format('d l');
+						$orderStatistics[$i]['date']=$date->format('d F');
 					}
 					if(isset($period) && $period!='' && $period=="month"){
 						$orderStatistics[$i]['date']=$date->format('d F');
@@ -115,7 +115,7 @@ class Dashboard extends CI_Controller
 				$where = '(DATE_FORMAT(users.created,"%Y-%m-%d") BETWEEN "'.$startdate.'" AND "'.$startdate.'")';
 				$rr=$this->Dashboard_model->get_usertables($where);
 				if(isset($period) && $period!='' && $period=="week"){
-					$orderStatistics[$i]['date']=$date->format('d l');
+					$orderStatistics[$i]['date']=$date->format('d F');
 				}
 				if(isset($period) && $period!='' && $period=="month"){
 					$orderStatistics[$i]['date']=$date->format('d F');
@@ -134,7 +134,7 @@ class Dashboard extends CI_Controller
 					$where = '(DATE_FORMAT(users.created,"%Y-%m") BETWEEN "'.$startdate.'" AND "'.$startdate.'")';
 					$rr=$this->Dashboard_model->get_usertables($where);
 					if(isset($period) && $period!='' && $period=="week"){
-						$orderStatistics[$i]['date']=$date->format('d l');
+						$orderStatistics[$i]['date']=$date->format('d F');
 					}
 					if(isset($period) && $period!='' && $period=="month"){
 						$orderStatistics[$i]['date']=$date->format('d F');

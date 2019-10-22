@@ -1,78 +1,64 @@
 <?php
-	defined('BASEPATH') OR exit('No direct script access allowed');
+  defined('BASEPATH') OR exit('No direct script access allowed');
 
-	class Product_report extends CI_Controller
-	{
-		public $msgName = "Order";
-		public $view = "product_report";
-		public $controller = "Product_report";
-		public $primary_id = "id";
-		public $table = "order_products";
-		public $msgDisplay ='order';
-		public $model;
+  class Best_selling_item extends CI_Controller
+  {
+    public $msgName = "Order";
+    public $view = "best_selling_item";
+    public $controller = "Best_selling_item";
+    public $primary_id = "id";
+    public $table = "order_products";
+    public $msgDisplay ='order';
+    public $model;
 
-		public function __construct()
-		{
+    public function __construct()
+    {
                     
-			parent::__construct();
-			date_default_timezone_set('Asia/Kolkata');
-			$this->model = "My_model";
-                    
-      if (!in_array(4,$this->userhelper->current('rights'))) 
-      {
+      parent::__construct();
+      date_default_timezone_set('Asia/Kolkata');
+      $this->model = "My_model";
+   
+      if (!in_array(4,$this->userhelper->current('rights'))) {
         $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
         redirect('Change_password');
       }
-                      
-
-		}
-		public function index() {
-                      //  echo '<pre>';
-                   // print_r($this->session);die;
-                   $this->userhelper->current('logged_in')['is_logged'] = 1;
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
-			$data['view'] = $this->view;
-			$data['msgDisplay'] = $this->msgDisplay;
+    }
+    public function index() {
+      $this->userhelper->current('logged_in')['is_logged'] = 1;
+      $data['msgName'] = $this->msgName;
+      $data['primary_id'] = $this->primary_id;
+      $data['controller'] = $this->controller;
+      $data['view'] = $this->view;
+      $data['msgDisplay'] = $this->msgDisplay;
       // Add for dispaly in filter
-      $data['activeProducts'] = $this->db->get("products")->result_array();
       $data['product_categories'] = $this->db->get("categories")->result_array();
-   
-			$this->load->view($this->view.'/manage',$data);
-		}
+      $this->load->view($this->view.'/manage',$data);
+    }
                 
-		public function server_data() {
+    public function server_data() {
                     
-			$model = $this->model;
-                      
-                       // echo $this->model; exit;
-      // Add for default value
-            $productid=$s=$cat_id=$where='';
-			$order_col_id = $_POST['order'][0]['column'];
-                     
-			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
-
-			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+      $model = $this->model;
                         
+      
+      $productid=$s=$cat_id=$where='';
+      $order_col_id = $_POST['order'][0]['column'];
+                     
+      $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
-                        $startDate = $_POST['columns'][1]['search']['value'];
-                        $endDate = $_POST['columns'][2]['search']['value'];
+      $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+      $startDate = $_POST['columns'][1]['search']['value'];
+      $endDate = $_POST['columns'][2]['search']['value'];
+
       $productid = $this->input->post('productid');
       $cat_id = $this->input->post('cat_id');
-      // Low stock default mo
-      $low_stock='no';
-      $low_stock=$this->input->post('low_stock');
-      // Add for where condition for filter
-            if(!empty($productid)){
-
-                if($where == null){
-                    $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
-                }else{
-                    $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
-                }
-            }
-            if(!empty($cat_id)){
+      if(!empty($productid)){
+        if($where == null){
+          $where .= 'LOWER(p.id) = "'.strtolower($productid).'" ';
+        }else{
+          $where .= ' AND LOWER(p.id) = "'.strtolower($productid).'" ';
+        }
+      }
+      if(!empty($cat_id)){
 
                 if($where == null){
                     $where .= 'c.id ="'.$cat_id.'"';
@@ -80,7 +66,6 @@
                     $where .= ' AND c.id ="'.$cat_id.'"';
                 }
             }
-            // For search  box filter
         if(isset($s) && $s!=''){
           if($where != null){
             $where .='AND';  
@@ -94,215 +79,126 @@
                 $where .= 'c.name LIKE "%'.$s.'%" or ';
 
                 $where .= 'p.design_no LIKE "%'.$s.'%" ) ';
-        }    
-
-			//$totalData = $this->$model->countTableRecords($this->table,array());
+        }
+      
+      //$totalData = $this->$model->countTableRecords($this->table,array());
       // Total count new
       $totalData = $this->$model->product_report_table_tecords($where,$low_stock);
                        
-			$start = $_POST['start'];
-			$limit = $_POST['length'];
+      $start = $_POST['start'];
+      $limit = $_POST['length'];
 
                         
-                     /* old query   
-                      if (empty($startDate) || empty($endDate)){
-                            $q = $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
-                                if(empty($s))
-			{
-                           
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				$q = $q->limit($limit, $start)->get($this->table)->result();
- 
-				$totalFiltered = count($q);
-			}
-			else
-			{
-                         
-				$q = $q->like('orders.total_price', $s, 'both');
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				//->limit($limit, $start)
-				$q = $q->get($this->table)->result();
-
-				$totalFiltered = count($q);
-			}
-                        }  else {
-                            $q= $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
-                            if(empty($s))
-			{
-                           
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				$q = $q->get($this->table)->result();
-
-				$totalFiltered = count($q);
-			}
-			else
-			{
-                         
-				$q = $q->like('orders.total_price', $s, 'both');
-				if(!empty($order))
-				{
-					$q = $q->order_by($order);
-				}
-				//->limit($limit, $start)
-				$q = $q->get($this->table)->result();
-
-				$totalFiltered = count($q);
-			}
-                        }*/
-        // For low stock   condition             
-       if(isset($low_stock) && $low_stock!='' && $low_stock=='true'){
-          $stocklimit=Stock_Reminder;
-          $this->db->select('ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity) as s_quantity');
-          $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
-
-        }                 
-      // End for low stock condition
-      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity');
       $this->db->from('order_products o');
       $this->db->join('products p','p.id=o.product_id','left');
       $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
       $this->db->join('categories c','c.id=pc.cat_id','left');
-      
-      $this->db->limit($limit, $start);
-      $this->db->group_by('o.product_id');
       if(!empty($where)){
         $this->db->where($where);
       }else {
         if(!empty($s)){
-           $this->db->or_like('o.total_price', $s, 'both');
-           $this->db->or_like('u.company_name', $s, 'both');
+          // $this->db->like('o.total_price', $s, 'both');
+           $this->db->or_like('p.name', $s, 'both');
         }
       }
-      /*
-      if(isset($s) && $s!=''){
-        $this->db->like('orders.total_price', $s, 'both');
-      }                 
-     if(!empty($order)){
-        $this->db->order_by($order);
-      } */
+      
+      $this->db->limit($limit, $start);
+      $this->db->group_by('o.product_id');
+      $this->db->order_by('s_quantity','desc');
+      
       $q=$this->db->get()->result_array();  
 
-			$data = array();
-   // echo $this->db->last_query();die();
+      $data = array();
+  //echo $this->db->last_query();die();
                  
-			if(!empty($q))
-			{
+      if(!empty($q))
+      {
                                $startNo = $_POST['start'];
                             $srNo = $startNo + 1;
-				foreach ($q as $key=>$value)
-				{
-					$id = $this->primary_id;
+        foreach ($q as $key=>$value)
+        {
+          $id = $this->primary_id;
                                              
                     
-                       /*  $multipleWhere2 = ['id' => $value->product_id];
-                        $this->db->where($multipleWhere2);
-                        $productData = $this->db->get("products")->result_array();
-             
-                        $multipleWhere3 = ['product_id' => $value->product_id];
-                        $this->db->where($multipleWhere3);
-                        $productCategoryData = $this->db->get("product_categories")->result_array();
-              
-                        $multipleWhere4 = ['id' => $productCategoryData[0]['cat_id']];
-                        $this->db->where($multipleWhere4);
-                        $categoryData = $this->db->get("categories")->result_array();
-                        $totalQuantity = $value->totalQuantity;*/
-					$nestedData['id'] = $srNo;
-                                      /* Old Array
-                                        $nestedData['product_name'] =$productData[0]['name'];
-                                        $nestedData['design_no'] =$productData[0]['design_no'];
-                                        $nestedData['size'] =$productData[0]['size'];
-                                        $nestedData['category'] =$categoryData[0]['name'];
-                                        $nestedData['purchase_expense'] =$productData[0]['purchase_expense'];
-                                        $nestedData['quantity'] =$productData[0]['quantity'];
-                                        $nestedData['sold_quantity'] = $value->totalQuantity;
-                                        $nestedData['total_left_quantity'] =$productData[0]['quantity']-$totalQuantity;
-                                        $nestedData['amount'] =$value->amount;
-                                        */
+                       
+          $nestedData['id'] = $srNo;
                                         $nestedData['product_name'] =$value['name'];
                                         $nestedData['design_no'] =$value['design_no'];
                                         $nestedData['size'] =$value['size'];
                                         $nestedData['category'] =$value['cate_name'];
-                                        $nestedData['purchase_expense'] =round($value['purchase_expense'],2);
+                                        $nestedData['purchase_expense'] =$value['purchase_expense'];
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =round($value['amount'],2);
-					$data[] = $nestedData;
+                                        $nestedData['amount'] =$value['amount'];
+          $data[] = $nestedData;
                                         $srNo++;
-				}
-			}
+        }
+      }
 
-			$json_data = array(
-						"draw"            => intval($this->input->post('draw')),
-						"recordsTotal"    => intval($totalData),
-						"recordsFiltered" => intval($totalData),
-						"data"            => $data
-						);
-			echo json_encode($json_data);
-		}
+      $json_data = array(
+            "draw"            => intval($this->input->post('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalData),
+            "data"            => $data
+            );
+      echo json_encode($json_data);
+    }
                 
-		public function add() {
+    public function add() {
                     //echo '3'; exit;
-			$data['action'] = "insert";
-			$model = $this->model;
+      $data['action'] = "insert";
+      $model = $this->model;
                         $data['controller'] = $this->controller;
 
-			$this->load->view($this->view.'/form',$data);
-		}
+      $this->load->view($this->view.'/form',$data);
+    }
                 
-		public function insert() {
+    public function insert() {
                   
-			$model = $this->model;
-			$name = $this->input->post('name');
+      $model = $this->model;
+      $name = $this->input->post('name');
                         $description = $this->input->post('description');
                        
-			$data = array(
+      $data = array(
 
-				'name' => $name,
+        'name' => $name,
                                 'description' => $description,
                                 'created' => date('Y-m-d h:i:s'),
-			);
-			$this->$model->insert($this->table,$data);
-			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
-			redirect($this->controller);
-		}
+      );
+      $this->$model->insert($this->table,$data);
+      $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
+      redirect($this->controller);
+    }
                 
-		public function edit($id) {
+    public function edit($id) {
                     
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                         //echo $id; exit;
-			$data['action'] = "update";
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
+      $data['action'] = "update";
+      $data['msgName'] = $this->msgName;
+      $data['primary_id'] = $this->primary_id;
+      $data['controller'] = $this->controller;
 
-			$model = $this->model;
+      $model = $this->model;
 
-			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
-			$this->load->view($this->view.'/form',$data);
-		}
+      $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+      $this->load->view($this->view.'/form',$data);
+    }
                 
                 public function view($id) {
                     
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                        // echo $id; exit;
-			$data['action'] = "update";
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
+      $data['action'] = "update";
+      $data['msgName'] = $this->msgName;
+      $data['primary_id'] = $this->primary_id;
+      $data['controller'] = $this->controller;
 
-			$model = $this->model;
+      $model = $this->model;
                       /*  $multipleWhere = ['id' => $value->product_id];
                         $this->db->where($multipleWhere);
                         $data['Product'] = $this->db->get("products")->result_array();
@@ -311,7 +207,7 @@
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
 
-			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+      $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['order_id' => $id];
                         $this->db->where($multipleWhere);
@@ -336,14 +232,14 @@
                         $data['User'] = $this->db->get("users")->result_array();
 
                       //  print_r($data); exit;
-			$this->load->view($this->view.'/view',$data);
-		}
+      $this->load->view($this->view.'/view',$data);
+    }
                 
                 
             public function downloadinvoice($id) {
                     
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                         
                           $multipleWhere = ['id' =>$id];
                         $this->db->where($multipleWhere);
@@ -457,12 +353,12 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         
                         
-			$data['action'] = "update";
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
+      $data['action'] = "update";
+      $data['msgName'] = $this->msgName;
+      $data['primary_id'] = $this->primary_id;
+      $data['controller'] = $this->controller;
 
-			$model = $this->model;
+      $model = $this->model;
                       /*  $multipleWhere = ['id' => $value->product_id];
                         $this->db->where($multipleWhere);
                         $data['Product'] = $this->db->get("products")->result_array();
@@ -471,7 +367,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
 
-			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+      $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
                         $this->db->where($multipleWhere);
@@ -482,14 +378,14 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         $data['User'] = $this->db->get("users")->result_array();
 
                       //  print_r($data); exit;
-			$this->load->view($this->view.'/view',$data);
-		}
+      $this->load->view($this->view.'/view',$data);
+    }
                 
                 
            public function downloadlpo($id) {
                     
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                         
                           $multipleWhere = ['id' =>$id];
                         $this->db->where($multipleWhere);
@@ -601,12 +497,12 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($ordersData[0]['lpo_no'], 'D');
                         
                         
-			$data['action'] = "update";
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
+      $data['action'] = "update";
+      $data['msgName'] = $this->msgName;
+      $data['primary_id'] = $this->primary_id;
+      $data['controller'] = $this->controller;
 
-			$model = $this->model;
+      $model = $this->model;
                       /*  $multipleWhere = ['id' => $value->product_id];
                         $this->db->where($multipleWhere);
                         $data['Product'] = $this->db->get("products")->result_array();
@@ -615,7 +511,7 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
 
-			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+      $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
                         $this->db->where($multipleWhere);
@@ -626,13 +522,13 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                         $data['User'] = $this->db->get("users")->result_array();
 
                       //  print_r($data); exit;
-			$this->load->view($this->view.'/view',$data);
-		}
+      $this->load->view($this->view.'/view',$data);
+    }
                 
                     public function download($id) {
                     
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                         
                           $multipleWhere = ['id' =>$id];
                         $this->db->where($multipleWhere);
@@ -723,12 +619,12 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($do_no, 'D');
                         
                         
-			$data['action'] = "update";
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
+      $data['action'] = "update";
+      $data['msgName'] = $this->msgName;
+      $data['primary_id'] = $this->primary_id;
+      $data['controller'] = $this->controller;
 
-			$model = $this->model;
+      $model = $this->model;
                       /*  $multipleWhere = ['id' => $value->product_id];
                         $this->db->where($multipleWhere);
                         $data['Product'] = $this->db->get("products")->result_array();
@@ -737,7 +633,7 @@ $pdf->Output($do_no, 'D');
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
 
-			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+      $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
                         $this->db->where($multipleWhere);
@@ -748,37 +644,37 @@ $pdf->Output($do_no, 'D');
                         $data['User'] = $this->db->get("users")->result_array();
 
                       //  print_r($data); exit;
-			$this->load->view($this->view.'/view',$data);
-		}
+      $this->load->view($this->view.'/view',$data);
+    }
                 
-		public function Update() {
+    public function Update() {
                     
-			$model = $this->model;
+      $model = $this->model;
 
-			$id = $this->input->post('id');
+      $id = $this->input->post('id');
                      //  echo $id; exit;
-			$sales_expense = $this->input->post('sales_expense');
+      $sales_expense = $this->input->post('sales_expense');
                         $status = $this->input->post('status');
                         //echo $sales_expense; exit;
-			$data = array(
+      $data = array(
 
                             'sales_expense' => $sales_expense,
                             'status' => $status,
 
 
-			);
-			$where = array($this->primary_id=>$id);
-			$this->$model->update($this->table,$data,$where);
+      );
+      $where = array($this->primary_id=>$id);
+      $this->$model->update($this->table,$data,$where);
                              
-			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
-			redirect($this->controller);
-		}
-		public function remove($id) {
+      //$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
+      redirect($this->controller);
+    }
+    public function remove($id) {
                    
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                          
-			$this->$model->select(array(),'categories',array('id'=>$id),'','');
+      $this->$model->select(array(),'categories',array('id'=>$id),'','');
                         $this->db->set('is_deleted',1);
                         $this->db->where('id',$id);
                         $this->db->update('categories',$data);
@@ -788,17 +684,17 @@ $pdf->Output($do_no, 'D');
                         $q = $this->db->get('categories');
                         $userdata = $q->result_array();
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been deleted successfully!</div>');
-                        redirect($this->controller);	
-		}
+                        redirect($this->controller);  
+    }
                 
        
                 
                 public function inactive($id) {
                    
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
                   
-			$this->$model->select(array(),'categories',array('id'=>$id),'','');
+      $this->$model->select(array(),'categories',array('id'=>$id),'','');
                         $this->db->set('status',0);
                         $this->db->where('id',$id);
                         $this->db->update('categories',$data);
@@ -808,15 +704,15 @@ $pdf->Output($do_no, 'D');
                         $q = $this->db->get('categories');
                         $userdata = $q->result_array();
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been blocked successfully!</div>');
-                        redirect($this->controller);	
-		}
+                        redirect($this->controller);  
+    }
                 
                 public function active($id) {
                    
-			$model = $this->model;
-			$id = $this->utility->decode($id);
+      $model = $this->model;
+      $id = $this->utility->decode($id);
 
-			$this->$model->select(array(),'categories',array('id'=>$id),'','');
+      $this->$model->select(array(),'categories',array('id'=>$id),'','');
                         $this->db->set('status',1);
                         $this->db->where('id',$id);
                         $this->db->update('categories',$data);
@@ -826,8 +722,8 @@ $pdf->Output($do_no, 'D');
                         $q = $this->db->get('categories');
                         $userdata = $q->result_array();
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
-                        redirect($this->controller);	
-		}
+                        redirect($this->controller);  
+    }
                 
-	}
+  }
 ?>
