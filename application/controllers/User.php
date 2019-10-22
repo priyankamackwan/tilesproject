@@ -224,15 +224,15 @@
 										} elseif ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
 											
-											$nestedData['manage'] = '<a class="btn btn-sm btn-primary" href="'.$accept.'" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a href="'.$statusAction.'" class="btn btn-warning btn-xs confirm-statuschange" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Block"><i class="fa fa-ban"></i></a>&nbsp;<a href="'.$delete.'" style="padding: 8px;margin-top:1px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
+											$nestedData['manage'] = '<a href="'.$view.'" style="padding: 8px;margin-top:1px;" class="btn btn-primary   btn-xs "  title="View"><i class="fa fa-eye"></i></a>&nbsp;<a class="btn btn-sm btn-info" href="'.$accept.'" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a href="'.$statusAction.'" class="btn btn-warning btn-xs confirm-statuschange" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Block"><i class="fa fa-ban"></i></a>&nbsp;<a href="'.$delete.'" style="padding: 8px;margin-top:1px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                                         } elseif ($value->status == 2) {
 											// $nestedData['manage'] = "<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
 											
-											$nestedData['manage'] = '<a style="padding: 8px;margin-top:1px;" href="'.$statusAction.'" class="btn btn-success btn-sm confirm-statuschange" data-toggle="tooltip" title="Active"><i class="fa fa-check"></i></a>&nbsp;<a href="'.$delete.'" style="padding: 8px;margin-top:1px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
+											$nestedData['manage'] = '<a href="'.$view.'" style="padding: 8px;margin-top:1px;" class="btn btn-primary   btn-xs "  title="View"><i class="fa fa-eye"></i></a>&nbsp;<a style="padding: 8px;margin-top:1px;" href="'.$statusAction.'" class="btn btn-success btn-sm confirm-statuschange" data-toggle="tooltip" title="Active"><i class="fa fa-check"></i></a>&nbsp;<a href="'.$delete.'" style="padding: 8px;margin-top:1px;" class="btn btn-danger btn-xs confirm-delete-user" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                                         } else {
 											// $nestedData['manage'] = "<a href='$delete' class='btn  btn-warning  btn-xs confirm-delete'>Delete</a>";
 
-											$nestedData['manage'] = '<a style="padding: 8px;margin-top:1px;" href="'.$delete.'" class="btn btn-danger btn-sm confirm-delete" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
+											$nestedData['manage'] = '<a href="'.$view.'" style="padding: 8px;margin-top:1px;" class="btn btn-primary   btn-xs "  title="View"><i class="fa fa-eye"></i></a>&nbsp;<a style="padding: 8px;margin-top:1px;" href="'.$delete.'" class="btn btn-danger btn-sm confirm-delete" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                                         }
 					$data[] = $nestedData;
                                         $srNo++;
@@ -339,19 +339,32 @@
                         redirect($this->controller);	
 		}
                 
-        public function accept()
-        {
-                   
+        public function accept(){
 			$model = $this->model;
                         $id = $this->input->post('id');
                         $client_type = $this->input->post('client_type');
-                       
+                        // Add new fileds for update
+                       $company_name = $this->input->post('company_name');
+                       $contact_person_name = $this->input->post('contact_person_name');
+                       $email = $this->input->post('email');
+                       $phone_no = $this->input->post('phone_no');
+                       $vat_number = $this->input->post('vat_number');
+                       $company_address = $this->input->post('company_address');
+                       $data=array(
+                       			'company_name' => $company_name,
+                       			'company_address' => $company_address,
+                       			'contact_person_name' => $contact_person_name,
+                       			'vat_number' => $vat_number,
+                       			'phone_no' => $phone_no,
+                       			'email' => $email,
+                       			'client_type' => $client_type,
+                       			'modified'	=> date('Y-m-d h:i:s')
+                       		);
 			$this->$model->select(array(),'users',array('id'=>$id),'','');
                         $this->db->set('status',1);
-                        $this->db->set('client_type',$client_type);
+                        //$this->db->set('client_type',$client_type);
                         $this->db->where('id',$id);
                         $this->db->update('users',$data);
-                        
                         $this->db->select('company_name');
                         $this->db->where('id', $id);
                         $q = $this->db->get('users');
@@ -367,15 +380,22 @@
 			$model = $this->model;
 			$id = $this->utility->decode($id);
 			$data['action'] = "block";
-                        $data['id'] = $id;
+            $data['id'] = $id;
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
+			/* OLd Query
                          $this->db->select('client_type');
                         $this->db->where('id', $id);
                         $q = $this->db->get('users');
                         $userdata = $q->result_array();
-       		$data['client_type'] = $userdata[0]['client_type'];
+        $data['client_type'] = $userdata[0]['client_type'];
+        				*/
+
+			$this->db->select('*');
+			$this->db->where('id', $id);
+			$q = $this->db->get('users');
+			$data['user_data'] = $q->row();
 			$this->load->view($this->view.'/acceptform',$data);
 		}
                 

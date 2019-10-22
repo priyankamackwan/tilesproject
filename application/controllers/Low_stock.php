@@ -79,7 +79,7 @@
             $this->db->where('p.status',1);
             $this->db->group_by('o.product_id');
             $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
-            $this->db->order_by('p.name,p.design_no asc');
+            $this->db->order_by('p.quantity-SUM(o.quantity) asc');
             if(!empty($where)){
                 $this->db->where($where);
             }
