@@ -18,10 +18,11 @@
 			date_default_timezone_set('Asia/Kolkata');
 			$this->model = "My_model";
                     
-                      if (!in_array(4,$this->userhelper->current('rights'))) {
-                        $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
-                        redirect('Change_password');
-                      }
+      if (!in_array(4,$this->userhelper->current('rights'))) 
+      {
+        $this->session->set_flashdata('ff','<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>No Rights for this module</div>');
+        redirect('Change_password');
+      }
                       
 
 		}
@@ -203,11 +204,11 @@
                                         $nestedData['design_no'] =$value['design_no'];
                                         $nestedData['size'] =$value['size'];
                                         $nestedData['category'] =$value['cate_name'];
-                                        $nestedData['purchase_expense'] =$value['purchase_expense'];
+                                        $nestedData['purchase_expense'] =round($value['purchase_expense'],2);
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =$value['amount'];
+                                        $nestedData['amount'] =round($value['amount'],2);
 					$data[] = $nestedData;
                                         $srNo++;
 				}

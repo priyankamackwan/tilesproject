@@ -47,6 +47,9 @@
     .dt-buttons{
       margin-left: 10px;
     }
+    table#datatables td {
+    vertical-align: middle;
+    }
   </style>
  
 </head>

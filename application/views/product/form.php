@@ -325,11 +325,11 @@
                     <?php 
                       if ($this->userhelper->current('role_id') == 1) { 
                     ?>
-                        <input type="text" name="cash_rate" value="<?php echo $result[0]->cash_rate;?>" class="form-control" placeholder="Enter Cash Rate">
+                        <input type="text" name="cash_rate" value="<?php echo ROUND($result[0]->cash_rate,2);?>" class="form-control" placeholder="Enter Cash Rate">
                     <?php 
                       } else { 
                     ?>
-                        <input type="text" name="cash_rate" value="<?php echo $result[0]->cash_rate;?>" readonly="" class="form-control" placeholder="Enter Cash Rate">
+                        <input type="text" name="cash_rate" value="<?php echo ROUND($result[0]->cash_rate,2);?>" readonly="" class="form-control" placeholder="Enter Cash Rate">
                     <?php 
                       } 
                     ?>
@@ -345,11 +345,11 @@
                     <?php 
                       if ($this->userhelper->current('role_id') == 1) { 
                     ?>
-                        <input type="text" name="credit_rate" value="<?php echo $result[0]->credit_rate;?>" class="form-control" placeholder="Enter Credit Rate">
+                        <input type="text" name="credit_rate" value="<?php echo ROUND($result[0]->credit_rate,2);?>" class="form-control" placeholder="Enter Credit Rate">
                     <?php 
                       } else { 
                     ?>
-                        <input type="text" name="credit_rate" value="<?php echo $result[0]->credit_rate;?>" readonly="" class="form-control" placeholder="Enter Credit Rate">
+                        <input type="text" name="credit_rate" value="<?php echo ROUND($result[0]->credit_rate,2);?>" readonly="" class="form-control" placeholder="Enter Credit Rate">
                     <?php 
                       } 
                     ?>
@@ -365,11 +365,11 @@
                     <?php 
                       if ($this->userhelper->current('role_id') == 1) { 
                     ?>
-                        <input type="text" name="walkin_rate" value="<?php echo $result[0]->walkin_rate;?>" class="form-control" placeholder="Enter Walkin Rate">
+                        <input type="text" name="walkin_rate" value="<?php echo ROUND($result[0]->walkin_rate,2);?>" class="form-control" placeholder="Enter Walkin Rate">
                     <?php
                       } else { 
                     ?>
-                        <input type="text" name="walkin_rate" value="<?php echo $result[0]->walkin_rate;?>" readonly="" class="form-control" placeholder="Enter Walkin Rate">
+                        <input type="text" name="walkin_rate" value="<?php echo ROUND($result[0]->walkin_rate,2);?>" readonly="" class="form-control" placeholder="Enter Walkin Rate">
                     <?php
                       } 
                     ?>
@@ -385,11 +385,11 @@
                       <?php
                         if ($this->userhelper->current('role_id') == 1) { 
                       ?>
-                          <input type="text" name="flexible_rate" value="<?php echo $result[0]->flexible_rate;?>" class="form-control" placeholder="Enter Flexible Rate">
+                          <input type="text" name="flexible_rate" value="<?php echo ROUND($result[0]->flexible_rate,2);?>" class="form-control" placeholder="Enter Flexible Rate">
                       <?php
                         } else { 
                       ?>
-                          <input type="text" name="flexible_rate" value="<?php echo $result[0]->flexible_rate;?>" readonly="" class="form-control" placeholder="Enter Flexible Rate">
+                          <input type="text" name="flexible_rate" value="<?php echo ROUND($result[0]->flexible_rate,2);?>" readonly="" class="form-control" placeholder="Enter Flexible Rate">
                       <?php 
                         } 
                       ?>
@@ -485,7 +485,7 @@
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
-                        <input type="text" name="purchase_expense" value="<?php echo $result[0]->purchase_expense;?>" class="form-control" placeholder="Enter Purchase Price">
+                        <input type="text" name="purchase_expense" value="<?php echo ROUND($result[0]->purchase_expense,2);?>" class="form-control" placeholder="Enter Purchase Price">
                       </div>
                     </div>
                 <?php
@@ -559,7 +559,7 @@
                     </label>
 
                     <div class="col-md-9 col-sm-12 col-xs-12">
-                        <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo $result[0]->quantity_per_unit;?>" class="form-control" placeholder="Quantity Per">
+                        <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo ROUND($result[0]->quantity_per_unit,2);?>" class="form-control" placeholder="Quantity Per">
                     </div>
                 </div>
 

@@ -135,7 +135,7 @@
                        // $userData = $this->db->get("users")->result_array();
 					$nestedData['id'] = $srNo;
                                         $nestedData['invoice_no'] =$value->invoice_no;
-                                        $nestedData['created'] =$value->created; 
+                                        $nestedData['created'] =$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
                                         $nestedData['sales_expense'] =$value->sales_expense;
 					$data[] = $nestedData;
                                         $srNo++;

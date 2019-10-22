@@ -379,7 +379,7 @@
 																<span class="grid-report-item green"><?php echo $value['sold_quantity'];?></span>
 															</td>
 															
-															<td class="text-right"><?php echo $value['sold_quantity']* $value['price'];?></td>
+															<td class="text-right"><?php echo ROUND($value['sold_quantity']* $value['price'],2);?></td>
 															<td class=" button-column text-center">
 																<a class="btn btn-default" href="<?php echo $view;?>"> <i class="fa fa-eye"></i> View
 																</a>
@@ -448,7 +448,7 @@
 																<span class="grid-report-item green"><?php echo $value['totalQuantity'];?></span>
 															</td>
 															
-															<td class="text-right"><?php echo $value['amount'];?></td>
+															<td class="text-right"><?php echo ROUND($value['amount'],2);?></td>
 															<td class=" button-column text-center">
 																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
 																</a>

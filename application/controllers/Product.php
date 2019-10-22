@@ -247,9 +247,9 @@
 
                     $nestedData['image'] = $image;
                                         $nestedData['quantity'] = $value['quantity'];
-                                        $nestedData['cash_rate'] = $value['cash_rate'];
-                                        $nestedData['credit_rate'] = $value['credit_rate'];
-                                        $nestedData['walkin_rate'] = $value['walkin_rate'];
+                                        $nestedData['cash_rate'] = ROUND($value['cash_rate'],2);
+                                        $nestedData['credit_rate'] = ROUND($value['credit_rate'],2);
+                                        $nestedData['walkin_rate'] = ROUND($value['walkin_rate'],2);
    
                                         $nestedData['size'] = $value['size'];
                                         if ($value['unit'] == 1) {
@@ -262,7 +262,7 @@
                                             $nestedData['unit'] = 'SET';
                                         }
                                         
-                                        $nestedData['purchase_expense'] = $value['purchase_expense'];
+                    $nestedData['purchase_expense'] = ROUND($value['purchase_expense'],2);
 					$nestedData['status'] = $statusText;
                                         if ($value['status'] == 1){
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";
@@ -488,24 +488,23 @@
 
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
                       
-                        $multipleWhere = ['product_id' => $data ['result'][0]->id];
-                        $this->db->where($multipleWhere);
-                        $data['selected_categories'] = $this->db->get("product_categories")->result_array();
-                        
-                        $this->db->where('status',1);
-                        $this->db->where('is_deleted',0);
-                        $q_maincategories = $this->db->get('categories');
-                        $data['categories'] = $q_maincategories->result_array();
-                        
-              
-                        $q_subcategories = $this->db->get('sub_categories');
-                        $data['sub_categories'] = $q_subcategories->result_array();
-                     //   echo '<pre>';
-                      //  print_r($data); exit;
+            $multipleWhere = ['product_id' => $data ['result'][0]->id];
+            $this->db->where($multipleWhere);
+            $data['selected_categories'] = $this->db->get("product_categories")->result_array();
+            
+            $this->db->where('status',1);
+            $this->db->where('is_deleted',0);
+            $q_maincategories = $this->db->get('categories');
+            $data['categories'] = $q_maincategories->result_array();
+            
+
+            $q_subcategories = $this->db->get('sub_categories');
+            $data['sub_categories'] = $q_subcategories->result_array();
+
 			$this->load->view($this->view.'/form',$data);
 		}
                 
-                public function view($id)
+        public function view($id)
 		{
                     
 			$model = $this->model;
@@ -518,19 +517,19 @@
 
 			$model = $this->model;
                         
-                        $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
-                        $multipleWhere = ['product_id' => $data ['result'][0]->id];
-                        $this->db->where($multipleWhere);
-                        $data['selected_categories'] = $this->db->get("product_categories")->result_array();
-                        
-                        $this->db->where('status',1);
-                        $this->db->where('is_deleted',0);
-                        $q_maincategories = $this->db->get('categories');
-                        $data['categories'] = $q_maincategories->result_array();
-                        
-              
-                        $q_subcategories = $this->db->get('sub_categories');
-                        $data['sub_categories'] = $q_subcategories->result_array();
+            $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+            $multipleWhere = ['product_id' => $data ['result'][0]->id];
+            $this->db->where($multipleWhere);
+            $data['selected_categories'] = $this->db->get("product_categories")->result_array();
+            
+            $this->db->where('status',1);
+            $this->db->where('is_deleted',0);
+            $q_maincategories = $this->db->get('categories');
+            $data['categories'] = $q_maincategories->result_array();
+            
+  
+            $q_subcategories = $this->db->get('sub_categories');
+            $data['sub_categories'] = $q_subcategories->result_array();
 
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
 			$this->load->view($this->view.'/view',$data);

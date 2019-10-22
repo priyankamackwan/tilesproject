@@ -214,7 +214,7 @@
                                         } else {
                                             $nestedData['client_type'] = 'Flexible Rate';
                                         }
-                    $nestedData['created'] = $value->created;
+                    $nestedData['created'] = $this->$model->date_conversion($value->created,'d/m/Y H:i:s');
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 0) {
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
