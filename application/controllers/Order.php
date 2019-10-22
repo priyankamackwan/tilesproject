@@ -910,7 +910,7 @@ $html = '<html>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$ordersData[0]['lpo_no'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>
     <br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>
+<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;"></td></tr></table>
 <br><br/>
  <table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
     <br><br/>
