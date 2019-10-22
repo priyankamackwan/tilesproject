@@ -104,14 +104,17 @@
 					<div class="col-lg-3 col-xs-6">
 						<div class="small-box bg-red">
 							<div class="inner">
-								<h3><?php echo $lowdata;?></h3><p>Total Low Stock Products</p>
+								<h3><?php echo $lowdata;?></h3><p>Total Low Stock Items</p>
 							</div>
 							<div class="icon">
 								<i class="ion ion-refresh"></i>
 							</div>
-							<a class="small-box-footer" href="<?php echo base_url();?>Low_stock">More info
+							<a class="small-box-footer" onclick="submit_report()">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>	
+							<form id="product_report" method="POST" action="<?php echo base_url();?>Product_report">  
+								<input type="hidden"  name="low_stock" value="true">
+							</form>
 						</div>
 					</div>
 				</div>
@@ -195,58 +198,57 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<div class="dataTables_scroll">
-											<div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
-												<div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 704px; padding-right: 0px;">
-													<table class="table table-bordered table-hover table-striped dataTable no-footer" width="100%" role="grid" style="margin-left: 0px; width: 704px;">
-														
-													</table>
-												</div>
-											</div>
-											<div class="dataTables_scrollBody" style="position: relative; overflow: auto; width: 100%;">
-												<table class="table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
-													<thead>
-															<tr role="row">
-																<th rowspan="1" colspan="1" style="width: 81px;" class="text-center">Order #</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Order status</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Customer</th><th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 104px;">Created on</th>
-																<th class="sorting_disabled button-column text-center" text-center rowspan="1" colspan="1" style="width: 69px;">View</th>
-															</tr>
-														</thead>
-													<tbody>
-														<?php
-														if(isset($latest_orders) && $latest_orders!='' && count($latest_orders) >0){
-															foreach ($latest_orders as $key => $value) {
-																if ($value['status'] == 0) {
-											                        $status = 'Pending';
-											                    } elseif($value['status'] == 1) {
-											                        $status ='In Progress';
-											                    } else {
-											                        $status ='Completed';
-											                    }
-											                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
-														?>
-														<tr role="row" class="odd">
-															<td class="text-center"><?php echo $key+1;?></td>
-															<td class="text-center">
-																<span class="grid-report-item green"><?php echo $status;?></span>
-															</td>
-															<td><?php echo $value['company_name'];?>					
-															</td>
-															<td class="text-center"><?php echo date('d/m/Y',strtotime($value['created']));?></td>
-															<td class=" button-column text-center">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
-																</a>
-															</td>
-														</tr>
-														<?php
-															}
-														}
-														?>
-													</tbody>
-												</table>
-											</div>
-										</div>
+										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+											<thead>
+				                                <th class="text-center">Sr No.</th>
+				                                <th class="text-center">Client Name</th>
+				                                <th class="text-center">Invoice Status</th>
+				                                <th class="text-center">Delivery Status</th>
+				                                <th class="text-center">Creation Date</th>
+				                                <th class="text-center">Manage</th>
+				                            </thead>
+											<tbody>
+												<?php
+												if(isset($latest_orders) && $latest_orders!='' && count($latest_orders) >0){
+													foreach ($latest_orders as $key => $value) {
+														if ($value['status'] == 0) {
+									                        $status = 'Pending';
+									                    } elseif($value['status'] == 1) {
+									                        $status ='In Progress';
+									                    } else {
+									                        $status ='Completed';
+									                    }
+									                    // Checking Delivery Status.
+									                    if ($value['invoice_status'] == 0) {
+
+									                        $invoice_status = 'Unpaid';
+
+									                    } elseif($value['invoice_status'] == 1) {
+
+									                        $invoice_status ='Paid';
+
+									                    }
+									                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
+												?>
+												<tr role="row" class="odd">
+													<td class="text-center"><?php echo $key+1;?></td>
+													<td><?php echo $value['company_name'];?>
+													<td class="text-center">
+														<?php echo $invoice_status;?>
+													</td>
+													<td class="text-center"><?php echo $status;?></td>					
+													</td>
+													<td class="text-center"><?php echo date('d/m/Y',strtotime($value['created']));?></td>
+													<td class=" button-column text-center">
+														<a href='<?php echo $view;?>' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+													</td>
+												</tr>
+												<?php
+													}
+												}
+												?>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -259,7 +261,7 @@
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
 									Unpaid Orders
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Order'); ?>">View All Orders</a>
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" onclick="submit_form()">View All Orders</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -270,58 +272,57 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<div class="dataTables_scroll">
-											<div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
-												<div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 704px; padding-right: 0px;">
-													<table class="table table-bordered table-hover table-striped dataTable no-footer" width="100%" role="grid" style="margin-left: 0px; width: 704px;">
-														
-													</table>
-												</div>
-											</div>
-											<div class="dataTables_scrollBody" style="position: relative; overflow: auto; width: 100%;">
-												<table class=" table-responsive table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
-													<thead>
-															<tr role="row">
-																<th rowspan="1" colspan="1" style="width: 81px;" class="text-center">Order #</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Order status</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Customer</th><th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 104px;">Created on</th>
-																<th class="sorting_disabled button-column text-center" rowspan="1" colspan="1" style="width: 69px;">View</th>
-															</tr>
-														</thead>
-													<tbody>
-														<?php
-														if(isset($unpaid_l_orders) && $unpaid_l_orders!='' && count($unpaid_l_orders) >0){
-															foreach ($unpaid_l_orders as $key => $value) {
-																if ($value['status'] == 0) {
-											                        $status = 'Pending';
-											                    } elseif($value['status'] == 1) {
-											                        $status ='In Progress';
-											                    } else {
-											                        $status ='Completed';
-											                    }
-											                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
-														?>
-														<tr role="row" class="odd">
-															<td class="text-center"><?php echo $key+1;?></td>
-															<td class="text-center">
-																<span class="grid-report-item green"><?php echo $status;?></span>
-															</td>
-															<td><?php echo $value['company_name'];?>					
-															</td>
-															<td class="text-center" ><?php echo date('d/m/Y',strtotime($value['created']));?></td>
-															<td class=" button-column text-center">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
-																</a>
-															</td>
-														</tr>
-														<?php
-															}
-														}
-														?>
-													</tbody>
-												</table>
-											</div>
-										</div>
+										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+											<thead>
+				                                <th class="text-center">Sr No.</th>
+				                                <th class="text-center">Client Name</th>
+				                                <th class="text-center">Invoice Status</th>
+				                                <th class="text-center">Delivery Status</th>
+				                                <th class="text-center">Creation Date</th>
+				                                <th class="text-center">Manage</th>
+				                            </thead>
+											<tbody>
+												<?php
+												if(isset($latest_orders) && $latest_orders!='' && count($latest_orders) >0){
+													foreach ($latest_orders as $key => $value) {
+														if ($value['status'] == 0) {
+									                        $status = 'Pending';
+									                    } elseif($value['status'] == 1) {
+									                        $status ='In Progress';
+									                    } else {
+									                        $status ='Completed';
+									                    }
+									                    // Checking Delivery Status.
+									                    if ($value['invoice_status'] == 0) {
+
+									                        $invoice_status = 'Unpaid';
+
+									                    } elseif($value['invoice_status'] == 1) {
+
+									                        $invoice_status ='Paid';
+
+									                    }
+									                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
+												?>
+												<tr role="row" class="odd">
+													<td class="text-center"><?php echo $key+1;?></td>
+													<td><?php echo $value['company_name'];?>
+													<td class="text-center">
+														<?php echo $invoice_status;?>
+													</td>
+													<td class="text-center"><?php echo $status;?></td>					
+													</td>
+													<td class="text-center"><?php echo date('d/m/Y',strtotime($value['created']));?></td>
+													<td class=" button-column text-center">
+														<a href='<?php echo $view;?>' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+													</td>
+												</tr>
+												<?php
+													}
+												}
+												?>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -335,8 +336,8 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
-									Best selling product (by quantity) 
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Order'); ?>">View All Orders</a>
+									Best Selling Items (By quantity) 
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Best_selling_item'); ?>">View All Items</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -347,52 +348,32 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<div class="dataTables_scroll">
-											<div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
-												<div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 704px; padding-right: 0px;">
-													<table class="table table-bordered table-hover table-striped dataTable no-footer" width="100%" role="grid" style="margin-left: 0px; width: 704px;">
-														
-													</table>
-												</div>
-											</div>
-											<div class="dataTables_scrollBody" style="position: relative; overflow: auto; width: 100%;">
-												<table class=" table-responsive table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
-													<thead>
-															<tr role="row">
-																<th rowspan="1" class="text-center" colspan="1" style="width: 81px;">Name</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Total quantity</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Total amount (excl tax)	</th>
-
-																<th class="sorting_disabled button-column text-center" rowspan="1" colspan="1" style="width: 69px;">View</th>
-															</tr>
-														</thead>
-													<tbody>
-														<?php
-														if(isset($sold_quantity) && $sold_quantity!='' && count($sold_quantity) >0){
-															foreach ($sold_quantity as $key => $value) {
-																
-											                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
-														?>
-														<tr role="row" class="odd">
-															<td><?php echo $value['name'];?></td>
-															<td class="text-right">
-																<span class="grid-report-item green"><?php echo $value['sold_quantity'];?></span>
-															</td>
-															
-															<td class="text-right"><?php echo $value['sold_quantity']* $value['price'];?></td>
-															<td class=" button-column text-center">
-																<a class="btn btn-default" href="<?php echo $view;?>"> <i class="fa fa-eye"></i> View
-																</a>
-															</td>
-														</tr>
-														<?php
-															}
-														}
-														?>
-													</tbody>
-												</table>
-											</div>
-										</div>
+										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+											<thead>
+				                                <th class="text-center">Item Name</th>
+				                                <th class="text-center">Item Group</th>
+				                                <th class="text-center">Sold Quantity</th>
+				                                <th class="text-center">Balance Quantity</th>
+				                            </thead>
+											<tbody>
+												<?php
+												if(isset($sold_quantity) && $sold_quantity!='' && count($sold_quantity) >0){
+													foreach ($sold_quantity as $key => $value) {
+												?>
+												<tr role="row" class="odd">
+													<td><?php echo $value['name'].' ('.$value['design_no'].')';?>
+													</td>
+													<td ><?php echo $value['cate_name'];?></td>					
+													</td>
+													<td class="text-right"><?php echo $value['totalQuantity'];?></td>
+													<td class="text-right		"><?php echo $value['quantity']-$value['totalQuantity'];?></td>
+												</tr>
+												<?php
+													}
+												}
+												?>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -404,8 +385,8 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
-									Best selling product (by quantity) 
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Order'); ?>">View All Orders</a>
+									Best seller (By Amount) 
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Best_seller'); ?>">View All Sellers</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -416,52 +397,30 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<div class="dataTables_scroll">
-											<div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
-												<div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 704px; padding-right: 0px;">
-													<table class="table table-bordered table-hover table-striped dataTable no-footer" width="100%" role="grid" style="margin-left: 0px; width: 704px;">
-														
-													</table>
-												</div>
-											</div>
-											<div class="dataTables_scrollBody" style="position: relative; overflow: auto; width: 100%;">
-												<table class=" table-responsive table table-bordered table-hover table-striped dataTable no-footer" width="100%" id="orders-grid" role="grid" aria-describedby="orders-grid_info" style="width: 100%;">
-													<thead>
-															<tr role="row">
-																<th rowspan="1" class="text-center" colspan="1" style="width: 81px;">Name</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 103px;">Total quantity</th>
-																<th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 261px;">Total amount (excl tax)	</th>
-
-																<th class="sorting_disabled button-column text-center" rowspan="1" colspan="1" style="width: 69px;">View</th>
-															</tr>
-														</thead>
-													<tbody>
-														<?php
-														if(isset($sold_amount) && $sold_amount!='' && count($sold_amount) >0){
-															foreach ($sold_amount as $key => $value) {
-																
-											                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
-														?>
-														<tr role="row" class="odd">
-															<td><?php echo $value['name'];?></td>
-															<td class="text-right">
-																<span class="grid-report-item green"><?php echo $value['totalQuantity'];?></span>
-															</td>
-															
-															<td class="text-right"><?php echo $value['amount'];?></td>
-															<td class=" button-column text-center">
-																<a class="btn btn-default" href="<?php echo $view;?>"><i class="fa fa-eye"></i> View
-																</a>
-															</td>
-														</tr>
-														<?php
-															}
-														}
-														?>
-													</tbody>
-												</table>
-											</div>
-										</div>
+										<table id="example1" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+											<thead>
+				                                <th class="text-center">Company Name</th>
+				                                <th class="text-center">Total Order Amount</th>
+				                                <th class="text-center">Manage</th>
+				                            </thead>
+											<tbody>
+												<?php
+												if(isset($sold_amount) && $sold_amount!='' && count($sold_amount) >0){
+													foreach ($sold_amount as $key => $value) {
+														 $view = base_url('order/view_all_order/'.$this->utility->encode($value['user_id']));
+												?>
+												<tr role="row" class="odd">
+													<td><?php echo $value['company_name'];?>
+													</td>
+													<td ><?php echo $value['totalValue'];?></td>	
+													<td class="text-right"><a href="<?php echo $view;?>" class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a></td>
+												</tr>
+												<?php
+													}
+												}
+												?>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -534,7 +493,7 @@ var footerLine1 =[];
             
             options: {
                 legend: {
-                    display: true,
+                    display: false,
 		            position: "bottom",
 		            labels: {
 		                fontColor: "#333",
@@ -802,4 +761,25 @@ var footerLine1 =[];
             function submit_form(){
             	$("#testForm").submit();
             }
+            // low stock submit
+            function submit_report(){
+            	$("#product_report").submit();
+            }
+            
         </script>
+<script type="text/javascript">
+	// Add for data tables
+	$('#datatables').dataTable({
+		"ordering": false,
+		"bPaginate": false,
+		"lengthChange": false,
+		"info": false
+	} );
+$('#example1').dataTable({
+		"ordering": false,
+		"bPaginate": false,
+		"lengthChange": false,
+		"info": false,
+		"searching": false
+	} );
+</script>        

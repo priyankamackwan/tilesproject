@@ -543,6 +543,14 @@
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
+        // Fro show all orders
+        public function view_all_order($id) {
+                    
+            $model = $this->model;
+            $id = $this->utility->decode($id);
+            $data ['result'] =  $this->orders_model->view_all_order($id);
+            $this->load->view($this->view.'/view_all_order',$data);
+        }
                 
                 
             public function downloadinvoice($id) {

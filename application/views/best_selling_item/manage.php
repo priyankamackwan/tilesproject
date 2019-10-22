@@ -1,18 +1,7 @@
 <?php
   $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
-  //For lowstock condition set default value
-  $Low_stock='false';
-   
-  if(isset($_REQUEST['low_stock']) && $_REQUEST['low_stock']!='' && $_REQUEST['low_stock']=="true"){
-      $Low_stock='true';
-  }
 ?>
-<style type="text/css">
-  .toggle {
-    float: right;
-  }
-</style>
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
@@ -97,32 +86,6 @@
                                 <div class="form-group">
                                     <div class="row">
 
-                                        <!-- Products Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Items:</label>
-                                        </div>
-
-                                        <!-- Products Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
-                                                <option value="" selected >All</option>
-                                                <?php
-                                                    if(!empty($activeProducts) && count($activeProducts) > 0 ){
-                                                    
-                                                        foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
-                                                ?>
-                                                            <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
-                                                <?php
-                                                        }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Product Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-
                                         <!-- Invoice Status Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Items Group:</label>
@@ -168,20 +131,12 @@
                           </div>
                       </div>
                   </div>
+
                   <div class="box-body table-responsive">
-                    <!-- Add toggel swtich for low stock product -->
-
-                    <input id="toggle-demo" value="" type="checkbox" data-toggle="toggle" class="pull-right">
-
-
-                      <input type="hidden" name="low_stock" value="<?php echo $Low_stock;?>" id="low_stock">
-                      <h4 class="pull-right">Low Stock &nbsp;&nbsp;</h4>
-                    
-                    <!-- End low stock -->
                       <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                           <thead>
                             <th width="5%" class="text-center">Sr No.</th>
-                            <th class="text-center">Product Name</th>
+                            <th class="text-center">Item Name</th>
                             <th class="text-center">Design No.</th>
                             <th class="text-center">Size</th>
                             <th class="text-center">Category</th>
@@ -206,14 +161,6 @@
 </div>
 <?php
 	$this->load->view('include/footer');
-  if(isset($_REQUEST['low_stock']) && $_REQUEST['low_stock']!='' && $_REQUEST['low_stock']=="true"){
-      $Low_stock='true';
-      ?>
-      <script type="text/javascript">
-        $('#toggle-demo').bootstrapToggle('on');
-      </script>
-      <?php
-  }
 ?>
 
 <script>
@@ -354,7 +301,6 @@
 				"data":function(data) {
                     data.cat_id = $('#cat_id').val();
                     data.productid = $('#productsList').val();
-                    data.low_stock=$("#low_stock").val();
                 },
 				},
 			"columns": [
@@ -370,17 +316,17 @@
         { "data": "amount"},
 			],
 			"columnDefs": [ {
-				"targets": [1,4,9],
+				"targets": [],
 				"orderable": false
 			},
       {
           "className": 'text-right',
-          "targets":   [5,6,7,8,9],
+          "targets":   [],
           "orderable": false
       },
       {
           "className": 'text-center',
-          "targets":   [0,2,3],
+          "targets":   [0,1,,2,3,4,5,6,7,8,9],
           "orderable": false
       }],
 			"rowCallback": function( row, data, index ) {
@@ -410,14 +356,10 @@
             $(document).on("change","#cat_id",function(evt){
                 dataTable1.api().draw();
             });
-//Start Low stock filter
-$('#toggle-demo').change(function() {
-     var toggledemo= $('#toggle-demo').is(':checked');
-     $("#low_stock").val(toggledemo);
-     dataTable1.api().draw();
-    })
-    //End Low stock filter
+
+
             
 	});
-       //Toggel button 
+        
+
 </script>

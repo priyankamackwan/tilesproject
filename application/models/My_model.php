@@ -95,8 +95,17 @@
             $query = $this->db->get()->num_rows();
 			return $query;
 		}
-		public function product_report_table_tecords($condition)
+		public function product_report_table_tecords($condition,$low_stock)
 		{
+			// For low stock yes 
+			if(isset($low_stock) && $low_stock!='' && $low_stock=='true'){
+			//Low stock constant 25 %	
+	          $stocklimit=Stock_Reminder;
+	          $this->db->select('ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity) as s_quantity');
+	          $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
+	          $this->db->order_by('p.name asc');
+	        } 
+	        // End for low stock conidtion
 			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');

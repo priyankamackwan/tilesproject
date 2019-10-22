@@ -181,30 +181,31 @@
             $query = $this->db->get();
              return $query->result_array();
         }
+        //For best selling by product
         function selling_product($order_by){
-            $this->db->select('*');
-            $this->db->from($this->products_table);
-            $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->products_table.'.id');
-            $this->db->where($this->products_table.'.is_deleted',0);
+           $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+          $this->db->from('order_products o');
+          $this->db->join('products p','p.id=o.product_id','left');
+          $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+          $this->db->join('categories c','c.id=pc.cat_id','left');
+          $this->db->limit($limit, $start);
+          $this->db->group_by('o.product_id');
+            $this->db->order_by('p.sold_quantity',' desc');
             $this->db->limit(5);
-            $this->db->order_by($order_by,'desc');
             $allorderData = $this->db->get();
             $count = $allorderData->result_array();
-            //echo '<pre>';print_r($count);die();
             return $count;
 
         }
+        // Fro dashboard best seller by amount
         function best_seller (){
-             $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
-              $this->db->from('order_products o');
-              $this->db->join('products p','p.id=o.product_id','left');
-              $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
-              $this->db->join('categories c','c.id=pc.cat_id','left');
-              $this->db->limit($limit, $start);
-              $this->db->group_by('o.product_id');
-             $this->db->limit(5);
-             $this->db->order_by('o.price','desc');
-            //$this->db->where($this->users_table.'.status',1);
+            $this->db->select('o.id,o.user_id,SUM(o.total_price) as totalValue,SUM(o.sales_expense) as total_sales_expense,o.invoice_no,u.company_name,u.contact_person_name,o.created');
+            $this->db->from('orders as o');
+            $this->db->join('users as u', 'u.id = o.user_id','left');
+            $this->db->where('o.is_deleted', 0);      
+            $this->db->limit(5);
+            $this->db->order_by('o.total_price','desc');
+            $this->db->group_by('o.user_id');
             $allorderData = $this->db->get();
             $count = $allorderData->result_array();
             return $count;
