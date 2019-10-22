@@ -183,7 +183,7 @@
                 </label>
                 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->cash_rate;?>
+                  <?php echo ROUND($result[0]->cash_rate,2);?>
                 </div>
               </div>
 
@@ -193,7 +193,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->credit_rate;?>
+                  <?php echo ROUND($result[0]->credit_rate,2);?>
                 </div>
               </div>
 
@@ -203,7 +203,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->walkin_rate;?>
+                  <?php echo ROUND($result[0]->walkin_rate,2);?>
                 </div>
               </div>
 
@@ -213,7 +213,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->purchase_expense;?>
+                  <?php echo ROUND($result[0]->purchase_expense,2);?>
                 </div>
               </div>
 
@@ -263,7 +263,7 @@
                     </label>
 
                     <div class="col-md-9 col-sm-12 col-xs-12">
-                      <?php echo $result[0]->purchase_expense;?>
+                      <?php echo ROUND($result[0]->purchase_expense,2);?>
                     </div>
                   </div>
               <?php 

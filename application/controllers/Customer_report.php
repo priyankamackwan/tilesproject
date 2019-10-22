@@ -194,7 +194,7 @@
           $nestedData['total_price'] =$value['total_price'];
           $nestedData['location'] =$value['location'];
           $nestedData['invoice_no'] =$value['invoice_no'];
-          $nestedData['created'] =$value['created'];
+          $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
 
           if ($value['invoice_status'] == 0) {
               $nestedData['invoice_status'] = 'Unpaid';

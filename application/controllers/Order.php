@@ -251,6 +251,7 @@
                 // Set serial number by 1.
                 $srNo = $startNo + 1;
                 
+                    $model=$this->model;
                 foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
                     //print_r($SingleOrderData);
                     
@@ -322,7 +323,8 @@
                     }
 
                     // Created date for sales order.
-                    $tabledata['created'] = date('d/m/Y',strtotime($SingleOrderData['created']));
+                    $tabledata['created'] =$this->$model->date_conversion($SingleOrderData['created'],'d/m/Y');
+                    //$tabledata['created']=date('d/m/Y',strtotime($SingleOrderData['created']));
 
                     // Manage buttons.
                     $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
@@ -557,7 +559,7 @@
                        // print_r($ordersData); exit;
                         $do_no = $ordersData[0]['do_no'];
                         $createdData = explode(' ',$ordersData[0]['created']);
-                        $finalDate = date("d-M-Y", strtotime($createdData[0]));
+                        $finalDate = $this->$model->date_conversion($createdData[0],'d-M-Y');
                         
                          $multipleWhere = ['id' =>$ordersData[0]['user_id']];
                         $this->db->where($multipleWhere);
@@ -633,20 +635,22 @@ $html = '<html>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$ordersData[0]['lpo_no'].'</td> </tr></table>
 <br><br/>
+<table style="width:100%;"><tr><td style="width:60%;"></td><td style="width:40%; text-align:right;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td> </tr></table>
+<br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
-    $html .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
+    $html .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: right">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: right">'.round($finalOrderData[$p]['rate'],2).'</td><td style="text-align: right">'.round($finalOrderData[$p]['amount'],2).'</td></tr>';
                                 
                           }
-                          $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
+                          $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td>'.$vat.'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
-<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
+<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
                                   <table style="width:100%;" border="1"><tr><th style="text-align:center">Terms and Conditions</th></tr>
                                   <tr><td>1) Goods subject to lien of seller till full payment is made by buyer.</td></tr>
@@ -705,7 +709,8 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                        // print_r($ordersData); exit;
                         $do_no = $ordersData[0]['do_no'];
                         $createdData = explode(' ',$ordersData[0]['created']);
-                        $finalDate = date("d-M-Y", strtotime($createdData[0]));
+                        //$finalDate = date("d-M-Y", strtotime($createdData[0]));
+                        $finalDate = $this->$model->date_conversion($createdData[0],'d-M-Y');
                         
                          $multipleWhere = ['id' =>$ordersData[0]['user_id']];
                         $this->db->where($multipleWhere);
@@ -778,8 +783,8 @@ $html = '<html>
 <table style="width:100%;"><tr><td style="width:40%;">From</td><td style="width:60%; text-align:center;">To</td> </tr></table>
 <table style="width:100%;"><tr><td style="width:40%;">Buyer : '.$userData[0]['company_name'].'</td><td style="width:60%; text-align:right;">Seller : PNP BUILDING MATERIAL TRADING LLC </td></tr></table>
 <table style="width:100%;"><tr><td style="width:40%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:60%; text-align:right;">Tel. : +97143531040 / +971558532631</td> </tr></table>
-<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$ordersData[0]['lpo_no'].'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br>
-    RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
+<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$ordersData[0]['lpo_no'].'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,</td></tr></table>
+<table style="width:100%;"><tr><td style="width:40%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:60%; text-align:right;">RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
     <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
@@ -788,14 +793,14 @@ $html = '<html>
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
-    $html .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
+    $html .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: right">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: right">'.round($finalOrderData[$p]['rate'],2).'</td><td style="text-align: right">'.round($finalOrderData[$p]['amount'],2).'</td></tr>';
                                 
                           }
-                          $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
+                          $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td>'.$vat.'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
-<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
+<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
                                   <table style="width:100%;" border="1"><tr><th style="text-align:center">Terms and Conditions</th></tr>
                                   <tr><td>1) Goods subject to lien of seller till full payment is made by buyer.</td></tr>
@@ -851,7 +856,8 @@ $pdf->Output($ordersData[0]['lpo_no'], 'I');
                        // print_r($ordersData); exit;
                         $do_no = $ordersData[0]['do_no'];
                         $createdData = explode(' ',$ordersData[0]['created']);
-                        $finalDate = date("d-M-Y", strtotime($createdData[0]));
+                        //$finalDate = date("d-M-Y", strtotime($createdData[0]));
+                        $finalDate = $this->$model->date_conversion($createdData[0],'d-M-Y');
                         
                          $multipleWhere = ['id' =>$ordersData[0]['user_id']];
                         $this->db->where($multipleWhere);
@@ -904,6 +910,8 @@ $html = '<html>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$ordersData[0]['lpo_no'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>
     <br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;"></td></tr></table>
+<br><br/>
  <table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
     <br><br/>
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table>     

@@ -58,7 +58,7 @@ class Dashboard extends CI_Controller
 	    			}
 	  				
 	  				$orderStatistics[$i]['value']=$rr;
-	  				$orderStatistics[$i]['amount']=round($count_price->invoiceAmount);
+	  				$orderStatistics[$i]['amount']=round($count_price->invoiceAmount,2);
 	  				
 	  				$i++;
 				}
@@ -81,7 +81,7 @@ class Dashboard extends CI_Controller
 	    			}
   				
   					$orderStatistics[$i]['value']=$rr;
-  					$orderStatistics[$i]['amount']=round($count_price->invoiceAmount);
+  					$orderStatistics[$i]['amount']=round($count_price->invoiceAmount,2);
   					$i++;
 					}
 				}
