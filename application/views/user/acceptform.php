@@ -3,6 +3,7 @@
 	$this->load->view('include/header');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
+//  print_r($user_data);die();
 ?>
 
 <!-- page content -->
@@ -100,12 +101,79 @@
             <form action="<?php echo base_url().$this->controller.'/accept';?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
               <input type="hidden" id="id" name="id" value="<?php echo $id;?>">
+              <!-- Start Of new filed   -->
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="company_name">
+                  Company Name<font color="red"><span class="required" aria-required="true">*</span></font> :
+                </label>
 
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="company_name" <?php if(isset($user_data->company_name) && $user_data->company_name!=''){?> value="<?php echo $user_data->company_name;?>" <?php } ?> class="form-control col-md-7 col-xs-12" placeholder="Enter Your Company Group Name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="contact_person_name  ">
+                  Contact Person Name<font color="red"><span class="required" aria-required="true">*</span></font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="contact_person_name" <?php if(isset($user_data->contact_person_name  ) && $user_data->contact_person_name  !=''){?> value="<?php echo $user_data->contact_person_name  ;?>" <?php } ?> class="form-control col-md-7 col-xs-12" placeholder="Enter Your Contact Person Name">
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="email">
+                  Email<font color="red"><span class="required" aria-required="true">*</span></font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="email" <?php if(isset($user_data->email) && $user_data->email !=''){?> value="<?php echo $user_data->email;?>" <?php } ?> class="form-control col-md-7 col-xs-12" placeholder="Enter Your Email Address">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="phone_no">
+                  Phone<font color="red"><span class="required" aria-required="true">*</span></font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="phone_no" <?php if(isset($user_data->phone_no  ) && $user_data->phone_no !=''){?> value="<?php echo $user_data->phone_no;?>" <?php } ?> class="form-control col-md-7 col-xs-12" placeholder="Enter Your Phone No">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="vat_number">
+                  Vat Number <font color="red"><span class="required" aria-required="true">*</span></font> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <input type="text" name="vat_number" <?php if(isset($user_data->vat_number) && $user_data->vat_number !=''){?> value="<?php echo $user_data->vat_number;?>" <?php } ?> class="form-control col-md-7 col-xs-12" placeholder="Enter Your Vat No">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="company_address">
+                  Company Address<!-- <font color="red"><span class="required" aria-required="true">*</span></font> --> :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <textarea type="text" name="company_address"  class="form-control col-md-7 col-xs-12" ><?php if(isset($user_data->company_address) && $user_data->company_address!=''){ echo $user_data->company_address; } ?></textarea>
+                </div>
+              </div>
+              <!-- End Of new filed   -->
               <div class="form-group">
                 <label for="access" class="col-sm-3 control-label">Client Type<font color="red">*</font> :</label>
                 <div class="col-sm-9">
                   <select class="form-control select2"  name='client_type' id="client_type" style="width: 100%;">
+                    <option value="">All</option>
+                    <option value="1" <?php  if ($user_data->client_type == 1) { echo 'selected'; }?>>Cash</option>
+                    <option value="2" <?php  if ($user_data->client_type == 2) { echo 'selected'; }?>>Credit</option>
+                    <option value="3" <?php  if ($user_data->client_type == 3) { echo 'selected'; }?>>Walkin</option>
                     <?php 
+                    if ($user_data->client_type == 4 && $this->userhelper->current('role_id') == 1)  { 
+                    ?>
+                    <option value="4"selected="">Flexible Rate</option>
+                  <?php } ?>
+
+                    <?php 
+                    /*
                       if ($client_type == 1) { 
                     ?>
                         <option value="1" selected="">Cash</option>
@@ -145,7 +213,7 @@
                         <option value="4">Flexible Rate</option>
                     <?php 
                       } 
-                    ?>
+                    */ ?>
                   </select>
                   <span class="text-danger" id="clientType"></span>
                 </div>
@@ -166,7 +234,68 @@
 	$this->load->view('include/footer');
 ?>
 <script>
-$(document).on('click','#submit1',function(){
+//New Validation
+$(document).ready(function (){                  
+
+jQuery.validator.addMethod("noSpace", function(value, element){
+  return value == '' || value.trim().length != 0;  
+}, "No space please and don't leave it empty");
+
+    var id = $('input[name = "id"]').val();
+    var action = $('input[name = "action"]').val();
+    $('#demo-form2').validate({
+      errorClass:"text-danger",
+      rules:{
+              company_name:{
+              required: true,
+            },
+            contact_person_name  :{
+              required: true,
+            },
+            email :{
+              required : true,
+              email: true
+            },
+            phone_no:{
+              required : true,
+              number: true,
+             // minlength: 7,
+             // maxlength: 13,
+            },
+            vat_number:{
+              required : true,
+            },
+            client_type :{
+              required : true,
+            }
+        },
+        messages: {
+          company_name: {
+            required: "Please Enter Company Name",
+          },
+          contact_person_name: {
+            required: "Please Enter Contact Person Name",
+          },
+          email: {
+            required: "Please Enter Email Address",
+          },
+          phone_no:{
+            required: "Please Enter Phone Number",
+          },
+          vat_number:{
+            required: "Please Enter Vat Number",
+          },
+          client_type:{
+            required: "Please Select Client Type",
+          }
+        },
+        submitHandler: function(form){
+          form.submit();
+        }
+  });
+});
+// OLd Validation
+/*$(document).on('click','#submit1',function(){
   
   var selectedoption = $("#client_type option:selected").val();
   if(selectedoption){
@@ -177,6 +306,6 @@ $(document).on('click','#submit1',function(){
     $('#clientType').text('Please select one Client type.').show();
     return false;
   }
-});
+});*/
   
 </script>
