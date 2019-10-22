@@ -1,6 +1,6 @@
 <?php
-  $this->load->view('include/leftsidemenu');
   $this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 ?>
 <style type="text/css">
 .loader {
