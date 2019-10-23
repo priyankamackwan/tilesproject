@@ -110,12 +110,12 @@
                                         </div>
 
 
-                                        <!-- Unit Filter -->
+                                        <!-- Customer Filter --
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Customer Name:</label>
                                         </div>
 
-                                        <!-- Unit Filter Dropdown -->
+                                        <-- Customer Filter Dropdown --
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select class="form-control select2" name="contact_person_name" style="width:100%;" id="contact_person_name">
                                                 <option value="" selected >All</option>
@@ -135,6 +135,8 @@
                                                 ?>
                                             </select>
                                         </div>
+                                        ----------->
+
                                         <!-- Date Range Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Date:</label>
@@ -148,9 +150,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                      <!-- Status Filter -->
+
                                         <!-- Status Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                           <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
@@ -212,7 +212,7 @@
                             <thead>
                                 <th width="5%" class="text-center">Sr No.</th>
                                 <th class="text-center">Company Name</th>
-                                <th class="text-center">Customer Name</th>
+                                <th class="text-center">Contact Person Name</th>
                                 <th class="text-center">Total Sales</th>
                                 <th class="text-center">Location</th>
                                 <th class="text-center">Invoice No</th>
@@ -395,11 +395,11 @@
 
                   var r2 = Addrow(2, [{ key: 'A', value: 'Company Name: ' }, { key: 'B', value: $("#company_name option:selected").html() }]);
 
-                  var r3 = Addrow(3, [{ key: 'A', value: 'Customer Name: ' },{ key: 'B', value: $("#contact_person_name option:selected").html() },]);
+                  //var r3 = Addrow(3, [{ key: 'A', value: 'Customer Name: ' },{ key: 'B', value: $("#contact_person_name option:selected").html() },]);
 
-                  var r4 = Addrow(4, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
+                  var r3 = Addrow(3, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
                   
-                  var r5 = Addrow(5, [{ key: 'A', value: 'Date' },{ key: 'B', value: $("#salesOrderDates").val() }]);
+                  var r4 = Addrow(4, [{ key: 'A', value: 'Date' },{ key: 'B', value: $("#salesOrderDates").val() }]);
 
 
                   //var r6 = Addrow(6, [{ key: 'A', value: 'To Date' },{ key: 'B', value: $("#datepicker_to").val() }]);

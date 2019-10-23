@@ -180,7 +180,7 @@
 
                                         <!-- Client Filter  -->
                                         <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Customer:</label>
+                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
                                         </div>
 
                                         <!-- Client Filter Dropdown -->
@@ -197,7 +197,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No User Available --</option>
+                                                    <option value="">-- No Company Available --</option>
                                                 <?php
                                                     }
                                                 ?>
@@ -300,7 +300,7 @@
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
                                 <th class="text-center">Sr No.</th>
-                                <th class="text-center">Client Name</th>
+                                <th class="text-center">Company Name</th>
                                 <th class="text-center">LPO No</th>
                                 <th class="text-center">Delivery No</th>
                                 <th class="text-center">Invoice No</th>
