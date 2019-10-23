@@ -748,30 +748,49 @@ You can change this password from mobile application after you are logged in onc
                     
                     $model = $this->model;
                     $data = $_POST;
-                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price']))) && isset($data['placed_by']) && (!empty($data['placed_by']))) {
+                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
 
-                        $customer_id=trim($data['customer_id']);
-                        $placed_by=trim($data['placed_by']);
-                        $placed_by=strtolower($placed_by);
-                        $customer_lpo=trim($data['customer_lpo']);
+
+                        if(!empty($data['placed_by']) && isset($data['placed_by'])) // placed by is set or not
+                        {
+                            $placed_by=trim($data['placed_by']);
+                            $placed_by=strtolower($placed_by);
+                        }
+                        else
+                        {
+                            $placed_by="customer";
+                        }
+
+
+                        if(!empty($data['customer_id']) && isset($data['customer_id'])) // customer id is set or not
+                        {
+                            $customer_id=trim($data['customer_id']);
+                        }
+                        else
+                        {
+                            $customer_id="0";
+                        }
+
+
+                        if(!empty($data['customer_lpo']) && isset($data['customer_lpo'])) // customer lpo is set or not
+                        {
+                            $customer_lpo=trim($data['customer_lpo']);
+                        }
+                        else
+                        {
+                            $customer_lpo="";
+                        }
+
                        
-                       $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
+                    $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
 
-                       if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
-                       {
-                            $response['status'] = 'failure';
-                            $response['message'] = 'Invalid customer id or customer is not active.';
-                            echo json_encode($response);
-                            exit();
-                       }
-
-                       /*if($placed_by=="customer" && $data['customer_id']!=$this->user_id) // if order is placed by customer then need to check order is placed by that customer only 
-                       {
-                            $response['status'] = 'failure';
-                            $response['message'] = 'Invalid customer id.';
-                            echo json_encode($response);
-                            exit();
-                       }*/
+                   if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
+                   {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Invalid customer id or customer is not active.';
+                        echo json_encode($response);
+                        exit();
+                   }
                       
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
@@ -785,10 +804,10 @@ You can change this password from mobile application after you are logged in onc
 
                          $newOrder = end($orderLast)['id'] + 1;
                          if (date('m') <= 3) {//Upto June 2014-2015
-    $financial_year = (date('y')-1) . '-' . date('y');
-} else {//After June 2015-2016
-    $financial_year = date('y') . '-' . (date('y') + 1);
-}
+                            $financial_year = (date('y')-1) . '-' . date('y');
+                        } else {//After June 2015-2016
+                            $financial_year = date('y') . '-' . (date('y') + 1);
+                        }
 
                          $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
                          $do = 'DO/'.$newOrder.'/'.$financial_year;
@@ -1165,7 +1184,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                 
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide product id, tax , total price and customer id ';
+                        $response['message'] = 'Please provide product id, tax and total price ';
                     }
                      $companyName = $userData[0]['company_name'];
                    
