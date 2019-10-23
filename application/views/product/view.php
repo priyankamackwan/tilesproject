@@ -132,6 +132,11 @@
             </div> -->
         <!-- /page content -->
 <!-- -------------------------------new design------------------------------- -->
+<style type="text/css">
+    .select2{
+      width: 100% !important;
+    }
+  </style>
 <!-- Main Container start-->
 <div class="content-wrapper">
 
