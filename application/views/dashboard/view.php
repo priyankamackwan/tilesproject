@@ -62,10 +62,8 @@
 							<div class="inner">
 								<h3><?php if(isset($tatal_orders)){echo $tatal_orders;} ?></h3><p>Total Orders</p>
 							</div>
-							<div class="icon">
-								<i class="ion ion-bag"></i>
-							</div>
-							<a class="small-box-footer" href="<?php echo base_url();?>Order">More info
+							<div class="icon"><i class="ion ion-bag"></i></div>
+							<a class="small-box-footer" target="_blank" href="<?php echo base_url();?>Order">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
 						</div>
@@ -82,8 +80,8 @@
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
 							<!-- Pass data for unpaid order status -->
-							<form id="testForm" method="POST" action="<?php echo base_url();?>Order">  
-								<input type="hidden"  name="dash_status" value="unpaid">
+							<form id="testForm" method="POST" action="<?php echo base_url();?>Order">
+								<input type="hidden" name="dash_status" value="unpaid">
 							</form>
 							<!-- End form -->
 						</div>
@@ -96,7 +94,7 @@
 							<div class="icon">
 								<i class="ion ion-person-add"></i>
 							</div>
-							<a class="small-box-footer" href="<?php echo base_url();?>User">More info
+							<a class="small-box-footer" target="_blank" href="<?php echo base_url();?>User">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
 						</div>
@@ -112,8 +110,8 @@
 							<a class="small-box-footer" onclick="submit_report()">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>	
-							<form id="product_report" method="POST" action="<?php echo base_url();?>Product_report">  
-								<input type="hidden"  name="low_stock" value="true">
+							<form id="product_report" method="POST" action="<?php echo base_url();?>Product_report">
+								<input type="hidden" name="low_stock" value="true">
 							</form>
 						</div>
 					</div>
@@ -187,7 +185,7 @@
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
 									Latest Orders
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Order'); ?>">View All Orders</a>
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" target="_blank" href="<?php echo base_url('Order'); ?>">View All Orders</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -198,10 +196,10 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+										<table id="datatables" class="table main-table table-bordered table-hover table-striped" width="100%">
 											<thead>
 				                                <th class="text-center">Sr No.</th>
-				                                <th class="text-center">Client Name</th>
+				                                <th class="text-center">Company Name</th>
 				                                <th class="text-center">Invoice Status</th>
 				                                <th class="text-center">Delivery Status</th>
 				                                <th class="text-center">Creation Date</th>
@@ -238,9 +236,9 @@
 													</td>
 													<td class="text-center"><?php echo $status;?></td>					
 													</td>
-													<td class="text-center"><?php echo date('d/m/Y',strtotime($value['created']));?></td>
+													<td class="text-center"><?php echo date('d/m/Y H:i:s',strtotime($value['created']));?></td>
 													<td class=" button-column text-center">
-														<a href='<?php echo $view;?>' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+														<a href='<?php echo $view;?>' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
 												<?php
@@ -261,7 +259,7 @@
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
 									Unpaid Orders
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" onclick="submit_form()">View All Orders</a>
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" onclick="submit_form()">View All Unpaid Orders</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -272,10 +270,10 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+										<table id="datatables1" class="table main-table table-bordered table-hover table-striped" width="100%">
 											<thead>
 				                                <th class="text-center">Sr No.</th>
-				                                <th class="text-center">Client Name</th>
+				                                <th class="text-center">Company Name</th>
 				                                <th class="text-center">Invoice Status</th>
 				                                <th class="text-center">Delivery Status</th>
 				                                <th class="text-center">Creation Date</th>
@@ -312,9 +310,9 @@
 													</td>
 													<td class="text-center"><?php echo $status;?></td>					
 													</td>
-													<td class="text-center"><?php echo date('d/m/Y',strtotime($value['created']));?></td>
+													<td class="text-center"><?php echo date('d/m/Y H:i:s',strtotime($value['created']));?></td>
 													<td class=" button-column text-center">
-														<a href='<?php echo $view;?>' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+														<a href='<?php echo $view;?>' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
 												<?php
@@ -337,7 +335,7 @@
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
 									Best Selling Items (By quantity) 
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Best_selling_item'); ?>">View All Items</a>
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" target="_blank" href="<?php echo base_url('Best_selling_item'); ?>">View All Items</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -349,7 +347,7 @@
 								<div class="row">
 									<div class="col-md-12">
 
-										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+										<table id="datatables2" class="table main-table table-bordered table-hover table-striped" width="100%">
 											<thead>
 				                                <th class="text-center">Item Name</th>
 				                                <th class="text-center">Item Group</th>
@@ -386,8 +384,8 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
-									Best seller (By Amount) 
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url('Best_seller'); ?>">View All Sellers</a>
+									Best Seller (By amount) 
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" target="_blank" href="<?php echo base_url('Best_seller'); ?>">View All Sellers</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -398,7 +396,7 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
-										<table id="example1" class="table main-table  table-bordered table-hover  table-striped " width="100%">
+										<table id="example1" class="table main-table table-bordered table-hover table-striped" width="100%">
 											<thead>
 				                                <th class="text-center">Company Name</th>
 				                                <th class="text-center">Total Order Amount</th>
@@ -798,6 +796,18 @@ var footerLine1 =[];
 		"lengthChange": false,
 		"info": false,
 		"searching": false
+	} );
+	$('#datatables1').dataTable({
+		"ordering": false,
+		"bPaginate": false,
+		"lengthChange": false,
+		"info": false
+	} );
+	$('#datatables2').dataTable({
+		"ordering": false,
+		"bPaginate": false,
+		"lengthChange": false,
+		"info": false
 	} );
 $('#example1').dataTable({
 		"ordering": false,
