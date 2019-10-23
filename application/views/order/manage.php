@@ -124,18 +124,18 @@
                     </div>
 
                     <div class="col-md-3">
+                        <h4 class="text-center">Total Invoice Amount</h4>
+                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                    </div>
+
+                    <div class="col-md-3">
                         <h4 class="text-center">Total Paid Amount</h4>
-                        <p class="text-center"><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
                     </div>
 
                     <div class="col-md-3">
                         <h4 class="text-center">Total Unpaid Amount</h4>
-                        <p class="text-center"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
-                    </div>
-
-                    <div class="col-md-3">
-                        <h4 class="text-center">Total Invoice Amount</h4>
-                        <p class="text-center"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
                     </div>
 
                 </div>
