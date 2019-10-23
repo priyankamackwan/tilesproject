@@ -2,9 +2,12 @@
     $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
     // Save Status from dashboard page unpaid orders
-    $dash_status='';
+    $dash_status=$client_name='';
     if(isset($_REQUEST['dash_status']) && $_REQUEST['dash_status']!='' && $_REQUEST['dash_status']=="unpaid"){
         $dash_status='selected';
+    }
+    if(isset($_REQUEST['client_name']) && $_REQUEST['client_name']!='' ){
+        $client_name=$_REQUEST['client_name'];
     }
 ?>
 <!-- page content -->
@@ -126,7 +129,7 @@
                                                     
                                                         foreach ($activeUsers as $activeUsersKey => $activeUsersValue) {
                                                 ?>
-                                                            <option value="<?php echo $activeUsersValue['company_name']; ?>"><?php echo $activeUsersValue['company_name']; ?></option>
+                                                            <option value="<?php echo $activeUsersValue['company_name']; ?>" <?php if(isset($client_name) && $client_name!='' && $client_name==$activeUsersValue['company_name']){ echo 'selected';}?>><?php echo $activeUsersValue['company_name']; ?></option>
                                                 <?php
                                                         }
                                                     }else{
