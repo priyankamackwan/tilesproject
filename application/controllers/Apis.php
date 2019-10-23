@@ -765,13 +765,13 @@ You can change this password from mobile application after you are logged in onc
                             exit();
                        }
 
-                       if($placed_by=="customer" && $data['customer_id']!=$this->user_id) // if order is placed by customer then need to check order is placed by that customer only 
+                       /*if($placed_by=="customer" && $data['customer_id']!=$this->user_id) // if order is placed by customer then need to check order is placed by that customer only 
                        {
                             $response['status'] = 'failure';
                             $response['message'] = 'Invalid customer id.';
                             echo json_encode($response);
                             exit();
-                       }
+                       }*/
                       
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
