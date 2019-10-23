@@ -34,9 +34,7 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-.small-box .icon {
-	    top: 0px !important;
-}
+
 /* on hover unpiad orders dashboard */
 .small-box>.small-box-footer:hover {
     cursor: pointer;
@@ -64,7 +62,9 @@
 							<div class="inner">
 								<h3><?php if(isset($tatal_orders)){echo $tatal_orders;} ?></h3><p>Total Orders</p>
 							</div>
-							<div class="icon"><i class="ion ion-bag"></i></div>
+							<div class="icon">
+								<i class="ion ion-bag"></i>
+							</div>
 							<a class="small-box-footer" href="<?php echo base_url();?>Order">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
@@ -413,8 +413,9 @@
 												<tr role="row" class="odd">
 													<td><?php echo $value['company_name'];?>
 													</td>
-													<td style="text-align:right;"><?php echo number_format($value['totalValue'],2);?></td>	
-													<td class="text-right"><a href="<?php echo $view;?>" class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a></td>
+													<td class="text-right"><?php echo number_format($value['totalValue'],2);?></td>	
+													<td class="text-center"><a onclick="submit_order<?php echo $key+1;?>()"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+													</td>
 												</tr>
 												<?php
 													}
@@ -422,6 +423,18 @@
 												?>
 											</tbody>
 										</table>
+										<?php
+										if(isset($sold_amount) && $sold_amount!='' && count($sold_amount) >0){
+											foreach ($sold_amount as $key => $value) {
+												 $view = base_url('order/view_all_order/'.$this->utility->encode($value['user_id']));
+										?>
+										<form id="order_report_<?php echo $key+1;?>" method="POST" action="<?php echo base_url();?>Order">  
+										<input type="hidden"  name="client_name" value="<?php echo $value['company_name'];?>">
+										</form>
+										<?php
+											}
+										}
+										?>
 									</div>
 								</div>
 							</div>
@@ -766,7 +779,16 @@ var footerLine1 =[];
             function submit_report(){
             	$("#product_report").submit();
             }
+            <?php
+            for ($i = 1; $i <= 5; $i++){
+            ?>
             
+            	function submit_order<?php echo $i;?>(){
+            	$("#order_report_"+<?php echo $i;?>).submit();
+            }
+           <?php  	
+            }
+            ?>
         </script>
 <script type="text/javascript">
 	// Add for data tables
@@ -774,7 +796,8 @@ var footerLine1 =[];
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
-		"info": false
+		"info": false,
+		"searching": false
 	} );
 $('#example1').dataTable({
 		"ordering": false,
