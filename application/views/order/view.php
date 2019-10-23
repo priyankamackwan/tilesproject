@@ -294,6 +294,8 @@
                 </div>
               </div>
               
+              <!-- if customer lpo no is added then display it -->
+              <?php if($customer_lpo[0]['customer_lpo']!="") {  ?>
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
@@ -304,6 +306,8 @@
                   <?php echo $customer_lpo[0]['customer_lpo'];?>
                 </div>
               </div>
+              
+            <?php } ?>
 
 
               <div class="form-group">
