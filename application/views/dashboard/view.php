@@ -34,9 +34,7 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-.small-box .icon {
-	    top: 0px !important;
-}
+
 /* on hover unpiad orders dashboard */
 .small-box>.small-box-footer:hover {
     cursor: pointer;
@@ -64,7 +62,9 @@
 							<div class="inner">
 								<h3><?php if(isset($tatal_orders)){echo $tatal_orders;} ?></h3><p>Total Orders</p>
 							</div>
-							<div class="icon"><i class="ion ion-bag"></i></div>
+							<div class="icon">
+								<i class="ion ion-bag"></i>
+							</div>
 							<a class="small-box-footer" href="<?php echo base_url();?>Order">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
