@@ -143,5 +143,16 @@
 			$newdate=date($format,strtotime($date));
 			return $newdate;
 		}
+		// balance amount and quantity
+		public function balance_quantity(){
+			$this->db->select('SUM(p.quantity-o.quantity) as totalQuantity,SUM(o.price) as amount,p.purchase_expense,p.quantity');
+			$this->db->from('order_products o');
+			$this->db->join('products p','p.id=o.product_id','left');
+			$this->db->group_by('o.product_id');
+
+			$balance_quantity=$this->db->get()->result_array(); 
+			//echo $this->db->last_query();
+			return $balance_quantity;
+		}
 	}
 ?>
