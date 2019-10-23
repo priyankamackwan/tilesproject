@@ -414,7 +414,8 @@
 													<td><?php echo $value['company_name'];?>
 													</td>
 													<td ><?php echo $value['totalValue'];?></td>	
-													<td class="text-center"><a onclick="submit_order<?php echo $key+1;?>()"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a></td>
+													<td class="text-center"><a onclick="submit_order<?php echo $key+1;?>()"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+													</td>
 												</tr>
 												<?php
 													}
