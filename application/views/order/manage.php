@@ -1,6 +1,6 @@
 <?php
-    $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+    $this->load->view('include/leftsidemenu');
     // Save Status from dashboard page unpaid orders
     $dash_status='';
     if(isset($_REQUEST['dash_status']) && $_REQUEST['dash_status']!='' && $_REQUEST['dash_status']=="unpaid"){

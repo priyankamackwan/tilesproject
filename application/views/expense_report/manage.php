@@ -1,6 +1,6 @@
 <?php
-    $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 ?>
 <!-- page content -->
      <!-- <div class="right_col" role="main">
