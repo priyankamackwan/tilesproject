@@ -787,7 +787,7 @@ You can change this password from mobile application after you are logged in onc
                     if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
                     {
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide customer id whose are exist and active';
+                        $response['message'] = 'Please provide customer id who is exist and active';
                         echo json_encode($response);
                         exit();
                     }
