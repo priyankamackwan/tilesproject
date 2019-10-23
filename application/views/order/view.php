@@ -244,7 +244,7 @@
                             <td style="text-align: center"><?php echo $productData[$p]['name'];?></td>
                             <td style="text-align: center"><?php echo $productData[$p]['design_no'];?></td>
                             <td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td>
-                            <td style="text-align: center"><?php echo $productData[$p]['price'];?></td>
+                            <td style="text-align: center"><?php echo round($productData[$p]['price'],2);?></td>
                           </tr>
                                                   
                       <?php 
@@ -270,7 +270,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->tax;?>
+                  <?php echo round($result[0]->tax,2);?>
                 </div>
               </div>
 
@@ -280,7 +280,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->total_price;?>
+                  <?php echo round($result[0]->total_price,2);?>
                 </div>
               </div>
 

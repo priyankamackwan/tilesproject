@@ -198,7 +198,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->modified;?>
+                  <?php echo $result[0]->last_activity;?>
                 </div>
               </div>
 

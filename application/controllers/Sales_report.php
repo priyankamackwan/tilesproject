@@ -211,10 +211,10 @@ echo $this->db->last_query();*/
                         
           $nestedData['id'] = $srNo;
                                         $nestedData['company_name'] =$value['company_name'];
-                                        $nestedData['created'] =$value['created'];
+                                        $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
                                         $nestedData['invoice_no'] =$value['invoice_no'];
-                                        $nestedData['total_price'] =$value['totalValue'];
-                                        $nestedData['sales_expense'] =$value['total_sales_expense'];
+                                        $nestedData['total_price'] =ROUND($value['totalValue'],2);
+                                        $nestedData['sales_expense'] =ROUND($value['total_sales_expense'],2);
           $data[] = $nestedData;
                                         $srNo++;
         }

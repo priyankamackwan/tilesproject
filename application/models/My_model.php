@@ -135,5 +135,13 @@
             $query = $this->db->get()->num_rows();
 			return $query;
 		}
+
+		public function date_conversion($date,$format)
+		{
+			$date=trim($date);
+			$format=trim($format);	
+			$newdate=date($format,strtotime($date));
+			return $newdate;
+		}
 	}
 ?>

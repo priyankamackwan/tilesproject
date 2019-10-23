@@ -78,10 +78,76 @@
         ?>
     </section>
 
+
     <section class="content">
+
+        <!--<div class="box"> <-- Balance Box Start ---
+            <div class="box-body table-responsive">
+                <div class="col-md-12 no-padding">
+
+                    <div class="col-md-2">
+                         <h4>Your Balance :</h4>
+                    </div>
+
+                    <div class="col-md-3 no-padding">
+                        <div class="col-md-3">
+                            <img src="https://hajiri.co/assets/admin/images/credit.png" class="balanceIcon">
+                        </div>
+                        <div class="col-md-9">
+                            <h4>Total Paid Amount</h4>
+                            <p><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h4 class="text-center">Total Unpaid Amount</h4>
+                        <p class="text-center"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-md-4">
+                            <img src="https://hajiri.co/assets/admin/images/debit.png" class="balanceIcon">
+                        </div>
+                        <div class="col-md-8">
+                            <h4>Total Invoice Amount</h4>
+                            <p><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div> <-- Balance Box End --->
+
+        <div class="box"> <!-- Balance Box Start --->
+            <div class="box-body table-responsive">
+                <div class="col-md-12 no-padding">
+
+                    <div class="col-md-2">
+                         <h4>Your Balance :</h4>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h4 class="text-center">Total Paid Amount</h4>
+                        <p class="text-center"><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h4 class="text-center">Total Unpaid Amount</h4>
+                        <p class="text-center"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h4 class="text-center">Total Invoice Amount</h4>
+                        <p class="text-center"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                    </div>
+
+                </div>
+            </div>
+        </div> <!-- Balance Box End --->
+
         <div class="box">
             <div class="box-body">
-                <div class="row form-group">
+                <!-- <div class="row form-group">
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <table class="pull-right">
                             <tbody>
@@ -96,14 +162,14 @@
                                     <td style="text-align: right"><?php echo number_format($totalAmounts->paidAmount,2);?></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Total Unpaid  Amount</b></td>
+                                    <td><b>Total Unpaid Amount</b></td>
                                     <td>&nbsp;:&nbsp;</td>
                                     <td style="text-align: right"><?php echo number_format($totalAmounts->unpaidAmount,2);?></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> -->
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="row">
@@ -143,7 +209,7 @@
 
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Product:</label>
+                                            <label class="control-label" style="margin-top:7px;">Item:</label>
                                         </div>
 
                                         <!-- Products Filter Dropdown -->
@@ -160,7 +226,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Item Available --</option>
                                                 <?php
                                                     }
                                                 ?>

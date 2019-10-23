@@ -116,7 +116,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Item Available --</option>
                                                 <?php
                                                     }
                                                 ?>
@@ -142,7 +142,7 @@
                                                             }
                                                         }else{
                                                     ?>
-                                                        <option value="">-- No Product Available --</option>
+                                                        <option value="">-- No Items Group Available --</option>
                                                     <?php
                                                         }
                                                     ?>
@@ -164,7 +164,7 @@
                   <div class="box-header">
                       <div class="row">
                           <div class="col-md-6 col-sm-12 col-xs-12">
-                              <h3 class="box-title">Products Report</h3>
+                              <h3 class="box-title">Items Report</h3>
                           </div>
                       </div>
                   </div>
@@ -181,7 +181,7 @@
                       <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                           <thead>
                             <th width="5%" class="text-center">Sr No.</th>
-                            <th class="text-center">Product Name</th>
+                            <th class="text-center">Item Name</th>
                             <th class="text-center">Design No.</th>
                             <th class="text-center">Size</th>
                             <th class="text-center">Category</th>
@@ -268,8 +268,8 @@
 			  [{
 				  extend:'excel',
           title:'',
-          filename:'Product report',
-          sheetName: 'Product report',
+          filename:'Item report',
+          sheetName: 'Item report',
           action: newExportAction,
 				  exportOptions: {
 							columns: [1,2,3,4,5,6,7,8,9]

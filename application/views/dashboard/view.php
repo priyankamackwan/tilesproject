@@ -1,6 +1,6 @@
 <?php
-  $this->load->view('include/leftsidemenu');
   $this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 ?>
 <style type="text/css">
 .loader {
@@ -348,6 +348,7 @@
 							<div id="orders-grid_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 								<div class="row">
 									<div class="col-md-12">
+
 										<table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
 											<thead>
 				                                <th class="text-center">Item Name</th>
