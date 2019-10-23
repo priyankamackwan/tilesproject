@@ -27,6 +27,7 @@
 
 		}
 		public function index() {
+        $model = $this->model;
                       //  echo '<pre>';
                    // print_r($this->session);die;
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
@@ -38,7 +39,8 @@
       // Add for dispaly in filter
       $data['activeProducts'] = $this->db->get("products")->result_array();
       $data['product_categories'] = $this->db->get("categories")->result_array();
-   
+      // Total balance quantity
+      $data['total_balance_quantity'] = $this->$model->balance_quantity();
 			$this->load->view($this->view.'/manage',$data);
 		}
                 
