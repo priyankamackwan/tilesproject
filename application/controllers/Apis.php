@@ -781,16 +781,16 @@ You can change this password from mobile application after you are logged in onc
                             $customer_lpo="";
                         }
 
-                       
+
                     $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
 
-                   if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
-                   {
+                    if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
+                    {
                         $response['status'] = 'failure';
-                        $response['message'] = 'Invalid customer id or customer is not active.';
+                        $response['message'] = 'Please provide customer id whose are exist and active';
                         echo json_encode($response);
                         exit();
-                   }
+                    }
                       
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
