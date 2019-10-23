@@ -774,19 +774,22 @@ var footerLine1 =[];
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
-		"info": false
+		"info": false,
+		"searching": false
 	} );
 	$('#datatables1').dataTable({
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
-		"info": false
+		"info": false,
+		"searching": false
 	} );
 	$('#datatables2').dataTable({
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
-		"info": false
+		"info": false,
+		"searching": false
 	} );
 $('#example1').dataTable({
 		"ordering": false,
