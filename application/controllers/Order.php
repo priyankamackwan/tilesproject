@@ -993,28 +993,32 @@ $pdf->Output($do_no, 'I');
 			$this->load->view($this->view.'/view',$data);
 		}
                 
-		public function Update() {
+		public function Update() 
+        {
                     
 			$model = $this->model;
-
 			$id = $this->input->post('id');
-                     //  echo $id; exit;
 			$sales_expense = $this->input->post('sales_expense');
-                        $status = $this->input->post('status');
-                        $invoice_status = $this->input->post('invoice_status');
-                        //echo $sales_expense; exit;
+            $status = $this->input->post('status');
+            $invoice_status = $this->input->post('invoice_status');
+            $txt_deliverydate = $this->input->post('txt_deliverydate');
+            $txt_paymentdate = $this->input->post('txt_paymentdate');
+
+            $txt_deliverydate=date('Y-m-d H:i:00',strtotime($txt_deliverydate));
+            $txt_paymentdate=date('Y-m-d H:i:00',strtotime($txt_paymentdate));
+
 			$data = array(
-
-                            'sales_expense' => $sales_expense,
-                            'status' => $status,
-                            'invoice_status' => $invoice_status,
-
-
+                        'sales_expense' => $sales_expense,
+                        'status' => $status,
+                        'invoice_status' => $invoice_status,
+                        'delivery_date' => $txt_deliverydate,
+                        'payment_date' => $txt_paymentdate
 			);
+            
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
                              
-			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
+			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Order has been updated successfully!</div>');
 			redirect($this->controller);
 		}
 		public function remove($id) {

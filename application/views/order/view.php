@@ -219,7 +219,7 @@
 
           <div class="box-body">
 
-            <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update'?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+            <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update'?>" method="post" id="demo-form2" onsubmit="return formvalidate();" data-parsley-validate class="form-horizontal form-label-left">
                                 
 	            <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
 					  
@@ -382,11 +382,11 @@
         
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
-                  Order Status :
+                  Delivery Status :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <select name="status" class="form-control select2" style="width: 100%;">
+                  <select name="status" class="form-control select2" style="width: 100%;" id="delivery_status">
                     <?php 
                       if ($result[0]->status == 0) { 
                     ?>
@@ -422,13 +422,38 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-                  Order Payment Status :
+              <div class="form-group" id="id_delivery_date" <?php if ($result[0]->status != 2) { ?> style="display: none;" <?php } ?> >  <!-- if delivery status is completed then display the date div -->
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="delivery_date">
+                  Delivery Date :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <select name="invoice_status" style="width: 100%;" class="form-control select2">
+                  <div class='input-group date' id='delivery_datetimepicker'>
+                      <?php 
+                            if ($result[0]->status != 2) 
+                            {
+                              $delivery_date_value="";
+                            }
+                            else
+                            {
+                              $delivery_date_value=date('d/m/Y h:i A',strtotime($result[0]->delivery_date));
+                            }
+                      ?>
+                      <input type='text' class="form-control" id="txt_deliverydate" name="txt_deliverydate" value="<?php echo $delivery_date_value; ?>" />
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar" id="delivery_gly"></span>
+                      </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+                  Payment Status :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <select name="invoice_status" style="width: 100%;" class="form-control select2" id="payment_status">
                     <?php
                       if ($result[0]->invoice_status == 0) { 
                     ?>
@@ -453,6 +478,33 @@
                   </select>
                 </div>
               </div>
+
+              <div class="form-group" id="id_payment_date" <?php if ($result[0]->invoice_status != 1) { ?> style="display: none;" <?php } ?> > <!-- if payment status is completed then display the date div -->
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
+                  Payment Date :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <div class='input-group date' id='payment_datetimepicker'>
+                      <?php 
+                            if ($result[0]->invoice_status != 1) 
+                            {
+                              $payment_date_value="";
+                            }
+                            else
+                            {
+                              $payment_date_value=date('d/m/Y h:i A',strtotime($result[0]->payment_date));
+                            }
+                      ?>
+                      <input type='text' class="form-control" id="txt_paymentdate" name="txt_paymentdate" value="<?php echo $payment_date_value; ?>" />
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
+                      </span>
+                  </div>
+                </div>
+              </div>
+
+
               <div class="box-footer">
                 <input type="submit" class="btn btn-primary" value="Submit">
               </div>
@@ -466,3 +518,112 @@
 <?php
 	$this->load->view('include/footer');
 ?>
+
+<style type="text/css">
+  .list-unstyled
+  {
+    text-align: center !important;
+    padding: 10px;
+  }
+  .table-condensed thead tr th
+  {
+    text-align: center !important;
+  }
+</style>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#delivery_datetimepicker').datetimepicker({
+    locale: 'ru',
+      autoclose: true
+  });
+
+  $('#payment_datetimepicker').datetimepicker({
+    locale: 'ru',
+      autoclose: true,
+  });
+});
+</script>
+
+<!-- Reselect delivery date -->
+<script type="text/javascript"> 
+$("#delivery_gly").click(function() {
+  $("#txt_deliverydate").val('');
+  $('#delivery_datetimepicker').datetimepicker({
+    locale: 'ru',
+      autoclose: true
+  });
+});
+</script>
+
+<!-- Reselect payment date -->
+<script type="text/javascript">
+$("#payment_gly").click(function() {
+
+  $("#txt_paymentdate").val('');
+  $('#payment_datetimepicker').datetimepicker({
+    locale: 'ru',
+      autoclose: true
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$("#delivery_status").change(function(){
+
+  if($("#delivery_status").val()=="2") // if status is completed then display datetimepicker
+  {
+    document.getElementById("id_delivery_date").style.display = "block";
+  }
+  else
+  {
+    document.getElementById("id_delivery_date").style.display = "none";
+    $("#txt_deliverydate").val('');
+  }
+});
+</script>
+
+
+<script type="text/javascript">
+$("#payment_status").change(function(){
+
+  if($("#payment_status").val()=="1") // if status is paid then display datetimepicker
+  {
+    document.getElementById("id_payment_date").style.display = "block";
+  }
+  else
+  {
+    document.getElementById("id_payment_date").style.display = "none";
+    $("#txt_paymentdate").val('');
+  }
+});
+</script>
+
+
+<script type="text/javascript">
+function formvalidate(){
+
+    var delivery_status=$("#delivery_status").val();
+    var txt_deliverydate = $("#txt_deliverydate").val().trim();
+    var payment_status=$("#payment_status").val();
+    var txt_paymentdate = $("#txt_paymentdate").val().trim();
+
+    if (delivery_status=="2" && txt_deliverydate=="") // if delievery status is completed and date is not selected
+    {
+      alert('Please add delivery date if delivery status is completed.');
+      return false;
+    }
+    else if (payment_status=="1" && txt_paymentdate=="") // if payment status is paid and date is not selected
+    {
+      alert('Please add payment date if payment status is paid.');
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+
+}
+</script>
