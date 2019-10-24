@@ -436,7 +436,7 @@
                             }
                             else
                             {
-                              $delivery_date_value=date('d/m/Y h:i A',strtotime($result[0]->delivery_date));
+                              $delivery_date_value=date('d/m/Y h:i',strtotime($result[0]->delivery_date));
                             }
                       ?>
                       <input type='text' class="form-control" id="txt_deliverydate" name="txt_deliverydate" value="<?php echo $delivery_date_value; ?>" />
@@ -493,7 +493,7 @@
                             }
                             else
                             {
-                              $payment_date_value=date('d/m/Y h:i A',strtotime($result[0]->payment_date));
+                              $payment_date_value=date('d/m/Y h:i',strtotime($result[0]->payment_date));
                             }
                       ?>
                       <input type='text' class="form-control" id="txt_paymentdate" name="txt_paymentdate" value="<?php echo $payment_date_value; ?>" />
@@ -535,13 +535,13 @@
 <script type="text/javascript">
 $(document).ready(function() {
   $('#delivery_datetimepicker').datetimepicker({
-    locale: 'ru',
-      autoclose: true
+      autoclose: true,
+      format: 'DD/MM/YYYY HH:mm'
   });
 
   $('#payment_datetimepicker').datetimepicker({
-    locale: 'ru',
       autoclose: true,
+      format: 'DD/MM/YYYY HH:mm'
   });
 });
 </script>
@@ -551,8 +551,8 @@ $(document).ready(function() {
 $("#delivery_gly").click(function() {
   $("#txt_deliverydate").val('');
   $('#delivery_datetimepicker').datetimepicker({
-    locale: 'ru',
-      autoclose: true
+      autoclose: true,
+      format: 'DD/MM/YYYY HH:mm'
   });
 });
 </script>
@@ -560,11 +560,10 @@ $("#delivery_gly").click(function() {
 <!-- Reselect payment date -->
 <script type="text/javascript">
 $("#payment_gly").click(function() {
-
   $("#txt_paymentdate").val('');
   $('#payment_datetimepicker').datetimepicker({
-    locale: 'ru',
-      autoclose: true
+      autoclose: true,
+      format: 'DD/MM/YYYY HH:mm'
   });
 });
 </script>
@@ -624,6 +623,5 @@ function formvalidate(){
     {
       return true;
     }
-
 }
 </script>
