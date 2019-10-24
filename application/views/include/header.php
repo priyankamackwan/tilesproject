@@ -18,6 +18,9 @@
 
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+  <!-- Bootstrap datetimepicker css for datetimepicker in edit order-->  
+  <link href="<?php echo base_url();?>assets/bootstrap/css/bootstrap-datepicker3.css" rel="stylesheet"/>
   
 
   <!-- Font Awesome -->
