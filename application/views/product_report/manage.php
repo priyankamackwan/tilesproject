@@ -7,7 +7,14 @@
   if(isset($_REQUEST['low_stock']) && $_REQUEST['low_stock']!='' && $_REQUEST['low_stock']=="true"){
       $Low_stock='true';
   }
+$balance_amount=$balance_quantity = 0;
+foreach ($total_balance_quantity as $key => $value) {
+  $balance_quantity+= $value['totalQuantity'];
+  $balance_amount+= $value['purchase_expense']* $value['quantity'];
+}
+
 ?>
+
 <style type="text/css">
   .toggle {
     float: right;
@@ -84,7 +91,7 @@
       </section>
 
     <section class="content">
-	<div class="box">
+	     <div class="box">
             <div class="box-body">
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -145,10 +152,17 @@
                                                         <option value="">-- No Items Group Available --</option>
                                                     <?php
                                                         }
-                                                    ?>
+                                                    ?>s
                                             </select>
                                         </div>
-                                        
+                                        <div class="col-md-2 col-sm-12 col-xs-12">
+                                           <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>
+                                           <?php echo number_format($balance_quantity,2); ?>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12 col-xs-12">
+                                           <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>
+                                           <i class="fa fa-inr"></i> <?php echo  number_format($balance_amount,2); ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
