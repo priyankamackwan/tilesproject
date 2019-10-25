@@ -425,7 +425,7 @@
                                             "quantity" => $quantity,
                                             "created" => $created,
                                         );
-                                                
+                                        /* Old array        
                                         $arr = array(
                                             "registration_ids" => array($userData[$k]['firebase_token']),
                                             "notification"=> [
@@ -436,6 +436,22 @@
                                             ],
                                         // "data" => json_encode(array())
                                           );
+                                        */
+                                          // New for ios notification
+                                        $arr = array(
+                                            "registration_ids" => array($userData[$k]['firebase_token']),
+                                                "notification" => [
+                                            "body" => $notificationArray,
+                                            "title" => "New Product Added",
+                                            ],
+                                            "priority": "high",
+                                            "content_available": true,
+                                            "mutable_content": true,
+                                            "data" => [
+                                                $notificationArray,
+                                            ],
+                                        );
+
                                         $data = json_encode($arr);
                                         $this->android_ios_notification($data,'Ios');
                                     }

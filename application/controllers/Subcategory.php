@@ -247,7 +247,7 @@
 			                                'created'=>$created
 
 			                            );
-			                                        
+			                            /* OLd ios notification            
 			                            $arr = array(
 					                        "registration_ids" => $userData[$k]['firebase_token'],
 					                        "notification" => [
@@ -257,6 +257,21 @@
 					                            // "icon" => "ic_launcher"
 					                        ],
 					                    );
+					                    */
+					                    // New ios notification
+					                    $arr = array(
+                                            "registration_ids" => $userData[$k]['firebase_token'],
+                                                "notification" => [
+                                            "body" => $notificationArray,
+                                            "title" => "New Sub Category Added",
+                                            ],
+                                            "priority": "high",
+                                            "content_available": true,
+                                            "mutable_content": true,
+                                            "data" => [
+                                                $notificationArray,
+                                            ],
+                                        );
                                     	
     									$data = json_encode($arr);
 
