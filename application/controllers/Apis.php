@@ -214,6 +214,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                             "phone_no" => $phone_no,
                             "created" => $created,
                             );
+                            /*      Old array      
                             $arr = array(
                                     "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                     "notification" => [
@@ -223,6 +224,22 @@ use PHPMailer\PHPMailer\PHPMailer;
                                     // "icon" => "ic_launcher"
                                     ],
                                     // "data" => json_encode(array())
+                            );
+                            */
+                            //new array
+                            $arr = array(
+                                "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+                                
+                                "notification" => [
+                                "body" => $notificationArray,
+                                "title" => "New User Registered",
+                                ],
+                                "priority": "high",
+                                "content_available": true,
+                                "mutable_content": true,
+                                "data" => [
+                                    $notificationArray,
+                                ],
                             );
                             $data = json_encode($arr);
                            $this->android_ios_notification($data,"Ios");
@@ -1187,6 +1204,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "tax" => $tax,
                                             "created" => $created,
                                         );
+                                        /* OLd array
                                         $arr = array(
                                             "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                             
@@ -1198,6 +1216,21 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             // "icon" => "ic_launcher"
                                             ],
                                             // "data" => json_encode(array())
+                                        );*/
+                                        // New array
+                                        $arr = array(
+                                            "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+                                            
+                                            "notification" => [
+                                            "body" => $notificationArray,
+                                            "title" => "New Order Added",
+                                            ],
+                                            "priority": "high",
+                                            "content_available": true,
+                                            "mutable_content": true,
+                                            "data" => [
+                                                $notificationArray,
+                                            ],
                                         );
                                            $data = json_encode($arr);
                                            $this->android_ios_notification($data,'Ios');

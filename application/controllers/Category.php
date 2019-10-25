@@ -282,7 +282,7 @@
 	                                "description" => $description,
 	                                "created" => $created,
 	                            );
-	                                        
+	                            /* OLd array            
 	                            $arr = array(
 			                        "registration_ids" => $iosToken,
 			                        "notification" => [
@@ -292,6 +292,21 @@
 			                            // "icon" => "ic_launcher"
 			                        ],
 			                    );
+			                    */ 
+			                    // New ios notification
+			                    $arr = array(
+                                            "registration_ids" => $iosToken,
+                                                "notification" => [
+                                            "body" => $notificationArray,
+                                            "title" => "New Category Added",
+                                            ],
+                                            "priority": "high",
+                                            "content_available": true,
+                                            "mutable_content": true,
+                                            "data" => [
+                                                $notificationArray,
+                                            ],
+                                        );
 			                     $data = json_encode($arr);
                                 $this->android_ios_notification($data,"Ios");
                         }
@@ -305,12 +320,10 @@
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
-                        //echo $id; exit;
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
-
 			$model = $this->model;
 
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
