@@ -231,7 +231,7 @@
                 <div class="col-md-9 col-sm-12 col-xs-12">
                   <table border ="1" width="100%">
                     <tr>
-                      <th style="text-align: center">Product Name</th>
+                      <th style="text-align: center">Item Name</th>
                       <th style="text-align: center">Design No</th>
                       <th style="text-align: center">Quantity</th>
                       <th style="text-align: center">Price</th>

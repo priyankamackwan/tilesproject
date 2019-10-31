@@ -298,11 +298,12 @@
                                             "registration_ids" => $iosToken,
                                                 "notification" => [
                                             "body" => $notificationArray,
-                                            "title" => "New Category Added",
+                                            //"title" => "New Category Added",
+                                            "title" => "Category ‘'".$name."'’ is added. Please click to check the new category.",
                                             ],
-                                            "priority": "high",
-                                            "content_available": true,
-                                            "mutable_content": true,
+                                            "priority"=> "high",
+                                            "content_available"=> true,
+                                            "mutable_content"=> true,
                                             "data" => [
                                                 $notificationArray,
                                             ],

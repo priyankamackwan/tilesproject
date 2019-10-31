@@ -269,6 +269,8 @@
                    
                     // View Page Link.
                     $view = base_url($this->controller.'/view/'.$this->utility->encode($SingleOrderData['id']));
+                    $edit = base_url($this->controller.'/edit/'.$this->utility->encode($SingleOrderData['id']));
+                    $delete = base_url($this->controller.'/remove/'.$this->utility->encode($SingleOrderData['id']));
 
                     // Download Link.
                     $download = base_url($this->controller.'/download/'.$this->utility->encode($SingleOrderData['id']));
@@ -327,7 +329,7 @@
                     //$tabledata['created']=date('d/m/Y',strtotime($SingleOrderData['created']));
 
                     // Manage buttons.
-                    $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+                    $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
 
                     // Push table data in to array.
                     $data[] = $tabledata;
@@ -472,22 +474,22 @@
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
-                
-		public function edit($id) {
+        // For edit order        
+		public function edit($id){
                     
-			$model = $this->model;
-			$id = $this->utility->decode($id);
-                        //echo $id; exit;
-			$data['action'] = "update";
-			$data['msgName'] = $this->msgName;
-			$data['primary_id'] = $this->primary_id;
-			$data['controller'] = $this->controller;
-
-			$model = $this->model;
-
-			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
-			$this->load->view($this->view.'/form',$data);
-		}
+            $model = $this->model;
+            $id = $this->utility->decode($id);
+            
+            $data['action'] = "update";
+            $data['msgName'] = $this->msgName;
+            $data['primary_id'] = $this->primary_id;
+            $data['controller'] = $this->controller;
+            $data['activeProducts'] = $this->db->get("products")->result_array();
+            $data['id']=$id;
+            $model = $this->model;
+            $data ['result'] = $this->orders_model->view_all_order($id);
+            $this->load->view($this->view.'/form',$data);
+        }
                 
             public function view($id) {
                     
@@ -994,6 +996,123 @@ $pdf->Output($do_no, 'I');
 			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
 			redirect($this->controller);
 		}
+        // For order sales update
+        public function Update_order() {
+            $model = $this->model;
+            // Order id
+            $id = $this->input->post('id');
+            // For post array and quantity
+            $product_arr=$quantity_arr=array();
+            $old_product_array=$old_product_quantity=array();
+            $erro_product=array();
+
+            $quantity_update=array();
+
+            //Store request data in array for quantity and product 
+            $product_count=$this->input->post('ordercount');
+            for($i=0;$i<=$product_count;$i++){
+                $p_id=$this->input->post('product_id'.$i);;
+                $quantity=$this->input->post('quantity_'.$i);
+                $product_arr[$p_id]=$p_id;
+                if(array_key_exists($p_id, $quantity_arr)){
+                    $total_quantity=$quantity+$quantity_arr[$p_id];
+                    $quantity_arr[$p_id]=$total_quantity;
+                }else{                   
+                    $quantity_arr[$p_id]=$quantity;
+                }
+            }
+
+            //remove blank array exist
+            $product_arr = array_filter($product_arr); 
+            $quantity_arr = array_filter($quantity_arr); 
+
+            //Old order  array from database 
+            $all_order=$this->orders_model->view_all_order($id);
+            foreach ($all_order as $key => $value) {
+
+                // store on array for quantity and product 
+                $old_product_array[$value['product_id']]=$value['product_id'];
+                $old_product_quantity[$value['product_id']]=$value['quantity'];
+                $total_sold=$check_quantity->sold_quantity;
+
+                // fetch quantity from product table
+                $check_quantity=$this->orders_model->check_items_quantity($value['product_id']);
+
+                //Check quantity is updated or not
+                if($quantity_arr[$value['product_id']]> $value['quantity']){
+                    $update_sold_quantity=$quantity_arr[$value['product_id']]-$value['quantity'];
+                    $update_oprator='+';
+                   $total_check_q=$quantity_arr[$value['product_id']]-$value['quantity'];
+                }elseif($quantity_arr[$value['product_id']]< $value['quantity']){
+                    $update_sold_quantity=$value['product_id']-$quantity_arr[$value['quantity']];
+                     $update_oprator='-';
+                     $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
+                }  
+            
+                if($check_quantity->quantity > $total_check_q){
+                    //Update solde quantity in product table
+                    $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator);   
+
+                    //Update solde quantity in order product table
+                    $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator);
+                }/*else{
+                    $this->session->set_flashdata('dispMessage','<span class="7"><div class="alert alert-danger"><strong>Some Item quantity Is Not Available</strong></div></span>');
+                    redirect($this->controller.'/edit/'.$this->utility->encode($id));
+                    $erro_product[$value['product_id']]=$value['product_id'];
+                } */               
+            }
+
+            // item removed  or delted   update sold quantity
+            $array_remove=array_diff($old_product_array, $product_arr);
+            if(isset($array_remove) && $array_remove!='' && count($array_remove) >0){
+                foreach ($array_remove as $key => $value) { 
+
+                    // Fetch single data from order products
+                    $single_datas=$this->orders_model->single_items($value);                  
+                    // Update removed items sold wuantity
+                    $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'+');
+
+                    // Delete item from order products table
+                    if(isset($old_product_array[$key]) && $old_product_array[$key]!='' && $old_product_array[$key]==$value){
+                        $this->db->where('product_id', $old_product_array[$key]);
+                        $this->db->where('order_id', $id);
+                        $this->db->delete('order_products');
+                    }
+                }
+            }
+            //for new item added update in sold quantity
+            $array_added=array_diff($product_arr, $old_product_array);
+            if(isset($array_added) && $array_added!='' && count($array_added) >0){
+                foreach ($array_added as $key => $value) {
+                    // insert in order prodcuts table
+                    $insert_data=array('order_id'=>$id,
+                                        'product_id'=>$value,
+                                        'quantity'=>$quantity_arr[$value]
+                                );
+                    $this->$model->insert('order_products',$insert_data);
+                    $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
+
+                }
+            }
+
+            // For check data old data is updated  or not
+
+                     //  echo $id; exit;
+            $sales_expense = $this->input->post('sales_expense');
+            $status = $this->input->post('status');
+            $invoice_status = $this->input->post('invoice_status');
+            $data = array(
+                    'sales_expense' => $sales_expense,
+                    'status' => $status,
+                    'invoice_status' => $invoice_status,
+                );
+            $where = array($this->primary_id=>$id);
+            $this->$model->update($this->table,$data,$where);
+                             
+            //$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
+            redirect($this->controller);
+        }
+        
 		public function remove($id) {
                    
 			$model = $this->model;

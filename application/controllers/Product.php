@@ -442,11 +442,12 @@
                                             "registration_ids" => array($userData[$k]['firebase_token']),
                                                 "notification" => [
                                             "body" => $notificationArray,
-                                            "title" => "New Product Added",
+                                            //"title" => "New Product Added",
+                                            "title" => "New product ‘'".$name."'’ has been added. Please click to check the new product.",
                                             ],
-                                            "priority": "high",
-                                            "content_available": true,
-                                            "mutable_content": true,
+                                            "priority"=>"high",
+                                            "content_available"=> true,
+                                            "mutable_content"=> true,
                                             "data" => [
                                                 $notificationArray,
                                             ],

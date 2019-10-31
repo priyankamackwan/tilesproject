@@ -263,11 +263,12 @@
                                             "registration_ids" => $userData[$k]['firebase_token'],
                                                 "notification" => [
                                             "body" => $notificationArray,
-                                            "title" => "New Sub Category Added",
+                                            //"title" => "New Sub Category Added",
+                                            "title" => "Sub category ‘'".$name."'’ is added. Please click to check the new category.",
                                             ],
-                                            "priority": "high",
-                                            "content_available": true,
-                                            "mutable_content": true,
+                                            "priority"=> "high",
+                                            "content_available"=> true,
+                                            "mutable_content"=> true,
                                             "data" => [
                                                 $notificationArray,
                                             ],

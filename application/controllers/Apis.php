@@ -175,7 +175,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 		    // "data" => json_encode(array())
 		);
     	$data = json_encode($arr);
-                            $this->android_ios_notification($data,"Android");
+                            $this-> ($data,"Android");
 		/*//FCM API end-point
 		$url = 'https://fcm.googleapis.com/fcm/send';
 		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
@@ -232,11 +232,12 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 
                                 "notification" => [
                                 "body" => $notificationArray,
-                                "title" => "New User Registered",
+                                //"title" => "New User Registered",
+                                 "title" => "'".$contactPersonName."' has registered now from the Company ‘'".$companyName."'’. Please click to accept/reject the request.",
                                 ],
-                                "priority": "high",
-                                "content_available": true,
-                                "mutable_content": true,
+                                "priority"=> "high",
+                                "content_available"=> true,
+                                "mutable_content"=> true,
                                 "data" => [
                                     $notificationArray,
                                 ],
@@ -1176,11 +1177,12 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             
                                             "notification" => [
                                             "body" => $notificationArray,
-                                            "title" => "New Order Added",
+                                            //"title" => "New Order Added",
+                                            "title" => "New order has been placed. Please check admin portal to check this order."
                                             ],
-                                            "priority": "high",
-                                            "content_available": true,
-                                            "mutable_content": true,
+                                            "priority"=> "high",
+                                            "content_available"=> true,
+                                            "mutable_content"=> true,
                                             "data" => [
                                                 $notificationArray,
                                             ],
