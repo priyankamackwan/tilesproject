@@ -1121,11 +1121,19 @@ $pdf->Output($do_no, 'I');
             $sales_expense = $this->input->post('sales_expense');
             $status = $this->input->post('status');
             $invoice_status = $this->input->post('invoice_status');
+            $txt_deliverydate = $this->input->post('txt_deliverydate');
+            $txt_paymentdate = $this->input->post('txt_paymentdate');
+
+            $txt_deliverydate=date('Y-m-d H:i:00',strtotime($txt_deliverydate));
+            $txt_paymentdate=date('Y-m-d H:i:00',strtotime($txt_paymentdate));
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
                     'invoice_status' => $invoice_status,
+                    'delivery_date' => $txt_deliverydate,
+                    'payment_date' => $txt_paymentdate
                 );
+
             $where = array($this->primary_id=>$id);
             $this->$model->update($this->table,$data,$where);
                              
