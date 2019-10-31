@@ -1025,7 +1025,11 @@ $pdf->Output($do_no, 'I');
             // Contatc personr name
             $username = $this->input->post('username');
             //price 
-            $price = $this->input->post('price');
+            //$price = $this->input->post('price');
+            // client type for amount
+            $client_type = $this->input->post('client_type');
+            //for total amount 
+            $total_order_price=0;
             $product_arr=$quantity_arr=array();
             $old_product_array=$old_product_quantity=array();
             $erro_product=array();
@@ -1062,6 +1066,24 @@ $pdf->Output($do_no, 'I');
 
                 // fetch quantity from product table
                 $check_quantity=$this->orders_model->check_items_quantity($value['product_id']);
+                // rate type for calculate amount
+                if(isset($client_type) && $client_type!='' && $client_type=="cash_rate"){
+
+                    $rate_type=$check_quantity->cash_rate;
+
+                }elseif(isset($client_type) && $client_type!='' && $client_type=="credit_rate"){
+
+                    $rate_type=$check_quantity->credit_rate;
+
+                }elseif(isset($client_type) && $client_type!='' && $client_type=="walkin_rate"){
+
+                    $rate_type=$check_quantity->walkin_rate;
+
+                }elseif(isset($client_type) && $client_type!='' && $client_type=="flexible_rate"){
+                        $rate_type=$check_quantity->flexible_rate;
+                    
+                }
+
 
                 //Check quantity is updated or not
                 if($quantity_arr[$value['product_id']]> $value['quantity']){
@@ -1072,7 +1094,12 @@ $pdf->Output($do_no, 'I');
                     $update_sold_quantity=$value['product_id']-$quantity_arr[$value['quantity']];
                      $update_oprator='-';
                      $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
-                }  
+                }
+                //echo $rate_type.'  '.$quantity_arr[$value['product_id']];
+                // total of all product amount
+                $amount=$quantity_arr[$value['product_id']] * $rate_type;
+               
+                $total_order_price+=$amount;  
             
                 if($check_quantity->quantity > $total_check_q){
                     //Update solde quantity in product table
@@ -1093,7 +1120,10 @@ $pdf->Output($do_no, 'I');
                 foreach ($array_remove as $key => $value) { 
 
                     // Fetch single data from order products
-                    $single_datas=$this->orders_model->single_items($value);                  
+                    $single_datas=$this->orders_model->single_items($value);  
+                   $remove_amount=  $single_datas->price * $single_datas->quantity;  
+                    //minus for reove items
+                    $total_order_price-=$remove_amount;         
                     // Update removed items sold wuantity
                     $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'+');
 
@@ -1109,18 +1139,39 @@ $pdf->Output($do_no, 'I');
             $array_added=array_diff($product_arr, $old_product_array);
             if(isset($array_added) && $array_added!='' && count($array_added) >0){
                 foreach ($array_added as $key => $value) {
+                    $check_quantity=$this->orders_model->check_items_quantity($value);
+                    
+                    // rate type for calculate amount
+                    if(isset($client_type) && $client_type!='' && $client_type=="cash_rate"){
+
+                        $rate_type=$check_quantity->cash_rate;
+
+                    }elseif(isset($client_type) && $client_type!='' && $client_type=="credit_rate"){
+
+                        $rate_type=$check_quantity->credit_rate;
+
+                    }elseif(isset($client_type) && $client_type!='' && $client_type=="walkin_rate"){
+
+                        $rate_type=$check_quantity->walkin_rate;
+
+                    }elseif(isset($client_type) && $client_type!='' && $client_type=="flexible_rate"){
+                            $rate_type=$check_quantity->flexible_rate;
+                        
+                    }
+                    // total of all product amount
+                    $amount=$quantity_arr[$value] * $rate_type;
+                    $total_order_price+=$amount;
                     // insert in order prodcuts table
                     $insert_data=array('order_id'=>$id,
                                         'product_id'=>$value,
                                         'quantity'=>$quantity_arr[$value],
-                                        'price'=>$price
+                                        'price'=>$rate_type
                                 );
                     $this->$model->insert('order_products',$insert_data);
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
 
                 }
             }
-
             // For check data old data is updated  or not
 
                      //  echo $id; exit;
@@ -1137,7 +1188,8 @@ $pdf->Output($do_no, 'I');
                     'status' => $status,
                     'invoice_status' => $invoice_status,
                     'delivery_date' => $delivery_date,
-                    'payment_date' => $payment_date
+                    'payment_date' => $payment_date,
+                    'total_price'=>$total_order_price
                 );
 
             $where = array($this->primary_id=>$id);
