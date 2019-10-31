@@ -14,6 +14,11 @@
 		$btn = "Update";
 	}
 ?>
+<style type="text/css">
+a:hover, a:active, a:focus {
+    cursor: pointer;
+}
+</style>
 <!-- Main Container start-->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
@@ -170,7 +175,7 @@
 				                            $delivery_date_value=date('d/m/Y h:i A',strtotime($delivery_date));
 				                        }
 				                      ?>
-				                      <input type='text' class="form-control" id="txt_deliverydate" name="txt_deliverydate" value="<?php echo $delivery_date_value; ?>" />
+				                      <input type='text' class="form-control" id="txt_deliverydate" name="txt_deliverydate" value="<?php echo $delivery_date_value; ?>" required="required"/>
 				                      <span class="input-group-addon">
 				                        <span class="glyphicon glyphicon-calendar" id="delivery_gly"></span>
 				                      </span>
@@ -204,7 +209,7 @@
 				                              $payment_date_value=date('d/m/Y h:i A',strtotime($payment_date));
 				                            }
 				                      ?>
-				                      <input type='text' class="form-control" id="txt_paymentdate" name="txt_paymentdate" value="<?php echo $payment_date_value; ?>" />
+				                      <input type='text' class="form-control" id="txt_paymentdate" name="txt_paymentdate" value="<?php echo $payment_date_value; ?>"  required="required"/>
 				                      <span class="input-group-addon">
 				                        <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
 				                      </span>

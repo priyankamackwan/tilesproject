@@ -1160,7 +1160,7 @@ $pdf->Output($do_no, 'I');
                     $user_data_name=$value['company_name'];
                 }
                 // Update sold quantity in products
-                $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$value['quantity'],'+');
+                $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$value['quantity'],'-');
                 $this->db->where('product_id', $value['product_id']);
                 $this->db->where('order_id', $value['order_id']);
                 $this->db->delete('order_products');
