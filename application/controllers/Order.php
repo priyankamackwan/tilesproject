@@ -1128,7 +1128,7 @@ $pdf->Output($do_no, 'I');
             $status = $this->input->post('status');
             $invoice_status = $this->input->post('invoice_status');
             $delivery_date = $this->input->post('delivery_date');
-            $ = $this->input->post('txt_paymentdate');
+            $payment_date = $this->input->post('txt_paymentdate');
 
             $delivery_date=date('Y-m-d H:i:00',strtotime($delivery_date));
             $payment_date=date('Y-m-d H:i:00',strtotime($payment_date));

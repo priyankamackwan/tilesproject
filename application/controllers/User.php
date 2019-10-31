@@ -183,7 +183,8 @@
                                             $accept = base_url($this->controller.'/acceptform/'.$this->utility->encode($value->$id));
                                             $reject = base_url($this->controller.'/reject/'.$this->utility->encode($value->$id));
 											// $statusText = 'Pending';
-											$statusText = 'Pending <br /><a href="'.$accept.'" class="btn btn-success btn-xs" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Accept"><i class="fa fa-check"></i></a>&nbsp;<a href="'.$reject.'" class="btn btn-danger btn-xs" data-toggle="tooltip" style="padding: 8px;margin-top:1px;" title="Reject"><i class="fa fa-ban"></i></a>';
+											//$statusText = 'Pending <br /><a href="'.$accept.'" class="btn btn-success btn-xs" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Accept"><i class="fa fa-check"></i></a>&nbsp;<a href="'.$reject.'" class="btn btn-danger btn-xs" data-toggle="tooltip" style="padding: 8px;margin-top:1px;" title="Reject"><i class="fa fa-ban"></i></a>';
+											$statusText = 'Pending';
                                         }
                                         if ($value->status == 3) {
                                             $statusText = 'Rejected';
@@ -218,8 +219,8 @@
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 0) {
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
-											
-											$nestedData['manage'] = "<a href='$delete' class='btn  btn-danger  btn-sm confirm-delete-user' style='padding: 8px;margin-top:1px;'><i class='fa fa-trash'></i></a>";
+											// Add buttons in reject and accept in manage
+											$nestedData['manage'] = "<a href='$delete' class='btn  btn-danger  btn-sm confirm-delete-user' style='padding: 8px;margin-top:1px;'><i class='fa fa-trash'></i></a>&nbsp;<a href='$accept' class='btn btn-success btn-xs' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Accept'><i class='fa fa-check'></i></a>&nbsp;<a href='$reject' class='btn btn-danger btn-xs' data-toggle='tooltip' style='padding: 8px;margin-top:1px;'' title='Reject'><i class='fa fa-ban'></i></a>";
 
 										} elseif ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
