@@ -1,6 +1,6 @@
 <?php
-  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
                $choosen_categories = array();
@@ -132,6 +132,11 @@
             </div> -->
         <!-- /page content -->
 <!-- -------------------------------new design------------------------------- -->
+<style type="text/css">
+    .select2{
+      width: 100% !important;
+    }
+  </style>
 <!-- Main Container start-->
 <div class="content-wrapper">
 
@@ -159,7 +164,7 @@
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
-                  Product Name :
+                  Item Name :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">

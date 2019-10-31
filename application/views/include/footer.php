@@ -295,16 +295,17 @@
     <script src="<?php echo base_url();?>assets/js/chart.min.js"></script>
     <script src="<?php echo base_url();?>assets/js/sweetalert.min.js"></script>
 
+    <!-- bootstrap datetimepicker js for datetimepicker in edit order-->
+    <script src="<?php echo base_url();?>assets/bootstrap/js/datetimepicker.min.js"></script>
+
    
 
     <script>
-    $(document).ready(function(){
-     
-     
-      
+    $(document).ready(function(){      
          $('#datepicker_to').datepicker({
        // format: 'dd-mm-yyyy',
         format: 'yyyy-mm-dd',
+        timeFormat:'H:i',
         todayHighlight: true,
         autoclose: true,
       });

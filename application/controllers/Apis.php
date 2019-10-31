@@ -766,30 +766,49 @@ You can change this password from mobile application after you are logged in onc
                     
                     $model = $this->model;
                     $data = $_POST;
-                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price']))) && isset($data['placed_by']) && (!empty($data['placed_by']))) {
+                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
 
-                        $customer_id=trim($data['customer_id']);
-                        $placed_by=trim($data['placed_by']);
-                        $placed_by=strtolower($placed_by);
-                        $customer_lpo=trim($data['customer_lpo']);
-                       
-                       $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
 
-                       if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
-                       {
-                            $response['status'] = 'failure';
-                            $response['message'] = 'Invalid customer id or customer is not active.';
-                            echo json_encode($response);
-                            exit();
-                       }
+                        if(!empty($data['placed_by']) && isset($data['placed_by'])) // placed by is set or not
+                        {
+                            $placed_by=trim($data['placed_by']);
+                            $placed_by=strtolower($placed_by);
+                        }
+                        else
+                        {
+                            $placed_by="customer";
+                        }
 
-                       if($placed_by=="customer" && $data['customer_id']!=$this->user_id) // if order is placed by customer then need to check order is placed by that customer only 
-                       {
-                            $response['status'] = 'failure';
-                            $response['message'] = 'Invalid customer id.';
-                            echo json_encode($response);
-                            exit();
-                       }
+
+                        if(!empty($data['customer_id']) && isset($data['customer_id'])) // customer id is set or not
+                        {
+                            $customer_id=trim($data['customer_id']);
+                        }
+                        else
+                        {
+                            $customer_id="0";
+                        }
+
+
+                        if(!empty($data['customer_lpo']) && isset($data['customer_lpo'])) // customer lpo is set or not
+                        {
+                            $customer_lpo=trim($data['customer_lpo']);
+                        }
+                        else
+                        {
+                            $customer_lpo="";
+                        }
+
+
+                    $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
+
+                    if($placed_by=="admin" && $customercheck=="0") // if order is placed by admin then need to check customer is exist or not and status
+                    {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide customer id who is exist and active';
+                        echo json_encode($response);
+                        exit();
+                    }
                       
                         $orderProductArray = json_decode($data['product_id'], true);
                         // Checking Email exist in our application
@@ -803,10 +822,10 @@ You can change this password from mobile application after you are logged in onc
 
                          $newOrder = end($orderLast)['id'] + 1;
                          if (date('m') <= 3) {//Upto June 2014-2015
-    $financial_year = (date('y')-1) . '-' . date('y');
-} else {//After June 2015-2016
-    $financial_year = date('y') . '-' . (date('y') + 1);
-}
+                            $financial_year = (date('y')-1) . '-' . date('y');
+                        } else {//After June 2015-2016
+                            $financial_year = date('y') . '-' . (date('y') + 1);
+                        }
 
                          $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
                          $do = 'DO/'.$newOrder.'/'.$financial_year;
@@ -949,8 +968,15 @@ $html = '<html>
 <table style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$lpo.'</td><td style="width:40%; text-align:right;">Invoice No. : '.$invoice.'</td></tr></table>
-    <br><br/>
- <table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$data['cargo_number'].'</td></tr></table>  
+    <br><br/>';
+
+if(trim($customer_lpo)!="") // if customer lpo field not null then display it'
+{
+    $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$customer_lpo.'</td><td style="width:40%; text-align:right;"></td></tr></table>
+    <br><br/>';
+}
+
+$html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$data['cargo_number'].'</td></tr></table>  
     <br><br/>
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$data['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$data['mark'].'</td></tr></table>     
 <br><br/>
@@ -998,8 +1024,22 @@ $html1 = '<html>
 <table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br>
     RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
     <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+<br><br/>';
+
+if(trim($customer_lpo)!="") { // if customer lpo is exist then display it.
+$html1.='<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,</td></tr></table>
+<table style="width:100%;"><tr><td style="width:40%;">Customer LPO No. : '.$customer_lpo.'</td><td style="width:60%; text-align:right;">RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
+    <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
+    <br><br/>'; } else {
+
+$html1.='<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br/>
+    RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
+    <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
+    <br><br/>';
+}
+
+
+$html1.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="30%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%".>RATE</th><th style="text-align: center" width="12%">AMOUNT</th></tr>';
 $count = 0;
@@ -1044,8 +1084,15 @@ $html2 = '<html>
 <table style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$invoice.'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$lpo.'</td> </tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+<br><br/>';
+
+if(trim($customer_lpo)!="") // if customer lpo field not null then display it.
+{
+    $html2.='<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$customer_lpo.'</td><td style="width:40%; text-align:right;"></td></tr></table>
+    <br><br/>';
+}
+
+$html2.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
@@ -1200,7 +1247,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                 
                         // If any of the mandatory parameters are missing
                         $response['status'] = 'failure';
-                        $response['message'] = 'Please provide product id, tax , total price and customer id ';
+                        $response['message'] = 'Please provide product id, tax and total price ';
                     }
                      $companyName = $userData[0]['company_name'];
                    

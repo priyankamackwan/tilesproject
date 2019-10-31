@@ -1,6 +1,6 @@
 <?php
-  $this->load->view('include/leftsidemenu');
   $this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
   
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
@@ -448,7 +448,7 @@ return value == '' || value.trim().length != 0;
         var category = $('#category:checkbox:checked').length;
         var product = $('#product:checkbox:checked').length;
         var order = $('#order:checkbox:checked').length;
-        if (user == 0 && category == 0 && category == 0 && order == 0) {
+        if (user == 0 && category == 0 && product == 0 && order == 0) {
           alert('Please select atleast one module for access');
           return false;
         }

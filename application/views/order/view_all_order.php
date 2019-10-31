@@ -2,8 +2,8 @@
 echo '<pre>';print_r($result);exit;
 //echo '<pre>';
 //print_r($productData); exit;
-  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 

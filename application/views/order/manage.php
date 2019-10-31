@@ -1,6 +1,6 @@
 <?php
-    $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+    $this->load->view('include/leftsidemenu');
     // Save Status from dashboard page unpaid orders
     $dash_status=$client_name='';
     if(isset($_REQUEST['dash_status']) && $_REQUEST['dash_status']!='' && $_REQUEST['dash_status']=="unpaid"){
@@ -127,18 +127,18 @@
                     </div>
 
                     <div class="col-md-3">
+                        <h4 class="text-center">Total Invoice Amount</h4>
+                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                    </div>
+
+                    <div class="col-md-3">
                         <h4 class="text-center">Total Paid Amount</h4>
-                        <p class="text-center"><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
                     </div>
 
                     <div class="col-md-3">
                         <h4 class="text-center">Total Unpaid Amount</h4>
-                        <p class="text-center"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
-                    </div>
-
-                    <div class="col-md-3">
-                        <h4 class="text-center">Total Invoice Amount</h4>
-                        <p class="text-center"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
                     </div>
 
                 </div>
@@ -183,7 +183,7 @@
 
                                         <!-- Client Filter  -->
                                         <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Customer:</label>
+                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
                                         </div>
 
                                         <!-- Client Filter Dropdown -->
@@ -200,7 +200,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No User Available --</option>
+                                                    <option value="">-- No Company Available --</option>
                                                 <?php
                                                     }
                                                 ?>
@@ -303,7 +303,7 @@
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
                                 <th class="text-center">Sr No.</th>
-                                <th class="text-center">Client Name</th>
+                                <th class="text-center">Company Name</th>
                                 <th class="text-center">LPO No</th>
                                 <th class="text-center">Delivery No</th>
                                 <th class="text-center">Invoice No</th>

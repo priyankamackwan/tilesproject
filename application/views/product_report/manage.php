@@ -1,6 +1,6 @@
 <?php
-  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
   //For lowstock condition set default value
   $Low_stock='false';
    

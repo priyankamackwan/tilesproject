@@ -325,7 +325,7 @@
                     }
 
                     // Created date for sales order.
-                    $tabledata['created'] =$this->$model->date_conversion($SingleOrderData['created'],'d/m/Y');
+                    $tabledata['created'] =$this->$model->date_conversion($SingleOrderData['created'],'d/m/Y H:i:s');
                     //$tabledata['created']=date('d/m/Y',strtotime($SingleOrderData['created']));
 
                     // Manage buttons.
@@ -637,10 +637,13 @@ $html = '<html>
 <table style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$ordersData[0]['lpo_no'].'</td> </tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;"></td><td style="width:40%; text-align:right;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td> </tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+<br><br/>';
+
+if(trim($ordersData[0]['customer_lpo'])!='') { // if customer lpo is exist then display it.
+$html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="width:40%; text-align:right;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td> </tr></table>
+<br><br/>'; }
+
+$html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
@@ -785,12 +788,22 @@ $html = '<html>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:40%;">From</td><td style="width:60%; text-align:center;">To</td> </tr></table>
 <table style="width:100%;"><tr><td style="width:40%;">Buyer : '.$userData[0]['company_name'].'</td><td style="width:60%; text-align:right;">Seller : PNP BUILDING MATERIAL TRADING LLC </td></tr></table>
-<table style="width:100%;"><tr><td style="width:40%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:60%; text-align:right;">Tel. : +97143531040 / +971558532631</td> </tr></table>
-<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$ordersData[0]['lpo_no'].'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,</td></tr></table>
+<table style="width:100%;"><tr><td style="width:40%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:60%; text-align:right;">Tel. : +97143531040 / +971558532631</td> </tr></table>';
+
+if(trim($ordersData[0]['customer_lpo'])!="") { // if customer lpo is exist then display it.
+$html.='<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$ordersData[0]['lpo_no'].'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,</td></tr></table>
 <table style="width:100%;"><tr><td style="width:40%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:60%; text-align:right;">RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
     <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+    <br><br/>'; } else {
+
+$html.='<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$ordersData[0]['lpo_no'].'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br/>
+    RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
+    <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
+    <br><br/>';
+}
+
+
+$html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align:center" width="5%" >SR No.</th><th style="text-align: center" width="30%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="12%">AMOUNT</th></tr>';
 $count = 0;
@@ -912,10 +925,13 @@ $html = '<html>
 <table style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$ordersData[0]['lpo_no'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>
-    <br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;"></td></tr></table>
-<br><br/>
- <table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
+    <br><br/>';
+
+if(trim($ordersData[0]['customer_lpo'])!=="") { // if customer lpo is exist then display it.
+$html.='<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;"></td></tr></table>
+<br><br/>'; }
+
+ $html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
     <br><br/>
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table>     
 <br><br/>
@@ -972,28 +988,32 @@ $pdf->Output($do_no, 'I');
 			$this->load->view($this->view.'/view',$data);
 		}
                 
-		public function Update() {
+		public function Update() 
+        {
                     
 			$model = $this->model;
-
 			$id = $this->input->post('id');
-                     //  echo $id; exit;
 			$sales_expense = $this->input->post('sales_expense');
-                        $status = $this->input->post('status');
-                        $invoice_status = $this->input->post('invoice_status');
-                        //echo $sales_expense; exit;
+            $status = $this->input->post('status');
+            $invoice_status = $this->input->post('invoice_status');
+            $txt_deliverydate = $this->input->post('txt_deliverydate');
+            $txt_paymentdate = $this->input->post('txt_paymentdate');
+
+            $txt_deliverydate=date('Y-m-d H:i:00',strtotime($txt_deliverydate));
+            $txt_paymentdate=date('Y-m-d H:i:00',strtotime($txt_paymentdate));
+
 			$data = array(
-
-                            'sales_expense' => $sales_expense,
-                            'status' => $status,
-                            'invoice_status' => $invoice_status,
-
-
+                        'sales_expense' => $sales_expense,
+                        'status' => $status,
+                        'invoice_status' => $invoice_status,
+                        'delivery_date' => $txt_deliverydate,
+                        'payment_date' => $txt_paymentdate
 			);
+            
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
                              
-			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
+			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Order has been updated successfully!</div>');
 			redirect($this->controller);
 		}
         // For order sales update

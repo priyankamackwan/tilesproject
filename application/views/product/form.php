@@ -1,8 +1,8 @@
 <?php
 //echo '<pre>';
 //print_r($result[0]); exit;
-  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
              $choosen_categories = array();
@@ -274,6 +274,11 @@
     echo $this->session->flashdata('Change_msg');
     echo $this->session->flashdata($this->msgDisplay);
   ?>
+  <style type="text/css">
+    .select2{
+      width: 100% !important;
+    }
+  </style>
   <!-- <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
     <li class="active">Users</li>
@@ -498,10 +503,8 @@
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
-                    <select class="form-control select2" name="unit"  id="unit">
-
+                    <select class="form-control select2" name="unit" id="unit">
                         <option value="0">Select Unit</option>
-                          
                       <?php 
                         if($result[0]->unit == 1) { 
                       ?>
@@ -512,8 +515,7 @@
                           <option value="1">CTN</option>
                       <?php 
                         } 
-                      ?>
-                          
+                      ?> 
                       <?php 
                         if($result[0]->unit == 2) { 
                       ?>
@@ -524,8 +526,7 @@
                           <option value="2">SQM</option>
                       <?php
                         } 
-                      ?>
-                            
+                      ?>  
                       <?php 
                         if($result[0]->unit == 3) { 
                       ?>
@@ -533,11 +534,10 @@
                       <?php 
                         } else { 
                       ?>
-                          <option value="3">PCS</option>
+                        <option value="3">PCS</option>
                       <?php
                         } 
                       ?>
-                          
                       <?php 
                         if($result[0]->unit == 4) { 
                       ?>

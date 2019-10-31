@@ -1,5 +1,5 @@
 <?php
-        $logged = $this->userhelper->current();
+  $logged = $this->userhelper->current();
   $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
         

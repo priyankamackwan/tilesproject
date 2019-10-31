@@ -1,6 +1,6 @@
 <?php
-  $this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+  $this->load->view('include/leftsidemenu');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 //  print_r($user_data);die();
