@@ -1022,9 +1022,14 @@ $pdf->Output($do_no, 'I');
             // Order id
             $id = $this->input->post('id');
             // For post array and quantity
+            // Contatc personr name
+            $username = $this->input->post('username');
+            //price 
+            $price = $this->input->post('price');
             $product_arr=$quantity_arr=array();
             $old_product_array=$old_product_quantity=array();
             $erro_product=array();
+            
 
             $quantity_update=array();
 
@@ -1107,7 +1112,8 @@ $pdf->Output($do_no, 'I');
                     // insert in order prodcuts table
                     $insert_data=array('order_id'=>$id,
                                         'product_id'=>$value,
-                                        'quantity'=>$quantity_arr[$value]
+                                        'quantity'=>$quantity_arr[$value],
+                                        'price'=>$price
                                 );
                     $this->$model->insert('order_products',$insert_data);
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
@@ -1136,27 +1142,31 @@ $pdf->Output($do_no, 'I');
 
             $where = array($this->primary_id=>$id);
             $this->$model->update($this->table,$data,$where);
-                             
-            //$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
+
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$username.' has been updated successfully!</div>');
             redirect($this->controller);
         }
-        
-		public function remove($id) {
-                   
+        // Delete sales order
+		public function remove($id) {                   
 			$model = $this->model;
+            $company_name=array();
+            $user_data_name='';
+            //Order id
 			$id = $this->utility->decode($id);
-                         
-			$this->$model->select(array(),'categories',array('id'=>$id),'','');
-                        $this->db->set('is_deleted',1);
-                        $this->db->where('id',$id);
-                        $this->db->update('categories',$data);
-                        
-                        $this->db->select('name');
-                        $this->db->where('id', $id);
-                        $q = $this->db->get('categories');
-                        $userdata = $q->result_array();
-                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been deleted successfully!</div>');
-                        redirect($this->controller);	
+            //Fetch order 
+            $delete_sales_order=$this->orders_model->view_all_order($id);  
+            foreach ($delete_sales_order as $key => $value) {
+                if(isset($value['company_name']) && $value['company_name']!=''){
+                    $user_data_name=$value['company_name'];
+                }
+                // Update sold quantity in products
+                $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$value['quantity'],'+');
+                $this->db->where('product_id', $value['product_id']);
+                $this->db->where('order_id', $value['order_id']);
+                $this->db->delete('order_products');
+            }
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$user_data_name.' has been deleted successfully!</div>');
+            redirect($this->controller);	
 		}
                 
        

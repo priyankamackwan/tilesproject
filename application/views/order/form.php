@@ -62,14 +62,27 @@
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
-							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=[];
+							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
 								$sales_expense=$value['sales_expense'];
 								$status=$value['status'];
 								$invoice_status=$value['invoice_status'];
-								$payment_date=$value['payment_date'];
-								$delivery_date=$value['delivery_date'];
+								if(isset($value['payment_date']) && $value['payment_date']!=''){
+									$payment_date=$value['payment_date'];
+								}
+								if(isset($value['delivery_date']) && $value['delivery_date']!=''){
+									$delivery_date=$value['delivery_date'];
+								}
+								if(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==1){
+									$price=$value['cash_rate'];
+								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==2){
+									$price=$value['credit_rate'];
+								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==3){
+									$price=$value['walkin_rate'];
+								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==4){
+									$price=$value['flexible_rate'];
+								}
 							?>
 							<div id="delete_<?php echo $key+1;?>">
 								<div class="form-group select2">
@@ -128,6 +141,7 @@
 				                  <input type="text" name="sales_expense" value="<?php echo $sales_expense;?>" class="form-control" placeholder="Enter Sales Expense">
 				                </div>
 				              </div>
+
 				              <div class="form-group">
 				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
 				                  Delivery Status :
@@ -149,7 +163,7 @@
 				                <div class="col-md-9 col-sm-12 col-xs-12">
 				                  <div class='input-group date' id='delivery_datetimepicker'>
 				                      	<?php 
-				                        if ($result[0]->status != 2) 
+				                        if ($status != 2) 
 				                        {
 				                            $delivery_date_value="";
 				                        }else{
@@ -197,13 +211,15 @@
 				                  </div>
 				                </div>
 				              </div>
-			              <div class="form-group">
-			              	<div class="col-md-3 col-sm-12 col-xs-12"></div>
-				              	
-							</div>
-							<div class="box-footer">
-								<input type="submit" class="btn btn-primary" value="<?php echo $btn;?>">
-							</div>
+				              <input type="hidden" name="username" value="<?php echo $username;?>">
+				              <input type="hidden" name="price" value="<?php echo $price;?>">
+				              <div class="form-group">
+				              	<div class="col-md-3 col-sm-12 col-xs-12"></div>
+					              	
+								</div>
+								<div class="box-footer">
+									<input type="submit" class="btn btn-primary" value="<?php echo $btn;?>">
+								</div>
 						</form>
 					</div>
 				</div>
