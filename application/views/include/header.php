@@ -18,6 +18,9 @@
 
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+  <!-- Bootstrap datetimepicker css for datetimepicker in edit order-->  
+  <link href="<?php echo base_url();?>assets/bootstrap/css/bootstrap-datepicker3.css" rel="stylesheet"/>
   
 
   <!-- Font Awesome -->
@@ -88,14 +91,27 @@
               <?php 
                 echo ucfirst($this->userhelper->current('first_name').' '.$this->userhelper->current('last_name'));
               ?>
-              <span class=" fa fa-angle-down"></span>
+              <span class="fa fa-angle-down"></span>
             </a>
             <ul class="dropdown-menu">
+
+              <!-- Header -->
+              <li class="user-header" style="height: 78px;">
+                <p>
+                  <b style="font-size: 19px;"><?php echo ucfirst($this->userhelper->current('first_name').' '.$this->userhelper->current('last_name')); ?></b>
+                  <small><?php echo ucfirst($this->userhelper->current('email')); ?></small>
+                </p>
+              </li>
+
               <!-- Menu Footer-->
               <li class="user-footer">
-                <a href="<?php echo base_url();?>Change_password" class="btn btn-default btn-flat">Change Password</a>
+                <div class="pull-left">
+                  <a href="<?php echo base_url();?>Change_password" class="btn btn-default btn-flat">Change Password</a>
+                </div>
               
-                <a href="<?php echo base_url();?>Logout"class="btn btn-default btn-flat">Log Out  <i class="fa fa-sign-out"></i></a>
+                <div class="pull-right">
+                  <a href="<?php echo base_url();?>Logout"class="btn btn-default btn-flat"> Log Out <i class="fa fa-sign-out"></i></a>
+                </div>
               </li>
             </ul>
           </li>
