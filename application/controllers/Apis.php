@@ -175,7 +175,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 		    // "data" => json_encode(array())
 		);
     	$data = json_encode($arr);
-                            $this-> ($data,"Android");
+                            $this->android_ios_notification($data,"Android");
 		/*//FCM API end-point
 		$url = 'https://fcm.googleapis.com/fcm/send';
 		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key

@@ -67,7 +67,7 @@ a:hover, a:active, a:focus {
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
-							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=[];
+							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
 								$sales_expense=$value['sales_expense'];
@@ -81,12 +81,16 @@ a:hover, a:active, a:focus {
 								}
 								if(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==1){
 									$price=$value['cash_rate'];
+									$client_type='cash_rate';
 								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==2){
 									$price=$value['credit_rate'];
+									$client_type='credit_rate';
 								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==3){
 									$price=$value['walkin_rate'];
+									$client_type='walkin_rate';
 								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==4){
 									$price=$value['flexible_rate'];
+									$client_type='flexible_rate';
 								}
 							?>
 							<div id="delete_<?php echo $key+1;?>">
@@ -218,6 +222,8 @@ a:hover, a:active, a:focus {
 				              </div>
 				              <input type="hidden" name="username" value="<?php echo $username;?>">
 				              <input type="hidden" name="price" value="<?php echo $price;?>">
+				              <input type="hidden" name="client_type" value="<?php echo $client_type;?>">
+				              
 				              <div class="form-group">
 				              	<div class="col-md-3 col-sm-12 col-xs-12"></div>
 					              	
