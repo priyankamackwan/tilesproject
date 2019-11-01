@@ -1050,7 +1050,6 @@ $pdf->Output($do_no, 'I');
                     $quantity_arr[$p_id]=$quantity;
                 }
             }
-
             //remove blank array exist
             $product_arr = array_filter($product_arr); 
             $quantity_arr = array_filter($quantity_arr); 
@@ -1083,8 +1082,6 @@ $pdf->Output($do_no, 'I');
                         $rate_type=$check_quantity->flexible_rate;
                     
                 }
-
-
                 //Check quantity is updated or not
                 if($quantity_arr[$value['product_id']]> $value['quantity']){
                     $update_sold_quantity=$quantity_arr[$value['product_id']]-$value['quantity'];
@@ -1094,6 +1091,8 @@ $pdf->Output($do_no, 'I');
                     $update_sold_quantity=$value['product_id']-$quantity_arr[$value['quantity']];
                      $update_oprator='-';
                      $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
+                }else{
+                    $total_check_q=$quantity_arr[$value['product_id']];
                 }
                 //echo $rate_type.'  '.$quantity_arr[$value['product_id']];
                 // total of all product amount
