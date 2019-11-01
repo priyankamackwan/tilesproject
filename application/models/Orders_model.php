@@ -107,10 +107,13 @@
              return true;
         }
         // Update order from prodcut id
-        function update_order_items($table_name,$fieldname,$product_id, $quantity,$oprator){
+        function update_order_items($table_name,$fieldname,$product_id, $quantity,$oprator,$order_id){
             // update  current  quantity - deleted
              $this->db->set($fieldname, $fieldname.$oprator.$quantity, FALSE);
              $this->db->where($table_name.'.product_id',$product_id);
+             if(isset($order_id) && $order_id!=''){
+                $this->db->where('order_id',$order_id);   
+             }
              $this->db->update($table_name);
              return true;
         }

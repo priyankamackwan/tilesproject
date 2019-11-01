@@ -1104,9 +1104,18 @@ $pdf->Output($do_no, 'I');
 
                     //Update solde quantity in product table
                     $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator);   
+                    
+                    //Update price according to client type
+                    
+                    $price_update = array(
+                            'price'=>$rate_type
+                            );
+                    $where_update = array('product_id'=>$$value['product_id'],'order_id'=>$id);
+                    $this->My_model->update('order_products',$price_update,$where_update);
+
 
                     //Update solde quantity in order product table
-                    $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator);
+                    $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator,$id);
                 }/*else{
                     $this->session->set_flashdata('dispMessage','<span class="7"><div class="alert alert-danger"><strong>Some Item quantity Is Not Available</strong></div></span>');
                     redirect($this->controller.'/edit/'.$this->utility->encode($id));

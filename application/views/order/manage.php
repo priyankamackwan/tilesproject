@@ -132,12 +132,12 @@
                     </div>
 
                     <div class="col-md-3">
-                        <h4 class="text-center" style="color:green">Total Paid Amount</h4>
+                        <h4 class="text-center" style="color:#007600"><b>Total Paid Amount</b></h4>
                         <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
                     </div>
 
                     <div class="col-md-3">
-                        <h4 class="text-center" style="color:red">Total Unpaid Amount</h4>
+                        <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b></h4>
                         <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
                     </div>
 

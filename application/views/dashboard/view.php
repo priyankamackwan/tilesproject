@@ -50,7 +50,7 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-12 col-xs-12">
 							<div class="box-title">
-								<i class="fa ion-stats-bars"></i> Common statistics
+								<i class="fa ion-stats-bars"></i> Common Statistics
 							</div>
 						</div>
 					</div>
@@ -151,7 +151,7 @@
 						<div class="box box-info " id="customer-statistics-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-user"></i> New customers
+									<i class="fa fa-user"></i> New Customers
 								</h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-xs btn-info btn-flat margin-r-5" data-chart-role="toggle-chart" data-chart-period="year">Year</button>

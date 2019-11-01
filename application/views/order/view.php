@@ -1,18 +1,18 @@
 <?php
 //echo '<pre>';
 //print_r($productData); exit;
-	$this->load->view('include/header');
+  $this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
-	defined('BASEPATH') OR exit('No direct script access allowed');
-	error_reporting(0);
+  defined('BASEPATH') OR exit('No direct script access allowed');
+  error_reporting(0);
 ?>
 
 <!-- page content -->
         <!-- <div class="right_col" role="main">
-		<div class="row">
+    <div class="row">
             <div class="page-title">
               <div class="title_left">
-					<a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a> 
+          <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a> 
               </div>
             </div>
             <div class="clearfix"></div>
@@ -26,9 +26,9 @@
                 <div class="x_content">
                     <br />
                     <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update'?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-	<input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
-					  
-					  <div class="form-group">
+  <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
+            
+            <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Order Detail
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -45,7 +45,7 @@
                             </table>
                         </div>
                       </div>
-                        	  <div class="form-group">
+                            <div class="form-group">
                         <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">User Name
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -180,7 +180,7 @@
                             </select>
                         </div>
                       </div>
-                        		  <div class="ln_solid"></div>
+                              <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-6 col-xs-12 col-md-offset-3">
                           <button type="submit" class="btn btn-primary">Submit</button>
@@ -221,9 +221,9 @@
 
             <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update'?>" method="post" id="demo-form2" onsubmit="return formvalidate();" data-parsley-validate class="form-horizontal form-label-left">
                                 
-	            <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
-					  
-					    <div class="form-group">
+              <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
+            
+              <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
                   Order Detail :
                 </label>
@@ -376,110 +376,57 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <input type="text" name="sales_expense" value="<?php echo $result[0]->sales_expense;?>" class="form-control" placeholder="Enter Sales Expense">
+                  <?php echo $result[0]->sales_expense;?>
                 </div>
-              </div>
-        
+              </div>        
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
                   Delivery Status :
                 </label>
-
-                <div class="col-md-9 col-sm-12 col-xs-12">
-                  <select name="status" class="form-control select2" style="width: 100%;" id="delivery_status">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
                     <?php 
-                      if ($result[0]->status == 0) { 
-                    ?>
-                        <option value="0" selected="selected">Pending</option>
-                    <?php 
-                      } else { 
-                    ?>
-                        <option value="0">Pending</option>
-                    <?php 
+                      if ($result[0]->status == 0) {
+                      echo  'Pending';
+                      }elseif($result[0]->status == 1) { 
+                          echo 'In Progress'; 
+                      }elseif($result[0]->status == 2) { 
+                          echo 'Completed'; 
                       }
-
-                      if ($result[0]->status == 1) { 
                     ?>
-                        <option value="1" selected="selected">In Progress</option>
-                    <?php 
-                      } else { 
-                    ?>
-                        <option value="1">In Progress</option>
-                    <?php 
-                      } 
-
-                      if ($result[0]->status == 2) { 
-                    ?>
-                        <option value="2" selected="selected">Completed</option>
-                    <?php 
-                      } else { 
-                    ?>
-                        <option value="2">Completed</option>
-                    <?php
-                      } 
-                    ?>
-                  </select>
                 </div>
               </div>
-
-              <div class="form-group" id="id_delivery_date" <?php if ($result[0]->status != 2) { ?> style="display: none;" <?php } ?> >  <!-- if delivery status is completed then display the date div -->
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="delivery_date">
+              <?php if(isset($result[0]->delivery_date) && $result[0]->delivery_date!='' && $result[0]->status == 2) { ?>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
                   Delivery Date :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <div class='input-group date' id='delivery_datetimepicker'>
-                      <?php 
-                            if ($result[0]->status != 2) 
-                            {
-                              $delivery_date_value="";
-                            }
-                            else
-                            {
-                              $delivery_date_value=date('d/m/Y h:i',strtotime($result[0]->delivery_date));
-                            }
-                      ?>
-                      <input type='text' class="form-control" id="txt_deliverydate" name="txt_deliverydate" value="<?php echo $delivery_date_value; ?>" />
-                      <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar" id="delivery_gly"></span>
-                      </span>
-                  </div>
+                    <?php 
+                      echo $result[0]->delivery_date;
+                    ?>
                 </div>
               </div>
-
+                <?php 
+                  } 
+                  ?>
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
                   Payment Status :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <select name="invoice_status" style="width: 100%;" class="form-control select2" id="payment_status">
                     <?php
                       if ($result[0]->invoice_status == 0) { 
+                        echo 'Unpaid';
+                      }elseif ($result[0]->invoice_status == 1) { 
+                        echo 'Paid';
+                      }
                     ?>
-                        <option value="0" selected="selected">Unpaid</option>
-                    <?php 
-                      } else { 
-                    ?>
-                        <option value="0">Unpaid</option>
-                    <?php 
-                      } 
-
-                      if ($result[0]->invoice_status == 1) { 
-                    ?>
-                        <option value="1" selected="selected">Paid</option>
-                    <?php
-                      } else { 
-                    ?>
-                        <option value="1">Paid</option>
-                    <?php 
-                      } 
-                    ?> 
-                  </select>
                 </div>
               </div>
-
-              <div class="form-group" id="id_payment_date" <?php if ($result[0]->invoice_status != 1) { ?> style="display: none;" <?php } ?> > <!-- if payment status is completed then display the date div -->
+              <?php if(isset($result[0]->payment_date) && $result[0]->payment_date!='' && $result[0]->invoice_status == 1) { ?>
+              <div class="form-group" id="id_payment_date"> <!-- if payment status is completed then display the date div -->
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
                   Payment Date :
                 </label>
@@ -487,27 +434,19 @@
                 <div class="col-md-9 col-sm-12 col-xs-12">
                   <div class='input-group date' id='payment_datetimepicker'>
                       <?php 
-                            if ($result[0]->invoice_status != 1) 
-                            {
-                              $payment_date_value="";
-                            }
-                            else
-                            {
-                              $payment_date_value=date('d/m/Y h:i',strtotime($result[0]->payment_date));
-                            }
+                        echo $result[0]->payment_date;
                       ?>
-                      <input type='text' class="form-control" id="txt_paymentdate" name="txt_paymentdate" value="<?php echo $payment_date_value; ?>" />
-                      <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
-                      </span>
                   </div>
                 </div>
               </div>
+              <?php
+                }   
+              ?>
 
 
-              <div class="box-footer">
+              <!-- <div class="box-footer">
                 <input type="submit" class="btn btn-primary" value="Submit">
-              </div>
+              </div> -->
             </form>
           </div>
         </div>
@@ -516,7 +455,7 @@
   </section>
 </div>
 <?php
-	$this->load->view('include/footer');
+  $this->load->view('include/footer');
 ?>
 
 <style type="text/css">
