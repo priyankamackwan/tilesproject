@@ -1091,7 +1091,7 @@ $pdf->Output($do_no, 'I');
                     $update_sold_quantity=$value['product_id']-$quantity_arr[$value['quantity']];
                      $update_oprator='-';
                      $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
-                }else{
+                }elseif($quantity_arr[$value['product_id']]==$value['quantity']){
                     $total_check_q=$quantity_arr[$value['product_id']];
                 }
                 //echo $rate_type.'  '.$quantity_arr[$value['product_id']];
@@ -1099,8 +1099,9 @@ $pdf->Output($do_no, 'I');
                 $amount=$quantity_arr[$value['product_id']] * $rate_type;
                
                 $total_order_price+=$amount;  
-            
-                if($check_quantity->quantity > $total_check_q){
+                    // Check total quantity and buy  quantity and if old + new quantity same not to update
+                if($check_quantity->quantity > $total_check_q && $quantity_arr[$value['product_id']]!=$value['quantity']){
+
                     //Update solde quantity in product table
                     $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator);   
 
