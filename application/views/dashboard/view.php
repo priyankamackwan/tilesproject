@@ -14,12 +14,12 @@
 }
 #loadingDiv{
   position:absolute;
-  top:0px;
-  background-color:#666;
+  top:50%;
+  left:50%;
   background-repeat:no-repeat;
   background-position:center;
   z-index:10000000;
-  opacity: 0.4;
+  opacity: 10.4;
   filter: alpha(opacity=40); /* For IE8 and earlier */
 }
 
@@ -453,7 +453,7 @@
 <?php
 $this->load->view('include/footer');
 ?>
-	<!-- <div class="loader" id="loadingDiv" ></div> -->
+	<div class="loader" id="loadingDiv" style="display: none;" ></div>
 <script>
 $(document).ready(function () {
   $('#nopcommerce-common-statistics-box').on('click', 'button[data-widget="collapse"]', function () {
@@ -577,8 +577,13 @@ var footerLine1 =[];
                 data: {
                     period: period
                 },
+                beforeSend: function(){
+			        $("#loadingDiv").show();
+			    },
+			    complete: function(){
+			        $("#loadingDiv").hide();
+			    },
                 success: function (data, textStatus, jqXHR) {
-                	
 					footerLine1=[];
 
                     for (var i = 0; i < data.length; i++) {
@@ -704,7 +709,6 @@ var footerLine1 =[];
         function changeCsPeriod(period) {
             var csLabels = [];
             var csData = [];
-
             $.ajax({
                 cache: false,
                 type: "POST",
@@ -714,10 +718,10 @@ var footerLine1 =[];
                     period: period
                 },
                 beforeSend: function(){
-			        $('#image').show();
+			        $("#loadingDiv").show();
 			    },
 			    complete: function(){
-			        $('#image').hide();
+			        $("#loadingDiv").hide();
 			    },
                 success: function (data, textStatus, jqXHR) {
                     for (var i = 0; i < data.length; i++) {
