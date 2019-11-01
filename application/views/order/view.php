@@ -383,7 +383,7 @@
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
                   Delivery Status :
                 </label>
-                    <div class="col-md-9 col-sm-12 col-xs-12">
+                    <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                     <?php 
                       if ($result[0]->status == 0) {
                       echo  'Pending';
@@ -401,7 +401,7 @@
                   Delivery Date :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                     <?php 
                       echo $result[0]->delivery_date;
                     ?>
@@ -415,7 +415,7 @@
                   Payment Status :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                     <?php
                       if ($result[0]->invoice_status == 0) { 
                         echo 'Unpaid';
@@ -427,7 +427,7 @@
               </div>
               <?php if(isset($result[0]->payment_date) && $result[0]->payment_date!='' && $result[0]->invoice_status == 1) { ?>
               <div class="form-group" id="id_payment_date"> <!-- if payment status is completed then display the date div -->
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12 mt_5" for="payment_date">
                   Payment Date :
                 </label>
 
