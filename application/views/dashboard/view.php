@@ -799,27 +799,31 @@ var footerLine1 =[];
 		"bPaginate": false,
 		"lengthChange": false,
 		"info": false,
-		"searching": false
+		"searching": false,
+		"scrollX": true
 	} );
 	$('#datatables1').dataTable({
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
 		"info": false,
-		"searching": false
+		"searching": false,
+		"scrollX": true
 	} );
 	$('#datatables2').dataTable({
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
 		"info": false,
-		"searching": false
+		"searching": false,
+		"scrollX": true
 	} );
 $('#example1').dataTable({
 		"ordering": false,
 		"bPaginate": false,
 		"lengthChange": false,
 		"info": false,
-		"searching": false
+		"searching": false,
+		"scrollX": true
 	} );
 </script>        
