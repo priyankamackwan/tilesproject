@@ -183,7 +183,7 @@
         }
         //For best selling by product
         function selling_product($order_by){
-           $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+           $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity');
           $this->db->from('order_products o');
           $this->db->join('products p','p.id=o.product_id','left');
           $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
@@ -204,7 +204,7 @@
             $this->db->join('users as u', 'u.id = o.user_id','left');
             $this->db->where('o.is_deleted', 0);      
             $this->db->limit(5);
-            $this->db->order_by('o.total_price','desc');
+            $this->db->order_by('totalValue','desc');
             $this->db->group_by('o.user_id');
             $allorderData = $this->db->get();
             $count = $allorderData->result_array();

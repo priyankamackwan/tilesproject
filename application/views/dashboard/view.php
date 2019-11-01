@@ -236,7 +236,7 @@
 													</td>
 													<td class="text-center"><?php echo $status;?></td>					
 													</td>
-													<td class="text-center"><?php echo date('d/m/Y H:i:s',strtotime($value['created']));?></td>
+													<td class="text-center"><?php echo $this->My_model->date_conversion($value['created'],'d/m/Y H:i:s');?></td>
 													<td class=" button-column text-center">
 														<a href='<?php echo $view;?>' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
 													</td>
@@ -310,7 +310,7 @@
 													</td>
 													<td class="text-center"><?php echo $status;?></td>					
 													</td>
-													<td class="text-center"><?php echo date('d/m/Y H:i:s',strtotime($value['created']));?></td>
+													<td class="text-center"><?php echo $this->My_model->date_conversion($value['created'],'d/m/Y H:i:s');?></td>
 													<td class=" button-column text-center">
 														<a href='<?php echo $view;?>' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
 													</td>

@@ -141,7 +141,9 @@
 			$date=trim($date);
 			$format=trim($format);	
 			$newdate=date($format,strtotime($date));
-			return $newdate;
+			$new_date = date('d/m/Y',strtotime($newdate));
+			$new_time = date('H:i:s',strtotime($timestamp));
+			return $new_date.'<br>'.$new_time;
 		}
 		// balance amount and quantity
 		public function balance_quantity(){
