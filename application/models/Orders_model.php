@@ -123,10 +123,11 @@
             return $data; 
         }
         // single prodcut from product id
-        function single_items($id){
+        function single_items($id,$order_id){
             $this->db->select('*');
             $this->db->from('order_products');
             $this->db->where('product_id',$id);
+            $this->db->where('order_id',$order_id);
             $data=$this->db->get()->row();
             return $data; 
         }

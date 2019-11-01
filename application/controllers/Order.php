@@ -1118,14 +1118,13 @@ $pdf->Output($do_no, 'I');
             $array_remove=array_diff($old_product_array, $product_arr);
             if(isset($array_remove) && $array_remove!='' && count($array_remove) >0){
                 foreach ($array_remove as $key => $value) { 
-
                     // Fetch single data from order products
-                    $single_datas=$this->orders_model->single_items($value);  
-                   $remove_amount=  $single_datas->price * $single_datas->quantity;  
+                    $single_datas=$this->orders_model->single_items($value,$id);  
+                    $remove_amount=  $single_datas->price * $single_datas->quantity;
                     //minus for reove items
-                    $total_order_price-=$remove_amount;         
+                    $total_order_price=$total_order_price-$remove_amount;         
                     // Update removed items sold wuantity
-                    $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'+');
+                    $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'-');
 
                     // Delete item from order products table
                     if(isset($old_product_array[$key]) && $old_product_array[$key]!='' && $old_product_array[$key]==$value){
