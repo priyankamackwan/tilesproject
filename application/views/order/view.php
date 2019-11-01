@@ -259,7 +259,7 @@
                   User Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $User[0]['company_name'];?>
                 </div>
               </div>
@@ -269,7 +269,7 @@
                   Tax :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo round($result[0]->tax,2);?>
                 </div>
               </div>
@@ -279,7 +279,7 @@
                   Total Price :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo round($result[0]->total_price,2);?>
                 </div>
               </div>
@@ -289,7 +289,7 @@
                   LPO No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->lpo_no;?>
                 </div>
               </div>
@@ -302,7 +302,7 @@
                   Customer LPO No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $customer_lpo[0]['customer_lpo'];?>
                 </div>
               </div>
@@ -315,7 +315,7 @@
                   Do No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->do_no;?>
                 </div>
               </div>
@@ -325,7 +325,7 @@
                   Invoice No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->invoice_no;?>
                 </div>
               </div>
@@ -335,7 +335,7 @@
                   Cargo :
                 </label>
               
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->cargo;?>
                 </div>
               </div>
@@ -345,7 +345,7 @@
                   Cargo Number :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->cargo_number;?>
                 </div>
               </div>
@@ -355,7 +355,7 @@
                   Location :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->location;?>
                 </div>
               </div>
@@ -365,7 +365,7 @@
                   Mark :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->mark;?>
                 </div>
               </div>
@@ -375,7 +375,7 @@
                   Sales Expense :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <input type="text" name="sales_expense" value="<?php echo $result[0]->sales_expense;?>" class="form-control" placeholder="Enter Sales Expense">
                 </div>
               </div>
