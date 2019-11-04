@@ -1193,11 +1193,11 @@ $pdf->Output($do_no, 'I');
             $sales_expense = $this->input->post('sales_expense');
             $status = $this->input->post('status');
             $invoice_status = $this->input->post('invoice_status');
-            $delivery_date = $this->input->post('delivery_date');
-            $payment_date = $this->input->post('txt_paymentdate');
+            $delivery_date = $this->input->post('deliverydate');
+            $payment_date = $this->input->post('paymentdate');
 
-            $delivery_date=date('Y-m-d H:i:00',strtotime($delivery_date));
-            $payment_date=date('Y-m-d H:i:00',strtotime($payment_date));
+            $delivery_date=date('Y-m-d H:i:s',strtotime($delivery_date));
+            $payment_date=date('Y-m-d H:i:s',strtotime($payment_date));
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
@@ -1209,7 +1209,6 @@ $pdf->Output($do_no, 'I');
 
             $where = array($this->primary_id=>$id);
             $this->$model->update($this->table,$data,$where);
-
             $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$username.' has been updated successfully!</div>');
             redirect($this->controller);
         }

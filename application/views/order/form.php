@@ -179,7 +179,7 @@ a:hover, a:active, a:focus {
 				                            $delivery_date_value=date('d/m/Y h:i A',strtotime($delivery_date));
 				                        }
 				                      ?>
-				                      <input type='text' class="form-control" id="txt_deliverydate" name="txt_deliverydate" value="<?php echo $delivery_date_value; ?>" required="required"/>
+				                      <input type='text' class="form-control" id="txt_deliverydate" name="deliverydate" value="<?php echo $delivery_date_value; ?>" required="required"/>
 				                      <span class="input-group-addon">
 				                        <span class="glyphicon glyphicon-calendar" id="delivery_gly"></span>
 				                      </span>
@@ -213,7 +213,7 @@ a:hover, a:active, a:focus {
 				                              $payment_date_value=date('d/m/Y h:i A',strtotime($payment_date));
 				                            }
 				                      ?>
-				                      <input type='text' class="form-control" id="txt_paymentdate" name="txt_paymentdate" value="<?php echo $payment_date_value; ?>"  required="required"/>
+				                      <input type='text' class="form-control" id="paymentdate" name="paymentdate" value="<?php echo $payment_date_value; ?>"  required="required"/>
 				                      <span class="input-group-addon">
 				                        <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
 				                      </span>
