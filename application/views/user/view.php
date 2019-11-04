@@ -200,7 +200,7 @@
                 <div class="col-md-9 col-sm-12 col-xs-12">
                   <?php if(trim($result[0]->last_activity)=='0000-00-00 00:00:00') // if date is not set
                           {
-                            echo '0000-00-00 00:00:00';
+                            echo '00/00/0000 00:00:00';
                           } 
                         else 
                           {

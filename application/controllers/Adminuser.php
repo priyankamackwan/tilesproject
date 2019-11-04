@@ -19,8 +19,7 @@
 
 		}
 		public function index()
-		{
-                       
+		{     
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
@@ -86,6 +85,15 @@
 				{
 					$model = $this->model;
 					$id = $this->primary_id;
+					if($value->created=="0000-00-00 00:00:00") // if date is not set
+					{
+						$date_value="00/00/0000"."<br>"." 00:00:00";
+					}
+					else
+					{
+						$date_value=$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
+					}
+					
 					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value->$id));
                                         if ($value->status == 1){
                                             $statusText = 'Active';
@@ -101,6 +109,7 @@
 					$nestedData['last_name'] = $value->last_name;
                                         $nestedData['email'] = $value->email;
 					$nestedData['mobile_no'] = $value->mobile_no;
+					$nestedData['created'] = $date_value;
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a>";
@@ -167,10 +176,10 @@
 				'first_name' => $first_name,
                                 'last_name' => $last_name,
                                 'email' => $email,
-				'mobile_no' => $number,
+								'mobile_no' => $number,
                                 'password' => md5($this->input->post('password')),
                                 'rights' => $permissions,
-
+                                'created' => date('Y-m-d H:i:s'),
 			);
 			$this->$model->insert($this->table,$data);
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$first_name.' '.$last_name.' has been added successfully!</div>');
@@ -195,7 +204,7 @@
 			$this->load->view($this->view.'/form',$data);
 		}
                 
-                public function view($id)
+        public function view($id)
 		{
 			$model = $this->model;
 			$id = $this->utility->decode($id);
@@ -216,7 +225,7 @@
 
 
                 
-                   public function checkemail()
+        public function checkemail()
 		{
 			$id = $this->input->post('id');
 			$email = $this->input->post('email');
@@ -248,7 +257,7 @@
 			}
 		}
                 
-                public function checknumber()
+        public function checknumber()
 		{
 			$id = $this->input->post('id');
 			$number = $this->input->post('number');

@@ -146,7 +146,7 @@
 			if(isset($format) && $format!='' && $format=="d/m/Y H:i:s"){
 				$new_time = date('H:i:s',strtotime($date));
 			}
-			return $new_date.'<br>'.$new_time;
+			return $new_date.'<br> '.$new_time;
 		}
 		// balance amount and quantity
 		public function balance_quantity(){

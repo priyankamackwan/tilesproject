@@ -326,10 +326,17 @@
 
                     // Created date for sales order.
                     $tabledata['created'] =$this->$model->date_conversion($SingleOrderData['created'],'d/m/Y H:i:s');
-                    //$tabledata['created']=date('d/m/Y',strtotime($SingleOrderData['created']));
+
 
                     // Manage buttons.
-                    $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
+                    if($SingleOrderData['status']==2 && $SingleOrderData['invoice_status']==1) // if order status is completed and status is paid then no need to display edit and delete button.
+                    {
+                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+                    }
+                    else
+                    {
+                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
+                    }
 
                     // Push table data in to array.
                     $data[] = $tabledata;
