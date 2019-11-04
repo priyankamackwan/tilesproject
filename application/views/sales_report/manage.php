@@ -264,7 +264,7 @@
                 sheetName: 'Sales report',
                 action: newExportAction,
                 exportOptions: {
-                    columns: [1,2,3,4]
+                    columns: [1,2,3,4,5]
                 },
                 customize: function (xlsx) {                            
                   // console.log(rels);

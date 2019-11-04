@@ -173,6 +173,25 @@
                 </div>
               </div>
 
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                  Created On :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                  <?php if($result[0]->created=="0000-00-00 00:00:00") // if date is not set
+                        {
+                          echo "00/00/0000 00:00:00";
+                        }
+                        else
+                        {
+                          echo date('d/m/Y H:i:s',strtotime($result[0]->created));
+                        }
+                  ?>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="age_group">
                   Client Rights :

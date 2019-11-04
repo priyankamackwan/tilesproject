@@ -19,8 +19,7 @@
 
 		}
 		public function index()
-		{
-                       
+		{     
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
@@ -86,6 +85,15 @@
 				{
 					$model = $this->model;
 					$id = $this->primary_id;
+					if($value->created=="0000-00-00 00:00:00") // if date is not set
+					{
+						$date_value="00/00/0000"."<br>"." 00:00:00";
+					}
+					else
+					{
+						$date_value=$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
+					}
+					
 					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value->$id));
                                         if ($value->status == 1){
                                             $statusText = 'Active';
@@ -101,6 +109,7 @@
 					$nestedData['last_name'] = $value->last_name;
                                         $nestedData['email'] = $value->email;
 					$nestedData['mobile_no'] = $value->mobile_no;
+					$nestedData['created'] = $date_value;
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a>";
@@ -139,42 +148,54 @@
 		public function insert()
 		{
                         
-			$model = $this->model;
-           
+			$model = $this->model;           
 			$first_name = $this->input->post('first_name');
-                        $last_name = $this->input->post('last_name');
-                        $email = $this->input->post('email');
+            $last_name = $this->input->post('last_name');
+            $email = $this->input->post('email');
 			$number = $this->input->post('number');
-    
-                        $permissionArray = array();
 
-                       
-                        if (!empty($this->input->post('user'))){
-                          array_push($permissionArray,$this->input->post('user'));
-                        }
-                        if (!empty($this->input->post('category'))){
-                            array_push($permissionArray,$this->input->post('category'));
-                        }
-                         if (!empty($this->input->post('product'))){
-                            array_push($permissionArray,$this->input->post('product'));
-                        }
-                        
-                        if (!empty($this->input->post('order'))){
-                            array_push($permissionArray,$this->input->post('order'));
-                        }
-                        $permissions = implode(',', $permissionArray);
-			$data = array(
-				'first_name' => $first_name,
-                                'last_name' => $last_name,
-                                'email' => $email,
-				'mobile_no' => $number,
-                                'password' => md5($this->input->post('password')),
-                                'rights' => $permissions,
+			$exist_user=$this->db->select('email,mobile_no')->from('admin_users')->where('email',$email)->or_where('mobile_no',$number)->get();
 
-			);
-			$this->$model->insert($this->table,$data);
-			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$first_name.' '.$last_name.' has been added successfully!</div>');
-			redirect($this->controller);
+			if ($exist_user->num_rows() == "0") //if email and mobile no not exist in database then insert admin user.
+			{
+                $permissionArray = array();
+                if (!empty($this->input->post('user'))){
+                  array_push($permissionArray,$this->input->post('user'));
+                }
+                if (!empty($this->input->post('category'))){
+                    array_push($permissionArray,$this->input->post('category'));
+                }
+                 if (!empty($this->input->post('product'))){
+                    array_push($permissionArray,$this->input->post('product'));
+                }
+                if (!empty($this->input->post('order'))){
+                    array_push($permissionArray,$this->input->post('order'));
+                }
+                $permissions = implode(',', $permissionArray);
+				$data = array(
+						'first_name' => $first_name,
+	                    'last_name' => $last_name,
+	                    'email' => $email,
+						'mobile_no' => $number,
+	                    'password' => md5($this->input->post('password')),
+	                    'rights' => $permissions,
+	                    'created' => date('Y-m-d H:i:s'),
+				);
+				$this->$model->insert($this->table,$data);
+				$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$first_name.' '.$last_name.' has been added successfully!</div>');
+				redirect($this->controller);
+			}
+			else
+			{
+				$this->session->set_flashdata($this->msgDisplay,'<span class="7"><div class="alert alert-danger" style=margin-top:15px;"><strong>Email Id or Mobile No already exist.</strong></div></span>');
+				$data['action'] = "insert";
+
+				$model = $this->model;
+
+				$data['controller'] = $this->controller;
+
+				$this->load->view($this->view.'/form',$data);
+			}
 		}
 		public function edit($id)
 		{
@@ -195,7 +216,7 @@
 			$this->load->view($this->view.'/form',$data);
 		}
                 
-                public function view($id)
+        public function view($id)
 		{
 			$model = $this->model;
 			$id = $this->utility->decode($id);
@@ -216,7 +237,7 @@
 
 
                 
-                   public function checkemail()
+        public function checkemail()
 		{
 			$id = $this->input->post('id');
 			$email = $this->input->post('email');
@@ -232,10 +253,10 @@
 				$check_query = $this->db->select('*')->where('email',$email)->where('is_deleted',0)->get($this->table)->result();
 			}
                         
-                        $this->db->select('*');
-                        $this->db->where('email', $email);
-                        $q = $this->db->get('users');
-                        $userData = $q->result_array();
+            $this->db->select('*');
+            $this->db->where('email', $email);
+            $q = $this->db->get('users');
+            $userData = $q->result_array();
                         
                        
 			if(count($check_query) > 0 || count($userData) > 0)
@@ -248,7 +269,7 @@
 			}
 		}
                 
-                public function checknumber()
+        public function checknumber()
 		{
 			$id = $this->input->post('id');
 			$number = $this->input->post('number');
@@ -336,7 +357,8 @@
                         redirect($this->controller);
       
 		}
-                  public function blockform($id)
+
+        public function blockform($id)
 		{
 			$model = $this->model;
 			$id = $this->utility->decode($id);
