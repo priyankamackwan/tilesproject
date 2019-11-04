@@ -291,14 +291,11 @@
                   // Add row data
                   var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
 
-                  var r2 = Addrow(2, [{ key: 'A', value: 'From Date' },{ key: 'B', value: $("#ff").val() }]);
+                  var r2 = Addrow(2, [{ key: 'A', value: 'Date:' },{ key: 'B', value: $("#salesOrderDates").val() }]);
 
-
-                  var r3 = Addrow(3, [{ key: 'A', value: 'To Date' },{ key: 'B', value: $("#datepicker_to").val() }]);
 
                   var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
-                  sheetData.insertBefore(r3,sheetData.childNodes[0]);
                   sheetData.insertBefore(r2,sheetData.childNodes[0]);
                   sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
