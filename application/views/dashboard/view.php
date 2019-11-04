@@ -7,15 +7,27 @@
   border: 16px solid #f3f3f3;
   border-radius: 50%;
   border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
+  width: 64px;
+  height: 64px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }
 #loadingDiv{
   position:absolute;
+  margin: auto;
   top:50%;
-  left:50%;
+  left:55%;
+  background-repeat:no-repeat;
+  background-position:center;
+  z-index:10000000;
+  opacity: 10.4;
+  filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+#loadingDiv1{
+  position:absolute;
+  margin: auto;
+  top:50%;
+  left:55%;
   background-repeat:no-repeat;
   background-position:center;
   z-index:10000000;
@@ -23,6 +35,16 @@
   filter: alpha(opacity=40); /* For IE8 and earlier */
 }
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+	#loadingDiv{
+		top:90%;
+  		left:45%;
+	}
+	#loadingDiv1{
+		 top:150%;
+  		left:45%;
+	}
+}
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
@@ -454,6 +476,7 @@
 $this->load->view('include/footer');
 ?>
 	<div class="loader" id="loadingDiv" style="display: none;" ></div>
+	<div class="loader" id="loadingDiv1" style="display: none;" ></div>
 <script>
 $(document).ready(function () {
   $('#nopcommerce-common-statistics-box').on('click', 'button[data-widget="collapse"]', function () {
@@ -718,10 +741,10 @@ var footerLine1 =[];
                     period: period
                 },
                 beforeSend: function(){
-			        $("#loadingDiv").show();
+			        $("#loadingDiv1").show();
 			    },
 			    complete: function(){
-			        $("#loadingDiv").hide();
+			        $("#loadingDiv1").hide();
 			    },
                 success: function (data, textStatus, jqXHR) {
                     for (var i = 0; i < data.length; i++) {
