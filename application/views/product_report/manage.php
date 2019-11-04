@@ -273,7 +273,14 @@ foreach ($total_balance_quantity as $key => $value) {
         dt.ajax.reload();
     };
 //End For download
-     
+  var low_stock=$("#low_stock").val();
+  if(low_stock=='true'){
+    var filename_e='low stock item report';
+    var  sheetname_e='low stock item report';
+  }else{
+    var  filename_e='Item report';
+    var  sheetname_e='Item report';
+  }
 	var dataTable1 = $('#datatables').dataTable({
 			"processing": true,
 			"serverSide": true,
@@ -282,8 +289,8 @@ foreach ($total_balance_quantity as $key => $value) {
 			  [{
 				  extend:'excel',
           title:'',
-          filename:'Item report',
-          sheetName: 'Item report',
+          filename:filename_e,
+          sheetName: sheetname_e,
           action: newExportAction,
 				  exportOptions: {
 							columns: [1,2,3,4,5,6,7,8,9]
