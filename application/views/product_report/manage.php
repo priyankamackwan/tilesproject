@@ -158,7 +158,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                         </div>
                                         <div class="col-md-2 col-sm-12 col-xs-12">
                                            <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>
-                                           <?php echo number_format($balance_quantity,2); ?>
+                                           <?php echo round($balance_quantity); ?>
                                         </div>
                                         <div class="col-md-2 col-sm-12 col-xs-12">
                                            <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>
@@ -181,16 +181,21 @@ foreach ($total_balance_quantity as $key => $value) {
                           <div class="col-md-6 col-sm-12 col-xs-12">
                               <h3 class="box-title">Items Report</h3>
                           </div>
+                          <div class=" col-md-6 col-sm-12 col-xs-12">
+                           <input type="hidden" name="low_stock" value="<?php echo $Low_stock;?>" id="low_stock">
+                           <input id="toggle-demo" value="" type="checkbox" data-toggle="toggle" class="pull-right">
+                            <h4 class="pull-right">Low Stock &nbsp;&nbsp;</h4>
+                         </div>
                       </div>
                   </div>
                   <div class="box-body table-responsive">
                     <!-- Add toggel swtich for low stock product -->
 
-                    <input id="toggle-demo" value="" type="checkbox" data-toggle="toggle" class="pull-right">
+                    
 
 
-                      <input type="hidden" name="low_stock" value="<?php echo $Low_stock;?>" id="low_stock">
-                      <h4 class="pull-right">Low Stock &nbsp;&nbsp;</h4>
+                     <!--  <input type="hidden" name="low_stock" value="<?php echo $Low_stock;?>" id="low_stock"> -->
+                      <!-- <h4 class="pull-right">Low Stock &nbsp;&nbsp;</h4> -->
                     
                     <!-- End low stock -->
                       <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
