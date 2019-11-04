@@ -187,7 +187,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->created;?>
+                  <?php echo date('d/m/Y H:i:s',strtotime($result[0]->created));?>
                 </div>
               </div>
 
@@ -198,7 +198,15 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <?php echo $result[0]->last_activity;?>
+                  <?php if(trim($result[0]->last_activity)=='0000-00-00 00:00:00') // if date is not set
+                          {
+                            echo '0000-00-00 00:00:00';
+                          } 
+                        else 
+                          {
+                             echo date('d/m/Y H:i:s',strtotime($result[0]->last_activity));
+                          } 
+                  ?>
                 </div>
               </div>
 

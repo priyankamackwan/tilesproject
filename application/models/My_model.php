@@ -140,11 +140,11 @@
 		{
 			$new_time='';
 			$date=trim($date);
-			$format=trim($format);	
-			$newdate=date($format,strtotime($date));
-			$new_date = date('d/m/Y',strtotime($newdate));
+			$format=trim($format);
+			//$newdate=date($format,strtotime($date));
+			$new_date = date('d/m/Y',strtotime($date));
 			if(isset($format) && $format!='' && $format=="d/m/Y H:i:s"){
-				$new_time = date('H:i:s',strtotime($timestamp));	
+				$new_time = date('H:i:s',strtotime($date));
 			}
 			return $new_date.'<br>'.$new_time;
 		}
