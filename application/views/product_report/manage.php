@@ -1,12 +1,13 @@
 <?php
+$Low_stock='false';
+   
+  if(isset($_GET['status']) && $_GET['status']!='' && $_GET['status']=="low_stock"){
+      $Low_stock='true';
+  }
 	$this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
   //For lowstock condition set default value
-  $Low_stock='false';
-   
-  if(isset($_REQUEST['low_stock']) && $_REQUEST['low_stock']!='' && $_REQUEST['low_stock']=="true"){
-      $Low_stock='true';
-  }
+  
 $balance_amount=$balance_quantity = 0;
 foreach ($total_balance_quantity as $key => $value) {
   $balance_quantity+= $value['totalQuantity'];
@@ -220,7 +221,7 @@ foreach ($total_balance_quantity as $key => $value) {
 </div>
 <?php
 	$this->load->view('include/footer');
-  if(isset($_REQUEST['low_stock']) && $_REQUEST['low_stock']!='' && $_REQUEST['low_stock']=="true"){
+  if(isset($_GET['status']) && $_GET['status']!='' && $_GET['status']=="low_stock"){
       $Low_stock='true';
       ?>
       <script type="text/javascript">

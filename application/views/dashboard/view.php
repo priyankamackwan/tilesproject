@@ -98,7 +98,7 @@
 							<div class="icon">
 								<i class="ion ion-bag"></i>
 							</div>
-							<a class="small-box-footer" onclick="submit_form()">More info
+							<a class="small-box-footer" href="<?php echo base_url();?>Order?status=unpaid"  target="_blank" >More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
 							<!-- Pass data for unpaid order status -->
@@ -129,7 +129,7 @@
 							<div class="icon">
 								<i class="ion ion-refresh"></i>
 							</div>
-							<a class="small-box-footer" onclick="submit_report()">More info
+							<a class="small-box-footer" href="<?php echo base_url();?>Product_report?status=low_stock"  target="_blank">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>	
 							<form id="product_report" method="POST" action="<?php echo base_url();?>Product_report">
@@ -281,7 +281,7 @@
 								<h3 class="box-title">
 									<i class="fa fa-cart-plus"></i>
 									Unpaid Orders
-									<a class="btn btn-xs btn-info btn-flat margin-l-10" onclick="submit_form()">View All Unpaid Orders</a>
+									<a class="btn btn-xs btn-info btn-flat margin-l-10" href="<?php echo base_url();?>Order?status=unpaid"  target="_blank">View All Unpaid Orders</a>
 								 </h3>
 								<div class="box-tools pull-right">
 									<button class="btn btn-box-tool" data-widget="collapse">
@@ -434,7 +434,7 @@
 													<td><?php echo $value['company_name'];?>
 													</td>
 													<td class="text-right"><?php echo number_format($value['totalValue'],2);?></td>	
-													<td class="text-center"><a onclick="submit_order<?php echo $key+1;?>()"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+													<td class="text-center"><a href="<?php echo base_url();?>Order?client_name=<?php echo str_replace('&', '_',str_replace(' ', '-',$value['company_name']));?>" target="_blank"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
 												<?php
