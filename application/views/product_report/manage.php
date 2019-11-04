@@ -349,14 +349,20 @@ foreach ($total_balance_quantity as $key => $value) {
                   return row;
               }          
               // Add row data
-              var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
+              var r1 = Addrow(1, [{ key: 'G', value: 'Total Balance Quantity' }, { key: 'H', value: '<?php echo number_format($balance_quantity,2);?>'  }]);
+              
+              var r2 = Addrow(2, [{ key: 'G', value: 'Total Balance Amount' }, { key: 'H', value: '<?php echo number_format($balance_amount,2);?>'  }]);
+                  
+              var r3 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
 
-              var r2 = Addrow(2, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
+              var r4 = Addrow(2, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
 
-              var r3 = Addrow(3, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+              var r5 = Addrow(3, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
               
               var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
+              sheetData.insertBefore(r5,sheetData.childNodes[0]);
+              sheetData.insertBefore(r4,sheetData.childNodes[0]);
               sheetData.insertBefore(r3,sheetData.childNodes[0]);
               sheetData.insertBefore(r2,sheetData.childNodes[0]);
               sheetData.insertBefore(r1,sheetData.childNodes[0]);
