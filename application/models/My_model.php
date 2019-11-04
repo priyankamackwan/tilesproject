@@ -138,10 +138,15 @@
 
 		public function date_conversion($date,$format)
 		{
+			$new_time='';
 			$date=trim($date);
 			$format=trim($format);	
 			$newdate=date($format,strtotime($date));
-			return $newdate;
+			$new_date = date('d/m/Y',strtotime($newdate));
+			if(isset($format) && $format!='' && $format=="d/m/Y H:i:s"){
+				$new_time = date('H:i:s',strtotime($timestamp));	
+			}
+			return $new_date.'<br>'.$new_time;
 		}
 		// balance amount and quantity
 		public function balance_quantity(){

@@ -338,7 +338,7 @@
     
      function warnBeforeStatusChange(linkURL) {
         swal({
-            title: "Are You Sure to change the status?",
+            title: "Are you sure to change the status?",
             type: "warning",
             showCancelButton: true
         }, function() {
@@ -349,8 +349,8 @@
 
     function warnBeforeDelete(linkURL) {
         swal({
-            title: "Are You Sure to delete?",
-            text: "Once Delete, Action Can Not Be Undone!!!",
+            title: "Are you sure to delete?",
+            text: "Once delete, action can not be undone!!!",
             type: "warning",
             showCancelButton: true
         }, function() {
@@ -361,8 +361,8 @@
     
      function warnBeforeDeleteUser(linkURL) {
         swal({
-            title: "Are You Sure to delete?",
-            text: "All Orders of the contact will also get deleted!!",
+            title: "Are you sure to delete?",
+            text: "All orders of the contact will also get deleted!!",
             type: "warning",
             showCancelButton: true
         }, function() {

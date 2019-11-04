@@ -53,6 +53,18 @@
     table#datatables td {
     vertical-align: middle;
     }
+    table#datatables1 td {
+    vertical-align: middle;
+    }
+    table#datatables2 td {
+    vertical-align: middle;
+    }
+    table#example1 td {
+    vertical-align: middle;
+    }
+    .mt_5{
+      margin-top: 7px;
+    }
   </style>
  
 </head>

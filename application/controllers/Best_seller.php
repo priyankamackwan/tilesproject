@@ -123,7 +123,7 @@
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =$value['amount'];
+                                        $nestedData['amount'] =ROUND($value['amount'],2);
           $data[] = $nestedData;
                                         $srNo++;
         }

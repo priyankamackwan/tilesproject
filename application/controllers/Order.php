@@ -1050,7 +1050,6 @@ $pdf->Output($do_no, 'I');
                     $quantity_arr[$p_id]=$quantity;
                 }
             }
-
             //remove blank array exist
             $product_arr = array_filter($product_arr); 
             $quantity_arr = array_filter($quantity_arr); 
@@ -1083,8 +1082,6 @@ $pdf->Output($do_no, 'I');
                         $rate_type=$check_quantity->flexible_rate;
                     
                 }
-
-
                 //Check quantity is updated or not
                 if($quantity_arr[$value['product_id']]> $value['quantity']){
                     $update_sold_quantity=$quantity_arr[$value['product_id']]-$value['quantity'];
@@ -1094,19 +1091,31 @@ $pdf->Output($do_no, 'I');
                     $update_sold_quantity=$value['product_id']-$quantity_arr[$value['quantity']];
                      $update_oprator='-';
                      $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
+                }elseif($quantity_arr[$value['product_id']]==$value['quantity']){
+                    $total_check_q=$quantity_arr[$value['product_id']];
                 }
                 //echo $rate_type.'  '.$quantity_arr[$value['product_id']];
                 // total of all product amount
                 $amount=$quantity_arr[$value['product_id']] * $rate_type;
                
                 $total_order_price+=$amount;  
-            
-                if($check_quantity->quantity > $total_check_q){
+                    // Check total quantity and buy  quantity and if old + new quantity same not to update
+                if($check_quantity->quantity > $total_check_q && $quantity_arr[$value['product_id']]!=$value['quantity']){
+
                     //Update solde quantity in product table
                     $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator);   
+                    
+                    //Update price according to client type
+                    
+                    $price_update = array(
+                            'price'=>$rate_type
+                            );
+                    $where_update = array('product_id'=>$$value['product_id'],'order_id'=>$id);
+                    $this->My_model->update('order_products',$price_update,$where_update);
+
 
                     //Update solde quantity in order product table
-                    $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator);
+                    $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator,$id);
                 }/*else{
                     $this->session->set_flashdata('dispMessage','<span class="7"><div class="alert alert-danger"><strong>Some Item quantity Is Not Available</strong></div></span>');
                     redirect($this->controller.'/edit/'.$this->utility->encode($id));
@@ -1118,14 +1127,13 @@ $pdf->Output($do_no, 'I');
             $array_remove=array_diff($old_product_array, $product_arr);
             if(isset($array_remove) && $array_remove!='' && count($array_remove) >0){
                 foreach ($array_remove as $key => $value) { 
-
                     // Fetch single data from order products
-                    $single_datas=$this->orders_model->single_items($value);  
-                   $remove_amount=  $single_datas->price * $single_datas->quantity;  
+                    $single_datas=$this->orders_model->single_items($value,$id);  
+                    $remove_amount=  $single_datas->price * $single_datas->quantity;
                     //minus for reove items
-                    $total_order_price-=$remove_amount;         
+                    $total_order_price=$total_order_price-$remove_amount;         
                     // Update removed items sold wuantity
-                    $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'+');
+                    $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'-');
 
                     // Delete item from order products table
                     if(isset($old_product_array[$key]) && $old_product_array[$key]!='' && $old_product_array[$key]==$value){

@@ -6,6 +6,7 @@ class Dashboard extends CI_Controller
 	function __construct(){
 		parent::__construct(); 
 		$this->load->model('Dashboard_model');
+		$this->load->model('My_model');
 	}
 	public  function index(){
 		//$this->userhelper->current('logged_in')['is_logged'] = 1;

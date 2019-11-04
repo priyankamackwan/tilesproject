@@ -1,6 +1,6 @@
 <?php
-	$this->load->view('include/leftsidemenu');
 	$this->load->view('include/header');
+	$this->load->view('include/leftsidemenu');	
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
@@ -137,7 +137,7 @@ a:hover, a:active, a:focus {
 								</div>
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">User Name :</label>
-								<div class="col-md-9 col-sm-12 col-xs-12">
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
 								<?php echo $username;?>
 								</div>
 							</div>
