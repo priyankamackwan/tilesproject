@@ -426,6 +426,9 @@ return value == '' || value.trim().length != 0;
 						}
 						
 					},
+          submitHandler: function(form){
+           form.submit();
+         }
 					// submitHandler: function(form){
                                             
           //   var user = $('#user:checkbox:checked').length;
