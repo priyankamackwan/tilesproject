@@ -3,7 +3,7 @@
 
 	class Adminuser extends CI_Controller
 	{
-		public $msgName = "Admin User";
+		public $msgName = "Admin Users";
 		public $view = "adminuser";
 		public $controller = "Adminuser";
 		public $primary_id = "id";
