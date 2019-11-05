@@ -18,6 +18,34 @@
 a:hover, a:active, a:focus {
     cursor: pointer;
 }
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  	.width_80{
+		width: 80px;
+	}
+	.dis_none{
+		display: none;
+	}
+}
+@media only screen and (min-device-width:  768px) and (max-device-width: 1024px)  {
+  	.width_80{
+			width: 80px;
+	}
+	.marginright_20px{
+		margin-right: 20px;
+	}
+	.dis_none{
+		display: none;
+	}
+}
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) {
+  	.width_80{
+		width: 80px;
+	}
+	.dis_none{
+		display: none;
+	}
+}
+
 </style>
 <!-- Main Container start-->
 <div class="content-wrapper">
@@ -52,16 +80,16 @@ a:hover, a:active, a:focus {
 							<input type="hidden" id="id" name="id" value="<?php echo $id;?>">
 							<input type="hidden" id="action" name="action" value="<?php echo $action;?>">
 							<input type="hidden" id="ordercount" name="ordercount" value="<?php echo count($result);?>">
-									<div class="col-md-3 col-sm-12 col-xs-12">
+									<div class="col-md-3 col-sm-12 col-xs-12 ">
 									</div>
 									<div class="col-md-5 col-sm-5 col-xs-5">
 										<label>Item Name (Design No)</label>
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-3">
+									<div class="col-md-3 col-sm-4 col-xs-4">
 										<label >Quantity</label>
 										
 									</div>
-									<div class="col-md-1 col-sm-4 col-xs-4">
+									<div class="col-md-1 col-sm-1 col-xs-1">
 										<label >Delete</label>
 									</div>
 									<!-- Show byuing product -->
@@ -95,7 +123,7 @@ a:hover, a:active, a:focus {
 							?>
 							<div id="delete_<?php echo $key+1;?>">
 								<div class="form-group select2">
-									<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+									<label class="control-label col-md-3 col-sm-12 col-xs-12 " for="category_name">
 										Item <font color="red"><span class="required">*</span></font> :
 									</label>
 
@@ -120,10 +148,10 @@ a:hover, a:active, a:focus {
 									</select>
 								
 									</div>
-									<div class="col-md-1 col-sm-1 col-xs-1">
-										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);">
+									<div class="col-md-1 col-sm-3 col-xs-3">
+										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class="width_80">
 									</div>
-									<div class="col-md-1 col-sm-1 col-xs-1 pull-right">
+									<div class="col-md-1 col-sm-3 col-xs-3 pull-right marginright_20px">
 										<a class='btn btn-danger'  onclick="remove_item(<?php echo $key+1;?>);" data-toggle='tooltip' title='Delete' ><i class='fa fa-close'></i></a>
 									</div>
 								</div>
@@ -315,7 +343,7 @@ function add_more_items(){
 
 	$("#delete_"+total_item).append('<div class="form-group select2"><label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Item <font color="red"><span class="required">*</span></font>:</label><div class="col-md-5 col-sm-5 col-xs-5"><select class="form-control select2" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
-?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-1 col-sm-1 col-xs-1"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);"></div><div class="col-md-1 col-sm-1 col-xs-1 pull-right"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
+?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-1 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class="width_80"></div><div class="col-md-1 col-sm-3 col-xs-3 pull-right marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
 }
 function remove_item(id){
