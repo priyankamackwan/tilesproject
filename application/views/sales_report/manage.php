@@ -367,17 +367,21 @@
                                //  "bFilter": false,
 			"columnDefs": [ {
 				"targets": [1,2,3],
-				"orderable": false
+				"orderable": true
 			},
       {
                 "className": 'text-right',
                 "targets":   [4,5],
-                "orderable": false
+                "orderable": true
             },
       {
                 "className": 'text-center',
-                "targets":   [0,2],
+                "targets":   [0],
                 "orderable": false
+            },{
+                "className": 'text-center',
+                "targets":   [2],
+                "orderable": true
             }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});

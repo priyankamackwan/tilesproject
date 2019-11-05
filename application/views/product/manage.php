@@ -437,6 +437,11 @@
       },
       {
         "className": 'text-center',
+        "targets":   [0],
+        "orderable": false
+      },
+      {
+        "className": 'text-center',
         "targets":   [0,10,11,12,13],
         "orderable": true
       }],

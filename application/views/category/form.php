@@ -201,7 +201,7 @@
 								} 
 							?>
 							<div class="box-footer">
-								<input type="submit" class="btn btn-primary" value="<?php echo $btn;?>">
+								<input type="submit" class="btn btn-primary" value="Save<?php //echo $btn;?>">
 							</div>
 							<!-- <div class="form-group">
 								<div class="col-md-9 col-sm-6 col-xs-12 col-md-offset-3">

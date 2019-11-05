@@ -453,17 +453,22 @@
 			],
 			"columnDefs": [ {
 				"targets": [5],
-				"orderable": false
+				"orderable": true
 			},
       {
           "className": 'text-right',
           "targets":   3,
+          "orderable": true
+      },
+      {
+          "className": 'text-center',
+          "targets":   [0],
           "orderable": false
       },
       {
           "className": 'text-center',
           "targets":   [0,6,7],
-          "orderable": false
+          "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});

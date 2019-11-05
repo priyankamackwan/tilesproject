@@ -220,7 +220,7 @@
               </div>
 
               <div class="box-footer">
-                <input type="submit" id="submit1" name="submit" class="btn btn-primary" value="Submit">
+                <input type="submit" id="submit1" name="submit" class="btn btn-primary" value="Save">
               </div>
             </form>
           </div>
