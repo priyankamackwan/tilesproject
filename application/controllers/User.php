@@ -220,7 +220,7 @@
                                         if ($value->status == 0) {
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Accept</a><a href='$reject' class='btn btn-danger btn-xs' >Reject</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";
 											// Add buttons in reject and accept in manage
-											$nestedData['manage'] = "<a href='$delete' class='btn  btn-danger  btn-sm confirm-delete-user' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$accept' class='btn btn-success btn-xs' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Accept'><i class='fa fa-check'></i></a>&nbsp;<a href='$reject' class='btn btn-danger btn-xs' data-toggle='tooltip' style='padding: 8px;margin-top:1px;'' title='Reject'><i class='fa fa-ban'></i></a>";
+											$nestedData['manage'] = "<a href='$accept' class='btn btn-success btn-xs' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Accept'><i class='fa fa-check'></i></a>&nbsp;<a href='$reject' class='btn btn-warning btn-xs' data-toggle='tooltip' style='padding: 8px;margin-top:1px;'' title='Reject'><i class='fa fa-close'></i></a>&nbsp;<a href='$delete' class='btn  btn-danger  btn-sm confirm-delete-user' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>";
 
 										} elseif ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$accept' class='btn  btn-warning  btn-xs'>Edit</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a><a href='$delete' class='btn  btn-warning  btn-xs confirm-delete-user'>Delete</a>";

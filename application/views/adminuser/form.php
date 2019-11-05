@@ -329,7 +329,11 @@
                     } 
                   ?>
                 </div>
+                <div class="col-md-6 col-sm-12 col-xs-12" id="module_error" style="display: none;">
+                  
+                </div>
 					    </div>
+              
               <div class="box-footer">
                 <input type="submit" id="submit1" name="submit" class="btn btn-primary" value="<?php echo $btn;?>">
               </div>
@@ -538,10 +542,10 @@ return value == '' || value.trim().length != 0;
 							synchronousRemote_number: "Contact Number Exist"
 						}
 						
-					},
+					},<?php if(isset($action) && $action!='' && $action=="update"){?>
           submitHandler: function(form){
            form.submit();
-         }
+         }<?php }?>
 					// submitHandler: function(form){
                                             
           //   var user = $('#user:checkbox:checked').length;
@@ -565,7 +569,8 @@ return value == '' || value.trim().length != 0;
         var product = $('#product:checkbox:checked').length;
         var order = $('#order:checkbox:checked').length;
         if (user == 0 && category == 0 && product == 0 && order == 0) {
-          alert('Please select atleast one module for access');
+          $("#module_error").show();
+          $("#module_error").html('<label  class="text-danger" id="error_show">Please select atleast one module for access<label>');
           return false;
         }
       return true;
