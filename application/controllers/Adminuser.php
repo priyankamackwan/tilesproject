@@ -258,7 +258,7 @@
             //$q = $this->db->get('users');
             $q = $this->db->get($this->table);
             $userData = $q->result_array();
-			if(count($check_query) > 0 || count($userData) > 1)
+			if(count($check_query) > 0 || count($userData) > 0)
 			{
 				echo "false";
 			}
