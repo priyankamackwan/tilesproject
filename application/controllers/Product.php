@@ -247,9 +247,9 @@
 
                     $nestedData['image'] = $image;
                                         $nestedData['quantity'] = $value['quantity'];
-                                        $nestedData['cash_rate'] = ROUND($value['cash_rate'],2);
-                                        $nestedData['credit_rate'] = ROUND($value['credit_rate'],2);
-                                        $nestedData['walkin_rate'] = ROUND($value['walkin_rate'],2);
+                                        $nestedData['cash_rate'] = '₹ '.$this->$model->getamount(ROUND($value['cash_rate'],2));
+                                        $nestedData['credit_rate'] = '₹ '.$this->$model->getamount(ROUND($value['credit_rate'],2));
+                                        $nestedData['walkin_rate'] = '₹ '.$this->$model->getamount(ROUND($value['walkin_rate'],2));
    
                                         $nestedData['size'] = $value['size'];
                                         if ($value['unit'] == 1) {
@@ -262,7 +262,7 @@
                                             $nestedData['unit'] = 'SET';
                                         }
                                         
-                    $nestedData['purchase_expense'] = ROUND($value['purchase_expense'],2);
+                    $nestedData['purchase_expense'] = '₹ '.$this->$model->getamount(ROUND($value['purchase_expense'],2));
 					$nestedData['status'] = $statusText;
                                         if ($value['status'] == 1){
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";

@@ -159,5 +159,15 @@
 			//echo $this->db->last_query();
 			return $balance_quantity;
 		}
+		function getamount($amount)
+		{
+		   if ( strpos( $amount, "." ) !== false ) {
+		       return  preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount);
+		   }
+		   else
+		   {
+		       return  preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
+		   }
+		}
 	}
 ?>

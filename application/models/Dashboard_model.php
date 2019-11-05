@@ -190,7 +190,7 @@
           $this->db->join('categories c','c.id=pc.cat_id','left');
           $this->db->limit($limit, $start);
           $this->db->group_by('o.product_id');
-            $this->db->order_by('p.sold_quantity',' desc');
+            $this->db->order_by('totalQuantity',' desc');
             $this->db->limit(5);
             $allorderData = $this->db->get();
             $count = $allorderData->result_array();

@@ -133,7 +133,7 @@ foreach ($total_balance_quantity as $key => $value) {
 
                                         
                                         <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
-                                           <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>
+                                           <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                            <?php echo round($balance_quantity); ?>
                                         </div>
                                         
@@ -166,7 +166,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                         </select>
                                     </div>
                                     <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
-                                           <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>
+                                           <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                            <i class="fa fa-inr"></i> <?php echo  number_format($balance_amount,2); ?>
                                         </div>
                                 </div>
@@ -309,7 +309,7 @@ foreach ($total_balance_quantity as $key => $value) {
             // console.log(rels);
             var sheet = xlsx.xl.worksheets['sheet1.xml'];
             // To add new row count
-            var numrows = 4;
+            var numrows = 6;
             // Get row from sheet
             var clRow = $('row', sheet);
             //console.log(clRow);
@@ -363,11 +363,11 @@ foreach ($total_balance_quantity as $key => $value) {
               
               var r2 = Addrow(2, [{ key: 'G', value: 'Total Balance Amount' }, { key: 'H', value: '<?php echo number_format($balance_amount,2);?>'  }]);
                   
-              var r3 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
+              var r3 = Addrow(3, [{ key: 'A', value: 'Filters' }]);
 
-              var r4 = Addrow(2, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
+              var r4 = Addrow(4, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
 
-              var r5 = Addrow(3, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+              var r5 = Addrow(5, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
               
               var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
@@ -378,8 +378,10 @@ foreach ($total_balance_quantity as $key => $value) {
               sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
               // Style of rows
-              $('row c[r="A2"]', sheet).attr('s', '7');
-              $('row c[r="B2"]', sheet).attr('s', '7'); 
+              $('row c[r="A5"]', sheet).attr('s', '7');
+              $('row c[r="B5"]', sheet).attr('s', '7'); 
+              $('row c[r="A4"]', sheet).attr('s', '7');
+              $('row c[r="B4"]', sheet).attr('s', '7'); 
               $('row c[r="B3"]', sheet).attr('s', '7');
               $('row c[r="A3"]', sheet).attr('s', '7');   
             },

@@ -213,8 +213,8 @@ echo $this->db->last_query();*/
                                         $nestedData['company_name'] =$value['company_name'];
                                         $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
                                         $nestedData['invoice_no'] =$value['invoice_no'];
-                                        $nestedData['total_price'] ='<i class="fa fa-inr"></i> '.ROUND($value['totalValue'],2);
-                                        $nestedData['sales_expense'] =ROUND($value['total_sales_expense'],2);
+                                        $nestedData['total_price'] ='₹ '.$this->$model->getamount(ROUND($value['totalValue'],2));
+                                        $nestedData['sales_expense'] =$value['total_sales_expense'];
           $data[] = $nestedData;
                                         $srNo++;
         }

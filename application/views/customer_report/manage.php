@@ -406,7 +406,6 @@
                   var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
                  // sheetData.insertBefore(r6,sheetData.childNodes[0]);
-                  sheetData.insertBefore(r5,sheetData.childNodes[0]);
                   sheetData.insertBefore(r4,sheetData.childNodes[0]);
                   sheetData.insertBefore(r3,sheetData.childNodes[0]);
                   sheetData.insertBefore(r2,sheetData.childNodes[0]);
