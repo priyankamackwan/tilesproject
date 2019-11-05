@@ -222,6 +222,7 @@
 											<thead>
 				                                <th class="text-center">Sr No.</th>
 				                                <th class="text-center">Company Name</th>
+				                                <th class="text-center">Amount</th>
 				                                <th class="text-center">Invoice Status</th>
 				                                <th class="text-center">Delivery Status</th>
 				                                <th class="text-center">Creation Date</th>
@@ -253,6 +254,9 @@
 												<tr role="row" class="odd">
 													<td class="text-center"><?php echo $key+1;?></td>
 													<td><?php echo $value['company_name'];?>
+													<td class="text-right">
+														<?php echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
+													</td>
 													<td class="text-center">
 														<?php echo $invoice_status;?>
 													</td>
@@ -296,6 +300,7 @@
 											<thead>
 				                                <th class="text-center">Sr No.</th>
 				                                <th class="text-center">Company Name</th>
+				                                <th class="text-center">Amount</th>
 				                                <th class="text-center">Invoice Status</th>
 				                                <th class="text-center">Delivery Status</th>
 				                                <th class="text-center">Creation Date</th>
@@ -327,6 +332,9 @@
 												<tr role="row" class="odd">
 													<td class="text-center"><?php echo $key+1;?></td>
 													<td><?php echo $value['company_name'];?>
+													<td class="text-right">
+														<?php echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
+													</td>
 													<td class="text-center">
 														<?php echo $invoice_status;?>
 													</td>
@@ -433,7 +441,7 @@
 												<tr role="row" class="odd">
 													<td><?php echo $value['company_name'];?>
 													</td>
-													<td class="text-right"><?php echo number_format($value['totalValue'],2);?></td>	
+													<td class="text-right"><?php echo '<i class="fa fa-inr"></i> '.number_format($value['totalValue'],2);?></td>	
 													<td class="text-center"><a href="<?php echo base_url();?>Order?client_name=<?php echo str_replace('&', '_',str_replace(' ', '-',$value['company_name']));?>" target="_blank"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>

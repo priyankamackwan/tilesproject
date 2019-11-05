@@ -433,12 +433,12 @@
       {
         "className": 'text-right',
         "targets":   [5,6,7,8,9],
-        "orderable": false
+        "orderable": true
       },
       {
         "className": 'text-center',
         "targets":   [0,10,11,12,13],
-        "orderable": false
+        "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});

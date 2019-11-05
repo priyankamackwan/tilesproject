@@ -36,14 +36,31 @@
     }
                 
     public function server_data() {
+      //for sorting column
+      $columnArray = array(
+                1 => 'p.name',
+                2 => 'p.design_no',
+                3 => 'p.size',
+                4 => 'cate_name',
+                5 => 'p.purchase_expense' ,
+                6 => 'p.quantity' ,
+                7 => 'totalQuantity',
+                8 => 's_quantity',
+                9 => 'amount',
+            );
+      // Order by
+      $order = $columnArray[$this->input->post('order')[0]['column']];
+
+      // set default order
+      $dir = $this->input->post('order')[0]['dir'];
                     
       $model = $this->model;
                         
       
       $productid=$s=$cat_id=$where='';
-      $order_col_id = $_POST['order'][0]['column'];
+      //$order_col_id = $_POST['order'][0]['column'];
                      
-      $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
+      //$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
       $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
       $startDate = $_POST['columns'][1]['search']['value'];
@@ -105,12 +122,17 @@
       
       $this->db->limit($limit, $start);
       $this->db->group_by('o.product_id');
-      $this->db->order_by('s_quantity','desc');
+
+      //order by
+      if(isset($order) && $order!=''){
+        $this->db->order_by($order,$dir);
+      }else{
+        $this->db->order_by('s_quantity','desc');  
+      }
       
       $q=$this->db->get()->result_array();  
 
       $data = array();
-  //echo $this->db->last_query();die();
                  
       if(!empty($q))
       {
@@ -127,11 +149,11 @@
                                         $nestedData['design_no'] =$value['design_no'];
                                         $nestedData['size'] =$value['size'];
                                         $nestedData['category'] =$value['cate_name'];
-                                        $nestedData['purchase_expense'] =$value['purchase_expense'];
+                                        $nestedData['purchase_expense'] ='<i class="fa fa-inr"></i> '.$value['purchase_expense'];
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =ROUND($value['amount'],2);
+                                        $nestedData['amount'] ='<i class="fa fa-inr"></i> '.ROUND($value['amount'],2);
           $data[] = $nestedData;
                                         $srNo++;
         }

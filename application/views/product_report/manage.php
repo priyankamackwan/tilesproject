@@ -131,40 +131,44 @@ foreach ($total_balance_quantity as $key => $value) {
                                             </select>
                                         </div>
 
-                                        <!-- Invoice Status Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Items Group:</label>
-                                        </div>
-
-                                        <!-- Invoice Status Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
-                                                <option value="">All</option>
-                                                <?php
-                                                        if(!empty($product_categories) && count($product_categories) > 0 ){
-                                                        
-                                                            foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
-                                                    ?>
-                                                                <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
-                                                    <?php
-                                                            }
-                                                        }else{
-                                                    ?>
-                                                        <option value="">-- No Items Group Available --</option>
-                                                    <?php
-                                                        }
-                                                    ?>s
-                                            </select>
-                                        </div>
-                                        <div class="col-md-2 col-sm-12 col-xs-12">
+                                        
+                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                                            <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>
                                            <?php echo round($balance_quantity); ?>
                                         </div>
-                                        <div class="col-md-2 col-sm-12 col-xs-12">
+                                        
+                                    </div>
+                                </div>                            
+                                <div class="row">
+                                <!-- Invoice Status Filter -->
+                                    <div class="col-md-1 col-sm-12 col-xs-12">
+                                        <label class="control-label" style="margin-top:7px;">Items Group:</label>
+                                    </div>
+
+                                    <!-- Invoice Status Filter Dropdown -->
+                                    <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
+                                            <option value="">All</option>
+                                            <?php
+                                                    if(!empty($product_categories) && count($product_categories) > 0 ){
+                                                    
+                                                        foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
+                                                ?>
+                                                            <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                                <?php
+                                                        }
+                                                    }else{
+                                                ?>
+                                                    <option value="">-- No Items Group Available --</option>
+                                                <?php
+                                                    }
+                                                ?>s
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                                            <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>
                                            <i class="fa fa-inr"></i> <?php echo  number_format($balance_amount,2); ?>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -403,18 +407,18 @@ foreach ($total_balance_quantity as $key => $value) {
         { "data": "amount"},
 			],
 			"columnDefs": [ {
-				"targets": [1,4,9],
+				"targets": [0],
 				"orderable": false
 			},
       {
           "className": 'text-right',
           "targets":   [5,6,7,8,9],
-          "orderable": false
+          "orderable": true
       },
       {
           "className": 'text-center',
           "targets":   [0,2,3],
-          "orderable": false
+          "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});

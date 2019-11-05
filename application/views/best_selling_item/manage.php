@@ -1,4 +1,13 @@
 <?php
+  $pagename=$this->router->fetch_class();
+  $order_colm='7';
+  if(isset($pagename) && $pagename!='' && $pagename=="Best_selling_item"){
+    $show_titel='Best Selling Item';
+    $order_colm='7';
+  }elseif(isset($pagename) && $pagename!='' && $pagename=="Best_seller"){
+    $show_titel='Best Seller';
+    $order_colm='9';
+  }
 	$this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
 ?>
@@ -127,7 +136,7 @@
                   <div class="box-header">
                       <div class="row">
                           <div class="col-md-6 col-sm-12 col-xs-12">
-                              <h3 class="box-title">Products Report</h3>
+                              <h3 class="box-title"><?php echo $show_titel;?></h3>
                           </div>
                       </div>
                   </div>
@@ -316,23 +325,23 @@
         { "data": "amount"},
 			],
 			"columnDefs": [ {
-				"targets": [],
+				"targets": [0],
 				"orderable": false
 			},
       {
           "className": 'text-right',
           "targets":   [6,7,8,9],
-          "orderable": false
+          "orderable": true
       },
       {
           "className": 'text-center',
-          "targets":   [0,1,,2,3,4,5],
-          "orderable": false
+          "targets":   [0,1,2,3,4,5],
+          "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
-			"order": [[ 0, "DESC"]],
+			"order": [[ <?php echo $order_colm;?>, "DESC"]],
                         
 		});
 

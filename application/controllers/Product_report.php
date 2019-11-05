@@ -45,15 +45,33 @@
 		}
                 
 		public function server_data() {
+      //for sorting column
+      $columnArray = array(
+                0 => 'o.id',
+                1 => 'p.name',
+                2 => 'p.design_no',
+                3 => 'p.size',
+                4 => 'cate_name',
+                5 => 'p.purchase_expense' ,
+                6 => 'p.quantity' ,
+                7 => 'totalQuantity',
+                8 => 's_quantity',
+                9 => 'amount',
+            );
+      // Order by
+      $order = $columnArray[$this->input->post('order')[0]['column']];
+
+      // set default order
+      $dir = $this->input->post('order')[0]['dir'];
                     
 			$model = $this->model;
                       
                        // echo $this->model; exit;
       // Add for default value
             $productid=$s=$cat_id=$where='';
-			$order_col_id = $_POST['order'][0]['column'];
+			//$order_col_id = $_POST['order'][0]['column'];
                      
-			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
+			//$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
 			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
                         
@@ -166,6 +184,8 @@
           $this->db->select('ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity) as s_quantity');
           $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
 
+        }else{
+          $this->db->select('p.quantity-SUM(o.quantity) as s_quantity');
         }                 
       // End for low stock condition
       $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
@@ -187,10 +207,10 @@
       /*
       if(isset($s) && $s!=''){
         $this->db->like('orders.total_price', $s, 'both');
-      }                 
-     if(!empty($order)){
-        $this->db->order_by($order);
-      } */
+      }   */              
+     if(isset($order) && $order!=''){
+        $this->db->order_by($order,$dir);
+      } 
       $q=$this->db->get()->result_array();  
 
 			$data = array();
@@ -233,11 +253,11 @@
                                         $nestedData['design_no'] =$value['design_no'];
                                         $nestedData['size'] =$value['size'];
                                         $nestedData['category'] =$value['cate_name'];
-                                        $nestedData['purchase_expense'] =round($value['purchase_expense'],2);
+                                        $nestedData['purchase_expense'] ='<i class="fa fa-inr"></i> '.round($value['purchase_expense'],2);
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =round($value['amount'],2);
+                                        $nestedData['amount'] ='<i class="fa fa-inr"></i> '.round($value['amount'],2);
 					$data[] = $nestedData;
                                         $srNo++;
 				}
