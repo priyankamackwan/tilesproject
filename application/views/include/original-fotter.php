@@ -109,7 +109,7 @@
     function warnBeforeDelete(linkURL) {
         swal({
             title: "Are You Sure to delete?",
-            text: "Once Delete, Action Can Not Be Undone!!!",
+            text: "Once Delete, Action Can Not Be revert back!!!",
             type: "warning",
             showCancelButton: true
         }, function() {

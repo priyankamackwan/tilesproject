@@ -360,6 +360,119 @@
     
 }, "Phone Number is invalid");
 
+  // Add coustom code for validation email and number exist or not
+  jQuery.validator.addMethod("synchronousRemote", function (value, element, param) {
+    if (this.optional(element)) {
+        return "dependency-mismatch";
+    }
+
+    var previous = this.previousValue(element);
+    if (!this.settings.messages[element.name]) {
+        this.settings.messages[element.name] = {};
+    }
+    previous.originalMessage = this.settings.messages[element.name].remote;
+    this.settings.messages[element.name].remote = previous.message;
+
+    param = typeof param === "string" && { url: param } || param;
+
+    if (previous.old === value) {
+        return previous.valid;
+    }
+
+    previous.old = value;
+    var validator = this;
+    this.startRequest(element);
+    var data = {};
+    data[element.name] = value;
+    var valid = "pending";
+    $.ajax($.extend(true, {
+        url: param,
+        async: false,
+        mode: "abort",
+        port: "validate" + element.name,
+        dataType: "json",
+        data: data,
+        success: function (response) {
+            validator.settings.messages[element.name].remote = previous.originalMessage;
+            valid = response === true || response === "true";
+            if (valid) {
+                var submitted = validator.formSubmitted;
+                validator.prepareElement(element);
+                validator.formSubmitted = submitted;
+                validator.successList.push(element);
+                delete validator.invalid[element.name];
+                validator.showErrors();
+            } else {
+                var errors = {};
+                var message = response || validator.defaultMessage(element, "remote");
+                errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+                validator.invalid[element.name] = true;
+                validator.showErrors(errors);
+            }
+            previous.valid = valid;
+            validator.stopRequest(element, valid);
+        }
+    }, param));
+    return valid;
+}, "Please fix this field.");
+
+           
+    //for number
+    jQuery.validator.addMethod("synchronousRemote_number", function (value, element, param) {
+    if (this.optional(element)) {
+        return "dependency-mismatch";
+    }
+
+    var previous = this.previousValue(element);
+    if (!this.settings.messages[element.name]) {
+        this.settings.messages[element.name] = {};
+    }
+    previous.originalMessage = this.settings.messages[element.name].remote;
+    this.settings.messages[element.name].remote = previous.message;
+
+    param = typeof param === "string" && { url: param } || param;
+
+    if (previous.old === value) {
+        return previous.valid;
+    }
+
+    previous.old = value;
+    var validator = this;
+    this.startRequest(element);
+    var data = {};
+    data[element.name] = value;
+    var valid = "pending";
+    $.ajax($.extend(true, {
+        url: param,
+        async: false,
+        mode: "abort",
+        port: "validate" + element.name,
+        dataType: "json",
+        data: data,
+        success: function (response) {
+            validator.settings.messages[element.name].remote = previous.originalMessage;
+            valid = response === true || response === "true";
+            if (valid) {
+                var submitted = validator.formSubmitted;
+                validator.prepareElement(element);
+                validator.formSubmitted = submitted;
+                validator.successList.push(element);
+                delete validator.invalid[element.name];
+                validator.showErrors();
+            } else {
+                var errors = {};
+                var message = response || validator.defaultMessage(element, "remote");
+                errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+                validator.invalid[element.name] = true;
+                validator.showErrors(errors);
+            }
+            previous.valid = valid;
+            validator.stopRequest(element, valid);
+        }
+    }, param));
+    return valid;
+}, "Please fix this field.");
+
            jQuery.validator.addMethod("noSpace", function(value, element) {
 return value == '' || value.trim().length != 0;  
     }, "No space please and don't leave it empty");
@@ -380,7 +493,7 @@ return value == '' || value.trim().length != 0;
                                                 email:{
 							required: true,
                                                         noSpace: true,
-							remote:{
+							synchronousRemote:{
 								url:"<?php echo base_url().$controller."/checkemail";?>",
 								type:"post",
 								data:{
@@ -398,7 +511,7 @@ return value == '' || value.trim().length != 0;
                                                         noSpace: true,
 							maxlength: 10,
                                                         greaterThanZero : true,
-							remote:{
+							synchronousRemote_number:{
 								url:"<?php echo base_url().$controller."/checknumber";?>",
 								type:"post",
 								data:{
@@ -416,13 +529,13 @@ return value == '' || value.trim().length != 0;
 					messages: {
                                                 email: {
 							required: "Please Enter Email",
-							remote: "Email Exist"
+							synchronousRemote: "Email Exist"
 						},
 						number: {
 							required: "Please Enter Mobile Number",
 							minlength: "Please Minimun enter 10 Charecter",
 							maxlength: "Please Maximun enter 10 Charecter",
-							remote: "Contact Number Exist"
+							synchronousRemote_number: "Contact Number Exist"
 						}
 						
 					},

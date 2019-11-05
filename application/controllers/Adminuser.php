@@ -252,14 +252,13 @@
 			{
 				$check_query = $this->db->select('*')->where('email',$email)->where('is_deleted',0)->get($this->table)->result();
 			}
-                        
+                    
             $this->db->select('*');
             $this->db->where('email', $email);
-            $q = $this->db->get('users');
+            //$q = $this->db->get('users');
+            $q = $this->db->get($this->table);
             $userData = $q->result_array();
-                        
-                       
-			if(count($check_query) > 0 || count($userData) > 0)
+			if(count($check_query) > 0 || count($userData) > 1)
 			{
 				echo "false";
 			}
@@ -285,7 +284,6 @@
 			{
 				$check_query = $this->db->select('*')->where('mobile_no',$number)->where('is_deleted',0)->get($this->table)->result();
 			}
-
 			if(count($check_query) > 0)
 			{
 				echo "false";
