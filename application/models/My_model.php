@@ -162,12 +162,11 @@
 		function getamount($amount)
 		{
 		   if ( strpos( $amount, "." ) !== false ) {
-		       return  preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount);
+		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount);
+		   }else{
+		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
 		   }
-		   else
-		   {
-		       return  preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
-		   }
+		   return '₹ '.$new_amount;
 		}
 	}
 ?>

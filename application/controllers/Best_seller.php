@@ -140,11 +140,11 @@
                                         $nestedData['design_no'] =$value['design_no'];
                                         $nestedData['size'] =$value['size'];
                                         $nestedData['category'] =$value['cate_name'];
-                                        $nestedData['purchase_expense'] ='<i class="fa fa-inr"></i> '.$value['purchase_expense'];
+                                        $nestedData['purchase_expense'] =$this->$model->getamount(round($value['purchase_expense'],2));
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] ='<i class="fa fa-inr"></i> '.ROUND($value['amount'],2);
+                                        $nestedData['amount'] =$this->$model->getamount(ROUND($value['amount'],2));
           $data[] = $nestedData;
                                         $srNo++;
         }

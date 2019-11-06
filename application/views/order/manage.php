@@ -128,17 +128,26 @@
 
                     <div class="col-md-3">
                         <h4 class="text-center"><b>Total Invoice Amount</b></h4>
-                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="creditBalance"> <?php echo number_format($totalAmounts->invoiceAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;">
+                            <span id="creditBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
+                            </span>
+                        </p>
                     </div>
 
                     <div class="col-md-3">
                         <h4 class="text-center" style="color:#007600"><b>Total Paid Amount</b></h4>
-                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="totalBalance"> <?php echo number_format($totalAmounts->paidAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;">
+                            <span id="totalBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
+                            </span>
+                        </p>
                     </div>
 
                     <div class="col-md-3">
                         <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b></h4>
-                        <p class="text-center" style="font-size: 17px;"><i class="fa fa-inr"></i><span id="debitBalance"> <?php echo number_format($totalAmounts->unpaidAmount,2);?></span></p>
+                        <p class="text-center" style="font-size: 17px;">
+                            <span id="debitBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
+                            </span>
+                        </p>
                     </div>
 
                 </div>
@@ -480,10 +489,10 @@
                       return row;
                   }          
                   // Add row data 
-                  var r1 = Addrow(1, [{ key: 'G', value: 'Total Invoice Amount  ' }, { key: 'H', value: '<?php echo number_format($totalAmounts->invoiceAmount,2);?>'  }]);
-                  var r2 = Addrow(2, [{ key: 'G', value: 'Total Paid Amount' }, { key: 'H', value: '<?php echo number_format($totalAmounts->paidAmount,2);?>'  }]);
+                  var r1 = Addrow(1, [{ key: 'G', value: 'Total Invoice Amount  ' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>'  }]);
+                  var r2 = Addrow(2, [{ key: 'G', value: 'Total Paid Amount' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>'  }]);
                   
-                  var r3 = Addrow(3, [{ key: 'G', value: 'Total Unpaid Amount' }, { key: 'H', value: '<?php echo number_format($totalAmounts->unpaidAmount,2);?>'  }]);
+                  var r3 = Addrow(3, [{ key: 'G', value: 'Total Unpaid Amount' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>'  }]);
 
                   var r4 = Addrow(4, [{ key: '', value: '' }]);
 
@@ -514,6 +523,8 @@
                   sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
                   // Style of rows
+                  $('row c[r^="I"]', sheet).attr('s', '51');
+                  $('row c[r="I12"]', sheet).attr('s', '2');
                   $('row c[r="A6"]', sheet).attr('s', '7');
                   $('row c[r="A7"]', sheet).attr('s', '7');
                   $('row c[r="A8"]', sheet).attr('s', '7');

@@ -297,6 +297,20 @@
               sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
               // Style of rows
+              $('row c[r^="B"]', sheet).attr( 's', '51');
+              $('row c[r="B5"]', sheet).attr( 's', '2');
+              $('row c[r^="C"]', sheet).attr( 's', '51');
+              $('row c[r="C5"]', sheet).attr( 's', '2'); 
+              $('row c[r^="E"]', sheet).attr( 's', '52');
+              $('row c[r="E5"]', sheet).attr( 's', '2'); 
+              $('row c[r^="F"]', sheet).attr( 's', '51');
+              $('row c[r="F5"]', sheet).attr( 's', '2'); 
+              $('row c[r^="G"]', sheet).attr( 's', '51');
+              $('row c[r="G5"]', sheet).attr( 's', '2'); 
+              $('row c[r^="H"]', sheet).attr( 's', '51');
+              $('row c[r="H5"]', sheet).attr( 's', '2'); 
+              $('row c[r^="I"]', sheet).attr( 's', '52');
+              $('row c[r="I5"]', sheet).attr( 's', '2'); 
               $('row c[r="A2"]', sheet).attr('s', '7');
               $('row c[r="B2"]', sheet).attr('s', '7'); 
               $('row c[r="B3"]', sheet).attr('s', '7');
@@ -330,12 +344,12 @@
 			},
       {
           "className": 'text-right',
-          "targets":   [6,7,8,9],
+          "targets":   [6,7,8,9,5],
           "orderable": true
       },
       {
           "className": 'text-center',
-          "targets":   [0,1,2,3,4,5],
+          "targets":   [0,1,2,3,4],
           "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {

@@ -270,7 +270,7 @@
                   // console.log(rels);
                   var sheet = xlsx.xl.worksheets['sheet1.xml'];
                   // To add new row count
-                  var numrows = 5;
+                  var numrows = 4;
                   // Get row from sheet
                   var clRow = $('row', sheet);
                   //console.log(clRow);
@@ -335,6 +335,10 @@
                   sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
                   // Style of rows
+                  $('row c[r^="B"]', sheet).attr('s', '51');
+                  $('row c[r="B5"]', sheet).attr('s', '2');
+                  $('row c[r^="D"]', sheet).attr('s', '52');
+                  $('row c[r="D5"]', sheet).attr('s', '2');
                   $('row c[r="A2"]', sheet).attr('s', '7');
                   $('row c[r="A3"]', sheet).attr('s', '7');
                   $('row c[r="A4"]', sheet).attr('s', '7');

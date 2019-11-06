@@ -167,7 +167,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                     </div>
                                     <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                                            <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                           <i class="fa fa-inr"></i> <?php echo  number_format($balance_amount,2); ?>
+                                           <?php echo $this->My_model->getamount(ROUND($balance_amount,2)); ?>
                                         </div>
                                 </div>
                             </div>
@@ -361,7 +361,7 @@ foreach ($total_balance_quantity as $key => $value) {
               // Add row data
               var r1 = Addrow(1, [{ key: 'G', value: 'Total Balance Quantity' }, { key: 'H', value: '<?php echo number_format($balance_quantity,2);?>'  }]);
               
-              var r2 = Addrow(2, [{ key: 'G', value: 'Total Balance Amount' }, { key: 'H', value: '<?php echo number_format($balance_amount,2);?>'  }]);
+              var r2 = Addrow(2, [{ key: 'G', value: 'Total Balance Amount' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($balance_amount,2));?>'  }]);
                   
               var r3 = Addrow(3, [{ key: 'A', value: 'Filters' }]);
 
@@ -377,13 +377,31 @@ foreach ($total_balance_quantity as $key => $value) {
               sheetData.insertBefore(r2,sheetData.childNodes[0]);
               sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
-              // Style of rows
+              // Style of rows               
+              $('row c[r^="E"]', sheet).attr( 's', '52' );
+              $('row c[r="E7"]', sheet).attr( 's', '2' ); 
+              $('row c[r^="F"]', sheet).attr( 's', '51' );
+              $('row c[r="F7"]', sheet).attr( 's', '2' );
+              $('row c[r^="B"]', sheet).attr( 's', '51' );
+              $('row c[r="B7"]', sheet).attr( 's', '2' );
+              $('row c[r^="G"]', sheet).attr( 's', '51' );
+              $('row c[r="G7"]', sheet).attr( 's', '2' ); 
+              $('row c[r^="H"]', sheet).attr( 's', '51' );
+              $('row c[r="H7"]', sheet).attr( 's', '2' );
+              $('row c[r^="C"]', sheet).attr( 's', '51' );
+              $('row c[r="C7"]', sheet).attr( 's', '2' );
+              $('row c[r^="I"]', sheet).attr( 's', '52' );
+              $('row c[r="I7"]', sheet).attr( 's', '2' );  
+              $('row c[r="G1"]', sheet).attr( 's', '2' );  
+              $('row c[r="G2"]', sheet).attr( 's', '2' );
+              $('row c[r="H1"]', sheet).attr( 's', '2' );  
+              $('row c[r="H2"]', sheet).attr( 's', '2' );  
               $('row c[r="A5"]', sheet).attr('s', '7');
               $('row c[r="B5"]', sheet).attr('s', '7'); 
               $('row c[r="A4"]', sheet).attr('s', '7');
               $('row c[r="B4"]', sheet).attr('s', '7'); 
               $('row c[r="B3"]', sheet).attr('s', '7');
-              $('row c[r="A3"]', sheet).attr('s', '7');   
+              $('row c[r="A3"]', sheet).attr('s', '7'); 
             },
 			  }],
 			"ajax":{

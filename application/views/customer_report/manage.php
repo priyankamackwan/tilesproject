@@ -335,13 +335,13 @@
                 sheetName: 'Customer report',
                 action: newExportAction,
                 exportOptions: {
-                        columns: [1,2,3,4,5]
+                        columns: [1,2,3,4,5,6,7]
                     },
                 customize: function (xlsx) {                            
                   // console.log(rels);
                   var sheet = xlsx.xl.worksheets['sheet1.xml'];
                   // To add new row count
-                  var numrows = 7;
+                  var numrows = 5;
                   // Get row from sheet
                   var clRow = $('row', sheet);
                   //console.log(clRow);
@@ -412,6 +412,8 @@
                   sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
                   // Style of rows
+                  $('row c[r^="F"]', sheet).attr('s', '51');
+                  $('row c[r="F6"]', sheet).attr('s', '2');
                   $('row c[r="A2"]', sheet).attr('s', '7');
                   $('row c[r="A3"]', sheet).attr('s', '7');
                   $('row c[r="B2"]', sheet).attr('s', '7');
@@ -421,9 +423,7 @@
                   $('row c[r="C3"]', sheet).attr('s', '7');          
                   $('row c[r="D3"]', sheet).attr('s', '7'); 
                   $('row c[r="A5"]', sheet).attr('s', '7'); 
-                  $('row c[r="A6"]', sheet).attr('s', '7'); 
                   $('row c[r="B5"]', sheet).attr('s', '7'); 
-                  $('row c[r="B6"]', sheet).attr('s', '7');    
                 },
             }],
 			"ajax":{

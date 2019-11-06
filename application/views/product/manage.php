@@ -389,6 +389,18 @@
 
           // Style of rows
           //$('row c[c="A1"]', sheet).attr('s', '7');
+          $('row c[r^="D"]', sheet).attr('s', '51');
+          $('row c[r="D7"]', sheet).attr('s', '2');
+          $('row c[r^="E"]', sheet).attr('s', '52');
+          $('row c[r="E7"]', sheet).attr('s', '2');
+          $('row c[r^="F"]', sheet).attr('s', '52');
+          $('row c[r="F7"]', sheet).attr('s', '2');
+          $('row c[r^="G"]', sheet).attr('s', '52');
+          $('row c[r="G7"]', sheet).attr('s', '2');
+          $('row c[r^="H"]', sheet).attr('s', '52');
+          $('row c[r="H7"]', sheet).attr('s', '2');
+          $('row c[r^="I"]', sheet).attr('s', '51');
+          $('row c[r="I7"]', sheet).attr('s', '2');
           $('row c[r="A2"]', sheet).attr('s', '7');
           $('row c[r="A3"]', sheet).attr('s', '7');
           $('row c[r="A5"]', sheet).attr('s', '7');
