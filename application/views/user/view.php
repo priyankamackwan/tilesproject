@@ -126,7 +126,7 @@
                   Company Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->company_name;?>
                 </div>
               </div>
@@ -136,7 +136,7 @@
                   Company Address :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->company_address;?>
                 </div>
               </div>
@@ -146,7 +146,7 @@
                   Contact Person Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->contact_person_name;?>
                 </div>
               </div>
@@ -156,7 +156,7 @@
                   Email :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->email;?>
                 </div>
               </div>
@@ -166,7 +166,7 @@
                   Phone :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->phone_no;?>
                 </div>
               </div>
@@ -176,7 +176,7 @@
                   Vat Number :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->vat_number;?>
                 </div>
               </div>
@@ -186,7 +186,7 @@
                   Created On  :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo date('d/m/Y H:i:s',strtotime($result[0]->created));?>
                 </div>
               </div>
@@ -197,7 +197,7 @@
                   Last Activity On :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php if(trim($result[0]->last_activity)=='0000-00-00 00:00:00') // if date is not set
                           {
                             echo '00/00/0000 00:00:00';
@@ -214,7 +214,7 @@
 						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
                   Client Type :
                 </label>
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php
                     if ($result[0]->client_type == 1) { 
                   ?>

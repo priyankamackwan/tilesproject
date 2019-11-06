@@ -138,7 +138,7 @@
                   First Name : 
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->first_name;?>
                 </div>
               </div>
@@ -148,7 +148,7 @@
                   Last Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->last_name;?>
                 </div>
               </div>
@@ -158,7 +158,7 @@
                   Email :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->email;?>
                 </div>
               </div>
@@ -168,7 +168,7 @@
                   Mobile No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->mobile_no;?>
                 </div>
               </div>
@@ -179,7 +179,7 @@
                   Created On :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php if($result[0]->created=="0000-00-00 00:00:00") // if date is not set
                         {
                           echo "00/00/0000 00:00:00";
@@ -197,7 +197,7 @@
                   Client Rights :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php 
                     if (in_array(3, $rightsArray)) { 
                   ?>
@@ -217,7 +217,7 @@
                   Category Rights :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php 
                     if (in_array(4, $rightsArray)) { 
                   ?>
@@ -237,7 +237,7 @@
                   Product Rights :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php 
                     if (in_array(5, $rightsArray)) { 
                   ?>
@@ -256,7 +256,7 @@
 						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order">
                   Order Rights :
                 </label>
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php 
                     if (in_array(6, $rightsArray)) { 
                   ?>

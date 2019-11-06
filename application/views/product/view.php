@@ -167,7 +167,7 @@
                   Item Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->name;?>
                 </div>
               </div>
@@ -177,7 +177,7 @@
                 Design No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->design_no;?>
                 </div>
               </div>
@@ -187,7 +187,7 @@
                   Cash Rate :
                 </label>
                 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo ROUND($result[0]->cash_rate,2);?>
                 </div>
               </div>
@@ -197,7 +197,7 @@
                   Credit Rate :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo ROUND($result[0]->credit_rate,2);?>
                 </div>
               </div>
@@ -207,7 +207,7 @@
                   Walkin Rate :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo ROUND($result[0]->walkin_rate,2);?>
                 </div>
               </div>
@@ -217,7 +217,7 @@
                   Purchase Price :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo ROUND($result[0]->purchase_expense,2);?>
                 </div>
               </div>
@@ -227,7 +227,7 @@
                   Size:
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->size;?>
                 </div>
               </div>
@@ -236,7 +236,7 @@
                   Uploaded Image :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 ">
                   <?php
 										if (!empty($result[0]->image) && file_exists(FCPATH.'assets/uploads/'.$result[0]->image)) {
 											$image = base_url().'./assets/uploads/'.$result[0]->image;
@@ -254,7 +254,7 @@
                   Quantity :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->quantity;?>
                 </div>
               </div>
@@ -267,7 +267,7 @@
                       Purchase Price :
                     </label>
 
-                    <div class="col-md-9 col-sm-12 col-xs-12">
+                    <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                       <?php echo ROUND($result[0]->purchase_expense,2);?>
                     </div>
                   </div>

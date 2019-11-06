@@ -86,7 +86,7 @@
 								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
 									Item Group Name :
 								</label>
-								<div class="col-md-9 col-sm-12 col-xs-12">
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
 									<?php echo $result[0]->name;?>
 								</div>
 							</div>
@@ -96,7 +96,7 @@
 									Description :
 								</label>
 												
-								<div class="col-md-9 col-sm-12 col-xs-12">
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
 									<?php echo $result[0]->description;?>
 								</div>
 							</div>
@@ -106,7 +106,7 @@
 									Uploaded Image :
 								</label>
 
-								<div class="col-md-9 col-sm-12 col-xs-12">
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
 									<?php
 										if (!empty($result[0]->image) && file_exists(FCPATH.'assets/uploads/'.$result[0]->image)) {
 											$image = base_url().'./assets/uploads/'.$result[0]->image;
