@@ -439,7 +439,7 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [4],
+				"targets": [4,13],
 				"orderable": false
 			},
       {

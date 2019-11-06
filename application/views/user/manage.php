@@ -401,8 +401,8 @@
         { "data": "manage"}
       ],
       "columnDefs": [ {
-        "targets": [6,8],
-        "orderable": false,  
+        "targets": [6,8,7],
+        "orderable": true,  
       },{
         "className": 'text-center',
         "targets":   [0,7,8,9],

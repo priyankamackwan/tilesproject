@@ -46,7 +46,7 @@
                 6 => 'p.quantity' ,
                 7 => 'totalQuantity',
                 8 => 's_quantity',
-                9 => 'amount',
+                9 => 'totalValue',
             );
       // Order by
       $order = $columnArray[$this->input->post('order')[0]['column']];
@@ -98,8 +98,9 @@
       $limit = $_POST['length'];
 
                         
-      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name');
+      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,SUM(orders.total_price) as totalValue,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name');
       $this->db->from('order_products o');
+      $this->db->from('orders orders','orders.id=o.order_id','left');
       $this->db->join('products p','p.id=o.product_id','left');
       $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
       $this->db->join('categories c','c.id=pc.cat_id','left');
@@ -113,7 +114,9 @@
       }
       
       $this->db->limit($limit, $start);
+      $this->db->group_by('orders.user_id');
       $this->db->group_by('o.product_id');
+
       if(isset($order) && $order!=''){
         $this->db->order_by($order,$dir);
       }else{
@@ -144,7 +147,7 @@
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =$this->$model->getamount(ROUND($value['amount'],2));
+                                        $nestedData['amount'] =$this->$model->getamount(ROUND($value['totalValue'],2));
           $data[] = $nestedData;
                                         $srNo++;
         }

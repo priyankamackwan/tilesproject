@@ -138,12 +138,19 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [6,7],
+				"targets": [7],
 				"orderable": false,  
 			},{
+        "targets": [6],
+        "orderable": true,  
+      },{
         "className": 'text-center',
-        "targets":   [0,5,6,7],
+        "targets":   [0],
         "orderable": false
+      },{
+        "className": 'text-center',
+        "targets":   [5,6,7],
+        "orderable": true
       }],
 
 			"order": [[ 0, "DESC"]],

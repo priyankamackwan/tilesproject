@@ -182,11 +182,11 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [2,4],
-				"orderable": false
+				"targets": [3],
+				"orderable": true
 			},{
         "className": 'text-center',
-        "targets":   [0,3,4],
+        "targets":   [0,2,3,4],
         "orderable": false
       }],
 			"rowCallback": function( row, data, index ) {
