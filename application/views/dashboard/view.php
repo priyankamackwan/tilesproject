@@ -264,7 +264,7 @@
 													</td>
 													<td class="text-center"><?php echo $this->My_model->date_conversion($value['created'],'d/m/Y H:i:s');?></td>
 													<td class=" button-column text-center">
-														<a href='<?php echo $view;?>' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
+														<a href='<?php echo $view;?>' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
 												<?php
@@ -342,7 +342,7 @@
 													</td>
 													<td class="text-center"><?php echo $this->My_model->date_conversion($value['created'],'d/m/Y H:i:s');?></td>
 													<td class=" button-column text-center">
-														<a href='<?php echo $view;?>' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
+														<a href='<?php echo $view;?>' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View' target="_blank"><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
 												<?php
@@ -442,7 +442,7 @@
 													<td><?php echo $value['company_name'];?>
 													</td>
 													<td class="text-right"><?php echo '<i class="fa fa-inr"></i> '.number_format($value['totalValue'],2);?></td>	
-													<td class="text-center"><a href="<?php echo base_url();?>Order?client_name=<?php echo str_replace('&', '_',str_replace(' ', '-',$value['company_name']));?>" target="_blank"  class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
+													<td class="text-center"><a href="<?php echo base_url();?>Order?client_name=<?php echo str_replace('&', '_',str_replace(' ', '-',$value['company_name']));?>" target="_blank"  class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
 												<?php
