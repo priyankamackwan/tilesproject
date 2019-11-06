@@ -11,76 +11,8 @@
 	$this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
 ?>
-<!-- page content -->
-     <!-- <div class="right_col" role="main">
-            <div class="clearfix"></div>
-            <div class="row">
-			<?php
-                        #echo '<pre>'.$this->msgDisplay;print_r($this->session->flashdata()); exit;
-				echo $this->session->flashdata('edit_profile');
-                                echo $this->session->flashdata('Change_msg');
-                                echo $this->session->flashdata($this->msgDisplay);
-			?>
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-				<div class="x_title">
-                    <h2>Products Report</h2>
-                    <div class="clearfix"></div>
-                    
-                 </div>
-                    
-				 <div class="x_content">
-                <div class="datatable-responsive">
-
-                 <table id="datatables" class="main-table table table-striped table-bordered">
-                    <thead>
-                          <th>Sr No.</th>
-                          <th>Product Name</th>
-                          <th>Design No.</th>
-                          <th>Size</th>
-                          <th>Category</th>
-                          <th>Purchase Price</th>
-                          <th>Total Quantity</th>
-                          <th>Sold Quantity</th>
-                          <th>Balance Quantity</th>
-                           <th>Total Amount Balance</th>
-                    </thead>
-                    <thead>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                  </div>
-                </div>
-			</div>
-		</div>
-	</div>
-</div> -->
-
 <!-- Main Container start-->
 <div class="content-wrapper">
-      <section class="content-header">
-        <?php
-          echo $this->session->flashdata('edit_profile');
-          echo $this->session->flashdata('Change_msg');
-          echo $this->session->flashdata($this->msgDisplay);
-        ?>
-        <!-- <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li class="active">Users</li>
-        </ol> -->
-      </section>
-
     <section class="content">
 	<div class="box">
             <div class="box-body">
@@ -224,8 +156,8 @@
 			  [{
 				  extend:'excel',
           title:'',
-          filename:'Product report',
-          sheetName: 'Product report',
+          filename:'Best selling item',
+          sheetName: 'Best selling item',
           action: newExportAction,
 				  exportOptions: {
 							columns: [1,2,3,4,5,6,7,8,9]
@@ -286,13 +218,10 @@
               // Add row data
               var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
 
-              var r2 = Addrow(2, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
-
-              var r3 = Addrow(3, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+              var r2 = Addrow(2, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
               
               var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
-              sheetData.insertBefore(r3,sheetData.childNodes[0]);
               sheetData.insertBefore(r2,sheetData.childNodes[0]);
               sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
