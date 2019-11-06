@@ -147,17 +147,39 @@
 		}
 		public function insert()
 		{
-                        
-			$model = $this->model;           
+            $model = $this->model; 
+            $data['post'] = $this->input->post();
+			$msg_set='';          
 			$first_name = $this->input->post('first_name');
             $last_name = $this->input->post('last_name');
             $email = $this->input->post('email');
 			$number = $this->input->post('number');
+			//Check email exist or not	
+			$check_email = $this->db->select('*')->where('email',$email)->where('is_deleted',0)->get($this->table)->result();
+			//Check contact number exist or not
+			$check_number = $this->db->select('*')->where('mobile_no',$number)->where('is_deleted',0)->get($this->table)->result();
+			//if email and mobile no not exist in database then insert admin user.
+			if(count($check_email) > 0 || count($check_number) > 0){
+				if(count($check_email) > 0){
+					$msg_set .='<p>Email Exist.</p>';
+				}
+				if(count($check_number) > 0){
+					$msg_set .='<p>Contact Number Exist.</p>';
+				}
+				$this->session->set_flashdata($this->msgDisplay,'<span class="7"><div class="alert alert-danger" style=margin-top:15px;"><strong>'.$msg_set.'</strong></div></span>');
 
-			$exist_user=$this->db->select('email,mobile_no')->from('admin_users')->where('email',$email)->or_where('mobile_no',$number)->get();
+				$model = $this->model;
 
-			if ($exist_user->num_rows() == "0") //if email and mobile no not exist in database then insert admin user.
-			{
+				$data['controller'] = $this->controller;
+
+				$data['action'] = "insert";
+
+				$model = $this->model;
+
+				$data['controller'] = $this->controller;
+
+				$this->load->view($this->view.'/form',$data);
+			}else{
                 $permissionArray = array();
                 if (!empty($this->input->post('user'))){
                   array_push($permissionArray,$this->input->post('user'));
@@ -185,17 +207,7 @@
 				$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$first_name.' '.$last_name.' has been added successfully!</div>');
 				redirect($this->controller);
 			}
-			else
-			{
-				$this->session->set_flashdata($this->msgDisplay,'<span class="7"><div class="alert alert-danger" style=margin-top:15px;"><strong>Email Id or Mobile No already exist.</strong></div></span>');
-				$data['action'] = "insert";
-
-				$model = $this->model;
-
-				$data['controller'] = $this->controller;
-
-				$this->load->view($this->view.'/form',$data);
-			}
+			
 		}
 		public function edit($id)
 		{
@@ -255,8 +267,12 @@
                     
             $this->db->select('*');
             $this->db->where('email', $email);
+            if(isset($id) && $id!=''){
+            	$this->db->where_not_in('id',$id);
+            }
             //$q = $this->db->get('users');
             $q = $this->db->get($this->table);
+            //echo $this->db->last_query();
             $userData = $q->result_array();
 			if(count($check_query) > 0 || count($userData) > 0)
 			{
@@ -298,12 +314,34 @@
 		{
 			$model = $this->model;
 
-			
 			$id = $this->input->post('id');
+			$msg_set='';
 			$first_name = $this->input->post('first_name');
                         $last_name = $this->input->post('last_name');
                         $email = $this->input->post('email');
 			$number = $this->input->post('number');
+			//Check email exist or not	
+			$check_email = $this->db->select('*')->where_not_in('id',$id)->where('email',$email)->where('is_deleted',0)->get($this->table)->result();
+			//Check contact number exist or not
+			$check_number = $this->db->select('*')->where_not_in('id',$id)->where('mobile_no',$number)->where('is_deleted',0)->get($this->table)->result();
+			//if email and mobile no not exist in database then insert admin user.
+			if(count($check_email) > 0 || count($check_number) > 0){
+				if(count($check_email) > 0){
+					$msg_set .='<p>Email Exist.</p>';
+				}
+				if(count($check_number) > 0){
+					$msg_set .='<p>Contact Number Exist.</p>';
+				}
+				$this->session->set_flashdata($this->msgDisplay,'<span class="7"><div class="alert alert-danger" style=margin-top:15px;"><strong>'.$msg_set.'</strong></div></span>');
+				$data['action'] = "update";
+
+				$model = $this->model;
+
+				$data['controller'] = $this->controller;
+
+				redirect($this->controller.'/edit/'.$this->utility->encode($id));
+			}
+			else{
                         $permissionArray = array();
 
                        
@@ -336,6 +374,7 @@
     
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$first_name.' '.$last_name.' has been updated successfully!</div>');
 			redirect($this->controller);
+			}
 		}
 		public function remove($id)
 		{

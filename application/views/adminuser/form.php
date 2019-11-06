@@ -1,7 +1,7 @@
 <?php
   $this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
-  
+  print_r($post);
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
@@ -156,9 +156,9 @@
     <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
     
     <?php
-      echo $this->session->flashdata('edit_profile');
-      echo $this->session->flashdata('Change_msg');
-      echo $this->session->flashdata($this->msgDisplay);
+    //  echo $this->session->flashdata('edit_profile');
+    //echo $this->session->flashdata('Change_msg');
+    //  echo $this->session->flashdata($this->msgDisplay);
     ?>
     <!-- <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -169,6 +169,13 @@
   <!-- Main content section start-->
   <section class="content">
     <div class="row">
+      <div class="col-md-9 col-sm-12 col-xs-12">
+      <?php
+      echo $this->session->flashdata('edit_profile');
+      echo $this->session->flashdata('Change_msg');
+      echo $this->session->flashdata($this->msgDisplay);
+    ?>
+  </div>
       <div class="col-md-9 col-sm-12 col-xs-12">
 
         <div class="box box-primary">
