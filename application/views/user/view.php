@@ -187,7 +187,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo date('d/m/Y H:i:s',strtotime($result[0]->created));?>
+                  <?php echo $this->My_model->date_conversion($result[0]->created,'d/m/Y H:i:s',' ');?>
                 </div>
               </div>
 
@@ -198,14 +198,12 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php if(trim($result[0]->last_activity)=='0000-00-00 00:00:00') // if date is not set
-                          {
+                  <!-- // if date is not set -->
+                  <?php if(trim($result[0]->last_activity)=='0000-00-00 00:00:00'){
                             echo '00/00/0000 00:00:00';
-                          } 
-                        else 
-                          {
-                             echo date('d/m/Y H:i:s',strtotime($result[0]->last_activity));
-                          } 
+                        }else{
+                            echo $this->My_model->date_conversion($result[0]->last_activity,'d/m/Y H:i:s',' ');
+                        } 
                   ?>
                 </div>
               </div>

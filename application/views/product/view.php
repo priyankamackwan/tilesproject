@@ -188,7 +188,7 @@
                 </label>
                 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo ROUND($result[0]->cash_rate,2);?>
+                  <?php echo $this->My_model->getamount(ROUND($result[0]->cash_rate,2));?>
                 </div>
               </div>
 
@@ -198,7 +198,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo ROUND($result[0]->credit_rate,2);?>
+                  <?php echo $this->My_model->getamount(ROUND($result[0]->credit_rate,2));?>
                 </div>
               </div>
 
@@ -208,7 +208,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo ROUND($result[0]->walkin_rate,2);?>
+                  <?php echo $this->My_model->getamount(ROUND($result[0]->walkin_rate,2));?>
                 </div>
               </div>
 
@@ -218,7 +218,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo ROUND($result[0]->purchase_expense,2);?>
+                  <?php echo $this->My_model->getamount(ROUND($result[0]->purchase_expense,2));?>
                 </div>
               </div>
 
@@ -259,7 +259,7 @@
                 </div>
               </div>
 
-              <?php 
+              <?php /*
                 if ($this->userhelper->current('role_id') ==1) { 
               ?>
                   <div class="form-group">
@@ -272,7 +272,7 @@
                     </div>
                   </div>
               <?php 
-                } 
+                } */
               ?>
 
               <div class="form-group">

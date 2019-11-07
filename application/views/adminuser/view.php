@@ -185,8 +185,8 @@
                           echo "00/00/0000 00:00:00";
                         }
                         else
-                        {
-                          echo date('d/m/Y H:i:s',strtotime($result[0]->created));
+                        {//Date from my model
+                          echo $this->My_model->date_conversion($result[0]->created,'d/m/Y H:i:s',' ');
                         }
                   ?>
                 </div>

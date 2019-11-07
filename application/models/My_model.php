@@ -136,18 +136,23 @@
 			return $query;
 		}
 
-		public function date_conversion($date,$format)
-		{
-			$new_time='';
-			$date=trim($date);
-			$format=trim($format);
-			//$newdate=date($format,strtotime($date));
-			$new_date = date('d/m/Y',strtotime($date));
-			if(isset($format) && $format!='' && $format=="d/m/Y H:i:s"){
-				$new_time = date('H:i:s',strtotime($date));
+		public function date_conversion($date,$format,$break=''){
+			if($break==''){
+				$break='<br>';
 			}
-			return $new_date.'<br> '.$new_time;
-		}
+            $date_format='';
+            $time_format='';
+            $new_date='';
+            $new_time='';
+            $date=trim($date);
+            $format=trim($format);
+            $date_explode=explode(" ",$format); // explode format for various date and time format.
+            $date_format=$date_explode[0];
+            $time_format=$date_explode[1];
+            $new_date = date($date_format,strtotime($date));
+            $new_time = date($time_format,strtotime($date));
+            return $new_date.$break.$new_time;
+        }
 		// balance amount and quantity
 		public function balance_quantity(){
 			$this->db->select('SUM(p.quantity-o.quantity) as totalQuantity,SUM(o.price) as amount,p.purchase_expense,p.quantity');
