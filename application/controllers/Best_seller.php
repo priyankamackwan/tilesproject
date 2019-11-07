@@ -39,7 +39,8 @@
       //for sorting column
       $columnArray = array(
                 1 => 'u.company_name',
-                2 => 'u.contact_person_name'
+                2 => 'u.contact_person_name',
+                3 => 'totalValue',
             );
       // Order by
       $order = $columnArray[$this->input->post('order')[0]['column']];
@@ -65,7 +66,7 @@
           }
           $where .= '(u.contact_person_name LIKE "'.$s.'%" or ';
 
-          $where .= 'u.company_name LIKE "%'.$s.'%")  ';
+          $where .= 'u.company_name LIKE "%'.$s.'%" ) ';
       }
       
       $totalData = $this->$model->best_seller_count($where);

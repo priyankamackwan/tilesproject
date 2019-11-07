@@ -288,13 +288,13 @@
                     $tabledata['company_name'] = $SingleOrderData['company_name'];
 
                     // Create LPO link for table.
-                    $tabledata['lpo_no'] = '<a href="'.$downloadlpo.'"><b>'.$SingleOrderData['lpo_no'].'</b></a>';
+                    $tabledata['lpo_no'] = '<a href="'.$downloadlpo.'" target="_blank"><b>'.$SingleOrderData['lpo_no'].'</b></a>';
 
                     // Create DP link for table.
-                    $tabledata['do_no'] ='<a href="'.$download.'"><b>'.$SingleOrderData['do_no'].'</b></a>';
+                    $tabledata['do_no'] ='<a href="'.$download.'" target="_blank"><b>'.$SingleOrderData['do_no'].'</b></a>';
 
                     // Create Invoice link for table.
-                    $tabledata['invoice_no'] ='<a href="'.$downloadinvoice.'"><b>'.$SingleOrderData['invoice_no'].'</b></a>';
+                    $tabledata['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$SingleOrderData['invoice_no'].'</b></a>';
 
                     $tabledata['placed_by'] = $placed_by_name;
 
@@ -335,7 +335,7 @@
                     }
                     else
                     {
-                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
+                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
                     }
 
                     // Push table data in to array.

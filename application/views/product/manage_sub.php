@@ -223,7 +223,7 @@
               <thead>
                 <th width="5%" class="text-center">Sr No.</th>
                 <th class="text-center">Design No.</th>
-                <th class="text-center">Name</th>
+                <th class="text-center">Item Name</th>
                 <th class="text-center">Item Group</th>
                 <th class="text-center">Image</th>
                 <th class="text-center">Quantity</th>

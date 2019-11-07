@@ -80,7 +80,7 @@
                             <th class="text-center">Item Name</th>
                             <th class="text-center">Design No.</th>
                             <th class="text-center">Size</th>
-                            <th class="text-center">Category</th>
+                            <th class="text-center">Item Group</th>
                             <th class="text-center">Purchase Price</th>
                             <th class="text-center">Total Quantity</th>
                             <th class="text-center">Sold Quantity</th>

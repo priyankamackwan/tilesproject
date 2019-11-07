@@ -565,7 +565,7 @@
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-12 col-xs-12" for="latitude">
-                    Categories<font color="red"><span class="required">*</span></font> :
+                    Item Group<font color="red"><span class="required">*</span></font> :
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
@@ -764,7 +764,11 @@ return value == '' || value.trim().length != 0;
 						},
                                                  unit:{
 							required: true,
-						}
+						},
+            "categories[]":{
+              required: true,
+              minlength: 1  
+            }
 					
 					},
 					messages: {
@@ -780,8 +784,11 @@ return value == '' || value.trim().length != 0;
                                                 quantity: {
 							required: "Please Enter Quantity",
                                                         noSpace: true,
-						}
-						
+						},
+             "categories[]": {
+              required: "Please Select  Item Group*",
+             noSpace: true,
+            },
 					},
 					submitHandler: function(form){
 						form.submit();
