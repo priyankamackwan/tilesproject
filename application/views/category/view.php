@@ -83,30 +83,30 @@
 						<form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
 							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+								<label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
 									Item Group Name :
 								</label>
-								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<div class="col-md-9 col-sm-6 col-xs-6 mt_5">
 									<?php echo $result[0]->name;?>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="editor">
+								<label class="control-label col-md-3 col-sm-6 col-xs-6" for="editor">
 									Description :
 								</label>
 												
-								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<div class="col-md-9 col-sm-6 col-xs-6 mt_5">
 									<?php echo $result[0]->description;?>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
+								<label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_image">
 									Item Group Image :
 								</label>
 
-								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<div class="col-md-9 col-sm-6 col-xs-6 mt_5">
 									<?php
 										if (!empty($result[0]->image) && file_exists(FCPATH.'assets/uploads/'.$result[0]->image)) {
 											$image = base_url().'./assets/uploads/'.$result[0]->image;

@@ -134,52 +134,52 @@
           <div class="box-body">
             <form action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="first_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="first_name">
                   First Name : 
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->first_name;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="last_name">
                   Last Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->last_name;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="email">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="email">
                   Email :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->email;?>
                 </div>
               </div>
                     
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="Mobile">
                   Mobile No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->mobile_no;?>
                 </div>
               </div>
 
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="Mobile">
                   Created On :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php if($result[0]->created=="0000-00-00 00:00:00") // if date is not set
                         {
                           echo "00/00/0000 00:00:00";
@@ -193,11 +193,11 @@
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="age_group">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6 for="age_group">
                   Client Rights :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php 
                     if (in_array(3, $rightsArray)) { 
                   ?>
@@ -213,11 +213,11 @@
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="age_group">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="age_group">
                   Item Grpup Rights :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php 
                     if (in_array(4, $rightsArray)) { 
                   ?>
@@ -233,11 +233,11 @@
               </div>
 
               <div class="form-group">
-						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="product">
+						    <label class="control-label col-md-3 col-sm-6 col-xs-6" for="product">
                   Item Rights :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php 
                     if (in_array(5, $rightsArray)) { 
                   ?>
@@ -253,10 +253,10 @@
 					    </div>
 
               <div class="form-group">
-						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order">
+						    <label class="control-label col-md-3 col-sm-6 col-xs-6" for="order">
                   Order Rights :
                 </label>
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php 
                     if (in_array(6, $rightsArray)) { 
                   ?>

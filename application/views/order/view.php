@@ -224,7 +224,7 @@
               <input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
             
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Order Detail :
                 </label>
                 
@@ -255,41 +255,41 @@
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   User Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $User[0]['company_name'];?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Tax :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(round($result[0]->tax,2));?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Total Price :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(round($result[0]->total_price,2));?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   LPO No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->lpo_no;?>
                 </div>
               </div>
@@ -298,11 +298,11 @@
               <?php if($customer_lpo[0]['customer_lpo']!="") {  ?>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Customer LPO No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $customer_lpo[0]['customer_lpo'];?>
                 </div>
               </div>
@@ -311,80 +311,80 @@
 
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Do No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->do_no;?>
                 </div>
               </div>
         
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Invoice No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->invoice_no;?>
                 </div>
               </div>
         
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Cargo :
                 </label>
               
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->cargo;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Cargo Number :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->cargo_number;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Location :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->location;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Mark :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->mark;?>
                 </div>
               </div>
                         
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="sales_expense">
                   Sales Expense :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->sales_expense;?>
                 </div>
               </div>    
               <div class="form-group" id="id_payment_date"> <!-- if payment status is completed then display the date div -->
-                <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="payment_date">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6 " for="payment_date">
                   Created On :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <div class='input-group date' id='payment_datetimepicker'>
                       <?php 
                       echo $this->My_model->date_conversion($result[0]->created,'d/m/Y H:i:s',' ');
@@ -393,10 +393,10 @@
                 </div>
               </div>    
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="order_status">
                   Delivery Status :
                 </label>
-                    <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                    <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                     <?php 
                       if ($result[0]->status == 0) {
                       echo  'Pending';
@@ -410,11 +410,11 @@
               </div>
               <?php if(isset($result[0]->delivery_date) && $result[0]->delivery_date!='' && $result[0]->status == 2) { ?>
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="order_status">
                   Delivery Date :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                     <?php 
                     echo $this->My_model->date_conversion($result[0]->delivery_date,'d/m/Y h:i A',' ');
                     ?>
@@ -424,11 +424,11 @@
                   } 
                   ?>
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="order_payment_status">
                   Payment Status :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                     <?php
                       if ($result[0]->invoice_status == 0) { 
                         echo 'Unpaid';
@@ -440,11 +440,11 @@
               </div>
               <?php if(isset($result[0]->payment_date) && $result[0]->payment_date!='' && $result[0]->invoice_status == 1) { ?>
               <div class="form-group" id="id_payment_date"> <!-- if payment status is completed then display the date div -->
-                <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="payment_date">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6 " for="payment_date">
                   Payment Date :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <div class='input-group date' id='payment_datetimepicker'>
                       <?php 
                       echo $this->My_model->date_conversion($result[0]->payment_date,'d/m/Y h:i A',' ');

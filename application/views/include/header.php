@@ -65,6 +65,29 @@
     .mt_5{
       margin-top: 7px;
     }
+   @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+      .mt_5{
+        margin-top: 0px;
+        overflow-wrap: break-word;
+      }
+    @media only screen and (min-device-width : 375px) and (max-device-width : 812px) and (-webkit-device-pixel-ratio : 3) {
+      .mt_5{
+        margin-top: 0px;
+      }
+    }
+      @media only screen and (min-device-width : 414px) and (max-device-width : 736px) {
+        .mt_5{
+        margin-top: 0px;
+        overflow-wrap: break-word;
+      }
+      @media only screen and (min-device-width : 320px) and (max-device-width : 568px) 
+and (orientation : landscape) {
+      .mt_5{
+        margin-top: 0px;
+        overflow-wrap: break-word;
+      }
+    }
+}
   </style>
  
 </head>

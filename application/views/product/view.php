@@ -163,80 +163,80 @@
             <form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Item Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->name;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="design_no">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="design_no">
                 Design No :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->design_no;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="cash_rate">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="cash_rate">
                   Cash Rate :
                 </label>
                 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(ROUND($result[0]->cash_rate,2));?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="credit_rate">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="credit_rate">
                   Credit Rate :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(ROUND($result[0]->credit_rate,2));?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="walkin_rate">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="walkin_rate">
                   Walkin Rate :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(ROUND($result[0]->walkin_rate,2));?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="purchase_expense">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="purchase_expense">
                   Purchase Price :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(ROUND($result[0]->purchase_expense,2));?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Size:
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->size;?>
                 </div>
               </div>
               <div class="form-group uploadedImage">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_image">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_image">
                   Item Image :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 ">
+                <div class="col-md-9 col-sm-6 col-xs-6 ">
                   <?php
 										if (!empty($result[0]->image) && file_exists(FCPATH.'assets/uploads/'.$result[0]->image)) {
 											$image = base_url().'./assets/uploads/'.$result[0]->image;
@@ -245,16 +245,16 @@
 										}
 									?>
                   
-                  <img width="150px" height="150px" src="<?php echo $image;?>" style="background-color:navy;" >
+                  <img width="140px" height="140px" src="<?php echo $image;?>" style="background-color:navy;" >
                 </div>
 					    </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Quantity :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->quantity;?>
                 </div>
               </div>
@@ -263,11 +263,11 @@
                 if ($this->userhelper->current('role_id') ==1) { 
               ?>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="purchase_expense">
+                    <label class="control-label col-md-3 col-sm-6 col-xs-6" for="purchase_expense">
                       Purchase Price :
                     </label>
 
-                    <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                    <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                       <?php echo ROUND($result[0]->purchase_expense,2);?>
                     </div>
                   </div>
@@ -276,11 +276,11 @@
               ?>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="latitude">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="latitude">
                   Item Group :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-6 col-xs-6">
                   <select class="form-control select2" name="categories[]" multiple="multiple" id="category" disabled="" width="100%">
 
                     <?php 

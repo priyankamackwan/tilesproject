@@ -122,82 +122,82 @@
             <form action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="first_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="first_name">
                   Company Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->company_name;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="last_name">
                   Company Address :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->company_address;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="last_name">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="last_name">
                   Contact Person Name :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->contact_person_name;?>
                 </div>
               </div>
                   
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="email">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="email">
                   Email :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->email;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="phone_no">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="phone_no">
                   Phone :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->phone_no;?>
                 </div>
               </div>
 
               <div class="form-group">
-						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+						    <label class="control-label col-md-3 col-sm-6 col-xs-6" for="Mobile">
                   Vat Number :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $result[0]->vat_number;?>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="Mobile">
                   Created On  :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->date_conversion($result[0]->created,'d/m/Y H:i:s',' ');?>
                 </div>
               </div>
 
 
               <div class="form-group">
-                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="Mobile">
                   Last Activity On :
                 </label>
 
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <!-- // if date is not set -->
                   <?php if(trim($result[0]->last_activity)=='0000-00-00 00:00:00'){
                             echo '00/00/0000 00:00:00';
@@ -209,10 +209,10 @@
               </div>
 
               <div class="form-group">
-						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Mobile">
+						    <label class="control-label col-md-3 col-sm-6 col-xs-6" for="Mobile">
                   Client Type :
                 </label>
-                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php
                     if ($result[0]->client_type == 1) { 
                   ?>
