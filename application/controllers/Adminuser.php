@@ -92,19 +92,19 @@
 					if (in_array(3, $rightsArray)){ 
 
 						if($rights!=''){ $add_coma=' , ';}
-						$rights .=$add_coma.'Client Rights';
+						$rights .=$add_coma.'Client ';
 					}
 					if(in_array(4, $rightsArray)){
 						if($rights!=''){ $add_coma=' , ';}
-						$rights .=$add_coma.'Item Grpup Rights';
+						$rights .=$add_coma.'Item Grpup';
 					}
 					if(in_array(5, $rightsArray)){
 						if($rights!=''){ $add_coma=' , ';}
-						$rights .=$add_coma.'Item Rights';
+						$rights .=$add_coma.'Item ';
 					}
 					if(in_array(6, $rightsArray)){ 
 						if($rights!=''){ $add_coma=' , ';}
-						$rights .=$add_coma.'Order Rights';
+						$rights .=$add_coma.'Order ';
 					}
 					// End of rights
 					if($value->created=="0000-00-00 00:00:00") // if date is not set

@@ -26,13 +26,38 @@
                             <div class="col-md-11 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <div class="row">
+                                      <!-- Products Filter -->
+                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                            <label class="control-label" style="margin-top:7px;">Items:</label>
+                                        </div>
 
-                                        <!-- Invoice Status Filter -->
+                                        <!-- Products Filter Dropdown -->
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
+                                                <option value="" selected >All</option>
+                                                <?php
+                                                    if(!empty($activeProducts) && count($activeProducts) > 0 ){
+                                                    
+                                                        foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
+                                                ?>
+                                                            <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
+                                                <?php
+                                                        }
+                                                    }else{
+                                                ?>
+                                                    <option value="">-- No Item Available --</option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Items Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Items Group:</label>
                                         </div>
 
-                                        <!-- Invoice Status Filter Dropdown -->
+                                        <!-- Items Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
                                                 <option value="">All</option>
@@ -218,10 +243,13 @@
               // Add row data
               var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
 
-              var r2 = Addrow(2, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+              var r2 = Addrow(2, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
+
+              var r3 = Addrow(3, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
               
               var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
+              sheetData.insertBefore(r3,sheetData.childNodes[0]);
               sheetData.insertBefore(r2,sheetData.childNodes[0]);
               sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
