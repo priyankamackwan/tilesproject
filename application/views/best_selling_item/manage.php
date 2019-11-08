@@ -71,7 +71,7 @@
                                                             }
                                                         }else{
                                                     ?>
-                                                        <option value="">-- No Product Available --</option>
+                                                        <option value="">-- No Items Group Available --</option>
                                                     <?php
                                                         }
                                                     ?>

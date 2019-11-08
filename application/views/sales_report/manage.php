@@ -99,7 +99,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Product Available --</option>
+                                                    <option value="">-- No Company Available --</option>
                                                 <?php
                                                     }
                                                 ?>
