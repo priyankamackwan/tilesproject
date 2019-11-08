@@ -85,6 +85,28 @@
 				{
 					$model = $this->model;
 					$id = $this->primary_id;
+					// show rights
+					$rights='';
+					$add_coma='';
+					$rightsArray=explode(',', $value->rights);
+					if (in_array(3, $rightsArray)){ 
+
+						if($rights!=''){ $add_coma=' , ';}
+						$rights .=$add_coma.'Client Rights';
+					}
+					if(in_array(4, $rightsArray)){
+						if($rights!=''){ $add_coma=' , ';}
+						$rights .=$add_coma.'Item Grpup Rights';
+					}
+					if(in_array(5, $rightsArray)){
+						if($rights!=''){ $add_coma=' , ';}
+						$rights .=$add_coma.'Item Rights';
+					}
+					if(in_array(6, $rightsArray)){ 
+						if($rights!=''){ $add_coma=' , ';}
+						$rights .=$add_coma.'Order Rights';
+					}
+					// End of rights
 					if($value->created=="0000-00-00 00:00:00") // if date is not set
 					{
 						$date_value="00/00/0000"."<br>"." 00:00:00";
@@ -109,17 +131,19 @@
 					$nestedData['last_name'] = $value->last_name;
                                         $nestedData['email'] = $value->email;
 					$nestedData['mobile_no'] = $value->mobile_no;
+					//Admin User rights
+					$nestedData['rights']=$rights;
 					$nestedData['created'] = $date_value;
 					$nestedData['status'] = $statusText;
                                         if ($value->status == 1){
 											// $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Block</a>";
 											
-											$nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Block'><i class='fa fa-ban'></i></a>";
+											$nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Block'><i class='fa fa-ban'></i></a>";
 											
 											
                                         } else {
                                             //$nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a>&nbsp;<a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a>&nbsp;<a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Active</a>";
-                                            $nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='$statusAction' class='btn  btn-success  btn-xs confirm-statuschange' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Unblock'><i class='fa fa-check'></i></a>";
+                                            $nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a><a href='$statusAction' class='btn  btn-success  btn-xs confirm-statuschange' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Unblock'><i class='fa fa-check'></i></a>";
                                         }
 					$data[] = $nestedData;
                                         $srNo++;

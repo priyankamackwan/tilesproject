@@ -214,7 +214,7 @@
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="age_group">
-                  Category Rights :
+                  Item Grpup Rights :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
@@ -234,7 +234,7 @@
 
               <div class="form-group">
 						    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="product">
-                  Product Rights :
+                  Item Rights :
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">

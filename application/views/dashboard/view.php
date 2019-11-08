@@ -308,8 +308,8 @@
 				                            </thead>
 											<tbody>
 												<?php
-												if(isset($latest_orders) && $latest_orders!='' && count($latest_orders) >0){
-													foreach ($latest_orders as $key => $value) {
+												if(isset($unpaid_l_orders) && $unpaid_l_orders!='' && count($unpaid_l_orders) >0){
+													foreach ($unpaid_l_orders as $key => $value) {
 														if ($value['status'] == 0) {
 									                        $status = 'Pending';
 									                    } elseif($value['status'] == 1) {
@@ -548,8 +548,8 @@ var footerLine1 =[];
 	                mode: 'single',
 	                callbacks: {
 	                    footer: function(tooltipItems, data) {
-	                    	console.log(footerLine1[tooltipItems[0].index]);
-	                    	return 'Order Amount  ' + footerLine1[tooltipItems[0].index];
+	                    	//console.log(footerLine1[tooltipItems[0].index]);
+	                    	return 'Order Amount:  ' + footerLine1[tooltipItems[0].index];
     					}
 	                }
 	            },

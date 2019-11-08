@@ -149,6 +149,9 @@
             $date_explode=explode(" ",$format); // explode format for various date and time format.
             $date_format=$date_explode[0];
             $time_format=$date_explode[1];
+            if(isset($date_explode[2]) && $date_explode[2]!=''){
+            	$time_format .= ' '.$date_explode[2];
+            }
             $new_date = date($date_format,strtotime($date));
             $new_time = date($time_format,strtotime($date));
             return $new_date.$break.$new_time;

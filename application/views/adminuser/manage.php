@@ -97,6 +97,7 @@
                 <th class="text-center">Last Name</th>
                 <th class="text-center">Email</th>
                 <th class="text-center">Mobile No</th>
+                <th class="text-center">Rights</th>
                 <th class="text-center">Created On</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Manage</th>
@@ -133,12 +134,13 @@
 				{ "data": "last_name"},
         { "data": "email"},
 				{ "data": "mobile_no"},
+        { "data": "rights"},
         { "data": "created"},
         { "data": "status"},
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [7],
+				"targets": [8],
 				"orderable": false,  
 			},{
         "targets": [6],
@@ -149,7 +151,7 @@
         "orderable": false
       },{
         "className": 'text-center',
-        "targets":   [5,6,7],
+        "targets":   [5,6,7,8],
         "orderable": true
       }],
 

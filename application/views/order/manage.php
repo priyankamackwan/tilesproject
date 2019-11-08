@@ -320,7 +320,7 @@
                                 <th class="text-center">Sales Expense</th>
                                 <th class="text-center">Invoice Status</th>
                                 <th class="text-center">Delivery Status</th>
-                                <th class="text-center">Creation Date</th>
+                                <th class="text-center">Created On</th>
                                 <th class="text-center">Manage</th>
                             </thead>
 

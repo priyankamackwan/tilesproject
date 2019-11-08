@@ -504,7 +504,7 @@
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
                     <select class="form-control select2" name="unit" id="unit">
-                        <option value="0">Select Unit</option>
+                        <option value="">Select Unit</option>
                       <?php 
                         if($result[0]->unit == 1) { 
                       ?>
@@ -786,7 +786,7 @@ return value == '' || value.trim().length != 0;
                                                         noSpace: true,
 						},
              "categories[]": {
-              required: "Please Select  Item Group*",
+              required: "Please Select  Item Group",
              noSpace: true,
             },
 					},

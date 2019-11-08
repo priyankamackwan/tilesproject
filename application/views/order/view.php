@@ -244,7 +244,7 @@
                             <td style="text-align: center"><?php echo $productData[$p]['name'];?></td>
                             <td style="text-align: center"><?php echo $productData[$p]['design_no'];?></td>
                             <td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td>
-                            <td style="text-align: center"><?php echo round($productData[$p]['price'],2);?></td>
+                            <td style="text-align: center"><?php echo $this->My_model->getamount(round($productData[$p]['price'],2));?></td>
                           </tr>
                                                   
                       <?php 
@@ -270,7 +270,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo round($result[0]->tax,2);?>
+                  <?php echo $this->My_model->getamount(round($result[0]->tax,2));?>
                 </div>
               </div>
 
@@ -280,7 +280,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-                  <?php echo round($result[0]->total_price,2);?>
+                  <?php echo $this->My_model->getamount(round($result[0]->total_price,2));?>
                 </div>
               </div>
 
@@ -378,7 +378,20 @@
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <?php echo $result[0]->sales_expense;?>
                 </div>
-              </div>        
+              </div>    
+              <div class="form-group" id="id_payment_date"> <!-- if payment status is completed then display the date div -->
+                <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="payment_date">
+                  Created On :
+                </label>
+
+                <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+                  <div class='input-group date' id='payment_datetimepicker'>
+                      <?php 
+                      echo $this->My_model->date_conversion($result[0]->created,'d/m/Y H:i:s',' ');
+                      ?>
+                  </div>
+                </div>
+              </div>    
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_status">
                   Delivery Status :
@@ -403,7 +416,7 @@
 
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                     <?php 
-                    echo date('d/m/Y h:i A',strtotime($result[0]->delivery_date));
+                    echo $this->My_model->date_conversion($result[0]->delivery_date,'d/m/Y h:i A',' ');
                     ?>
                 </div>
               </div>
@@ -434,7 +447,8 @@
                 <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
                   <div class='input-group date' id='payment_datetimepicker'>
                       <?php 
-                      echo date('d/m/Y h:i A',strtotime($result[0]->payment_date));
+                      echo $this->My_model->date_conversion($result[0]->payment_date,'d/m/Y h:i A',' ');
+                      //echo date('d/m/Y h:i A',strtotime($result[0]->payment_date));
                       ?>
                   </div>
                 </div>
