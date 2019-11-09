@@ -108,7 +108,7 @@
 
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Items:</label>
+                                            <label class="control-label" style="margin-top:7px;">Item:</label>
                                         </div>
 
                                         <!-- Products Filter Dropdown -->
@@ -150,7 +150,7 @@
 
                                         <!-- Invoice Status Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Items Group:</label>
+                                            <label class="control-label" style="margin-top:7px;">Item Group:</label>
                                         </div>
 
                                         <!-- Invoice Status Filter Dropdown -->
