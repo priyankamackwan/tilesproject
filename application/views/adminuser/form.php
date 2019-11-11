@@ -1,7 +1,7 @@
 <?php
   $this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
-  print_r($post);
+ // print_r($post);exit;
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
@@ -9,6 +9,7 @@
 	if($action == 'insert')
 	{
 		$btn = "Add";
+     $rightsArray = explode(',', $result[0]->rights);
 	}
 	else if($action == 'update')
 	{
@@ -196,7 +197,7 @@
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
-                    <input type="text" name="first_name" value="<?php echo $result[0]->first_name;?>" class="form-control" placeholder="First Name">
+                    <input type="text" name="first_name" value="<?php if(isset($post['first_name']) && $post['first_name']!=''){echo $post['first_name'];}else{ echo $result[0]->first_name;}?>" class="form-control" placeholder="First Name">
                   </div>
               </div>
 
@@ -206,7 +207,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <input type="text" name="last_name" value="<?php echo $result[0]->last_name;?>" class="form-control" placeholder="Last Name">
+                  <input type="text" name="last_name" value="<?php if(isset($post['last_name']) && $post['last_name']!=''){echo $post['last_name'];}else{ echo $result[0]->last_name;}?>" class="form-control" placeholder="Last Name">
                 </div>
               </div>
 
@@ -216,7 +217,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <input type="text" name="email" value="<?php echo $result[0]->email;?>" class="form-control email" placeholder="Email">
+                  <input type="text" name="email" value="<?php if(isset($post['email']) && $post['email']!=''){echo $post['email'];}else{ echo $result[0]->email;}?>" class="form-control email" placeholder="Email">
                 </div>
               </div>
 
@@ -254,7 +255,7 @@
                 </label>
 
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                  <input type="text" maxlength="10" name="number" value="<?php echo $result[0]->mobile_no;?>" class="form-control" placeholder="Mobile No">
+                  <input type="text" maxlength="10" name="number" value="<?php if(isset($post['number']) && $post['number']!=''){echo $post['number'];}else{echo $result[0]->mobile_no;}?>" class="form-control" placeholder="Mobile No">
                 </div>
               </div>
 
@@ -272,7 +273,7 @@
                   <?php 
                     } else { 
                   ?>
-                      <input type="checkbox" name="user" id="user" value="3">
+                      <input type="checkbox" name="user" id="user" value="3" <?php if(isset($post['user']) && $post['user']!='' && $post['user']==3){echo 'checked';}?>>
                   <?php 
                     } 
                   ?>
@@ -292,7 +293,7 @@
                   <?php 
                     } else { 
                   ?>
-                      <input type="checkbox" name="category" id="category" value="4">
+                      <input type="checkbox" name="category" id="category" value="4" <?php if(isset($post['category']) && $post['category']!='' && $post['category']==4){echo 'checked';}?>>
                   <?php
                     } 
                   ?>
@@ -312,7 +313,7 @@
                   <?php 
                     } else { 
                   ?>
-                      <input type="checkbox" name="product" id="product" value="5">
+                      <input type="checkbox" name="product" id="product" value="5" <?php if(isset($post['product']) && $post['product']!='' && $post['product']==5){echo 'checked';}?>>
                   <?php 
                     } 
                   ?>
@@ -331,7 +332,7 @@
                   <?php 
                     } else { 
                   ?>
-                      <input type="checkbox" name="order" id="order" value="6">
+                      <input type="checkbox" name="order" id="order" value="6" <?php if(isset($post['order']) && $post['order']!='' && $post['order']==6){echo 'checked';}?>>
                   <?php 
                     } 
                   ?>
