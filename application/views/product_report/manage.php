@@ -159,7 +159,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No Items Group Available --</option>
+                                                    <option value="">-- No Item Group Available --</option>
                                                 <?php
                                                     }
                                                 ?>s
@@ -365,9 +365,9 @@ foreach ($total_balance_quantity as $key => $value) {
                   
               var r3 = Addrow(3, [{ key: 'A', value: 'Filters' }]);
 
-              var r4 = Addrow(4, [{ key: 'A', value: 'Items' },{ key: 'B', value: $("#productsList option:selected").html() }]);
+              var r4 = Addrow(4, [{ key: 'A', value: 'Item' },{ key: 'B', value: $("#productsList option:selected").html() }]);
 
-              var r5 = Addrow(5, [{ key: 'A', value: 'Items Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+              var r5 = Addrow(5, [{ key: 'A', value: 'Item Group' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
               
               var sheetData = sheet.getElementsByTagName('sheetData')[0];
 

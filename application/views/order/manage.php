@@ -498,9 +498,9 @@
 
                   var r5 = Addrow(5, [{ key: 'A', value: 'Filters' }]);
 
-                  var r6 = Addrow(6, [{ key: 'A', value: 'Client: ' }, { key: 'B', value: $("#clientList option:selected").html() }]);
+                  var r6 = Addrow(6, [{ key: 'A', value: 'Company Name: ' }, { key: 'B', value: $("#clientList option:selected").html() }]);
 
-                  var r7 = Addrow(7, [{ key: 'A', value: 'Product: ' },{ key: 'B', value: $("#productsList option:selected").html() },]);
+                  var r7 = Addrow(7, [{ key: 'A', value: 'Item: ' },{ key: 'B', value: $("#productsList option:selected").html() },]);
 
                   var r8 = Addrow(8, [{ key: 'A', value: 'Date: ' },{ key: 'B', value: $("#salesOrderDate").val() }]);
                   

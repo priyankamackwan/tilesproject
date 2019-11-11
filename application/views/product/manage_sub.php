@@ -108,7 +108,7 @@
 
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Items:</label>
+                                            <label class="control-label" style="margin-top:7px;">Item:</label>
                                         </div>
 
                                         <!-- Products Filter Dropdown -->
@@ -150,7 +150,7 @@
 
                                         <!-- Invoice Status Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Items Group:</label>
+                                            <label class="control-label" style="margin-top:7px;">Item Group:</label>
                                         </div>
 
                                         <!-- Invoice Status Filter Dropdown -->
@@ -167,7 +167,7 @@
                                                             }
                                                         }else{
                                                     ?>
-                                                        <option value="">-- No Items Group Available --</option>
+                                                        <option value="">-- No Item Group Available --</option>
                                                     <?php
                                                         }
                                                     ?>
@@ -307,8 +307,8 @@
         extend:'excel',
         text: window.excelButtonTrans,
         title:'',
-        filename: 'Items List',
-        sheetName:'Items List',
+        filename: 'Item List',
+        sheetName:'Item List',
         action: newExportAction,
         exportOptions: {
           columns: [1,2,3,5,6,7,8,9,10,11,12]
@@ -371,11 +371,11 @@
           // Add row data 
           var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }, { key: 'B', value: '' }]);
 
-          var r2 = Addrow(2, [{ key: 'A', value: 'Items: ' }, { key: 'B', value: $("#productsList option:selected").html() }]);
+          var r2 = Addrow(2, [{ key: 'A', value: 'Item: ' }, { key: 'B', value: $("#productsList option:selected").html() }]);
 
-          var r3 = Addrow(3, [{ key: 'A', value: 'Items Group: ' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
+          var r3 = Addrow(3, [{ key: 'A', value: 'Item Group: ' },{ key: 'B', value: $("#cat_id option:selected").html() }]);
 
-          var r4 = Addrow(4, [{ key: 'A', value: 'Units: ' },{ key: 'B', value: $("#units option:selected").html() }]);
+          var r4 = Addrow(4, [{ key: 'A', value: 'Unit: ' },{ key: 'B', value: $("#units option:selected").html() }]);
 
           var r5 = Addrow(5, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
           
