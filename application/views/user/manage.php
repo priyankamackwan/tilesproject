@@ -123,7 +123,7 @@
                                                         }
                                                     }else{
                                                 ?>
-                                                    <option value="">-- No User Available --</option>
+                                                    <option value="">-- No Company Available --</option>
                                                 <?php
                                                     }
                                                 ?>

@@ -454,7 +454,9 @@
                     
                     $ext = pathinfo($importFile,PATHINFO_EXTENSION);
 			$image = time().'.'.$ext;
-
+			if (!file_exists('assets/uploads/')) {
+				mkdir('assets/uploads/', 0755, TRUE);
+			}
 			$config['upload_path'] = 'assets/uploads/';
 			$config['file_name'] = $image;
 			// $config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
