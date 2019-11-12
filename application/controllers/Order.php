@@ -1352,7 +1352,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                         for($k=0;$k<count($countPrice);$k++) {
                             
                               $this->db->select('*');
-                        $this->db->where('design_no', $countProducts[$k]);
+                        $this->db->where('id', $countProducts[$k]);
                         $q = $this->db->get('products');
             $productData = $q->result_array();
                             
