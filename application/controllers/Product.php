@@ -726,86 +726,98 @@
 			$this->load->library('upload', $config);
 			$this->load->initialize($config);
 			$this->upload->do_upload('upload_products');
-	$model = $this->model;
-require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
-
+	       $model = $this->model;
+    require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
 
 	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
-         $i=0;
+
+    $i=0;
 	foreach ($Reader as $Row)
 	{
-               // echo '<pre>';
-		//print_r($Row);
-            if ($i !=0) {
-                 $this->db->select('*');
-                        $this->db->where('name', $Row[12]);
-                        $q = $this->db->get('categories');
-            $categoryData = $q->result_array();
-            if ($categoryData) {
-            	$data = array(
-				'name' => $Row[0],
-                                'design_no' => $Row[1],
-                                'cash_rate' => $Row[2],
-				'credit_rate' => $Row[3],
-                                'walkin_rate' => $Row[4],
-                                'size' => $Row[5],
-                     'unit' =>$Row[6],
-                     'purchase_expense' => $Row[7],
-                     'image' => $Row[8],
-                    'quantity' => $Row[9],
-                    'factor' => $Row[10],
-                    'quantity_per_unit' => $Row[11],
-                    'flexible_rate' => $Row[13],      
-			);
-			$this->$model->insert('products',$data);
+        echo "<pre>";
+        print_r($Row);
+        if ($i !=0) 
+        {
+            if($Row[$i]=="")
+            {
+                break;
+            }
+            else
+            {
+                $this->db->select('*');
+                $this->db->where('name', $Row[12]);
+                $q = $this->db->get('categories');
+                $categoryData = $q->result_array();
+                if ($categoryData)
+                {
+                    $data = array(
+                        'name' => $Row[0],
+                        'design_no' => $Row[1],
+                        'cash_rate' => $Row[2],
+    				    'credit_rate' => $Row[3],
+                        'walkin_rate' => $Row[4],
+                        'size' => $Row[5],
+                        'unit' =>$Row[6],
+                        'purchase_expense' => $Row[7],
+                        'image' => $Row[8],
+                        'quantity' => $Row[9],
+                        'factor' => $Row[10],
+                        'quantity_per_unit' => $Row[11],
+                        'flexible_rate' => $Row[13],
+    		         );
+
+                    $this->$model->insert('products',$data);
+                    $lastInsertedProductId = $this->db->insert_id();
                         
-                        $lastInsertedProductId = $this->db->insert_id();
-                        
-                          $productCategoryData = array(
-                                    'product_id' => $lastInsertedProductId,
-                                    'cat_id' =>$categoryData[0]['id'],
-                                    'created' => date('Y-m-d h:i:s'),
-                            );
-                            $this->$model->insert('product_categories',$productCategoryData); 
-            } else {
-           
+                    $productCategoryData = array(
+                        'product_id' => $lastInsertedProductId,
+                        'cat_id' =>$categoryData[0]['id'],
+                        'created' => date('Y-m-d h:i:s'),
+                    );
+
+                    $this->$model->insert('product_categories',$productCategoryData); 
+                } 
+                else 
+                {
                 	$categoryData = array(
-				'name' => $Row[12],
-			);
-			$this->$model->insert('categories',$categoryData);
+    			        'name' => $Row[12],
+                    );
+                    $this->$model->insert('categories',$categoryData);
                     
-                        $lastInsertedCategoryId = $this->db->insert_id();
+                    $lastInsertedCategoryId = $this->db->insert_id();
                         
+                    $data = array(
+    			        'name' => $Row[0],
+                        'design_no' => $Row[1],
+                        'cash_rate' => $Row[2],
+    			        'credit_rate' => $Row[3],
+                        'walkin_rate' => $Row[4],
+                        'size' => $Row[5],
+                        'unit' => $Row[6],
+                        'purchase_expense' => $Row[7],
+                        'image' => $Row[8],
+                        'quantity' => $Row[9],
+                        'factor' => $Row[10],
+                        'quantity_per_unit' => $Row[11],
+                        'flexible_rate' => $Row[13],               
+                    );
+
+                    $this->$model->insert('products',$data);
                         
-                         	$data = array(
-				'name' => $Row[0],
-                                'design_no' => $Row[1],
-                                'cash_rate' => $Row[2],
-				'credit_rate' => $Row[3],
-                                'walkin_rate' => $Row[4],
-                                'size' => $Row[5],
-                     'unit' => $Row[6],
-                     'purchase_expense' => $Row[7],
-                     'image' => $Row[8],
-                    'quantity' => $Row[9],
-                    'factor' => $Row[10],
-                    'quantity_per_unit' => $Row[11],
-                     'flexible_rate' => $Row[13],               
-			);
-			$this->$model->insert('products',$data);
-                        
-                        $lastInsertedProductId = $this->db->insert_id();
-                        
-                          $productCategoryData = array(
-                                    'product_id' => $lastInsertedProductId,
-                                    'cat_id' =>$lastInsertedCategoryId,
-                                    'created' => date('Y-m-d h:i:s'),
-                            );
-                            $this->$model->insert('product_categories',$productCategoryData); 
+                    $lastInsertedProductId = $this->db->insert_id();
+                    
+                      $productCategoryData = array(
+                            'product_id' => $lastInsertedProductId,
+                            'cat_id' =>$lastInsertedCategoryId,
+                            'created' => date('Y-m-d h:i:s'),
+                        );
+
+                    $this->$model->insert('product_categories',$productCategoryData); 
+                }
             }
-            }
-            $i++;
+        }
+        $i++;
 	}
         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Products has been imported successfully!</div>');
        redirect($this->controller);	
