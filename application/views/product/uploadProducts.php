@@ -78,6 +78,7 @@
                 <div class="col-md-9 col-sm-12 col-xs-12">
                   <input type="file" name="upload_products" class="form-control numberonly" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                   <p class="text-danger"><small>* only allow .xls, .xlsx and .csv files</small></p>
+                  <p class="text-danger"><a href="<?php echo base_url().'assets/sample_files/Item Detail.xlsx'; ?>" download><font color="red">Download Sample File</font></a></p>
                 </div>
               </div>
 
@@ -104,11 +105,8 @@
 				rules:{
 						upload_products: {
 							required: true,
-                                                    }
-			
-					
-					},
-			
+            }
+					},			
 					submitHandler: function(form){
 						form.submit();
 					}
