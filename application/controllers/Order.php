@@ -48,11 +48,11 @@
              
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
-            $data['activeUsers'] = $this->db->get("users")->result_array();
+            $data['activeUsers'] = $this->db->where('is_deleted',0)->get("users")->result_array();
 
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
-            $data['activeProducts'] = $this->db->get("products")->result_array();
+            $data['activeProducts'] = $this->db->where('is_deleted',0)->get("products")->result_array();
 
             //get oder is placed by
 
