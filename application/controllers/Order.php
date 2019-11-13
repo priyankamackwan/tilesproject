@@ -255,7 +255,7 @@
                 foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
                     //print_r($SingleOrderData);
                     
-                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then disply admin name
+                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then display admin name
                     {
                         $adminid=$SingleOrderData['admin_id'];
                         $admindbdata=$this->db->select('first_name,last_name')->from('admin_users')->where('id',$adminid)->get()->result_array();

@@ -63,48 +63,50 @@
 
     <section class="content">
       <div class="box">
-            <div class="box-body">
-      <div class="row form-group">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="row">
-                            <div class="col-md-1 col-sm-12 col-xs-12">
-                                <h4>Filters:</h4>
-                            </div>
+        <div class="box-body">
+          <div class="row form-group">
 
-                            <div class="col-md-11 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <!-- Date Range Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Date:</label>
-                                        </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="row">
+                    <div class="col-md-1 col-sm-12 col-xs-12">
+                        <h4>Filters:</h4>
+                    </div>
 
-                                        <!-- Date Range Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="" required="" id="salesOrderDates" name="salesOrderDates" type="text">
-                                                <label class="input-group-addon btn" for="salesOrderDates">
-                                                    <span class="fa fa-calendar"></span>
-                                                </label>
-                                            </div>
-                                        </div>
+                    <div class="col-md-11 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="row">
+                              <!-- Date Range Filter -->
+                              <div class="col-md-1 col-sm-12 col-xs-12">
+                                <!-- <label class="control-label" style="margin-top:7px;">Date:</label> -->
+                              </div>
+
+                              <!-- Date Range Filter Dropdown -->
+                              <div class="col-md-3 col-sm-12 col-xs-12">
+                                <div class="input-group">
+                                  <input class="form-control" placeholder="Date" required="" id="salesOrderDates" name="salesOrderDates" type="text">
+                                  <label class="input-group-addon btn" for="salesOrderDates">
+                                    <span class="fa fa-calendar"></span>
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                         </div>
                     </div>
+                  </div>
                 </div>
-            </div>
+          </div>
         </div>
-      </div></div>
+      </div>
+
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-
 
                 <div class="box box-primary">
 
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-6 col-sm-12 col-xs-12">
-                                <h3 class="box-title">Expense Report</h3>
+                                <h3 class="box-title">Expense Reports</h3>
                             </div>
                         </div>
                     </div>

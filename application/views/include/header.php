@@ -62,6 +62,21 @@
     table#example1 td {
     vertical-align: middle;
     }
+
+    table#datatables th {
+    vertical-align: middle;
+    }
+    table#datatables1 th {
+    vertical-align: middle;
+    }
+    table#datatables2 th {
+    vertical-align: middle;
+    }
+    table#example1 th {
+    vertical-align: middle;
+    }
+
+
     .mt_5{
       margin-top: 7px;
     }
