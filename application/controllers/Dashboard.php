@@ -10,6 +10,8 @@ class Dashboard extends CI_Controller
 	}
 	public  function index(){
 		//$this->userhelper->current('logged_in')['is_logged'] = 1;
+		//Add meta title
+		$data['meta_tital']='Dashboard | PNP Building Materials Trading L.L.C';
 		$data['tatal_orders']=$this->Dashboard_model->get_OrderDatatables($where='');
 		$data['unpaid_orders']=$this->Dashboard_model->get_OrderDatatables('orders.invoice_status=0');
 		$data['all_user'] = $this->db->where('is_deleted',0)->get("users")->num_rows();

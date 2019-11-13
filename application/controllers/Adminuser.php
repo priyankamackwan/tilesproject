@@ -21,6 +21,8 @@
 		public function index()
 		{     
 			$data['msgName'] = $this->msgName;
+			//Add meta title
+			$data['meta_tital']='Admin Users | PNP Building Materials Trading L.L.C';
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
@@ -162,6 +164,8 @@
 		public function add()
 		{
 			$data['action'] = "insert";
+			//Add meta title
+			$data['meta_tital']='Admin Users | PNP Building Materials Trading L.L.C';
 
 			$model = $this->model;
 
@@ -172,6 +176,8 @@
 		public function insert()
 		{
             $model = $this->model; 
+            //Add meta title
+            $data['meta_tital']='Admin Users | PNP Building Materials Trading L.L.C';
             $data['post'] = $this->input->post();
 			$msg_set='';          
 			$first_name = $this->input->post('first_name');
@@ -236,6 +242,8 @@
 		public function edit($id)
 		{
 			$model = $this->model;
+			//Add meta title
+			$data['meta_tital']='Admin Users | PNP Building Materials Trading L.L.C';
 			$id = $this->utility->decode($id);
                       
 			$data['action'] = "update";
@@ -256,6 +264,8 @@
 		{
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+			//Add meta title
+			$data['meta_tital']='Admin Users | PNP Building Materials Trading L.L.C';
                       
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;

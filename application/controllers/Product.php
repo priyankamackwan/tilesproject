@@ -41,6 +41,8 @@
                       //  echo '<pre>';
                    // print_r($this->session);die;
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
+            //Add meta title
+            $data['meta_tital']='Items | PNP Building Materials Trading L.L.C';
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
@@ -291,6 +293,8 @@
 		{
                     //echo '3'; exit;
 			$data['action'] = "insert";
+            //Add meta title
+            $data['meta_tital']='Items | PNP Building Materials Trading L.L.C';
 			$model = $this->model;
                         $data['controller'] = $this->controller;
                             $multipleWhere = ['status' => 1, 'is_deleted' => 0];
@@ -493,6 +497,8 @@
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+            //Add meta title
+            $data['meta_tital']='Items | PNP Building Materials Trading L.L.C';
                         //echo $id; exit;
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
@@ -525,6 +531,8 @@
 			$model = $this->model;
 			$id = $this->utility->decode($id);
                         //echo $id; exit;
+            //Add meta title
+            $data['meta_tital']='Items | PNP Building Materials Trading L.L.C';
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
@@ -823,8 +831,9 @@
     
         public function uploadProducts(){
        
-
-			$this->load->view($this->view.'/uploadProducts',array());
+            //Add meta title
+            $data['meta_tital']='Items | PNP Building Materials Trading L.L.C';
+			$this->load->view($this->view.'/uploadProducts',$data);
     }
      public function android_ios_notification($data,$type)
         {

@@ -29,6 +29,8 @@
          
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
 			$data['msgName'] = $this->msgName;
+      //Add meta title
+      $data['meta_tital']='Expense Reports | PNP Building Materials Trading L.L.C';
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;

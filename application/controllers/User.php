@@ -32,6 +32,8 @@
 		public function index()
 		{
 			$data['msgName'] = $this->msgName;
+			//Add meta title
+			$data['meta_tital']='Contacts | PNP Building Materials Trading L.L.C';
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
 			$data['view'] = $this->view;
@@ -251,6 +253,8 @@
 		}
 		public function add()
 		{
+			//Add meta title
+			$data['meta_tital']='Contacts | PNP Building Materials Trading L.L.C';
 			$data['action'] = "insert";
 
 			$model = $this->model;
@@ -287,6 +291,8 @@
         public function view($id)
 		{
 			$model = $this->model;
+			//Add meta title
+			$data['meta_tital']='Contacts | PNP Building Materials Trading L.L.C';
 			$id = $this->utility->decode($id);
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
@@ -377,7 +383,8 @@
                 
         public function acceptform($id)
         {
-                   
+            //Add meta title
+			$data['meta_tital']='Contacts | PNP Building Materials Trading L.L.C';       
 			$model = $this->model;
 			$id = $this->utility->decode($id);
 			$data['action'] = "block";
@@ -438,6 +445,7 @@
 		}
                 
         public function addUsers() {
+
                                   // Report all errors
 				error_reporting(E_ALL);
 				ini_set("error_reporting", E_ALL);
@@ -513,7 +521,9 @@
     
     public function uploadContacts()
     {
-		$this->load->view($this->view.'/uploadContacts',array());
+    	//Add meta title
+		$data['meta_tital']='Contacts | PNP Building Materials Trading L.L.C';
+		$this->load->view($this->view.'/uploadContacts',$data);
     }
 }
 ?>

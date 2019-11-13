@@ -28,6 +28,8 @@
 		public function index() {
                       //  echo '<pre>';
                    // print_r($this->session);die;
+      //Add meta title
+      $data['meta_tital']='Customer Reports | PNP Building Materials Trading L.L.C';
       $model = $this->model;
       $pagename='';
                    $this->userhelper->current('logged_in')['is_logged'] = 1;

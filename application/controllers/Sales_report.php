@@ -30,6 +30,8 @@
                            //  echo '<pre>';
                    // print_r($this->session);die;
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
+      //Add meta title
+      $data['meta_tital']='Sales Reports | PNP Building Materials Trading L.L.C';
       $data['msgName'] = $this->msgName;
       $data['primary_id'] = $this->primary_id;
       $data['controller'] = $this->controller;

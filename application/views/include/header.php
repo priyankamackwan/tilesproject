@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Admin Panel </title>
+  <title><?php echo $meta_tital;?></title>
 
   <link rel="icon" href="<?php echo base_url().'assets/favicon-32x32.png';?>" type="image/gif" sizes="16x16">
 
