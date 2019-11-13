@@ -448,9 +448,7 @@
                                             "priority"=>"high",
                                             "content_available"=> true,
                                             "mutable_content"=> true,
-                                            "data" => [
-                                                $notificationArray,
-                                            ],
+                                            "data" => $notificationArray
                                         );
 
                                         $data = json_encode($arr);
