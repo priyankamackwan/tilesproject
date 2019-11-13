@@ -149,7 +149,7 @@ and (orientation : landscape) {
               <li class="user-header" style="height: 78px;">
                 <p>
                   <b style="font-size: 19px;"><?php echo ucfirst($this->userhelper->current('first_name').' '.$this->userhelper->current('last_name')); ?></b>
-                  <small><?php echo ucfirst($this->userhelper->current('email')); ?></small>
+                  <small><?php echo $this->userhelper->current('email'); ?></small>
                 </p>
               </li>
 
