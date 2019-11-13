@@ -735,8 +735,8 @@
     $i=0;
 	foreach ($Reader as $Row)
 	{
-        echo "<pre>";
-        print_r($Row);
+        //echo "<pre>";
+        //print_r($Row);
         if ($i !=0) 
         {
             if($Row[$i]=="")

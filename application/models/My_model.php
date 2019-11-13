@@ -86,6 +86,7 @@
 			$this->db->from('orders as o');
 			$this->db->join('users as u', 'u.id = o.user_id','left');
 			$this->db->where('o.is_deleted', 0);
+			$this->db->where('u.is_deleted', 0);
 			if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
 			}
@@ -111,6 +112,8 @@
 			$this->db->join('products p','p.id=o.product_id','left');
 			$this->db->join('product_categories pc','pc.product_id=o.product_id','left');
 			$this->db->join('categories c','c.id=pc.cat_id','left');
+			$this->db->where('p.is_deleted',0);
+      		$this->db->where('c.is_deleted',0);
 			if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
 			}
@@ -126,6 +129,7 @@
             $this->db->from('products AS p');
             $this->db->join('order_products AS o','p.id=o.product_id');
             $this->db->where('p.status',1);
+            $this->db->where('p.is_deleted',0);
             $this->db->group_by('o.product_id');
             $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
             $this->db->order_by('p.name,p.design_no asc');
@@ -161,6 +165,7 @@
 			$this->db->select('SUM(p.quantity-o.quantity) as totalQuantity,SUM(o.price) as amount,p.purchase_expense,p.quantity');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
+			$this->db->where('p.is_deleted',0);
 			$this->db->group_by('o.product_id');
 
 			$balance_quantity=$this->db->get()->result_array(); 
@@ -182,6 +187,7 @@
 			$this->db->from('orders as o');
 			$this->db->join('users as u', 'u.id = o.user_id','left');
 			$this->db->where('o.is_deleted', 0); 
+			$this->db->where('u.is_deleted', 0); 
 			if(!empty($where)){
 				$this->db->where($where);
 			}

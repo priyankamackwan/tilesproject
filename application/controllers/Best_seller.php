@@ -79,6 +79,7 @@
       $this->db->from('orders as o');
       $this->db->join('users as u', 'u.id = o.user_id','left');
       $this->db->where('o.is_deleted', 0); 
+      $this->db->where('u.is_deleted', 0); 
       if(!empty($where)){
         $this->db->where($where);
       }

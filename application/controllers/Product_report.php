@@ -193,7 +193,8 @@
       $this->db->join('products p','p.id=o.product_id','left');
       $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
       $this->db->join('categories c','c.id=pc.cat_id','left');
-      
+      $this->db->where('p.is_deleted',0);
+      $this->db->where('c.is_deleted',0);
       $this->db->limit($limit, $start);
       $this->db->group_by('o.product_id');
       if(!empty($where)){
