@@ -47,8 +47,8 @@
 			$data['view'] = $this->view;
 			$data['msgDisplay'] = $this->msgDisplay;
             // Add for dispaly in filter
-            $data['activeProducts'] = $this->db->get("products")->result_array();
-            $data['product_categories'] = $this->db->get("categories")->result_array();
+            $data['activeProducts'] = $this->db->where('is_deleted',0)->get("products")->result_array();
+            $data['product_categories'] = $this->db->where('is_deleted',0)->get("categories")->result_array();
    if ($this->userhelper->current('role_id') ==1) {
 			$this->load->view($this->view.'/manage',$data);
    } else {

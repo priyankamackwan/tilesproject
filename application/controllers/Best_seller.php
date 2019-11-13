@@ -31,7 +31,7 @@
       $data['view'] = $this->view;
       $data['msgDisplay'] = $this->msgDisplay;
       // Add for dispaly in filter
-      $data['all_user'] = $this->db->get("users")->result_array();
+      $data['all_user'] = $this->db->where('is_deleted',0)->get("users")->result_array();
       $this->load->view($this->view.'/manage',$data);
     }
                 
