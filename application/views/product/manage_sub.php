@@ -153,7 +153,7 @@
                                 <div class="row">
                                     <!-- Status Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Status:</label>
+                                        <!-- <label class="control-label" style="margin-top:7px;">Status:</label> -->
                                     </div>
 
                                     <!-- Status Filter Dropdown -->
@@ -165,30 +165,31 @@
                                         </select>
                                     </div>
 
-                                    <!-- Item Group Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                          <!-- <label class="control-label" style="margin-top:7px;">Item Group:</label> -->
-                                        </div>
+                                     <!-- Item Group Filter -->
+                                    <div class="col-md-1 col-sm-12 col-xs-12">
+                                        <!-- <label class="control-label" style="margin-top:7px;">Item Group:</label> -->
+                                    </div>
 
-                                        <!-- Item Group Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
-                                                <option value="">All Item Groups</option>
-                                                <?php
+                                    <!-- Item Group Filter Dropdown -->
+                                    <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
+                                            <option value="">All Item Group</option>
+                                            <?php
                                                     if(!empty($product_categories) && count($product_categories) > 0 ){
-                                                    foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
+                                                    
+                                                        foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
                                                 ?>
-                                                    <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
-                                                    <?php
-                                                      }
-                                                      }else{
-                                                    ?>
-                                                      <option value="">-- No Item Group Available --</option>
-                                                    <?php
-                                                      }
-                                                    ?>
-                                            </select>
-                                        </div>
+                                                            <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                                <?php
+                                                        }
+                                                    }else{
+                                                ?>
+                                                    <option value="">-- No Item Group Available --</option>
+                                                <?php
+                                                    }
+                                                ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +204,7 @@
           <div class="box-header">
             <div class="row">
               <div class="col-md-6 col-sm-12 col-xs-12">
-                <h3 class="box-title"><?php echo $msgName;?> Detail</h3>
+                <h3 class="box-title"><?php echo $msgName;?></h3>
               </div>
               <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                 <div class="box-tools pull-right">             

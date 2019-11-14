@@ -3,7 +3,7 @@
 
 	class Product extends CI_Controller
 	{
-		public $msgName = "Item";
+		public $msgName = "Items";
 		public $view = "product";
 		public $controller = "Product";
 		public $primary_id = "id";

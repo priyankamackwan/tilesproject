@@ -3,7 +3,7 @@
 
 	class Category extends CI_Controller
 	{
-		public $msgName = "Item Group";
+		public $msgName = "Item Groups";
 		public $view = "category";
 		public $controller = "Category";
 		public $primary_id = "id";

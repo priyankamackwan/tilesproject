@@ -3,7 +3,7 @@
 
   class Sales_report extends CI_Controller
   {
-    public $msgName = "Order";
+    public $msgName = "Sales Reports";
     public $view = "sales_report";
     public $controller = "Sales_report";
     public $primary_id = "id";

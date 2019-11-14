@@ -204,7 +204,7 @@
           <div class="box-header">
             <div class="row">
               <div class="col-md-6 col-sm-12 col-xs-12">
-                <h3 class="box-title"><?php echo $msgName;?> Detail</h3>
+                <h3 class="box-title"><?php echo $msgName;?></h3>
               </div>
               <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                 <div class="box-tools pull-right">             
