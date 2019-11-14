@@ -1838,7 +1838,7 @@ $pdf2->Output($fileNL_invoice, 'F');
             }
             //header with content_type api key
             $headers = array(
-                'Content-Type:application/json',
+                'Content-Type: application/json',
                 'Authorization:key='.$server_key
             );
             //CURL request to route notification to FCM connection server (provided by Google)

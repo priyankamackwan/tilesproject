@@ -241,7 +241,7 @@
 		                        "registration_ids" => $androidToken,
 		                        "data" => [
 		                            "body" => $notificationArray,
-		                            "title" => "New Category Added",
+		                            "title" => "New Item Group Added",
 		                            // "icon" => "ic_launcher"
 		                        ],
 		                        // "data" => json_encode(array())
@@ -308,7 +308,7 @@
                                                 "notification" => [
                                             "body" => $notificationArray,
                                             //"title" => "New Category Added",
-                                            "title" => "Category ‘'".$name."'’ is added. Please click to check the new category.",
+                                            "title" => "Item Group ‘'".$name."'’ is added. Please click to check the new category.",
                                             ],
                                             "priority"=> "high",
                                             "content_available"=> true,
@@ -557,7 +557,7 @@
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($ch);
-            //echo "----".$result;
+            // echo "----".$result;exit;
             if ($result === FALSE) {
                 //die('Oops! FCM Send Error: ' . curl_error($ch));
             }
