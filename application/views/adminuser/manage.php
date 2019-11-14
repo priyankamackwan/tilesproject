@@ -2,6 +2,12 @@
 	$this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
 ?>
+<style type="text/css">
+ /*rigths th width*/
+.table-bordered>thead>tr>th:nth-child(6) {
+    width: 60px!important;
+  }
+</style>
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>

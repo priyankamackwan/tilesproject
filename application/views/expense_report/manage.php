@@ -138,6 +138,7 @@
                                 <th width="5%" class="text-center">Sr No.</th>
                                 <th class="text-center">Invoice Number</th>
                                 <th class="text-center">Invoice Date</th>
+                                <th class="text-center">Amount</th>
                                 <th class="text-center">Expense</th>
                             </thead>
 
@@ -233,7 +234,7 @@
                 sheetName: 'Expense report',
                 action: newExportAction,
                 exportOptions: {
-                    columns: [1,2,3]
+                    columns: [1,2,3,4]
                 },
                 customize: function (xlsx) {                            
                   // console.log(rels);
@@ -305,7 +306,9 @@
                   $('row c[r="A2"]', sheet).attr('s', '7');
                   $('row c[r="B2"]', sheet).attr('s', '7');
                   $('row c[r="A3"]', sheet).attr('s', '7');
-                  $('row c[r="B3"]', sheet).attr('s', '7');   
+                  $('row c[r="B3"]', sheet).attr('s', '7');
+                  $('row c[r^="C"]', sheet).attr('s', '52');
+                  $('row c[r="C4"]', sheet).attr('s', '2');   
                 },
             }
             ],
@@ -324,6 +327,7 @@
 				{ "data": "id"},
                 { "data": "invoice_no"},
                 { "data": "created"},
+                { "data": "total_price"},
                 { "data": "sales_expense"},
 			],
 			"columnDefs": [ {
@@ -338,6 +342,10 @@
       {
           "className": 'text-center',
           "targets":   [2],
+          "orderable": true
+      },{
+          "className": 'text-right',
+          "targets":   [3,4],
           "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {
