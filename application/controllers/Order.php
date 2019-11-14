@@ -40,6 +40,8 @@
                       //  echo '<pre>';
                    // print_r($this->session);die;
             $this->userhelper->current('logged_in')['is_logged'] = 1;
+            //Add meta title
+            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
@@ -255,7 +257,7 @@
                 foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
                     //print_r($SingleOrderData);
                     
-                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then disply admin name
+                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then display admin name
                     {
                         $adminid=$SingleOrderData['admin_id'];
                         $admindbdata=$this->db->select('first_name,last_name')->from('admin_users')->where('id',$adminid)->get()->result_array();
@@ -458,6 +460,8 @@
                 
 		public function add() {
                     //echo '3'; exit;
+            //Add meta title
+            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
 			$data['action'] = "insert";
 			$model = $this->model;
                         $data['controller'] = $this->controller;
@@ -486,6 +490,8 @@
                     
             $model = $this->model;
             $id = $this->utility->decode($id);
+            //Add meta title
+            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
             
             $data['action'] = "update";
             $data['msgName'] = $this->msgName;
@@ -502,6 +508,8 @@
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+            //Add meta title
+            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
 
             //echo $id;
             //exit();
@@ -561,6 +569,8 @@
               
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+            //Add meta title
+            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
                         
                           $multipleWhere = ['id' =>$id];
                         $this->db->where($multipleWhere);
@@ -676,7 +686,8 @@ for($p=0;$p<count($finalOrderData);$p++) {
 <table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
                             <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>';
 $html .='</body></html>';
-
+//Add meta title
+$pdf->SetTitle('Tax Invoice | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
@@ -834,7 +845,8 @@ for($p=0;$p<count($finalOrderData);$p++) {
 <table style="width:100%;"><tr><td width="50%";>Buyer Signature:</td><td width="50%";>For PNP Building Materials Trading L.L.C</td></tr></table>
 <br><br/><br><br/>';
 $html .='</body></html>';
-
+//Add meta title
+$pdf->SetTitle('Local Purchase Order | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($ordersData[0]['lpo_no'], 'I');
                         
@@ -962,7 +974,8 @@ $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the abo
                             <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>
 
 </body></html>';
-
+//Add meta title
+$pdf->SetTitle('Delivery Note | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($do_no, 'I');
                         
@@ -1381,8 +1394,9 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
     
             public function uploadOrders(){
        
-
-			$this->load->view($this->view.'/uploadOrders',array());
+            //Add meta title
+            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
+			$this->load->view($this->view.'/uploadOrders',$data);
     }
                 
 	}

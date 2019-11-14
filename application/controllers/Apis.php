@@ -238,9 +238,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 "priority"=> "high",
                                 "content_available"=> true,
                                 "mutable_content"=> true,
-                                "data" => [
-                                    $notificationArray,
-                                ],
+                                "data" => $notificationArray
                             );
                             $data = json_encode($arr);
                            $this->android_ios_notification($data,"Ios");
@@ -1230,9 +1228,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "priority"=> "high",
                                             "content_available"=> true,
                                             "mutable_content"=> true,
-                                            "data" => [
-                                                $notificationArray,
-                                            ],
+                                            "data" => $notificationArray
                                         );
                                            $data = json_encode($arr);
                                            $this->android_ios_notification($data,'Ios');
@@ -1857,7 +1853,7 @@ $pdf2->Output($fileNL_invoice, 'F');
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($ch);
-            //echo "----".$result;
+            // echo "----".$result;exit;
             if ($result === FALSE) {
                 //die('Oops! FCM Send Error: ' . curl_error($ch));
             }

@@ -28,11 +28,11 @@
 	<input type="hidden" id="id" name="id" value="<?php echo $result[0]->id;?>">
 					  
 					  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Product Name/Quantity
+                        <label class="control-label col-md-3 col-sm-6 col-xs-12" for="category_name">Item Name/Quantity
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                       
-                            <table border ="1" width="100%"><tr><th style="text-align: center">Product Name</th><th style="text-align: center">Quantity</th></tr>
+                            <table border ="1" width="100%"><tr><th style="text-align: center">Item Name</th><th style="text-align: center">Quantity</th></tr>
                                 
                          
    <?php 

@@ -3,7 +3,7 @@
 
 	class Category extends CI_Controller
 	{
-		public $msgName = "Item Group";
+		public $msgName = "Item Groups";
 		public $view = "category";
 		public $controller = "Category";
 		public $primary_id = "id";
@@ -42,6 +42,8 @@
                       //  echo '<pre>';
                    // print_r($this->session);die;
                    $this->userhelper->current('logged_in')['is_logged'] = 1;
+            //Add meta title
+			$data['meta_tital']='Item Groups | PNP Building Materials Trading L.L.C';
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
@@ -168,6 +170,8 @@
 		public function add()
 		{
                     //echo '3'; exit;
+			//Add meta title
+			$data['meta_tital']='Item Groups | PNP Building Materials Trading L.L.C';
 			$data['action'] = "insert";
 			$model = $this->model;
                         $data['controller'] = $this->controller;
@@ -309,9 +313,7 @@
                                             "priority"=> "high",
                                             "content_available"=> true,
                                             "mutable_content"=> true,
-                                            "data" => [
-                                                $notificationArray,
-                                            ],
+                                            "data" => $notificationArray
                                         );
 			                     $data = json_encode($arr);
                                 $this->android_ios_notification($data,"Ios");
@@ -325,6 +327,8 @@
 		{
                     
 			$model = $this->model;
+			//Add meta title
+			$data['meta_tital']='Item Groups | PNP Building Materials Trading L.L.C';
 			$id = $this->utility->decode($id);
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
@@ -341,6 +345,8 @@
                     
 			$model = $this->model;
 			$id = $this->utility->decode($id);
+			//Add meta title
+			$data['meta_tital']='Item Groups | PNP Building Materials Trading L.L.C';
                         //echo $id; exit;
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;

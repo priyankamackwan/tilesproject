@@ -21,11 +21,13 @@
 	if($action == 'insert')
 	{
 		$btn = "Save";
+    $title_name='Add';
 	}
 	else if($action == 'update')
 	{
-		$btn = "Update";
+		$title_name=$btn = "Update";
 	}
+
 ?>
 
 <!-- page content -->
@@ -291,7 +293,7 @@
 
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
+              <h3 class="box-title"><?php echo $title_name.' '.$this->msgName;?></h3>
             </div>
 
             <div class="box-body">

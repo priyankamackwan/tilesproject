@@ -1,7 +1,7 @@
 <?php
+  $this->load->view('include/header');
   $rightsArray = explode(',', $result[0]->rights);
   $this->load->view('include/leftsidemenu');
-	$this->load->view('include/header');
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>

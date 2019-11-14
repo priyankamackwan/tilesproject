@@ -33,7 +33,7 @@
                 if (in_array('4',$this->userhelper->current('rights'))) {
             ?>
                     <li class="treeview <?php echo $url == 'Category'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Category"><i class="fa fa-tag"></i><span>Item Group</span></a>
+                        <a href="<?php echo base_url();?>Category"><i class="fa fa-tag"></i><span>Item Groups</span></a>
                     </li> 
             <?php    
                 }

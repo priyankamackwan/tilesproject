@@ -63,48 +63,50 @@
 
     <section class="content">
       <div class="box">
-            <div class="box-body">
-      <div class="row form-group">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="row">
-                            <div class="col-md-1 col-sm-12 col-xs-12">
-                                <h4>Filters:</h4>
-                            </div>
+        <div class="box-body">
+          <div class="row form-group">
 
-                            <div class="col-md-11 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <!-- Date Range Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Date:</label>
-                                        </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="row">
+                    <div class="col-md-1 col-sm-12 col-xs-12">
+                        <h4>Filters:</h4>
+                    </div>
 
-                                        <!-- Date Range Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="" required="" id="salesOrderDates" name="salesOrderDates" type="text">
-                                                <label class="input-group-addon btn" for="salesOrderDates">
-                                                    <span class="fa fa-calendar"></span>
-                                                </label>
-                                            </div>
-                                        </div>
+                    <div class="col-md-11 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="row">
+                              <!-- Date Range Filter -->
+                              <div class="col-md-1 col-sm-12 col-xs-12">
+                                <!-- <label class="control-label" style="margin-top:7px;">Date:</label> -->
+                              </div>
+
+                              <!-- Date Range Filter Dropdown -->
+                              <div class="col-md-3 col-sm-12 col-xs-12">
+                                <div class="input-group">
+                                  <input class="form-control" placeholder="Date" required="" id="salesOrderDates" name="salesOrderDates" type="text">
+                                  <label class="input-group-addon btn" for="salesOrderDates">
+                                    <span class="fa fa-calendar"></span>
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                         </div>
                     </div>
+                  </div>
                 </div>
-            </div>
+          </div>
         </div>
-      </div></div>
+      </div>
+
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-
 
                 <div class="box box-primary">
 
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-6 col-sm-12 col-xs-12">
-                                <h3 class="box-title">Expense Report</h3>
+                                <h3 class="box-title">Expense Reports</h3>
                             </div>
                         </div>
                     </div>
@@ -138,6 +140,7 @@
                                 <th width="5%" class="text-center">Sr No.</th>
                                 <th class="text-center">Invoice Number</th>
                                 <th class="text-center">Invoice Date</th>
+                                <th class="text-center">Amount</th>
                                 <th class="text-center">Expense</th>
                             </thead>
 
@@ -233,7 +236,7 @@
                 sheetName: 'Expense report',
                 action: newExportAction,
                 exportOptions: {
-                    columns: [1,2,3]
+                    columns: [1,2,3,4]
                 },
                 customize: function (xlsx) {                            
                   // console.log(rels);
@@ -305,7 +308,9 @@
                   $('row c[r="A2"]', sheet).attr('s', '7');
                   $('row c[r="B2"]', sheet).attr('s', '7');
                   $('row c[r="A3"]', sheet).attr('s', '7');
-                  $('row c[r="B3"]', sheet).attr('s', '7');   
+                  $('row c[r="B3"]', sheet).attr('s', '7');
+                  $('row c[r^="C"]', sheet).attr('s', '52');
+                  $('row c[r="C4"]', sheet).attr('s', '2');   
                 },
             }
             ],
@@ -324,6 +329,7 @@
 				{ "data": "id"},
                 { "data": "invoice_no"},
                 { "data": "created"},
+                { "data": "total_price"},
                 { "data": "sales_expense"},
 			],
 			"columnDefs": [ {
@@ -338,6 +344,10 @@
       {
           "className": 'text-center',
           "targets":   [2],
+          "orderable": true
+      },{
+          "className": 'text-right',
+          "targets":   [3,4],
           "orderable": true
       }],
 			"rowCallback": function( row, data, index ) {

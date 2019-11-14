@@ -105,23 +105,23 @@ foreach ($total_balance_quantity as $key => $value) {
                                 <div class="form-group">
                                     <div class="row">
 
-                                        <!-- Products Filter -->
+                                        <!-- Item Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Item:</label>
+                                            <!-- <label class="control-label" style="margin-top:7px;">Item:</label> -->
                                         </div>
 
-                                        <!-- Products Filter Dropdown -->
+                                        <!-- Item Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
-                                                <option value="" selected >All</option>
+                                                <option value="" selected >All Items</option>
                                                 <?php
                                                     if(!empty($activeProducts) && count($activeProducts) > 0 ){
                                                     
-                                                        foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
+                                                    foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
                                                 ?>
-                                                            <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
+                                                    <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
                                                 <?php
-                                                        }
+                                                      }
                                                     }else{
                                                 ?>
                                                     <option value="">-- No Item Available --</option>
@@ -131,7 +131,6 @@ foreach ($total_balance_quantity as $key => $value) {
                                             </select>
                                         </div>
 
-                                        
                                         <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                                            <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                            <?php echo round($balance_quantity); ?>
@@ -140,29 +139,29 @@ foreach ($total_balance_quantity as $key => $value) {
                                     </div>
                                 </div>                            
                                 <div class="row">
-                                <!-- Invoice Status Filter -->
+                                <!-- Item Group Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Item Group:</label>
+                                        <!-- <label class="control-label" style="margin-top:7px;">Item Group:</label> -->
                                     </div>
 
-                                    <!-- Invoice Status Filter Dropdown -->
+                                    <!-- Item Group Filter Dropdown -->
                                     <div class="col-md-3 col-sm-12 col-xs-12">
                                         <select class="form-control" name="cat_id" style="width:100%;" id="cat_id">
-                                            <option value="">All</option>
-                                            <?php
-                                                    if(!empty($product_categories) && count($product_categories) > 0 ){
+                                            <option value="">All Item Groups</option>
+                                              <?php
+                                                  if(!empty($product_categories) && count($product_categories) > 0 ){
                                                     
-                                                        foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
-                                                ?>
-                                                            <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
-                                                <?php
-                                                        }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Item Group Available --</option>
-                                                <?php
-                                                    }
-                                                ?>s
+                                                  foreach ($product_categories as $product_categoriesKey => $product_categoriesValue) {
+                                              ?>
+                                                  <option value="<?php echo $product_categoriesValue['id']; ?>"><?php echo $product_categoriesValue['name']; ?></option>
+                                              <?php
+                                                  }
+                                                  }else{
+                                              ?>
+                                                  <option value="">-- No Item Group Available --</option>
+                                              <?php
+                                                  }
+                                              ?>
                                         </select>
                                     </div>
                                     <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
@@ -183,12 +182,12 @@ foreach ($total_balance_quantity as $key => $value) {
                   <div class="box-header">
                       <div class="row">
                           <div class="col-md-6 col-sm-12 col-xs-12">
-                              <h3 class="box-title">Items Report</h3>
+                              <h3 class="box-title">Items Reports</h3>
                           </div>
                           <div class=" col-md-6 col-sm-12 col-xs-12">
                            <input type="hidden" name="low_stock" value="<?php echo $Low_stock;?>" id="low_stock">
                            <input id="toggle-demo" value="" type="checkbox" data-toggle="toggle" class="pull-right">
-                            <h4 class="pull-right">Low Stock &nbsp;&nbsp;</h4>
+                            <h4 class="pull-right"><b><u>Low Stock</u></b> &nbsp;&nbsp;</h4>
                          </div>
                       </div>
                   </div>

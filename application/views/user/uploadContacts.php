@@ -67,7 +67,8 @@
 
         <div class="box box-primary">
           <div class="box-header">
-            <h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
+            <!-- <h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3> -->
+            <h3 class="box-title">Import Contacts</h3>
           </div>
 
           <div class="box-body">

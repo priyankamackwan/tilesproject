@@ -14,6 +14,8 @@
             parent::__construct();
             // $this->load->database();
         }
+        //dashboard order count
+        
 
         // All order Data.
         function get_OrderDatatables($where) {
@@ -133,20 +135,19 @@
         }
         function lowdata(){
             $stocklimit=Stock_Reminder;
-            $this->db->select('p.name,p.design_no,p.quantity,ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity)');
-            $this->db->from('products AS p');
-            $this->db->join('order_products AS o','p.id=o.product_id');
-            $this->db->where('p.status',1);
-            $this->db->group_by('o.product_id');
+            $this->db->select('ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity) as s_quantity');
             $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
-            $this->db->order_by('p.name,p.design_no asc');
+            $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+            $this->db->from('order_products o');
+            $this->db->join('products p','p.id=o.product_id','left');
+            $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+            $this->db->join('categories c','c.id=pc.cat_id','left');
+            $this->db->where('p.is_deleted',0);
+            $this->db->where('c.is_deleted',0);
+            $this->db->limit($limit, $start);
+            $this->db->group_by('o.product_id');
             $listInfo=$this->db->get()->num_rows();
-
-
-            //$listInfo=$this->db->last_query();
-            //$listInfo=$listInfo->result_array();
-
-               return $listInfo;
+            return $listInfo;
         }
         function get_usertables($where) {
             
@@ -188,6 +189,9 @@
           $this->db->join('products p','p.id=o.product_id','left');
           $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
           $this->db->join('categories c','c.id=pc.cat_id','left');
+          //where condition
+          $this->db->where('p.is_deleted',0);
+          $this->db->where('c.is_deleted',0);
           $this->db->limit($limit, $start);
           $this->db->group_by('o.product_id');
             $this->db->order_by('totalQuantity',' desc');
@@ -202,7 +206,8 @@
             $this->db->select('o.id,o.user_id,SUM(o.total_price) as totalValue,SUM(o.sales_expense) as total_sales_expense,o.invoice_no,u.company_name,u.contact_person_name,o.created');
             $this->db->from('orders as o');
             $this->db->join('users as u', 'u.id = o.user_id','left');
-            $this->db->where('o.is_deleted', 0);      
+            $this->db->where('o.is_deleted', 0);  
+            $this->db->where('u.is_deleted',0);    
             $this->db->limit(5);
             $this->db->order_by('totalValue','desc');
             $this->db->group_by('o.user_id');
