@@ -131,9 +131,13 @@ foreach ($total_balance_quantity as $key => $value) {
                                             </select>
                                         </div>
 
-                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
-                                           <label class="control-label" style="margin-top:7px;">Total Balance Quantity:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right ">
+                                          <div class="col-md-7 col-sm-7 col-xs-7 text-right">
+                                           <label class="control-label">Total Balance Quantity:</label>
+                                         </div>
+                                         <div class="col-md-5 col-sm-5 col-xs-5 pull-right">
                                            <?php echo round($balance_quantity); ?>
+                                         </div>
                                         </div>
                                         
                                     </div>
@@ -165,8 +169,12 @@ foreach ($total_balance_quantity as $key => $value) {
                                         </select>
                                     </div>
                                     <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
-                                           <label class="control-label" style="margin-top:7px;">Total Balance    Amount:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="col-md-7 col-sm-7 col-xs-7 text-right">
+                                           <label class="control-label">Total Balance    Amount:</label>
+                                         </div>
+                                         <div class="col-md-5 col-sm-5 col-xs-5 pull-right">
                                            <?php echo $this->My_model->getamount(ROUND($balance_amount,2)); ?>
+                                         </div>
                                         </div>
                                 </div>
                             </div>
