@@ -50,6 +50,9 @@
     .dt-buttons{
       margin-left: 10px;
     }
+    form{
+          overflow-wrap: break-word;
+    }
     table#datatables td {
     vertical-align: middle;
     }
