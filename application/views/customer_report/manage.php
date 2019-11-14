@@ -85,19 +85,19 @@
                                     <div class="row">
                                         <!-- Products Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
+                                            <!-- <label class="control-label" style="margin-top:7px;">Company Name:</label> -->
                                         </div>
 
                                         <!-- Products Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select class="form-control select2" name="company_name" style="width:100%;" id="company_name">
-                                                <option value="" selected >All</option>
+                                                <option value="" selected >All Compnies</option>
                                                 <?php
                                                     if(!empty($order_list) && count($order_list) > 0 ){
                                                     
-                                                        foreach ($order_list as $order_listKey => $order_listValue) {
+                                                    foreach ($order_list as $order_listKey => $order_listValue) {
                                                 ?>
-                                                            <option value="<?php echo $order_listValue['company_name']; ?>"><?php echo $order_listValue['company_name']; ?></option>
+                                                    <option value="<?php echo $order_listValue['company_name']; ?>"><?php echo $order_listValue['company_name']; ?></option>
                                                 <?php
                                                         }
                                                     }else{
@@ -110,33 +110,6 @@
                                         </div>
 
 
-                                        <!-- Customer Filter --
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Customer Name:</label>
-                                        </div>
-
-                                        <-- Customer Filter Dropdown --
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select class="form-control select2" name="contact_person_name" style="width:100%;" id="contact_person_name">
-                                                <option value="" selected >All</option>
-                                                <?php
-                                                    if(!empty($order_list) && count($order_list) > 0 ){
-                                                    
-                                                        foreach ($order_list as $order_listKey => $order_listValue) {
-                                                ?>
-                                                            <option value="<?php echo $order_listValue['contact_person_name']; ?>"><?php echo $order_listValue['contact_person_name']; ?></option>
-                                                <?php
-                                                        }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Customer Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        ----------->
-
                                         <!-- Date Range Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Date:</label>
@@ -144,26 +117,29 @@
                                         <!-- Date Range Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <div class="input-group">
-                                                <input class="form-control" placeholder="" required="" id="salesOrderDates" name="salesOrderDates" type="text">
+                                                <input class="form-control" placeholder="Date" required="" id="salesOrderDates" name="salesOrderDates" type="text">
                                                 <label class="input-group-addon btn" for="salesOrderDates">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
                                             </div>
                                         </div>
 
-                                        <!-- Status Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                          <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
-                                        </div>
+                                    </div>
+                                </div>
 
-                                        <!-- Status Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select class="form-control" name="status" style="width:100%;" id="status">
-                                                <option value="">All</option>
-                                                <option value="Paid">Paid</option>
-                                                <option value="Unpaid">Unpaid</option>
-                                            </select>
-                                        </div>
+                                <div class="row">
+                                    <!-- Status Filter -->
+                                    <div class="col-md-1 col-sm-12 col-xs-12">
+                                      <!-- <label class="control-label" style="margin-top:7px;">Invoice Status:</label> -->
+                                    </div>
+
+                                    <!-- Status Filter Dropdown -->
+                                    <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <select class="form-control" name="status" style="width:100%;" id="status">
+                                            <option value="">All Invoice Status</option>
+                                            <option value="Paid">Paid</option>
+                                            <option value="Unpaid">Unpaid</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +155,7 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-6 col-sm-12 col-xs-12">
-                                <h3 class="box-title">Customer Report</h3>
+                                <h3 class="box-title">Customer Reports</h3>
                             </div>
                         </div>
                     </div>

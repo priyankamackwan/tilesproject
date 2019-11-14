@@ -62,6 +62,21 @@
     table#example1 td {
     vertical-align: middle;
     }
+
+    table#datatables th {
+    vertical-align: middle;
+    }
+    table#datatables1 th {
+    vertical-align: middle;
+    }
+    table#datatables2 th {
+    vertical-align: middle;
+    }
+    table#example1 th {
+    vertical-align: middle;
+    }
+
+
     .mt_5{
       margin-top: 7px;
     }
@@ -134,7 +149,7 @@ and (orientation : landscape) {
               <li class="user-header" style="height: 78px;">
                 <p>
                   <b style="font-size: 19px;"><?php echo ucfirst($this->userhelper->current('first_name').' '.$this->userhelper->current('last_name')); ?></b>
-                  <small><?php echo ucfirst($this->userhelper->current('email')); ?></small>
+                  <small><?php echo $this->userhelper->current('email'); ?></small>
                 </p>
               </li>
 

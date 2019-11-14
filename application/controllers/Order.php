@@ -257,7 +257,7 @@
                 foreach ($AlltotalFiltered['result'] as $AlltotalFilteredKey => $SingleOrderData){
                     //print_r($SingleOrderData);
                     
-                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then disply admin name
+                    if($SingleOrderData['placed_by']=="admin") // if order is placed by admin then display admin name
                     {
                         $adminid=$SingleOrderData['admin_id'];
                         $admindbdata=$this->db->select('first_name,last_name')->from('admin_users')->where('id',$adminid)->get()->result_array();
@@ -1365,7 +1365,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                         for($k=0;$k<count($countPrice);$k++) {
                             
                               $this->db->select('*');
-                        $this->db->where('design_no', $countProducts[$k]);
+                        $this->db->where('id', $countProducts[$k]);
                         $q = $this->db->get('products');
             $productData = $q->result_array();
                             

@@ -7,6 +7,19 @@
   error_reporting(0);
 ?>
 
+<style type="text/css">
+  /*table, th, td
+  {
+    border: 2px solid grey;
+  }
+
+  th 
+  {
+    background-color: #3c8dbc ;
+    color: #fff;
+  }*/
+</style>
+
 <!-- page content -->
         <!-- <div class="right_col" role="main">
     <div class="row">
@@ -483,98 +496,3 @@
     text-align: center !important;
   }
 </style>
-
-
-<script type="text/javascript">
-$(document).ready(function() {
-  $('#delivery_datetimepicker').datetimepicker({
-      autoclose: true,
-      format: 'DD/MM/YYYY HH:mm'
-  });
-
-  $('#payment_datetimepicker').datetimepicker({
-      autoclose: true,
-      format: 'DD/MM/YYYY HH:mm'
-  });
-});
-</script>
-
-<!-- Reselect delivery date -->
-<script type="text/javascript"> 
-$("#delivery_gly").click(function() {
-  $("#txt_deliverydate").val('');
-  $('#delivery_datetimepicker').datetimepicker({
-      autoclose: true,
-      format: 'DD/MM/YYYY HH:mm'
-  });
-});
-</script>
-
-<!-- Reselect payment date -->
-<script type="text/javascript">
-$("#payment_gly").click(function() {
-  $("#txt_paymentdate").val('');
-  $('#payment_datetimepicker').datetimepicker({
-      autoclose: true,
-      format: 'DD/MM/YYYY HH:mm'
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$("#delivery_status").change(function(){
-
-  if($("#delivery_status").val()=="2") // if status is completed then display datetimepicker
-  {
-    document.getElementById("id_delivery_date").style.display = "block";
-  }
-  else
-  {
-    document.getElementById("id_delivery_date").style.display = "none";
-    $("#txt_deliverydate").val('');
-  }
-});
-</script>
-
-
-<script type="text/javascript">
-$("#payment_status").change(function(){
-
-  if($("#payment_status").val()=="1") // if status is paid then display datetimepicker
-  {
-    document.getElementById("id_payment_date").style.display = "block";
-  }
-  else
-  {
-    document.getElementById("id_payment_date").style.display = "none";
-    $("#txt_paymentdate").val('');
-  }
-});
-</script>
-
-
-<script type="text/javascript">
-function formvalidate(){
-
-    var delivery_status=$("#delivery_status").val();
-    var txt_deliverydate = $("#txt_deliverydate").val().trim();
-    var payment_status=$("#payment_status").val();
-    var txt_paymentdate = $("#txt_paymentdate").val().trim();
-
-    if (delivery_status=="2" && txt_deliverydate=="") // if delievery status is completed and date is not selected
-    {
-      alert('Please add delivery date if delivery status is completed.');
-      return false;
-    }
-    else if (payment_status=="1" && txt_paymentdate=="") // if payment status is paid and date is not selected
-    {
-      alert('Please add payment date if payment status is paid.');
-      return false;
-    }
-    else
-    {
-      return true;
-    }
-}
-</script>

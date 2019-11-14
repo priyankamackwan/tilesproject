@@ -102,65 +102,67 @@
 
                             <div class="col-md-11 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <div class="row">
+                                  <div class="row">
 
-                                        <!-- Contact Filter  -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
-                                        </div>
+                                      <!-- Company Filter  -->
+                                      <div class="col-md-1 col-sm-12 col-xs-12" >
+                                          <!-- <label class="control-label" style="margin-top:7px;">Company Name:</label> -->
+                                      </div> 
 
-                                        <!-- Contact Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select name="clientList" class="form-control select2" style="width: 100%;" id="clientList">
-                                                <option value="" selected="selected">All</option>
-                                                <?php
-                                                    if(!empty($all_user) && count($all_user) > 0 ){
-                                                    
-                                                        foreach ($all_user as $all_userKey => $all_userValue) {
-                                                ?>
-                                                            <option value="<?php echo $all_userValue['company_name']; ?>"><?php echo $all_userValue['company_name']; ?></option>
-                                                <?php
-                                                        }
-                                                    }else{
-                                                ?>
-                                                    <option value="">-- No Company Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <!-- Contact Filter  -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Client Type:</label>
-                                        </div>
+                                      <!-- Contact Filter Dropdown -->
+                                      <div class="col-md-3 col-sm-12 col-xs-12">
+                                          <select name="clientList" class="form-control select2" style="width: 100%;" id="clientList">
+                                              <option value="" selected="selected">All Companies</option>
+                                              <?php
+                                                  if(!empty($all_user) && count($all_user) > 0 ){
+                                                  
+                                                      foreach ($all_user as $all_userKey => $all_userValue) {
+                                              ?>
+                                                          <option value="<?php echo $all_userValue['company_name']; ?>"><?php echo $all_userValue['company_name']; ?></option>
+                                              <?php
+                                                      }
+                                                  }else{
+                                              ?>
+                                                  <option value="">-- No Company Available --</option>
+                                              <?php
+                                                  }
+                                              ?>
+                                          </select>
+                                      </div>
+                                                                            
+                                      <!-- Status Filter -->
+                                      <div class="col-md-1 col-sm-12 col-xs-12">
+                                          <!-- <label class="control-label" style="margin-top:7px;">Status:</label> -->
+                                      </div>
+                                      <!-- Status Filter Dropdown -->
+                                      <div class="col-md-3 col-sm-12 col-xs-12">
+                                          <select class="form-control" name="status" style="width:100%;" id="status">
+                                              <option value="" selected="selected">All Status</option>
+                                              <option value="1">Active</option>
+                                              <option value="3">Rejected</option>
+                                              <option value="4">Pending</option>        
+                                              <option value="2">Block</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                </div>
 
-                                        <!-- Contact Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select name="client_type" class="form-control select2" style="width: 100%;" id="client_type">
-                                                <option value="" selected="selected">All</option>
-                                                <option value="1">Cash</option>
-                                                <option value="2">Credit</option>
-                                                <option value="3">Walkin</option>
-                                                <option value="4">Flexible Rate</option>
-                                            </select>
-                                        </div>
+                                <div class="row">
+                                  <!-- Client Type Filter  -->
+                                  <div class="col-md-1 col-sm-12 col-xs-12" >
+                                      <!-- <label class="control-label" style="margin-top:7px;">Client Type:</label> -->
+                                  </div>
 
-                                        
-                                        <!-- Status Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Status:</label>
-                                        </div>
-                                        <!-- Status Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
-                                            <select class="form-control" name="status" style="width:100%;" id="status">
-                                                <option value="" selected="selected">All</option>
-                                                <option value="1">Active</option>
-                                                <option value="3">Rejected</option>
-                                                <option value="4">Pending</option>        
-                                                <option value="2">Block</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                  <!-- Client Type Dropdown -->
+                                  <div class="col-md-3 col-sm-12 col-xs-12">
+                                      <select name="client_type" class="form-control select2" style="width: 100%;" id="client_type">
+                                          <option value="" selected="selected">All Client Types</option>
+                                          <option value="1">Cash</option>
+                                          <option value="2">Credit</option>
+                                          <option value="3">Walkin</option>
+                                          <option value="4">Flexible Rate</option>
+                                      </select>
+                                  </div>                                       
                                 </div>
                             </div>
                         </div>

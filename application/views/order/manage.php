@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <h4 class="text-center" style="color:#007600"><b>Total Paid Amount</b></h4>
+                        <h4 class="text-center" style="color:#00c400"><b>Total Paid Amount</b></h4>
                         <p class="text-center" style="font-size: 17px;">
                             <span id="totalBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
                             </span>
@@ -192,13 +192,13 @@
 
                                         <!-- Client Filter  -->
                                         <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <label class="control-label" style="margin-top:7px;">Company Name:</label>
+                                            <!-- <label class="control-label" style="margin-top:7px;">Company Name:</label> -->
                                         </div>
 
                                         <!-- Client Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select name="clientList" class="form-control select2" style="width: 100%;" id="clientList">
-                                                <option value="" selected="selected">All</option>
+                                                <option value="" selected="selected">All Companies</option>
                                                 <?php
                                                     if(!empty($activeUsers) && count($activeUsers) > 0 ){
                                                     
@@ -216,23 +216,23 @@
                                             </select>
                                         </div>
 
-                                        <!-- Products Filter -->
+                                        <!-- Item Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Item:</label>
+                                            <!-- <label class="control-label" style="margin-top:7px;">Item:</label> -->
                                         </div>
 
-                                        <!-- Products Filter Dropdown -->
+                                        <!-- Item Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
-                                                <option value="" selected >All</option>
+                                                <option value="" selected >All Items</option>
                                                 <?php
                                                     if(!empty($activeProducts) && count($activeProducts) > 0 ){
                                                     
-                                                        foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
+                                                    foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
                                                 ?>
-                                                            <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
+                                                    <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
                                                 <?php
-                                                        }
+                                                    }
                                                     }else{
                                                 ?>
                                                     <option value="">-- No Item Available --</option>
@@ -244,13 +244,13 @@
 
                                         <!-- Date Range Filter -->
                                         <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <label class="control-label" style="margin-top:7px;">Date:</label>
+                                            <!-- <label class="control-label" style="margin-top:7px;">Date:</label> -->
                                         </div>
 
                                         <!-- Date Range Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <div class="input-group">
-                                                <input class="form-control" placeholder="" required="" id="salesOrderDate" name="salesOrderDate" type="text">
+                                                <input class="form-control" placeholder="Orede Date" required="" id="salesOrderDate" name="salesOrderDate" type="text">
                                                 <label class="input-group-addon btn" for="salesOrderDate">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
@@ -263,27 +263,27 @@
 
                                     <!-- Invoice Status Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Invoice Status:</label>
+                                        <!-- <label class="control-label" style="margin-top:7px;">Invoice Status:</label> -->
                                     </div>
 
                                     <!-- Invoice Status Filter Dropdown -->
                                     <div class="col-md-3 col-sm-12 col-xs-12">
                                         <select class="form-control" name="invoiceStatus" style="width:100%;" id="invoiceStatus">
-                                            <option value="">All</option>
+                                            <option value="">All Invoice Status</option>
                                             <option value="unpaid" <?php echo $dash_status;?>>Unpaid</option>
                                             <option value="paid">Paid</option>
                                         </select>
                                     </div>
 
-                                    <!-- Status Filter -->
+                                    <!-- Delivery Status Filter -->
                                     <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <label class="control-label" style="margin-top:7px;">Delivery Status:</label>
+                                        <!-- <label class="control-label" style="margin-top:7px;">Delivery Status:</label> -->
                                     </div>
 
-                                    <!-- Status Filter Dropdown -->
+                                    <!-- Delivery Status Filter Dropdown -->
                                     <div class="col-md-3 col-sm-12 col-xs-12">
                                         <select class="form-control" name="status" style="width:100%;" id="status">
-                                            <option value="">All</option>
+                                            <option value="">All Delivery Status</option>
                                             <option value="pending">Pending</option>
                                             <option value="inprogress">In Progress</option>
                                             <option value="completed">Completed</option>

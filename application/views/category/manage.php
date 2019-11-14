@@ -79,7 +79,7 @@
 
         <div class="box box-primary">
           <div class="box-header">
-            <h3 class="box-title"><?php echo $msgName;?> Detail</h3>
+            <h3 class="box-title"><?php echo $msgName;?></h3>
             <a href="<?php echo base_url($this->controller);?>/add" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add Item Group </a>
           </div>
 
