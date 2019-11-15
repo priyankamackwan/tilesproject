@@ -387,7 +387,7 @@
 		    "registration_ids" => array($userData[$k]['firebase_token']),
 		    "data"=> [
 		        "body" => $notificationArray,
-		        "title" => "New Product Added",
+		        "title" => "New Item Added",
 		        // "icon" => "ic_launcher"
 		    ],
 		    // "data" => json_encode(array())
@@ -445,9 +445,10 @@
                                         $arr = array(
                                             "registration_ids" => array($userData[$k]['firebase_token']),
                                                 "notification" => [
-                                            "body" => $notificationArray,
+                                            // "body" => $notificationArray,
+                                            "body" => "",
                                             //"title" => "New Product Added",
-                                            "title" => "New product ‘'".$name."'’ has been added. Please click to check the new product.",
+                                            "title" => "New Item ‘'".$name."'’ has been added. Please click to check the new product.",
                                             ],
                                             "priority"=>"high",
                                             "content_available"=> true,
@@ -865,7 +866,7 @@
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($ch);
-            //echo "----".$result;
+            // echo "----".$result;exit;
             if ($result === FALSE) {
                 //die('Oops! FCM Send Error: ' . curl_error($ch));
             }

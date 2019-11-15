@@ -262,9 +262,10 @@
 					                    $arr = array(
                                             "registration_ids" => $userData[$k]['firebase_token'],
                                                 "notification" => [
-                                            "body" => $notificationArray,
+                                            // "body" => $notificationArray,
+                                            "body" =>"",
                                             //"title" => "New Sub Category Added",
-                                            "title" => "Sub category ‘'".$name."'’ is added. Please click to check the new category.",
+                                            "title" => "Sub Item ‘'".$name."'’ is added. Please click to check the new category.",
                                             ],
                                             "priority"=> "high",
                                             "content_available"=> true,

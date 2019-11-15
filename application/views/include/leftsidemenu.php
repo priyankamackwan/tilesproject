@@ -33,7 +33,7 @@
                 if (in_array('4',$this->userhelper->current('rights'))) {
             ?>
                     <li class="treeview <?php echo $url == 'Category'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Category"><i class="fa fa-tag"></i><span>Item Groups</span></a>
+                        <a href="<?php echo base_url();?>Category"><i class="fa fa-book"></i><span>Item Groups</span></a>
                     </li> 
             <?php    
                 }
@@ -41,7 +41,7 @@
                 if (in_array('5',$this->userhelper->current('rights'))) {
             ?>
                     <li class="treeview <?php echo $url == 'Product'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Product"><i class="fa fa-tag"></i><span>Items</span></a>
+                        <a href="<?php echo base_url();?>Product"><i class="fa fa-object-group"></i><span>Items</span></a>
                     </li>
                     <!-- Commnet Change to product report -->
                     <!-- <li class="treeview <?php //echo $url == 'Low_stock'?'active':'';?>">
@@ -53,7 +53,7 @@
                 if (in_array('6',$this->userhelper->current('rights'))) {
             ?>
                     <li class="treeview <?php echo $url == 'Order'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Order"><i class="fa fa-tag"></i><span>Sales Orders</span></a>
+                        <a href="<?php echo base_url();?>Order"><i class="fa fa-shopping-cart"></i><span>Sales Orders</span></a>
                     </li>
             <?php
                 }
@@ -61,16 +61,16 @@
                 if ($this->userhelper->current('role_id') == 1) {
             ?>
                     <li class="treeview <?php echo $url == 'Customer_report'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Customer_report"><i class="fa fa-tag"></i><span>Customer Reports</span></a>
+                        <a href="<?php echo base_url();?>Customer_report"><i class="fa fa-line-chart"></i><span>Customer Reports</span></a>
                     </li>
                     <li class="treeview <?php echo $url == 'Sales_report'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Sales_report"><i class="fa fa-tag"></i><span>Sales Reports</span></a>
+                        <a href="<?php echo base_url();?>Sales_report"><i class="fa fa-line-chart"></i><span>Sales Reports</span></a>
                     </li>
                     <li class="treeview <?php echo $url == 'Expense_report'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Expense_report"><i class="fa fa-tag"></i><span>Expense Reports</span></a>
+                        <a href="<?php echo base_url();?>Expense_report"><i class="fa fa-line-chart"></i><span>Expense Reports</span></a>
                     </li>
                     <li class="treeview <?php echo $url == 'Product_report'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Product_report"><i class="fa fa-tag"></i><span>Item Reports</span></a>
+                        <a href="<?php echo base_url();?>Product_report"><i class="fa fa-line-chart"></i><span>Item Reports</span></a>
                     </li>
             <?php
                 }

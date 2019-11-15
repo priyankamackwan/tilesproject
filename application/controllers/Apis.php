@@ -231,7 +231,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                 
                                 "notification" => [
-                                "body" => $notificationArray,
+                                // "body" => $notificationArray,
+                                    "body" => "",
                                 //"title" => "New User Registered",
                                  "title" => "'".$contactPersonName."' has registered now from the Company ‘'".$companyName."'’. Please click to accept/reject the request.",
                                 ],
@@ -1221,7 +1222,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                             
                                             "notification" => [
-                                            "body" => $notificationArray,
+                                            // "body" => $notificationArray,
+                                            "body" => "",
                                             //"title" => "New Order Added",
                                             "title" => "New order has been placed. Please check admin portal to check this order."
                                             ],
@@ -1838,7 +1840,7 @@ $pdf2->Output($fileNL_invoice, 'F');
             }
             //header with content_type api key
             $headers = array(
-                'Content-Type:application/json',
+                'Content-Type: application/json',
                 'Authorization:key='.$server_key
             );
             //CURL request to route notification to FCM connection server (provided by Google)
