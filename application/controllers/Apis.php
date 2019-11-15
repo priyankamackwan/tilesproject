@@ -232,6 +232,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 
                                 "notification" => [
                                 // "body" => $notificationArray,
+                                    "body" => "",
                                 //"title" => "New User Registered",
                                  "title" => "'".$contactPersonName."' has registered now from the Company ‘'".$companyName."'’. Please click to accept/reject the request.",
                                 ],
@@ -1222,6 +1223,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             
                                             "notification" => [
                                             // "body" => $notificationArray,
+                                            "body" => "",
                                             //"title" => "New Order Added",
                                             "title" => "New order has been placed. Please check admin portal to check this order."
                                             ],
