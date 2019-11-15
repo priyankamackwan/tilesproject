@@ -306,7 +306,7 @@
 			                    $arr = array(
                                             "registration_ids" => $iosToken,
                                                 "notification" => [
-                                            "body" => $notificationArray,
+                                            // "body" => $notificationArray,
                                             //"title" => "New Category Added",
                                             "title" => "Item Group ‘'".$name."'’ is added. Please click to check the new category.",
                                             ],

@@ -231,7 +231,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                                 "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                 
                                 "notification" => [
-                                "body" => $notificationArray,
+                                // "body" => $notificationArray,
                                 //"title" => "New User Registered",
                                  "title" => "'".$contactPersonName."' has registered now from the Company ‘'".$companyName."'’. Please click to accept/reject the request.",
                                 ],
@@ -1221,7 +1221,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                             
                                             "notification" => [
-                                            "body" => $notificationArray,
+                                            // "body" => $notificationArray,
                                             //"title" => "New Order Added",
                                             "title" => "New order has been placed. Please check admin portal to check this order."
                                             ],
