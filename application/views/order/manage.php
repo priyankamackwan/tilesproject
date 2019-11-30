@@ -129,7 +129,7 @@
                     <div class="col-md-3">
                         <h4 class="text-center"><b>Total Invoice Amount</b></h4>
                         <p class="text-center" style="font-size: 17px;">
-                            <span id="creditBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
+                            <span id="creditBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
                             </span>
                         </p>
                     </div>
@@ -137,7 +137,7 @@
                     <div class="col-md-3">
                         <h4 class="text-center" style="color:#00c400"><b>Total Paid Amount</b></h4>
                         <p class="text-center" style="font-size: 17px;">
-                            <span id="totalBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
+                            <span id="totalBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
                             </span>
                         </p>
                     </div>
