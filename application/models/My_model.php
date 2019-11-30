@@ -179,7 +179,7 @@
 		   }else{
 		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
 		   }
-		   return '₹ '.$new_amount;
+		   return 'AED '.$new_amount;
 		}
 		//best seller count 
 		public function best_seller_count($where){

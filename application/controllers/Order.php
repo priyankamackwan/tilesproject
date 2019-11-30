@@ -60,12 +60,13 @@
 
 
             // Get all Amounts of Invoice. 
-            $data['totalAmounts'] = $this->orders_model->get_invoiceAmount();
+            $data['totalAmounts'] = $this->orders_model->get_invoiceAmount('');
         
 			$this->load->view($this->view.'/manage',$data);
         }
                 
 		public function server_data() {
+
 
             // Column array
             $columnArray = array(
@@ -230,6 +231,7 @@
                 
                 // Get all records with limit for data table.
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir);
+                $totalAmounts = $this->orders_model->get_invoiceAmount('');
                 
             }else{
                 
@@ -240,6 +242,8 @@
                 $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where);
 
                 $totalFiltered = $totalFiltered['count'];
+
+                $totalAmounts = $this->orders_model->get_invoiceAmount($where);
             }
 
             // Initialized blank array to push data of data table.
@@ -336,24 +340,44 @@
                         $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
                     }
                     else
-                    {
-                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
+                    {//<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;
+                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
                     }
 
                     // Push table data in to array.
                     $data[] = $tabledata;
 
+                    
+                    
+
                     // Increment serial number by 1.
                     $srNo++;
                 }
             }
-
+            if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
+                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount,2));
+            }else{
+                $invoiceAmount=0;
+            }
+            if(isset($totalAmounts->paidAmount) && $totalAmounts->paidAmount!='' && $totalAmounts->paidAmount!=0){
+                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount,2));
+            }else{
+                $paidAmount=0;
+            }
+            if(isset($totalAmounts->unpaidAmount) && $totalAmounts->unpaidAmount!='' && $totalAmounts->unpaidAmount!=0){
+                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount,2));
+            }else{
+                $unpaidAmount=0;
+            }
             // Combine all data in json
             $json_data = array(
                 "draw"            => intval($this->input->post('draw')),  
                 "recordsTotal"    => intval($totalData['count']),  
                 "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data   
+                "data"            => $data,
+                "invoiceAmount"   => $invoiceAmount,
+                "paidAmount"      => $paidAmount,
+                "unpaidAmount"    => $unpaidAmount
             );
 
             // Convert all data into Json

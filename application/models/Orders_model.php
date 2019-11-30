@@ -20,6 +20,8 @@
             
            //$this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$this->orders_table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID');
 
+            //my balance
+
             $this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$this->orders_table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID,'.$this->orders_table.'.placed_by,'.$this->orders_table.'.admin_id,'.$this->users_table.'.contact_person_name');
 
             // Select from Order main table
@@ -66,11 +68,25 @@
         }
 
         // Get invoice paid total and unpaid amount
-        public function get_invoiceAmount()
+        public function get_invoiceAmount($where)
         {
             $this->db->select('SUM('.$this->orders_table.'.total_price) as invoiceAmount,SUM(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,SUM(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+            if(!empty($where)){
+                
+                // Filter condition to add where
+                $this->db->where($where);
+            }
 
             $this->db->from($this->orders_table);
+            $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
+
+            $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->orders_table.'.id');
+            $this->db->where($this->orders_table.'.is_deleted',0);
+
+            $this->db->where($this->users_table.'.is_deleted',0);
+
+            $this->db->where($this->users_table.'.status',1);
+
 
             $Amountdata = $this->db->get()->row();
             
