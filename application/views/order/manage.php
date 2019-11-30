@@ -568,7 +568,12 @@
                 "className": 'text-center',
                 "targets":   [0,7,8,9,10]
             }], 
-            "order": [[ 1, "DESC"]],     
+            "order": [[ 1, "DESC"]],  
+            "drawCallback": function(settings) {
+              $("#creditBalance").html(settings.json.invoiceAmount);
+              $("#totalBalance").html(settings.json.paidAmount);
+              $("#debitBalance").html(settings.json.unpaidAmount);
+            },   
 		});
 
         $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
