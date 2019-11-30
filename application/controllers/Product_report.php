@@ -42,7 +42,7 @@
       $data['activeProducts'] = $this->db->where('is_deleted',0)->get("products")->result_array();
       $data['product_categories'] = $this->db->where('is_deleted',0)->get("categories")->result_array();
       // Total balance quantity
-      $data['total_balance_quantity'] = $this->$model->balance_quantity();
+      $data['total_balance_quantity'] = $this->$model->balance_quantity('','');
 			$this->load->view($this->view.'/manage',$data);
 		}
                 
@@ -117,7 +117,16 @@
 
                 $where .= 'p.design_no LIKE "%'.$s.'%" ) ';
         }    
+      //Show total balance amount and quantity
+      $totalBalancequantity=$totalBalanceAmount=0; 
+      $total_balance_quantity = $this->$model->balance_quantity($where,$low_stock);
+      if(isset($total_balance_quantity) && $total_balance_quantity!='' && count($total_balance_quantity) > 0){
+        foreach ($total_balance_quantity as $key => $value) {
+          $totalBalancequantity+=$value['quantity']- $value['totalQuantity'];
+          $totalBalanceAmount+=$value['purchase_expense'] * $totalBalancequantity;
+        }
 
+      }
 			//$totalData = $this->$model->countTableRecords($this->table,array());
       // Total count new
       $totalData = $this->$model->product_report_table_tecords($where,$low_stock);
@@ -218,7 +227,7 @@
 
 			$data = array();
    // echo $this->db->last_query();die();
-                 
+                
 			if(!empty($q))
 			{
                                $startNo = $_POST['start'];
@@ -260,17 +269,19 @@
                                         $nestedData['quantity'] =$value['quantity'];
                                         $nestedData['sold_quantity'] = $value['totalQuantity'];
                                         $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
-                                        $nestedData['amount'] =$this->$model->getamount(round($value['amount'],2));
+                                        $nestedData['amount'] =$this->$model->getamount(round($value['purchase_expense'] *$nestedData['total_left_quantity'],2));
 					$data[] = $nestedData;
                                         $srNo++;
 				}
 			}
-
+         //Show total balance amount and quantity
 			$json_data = array(
 						"draw"            => intval($this->input->post('draw')),
 						"recordsTotal"    => intval($totalData),
 						"recordsFiltered" => intval($totalData),
-						"data"            => $data
+						"data"            => $data,
+            'totalBalancequantity'=>round($totalBalancequantity),
+            'totalBalanceAmount'=>$this->$model->getamount(round($totalBalanceAmount,2)),
 						);
 			echo json_encode($json_data);
 		}

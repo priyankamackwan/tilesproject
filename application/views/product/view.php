@@ -211,7 +211,10 @@
                   <?php echo $this->My_model->getamount(ROUND($result[0]->walkin_rate,2));?>
                 </div>
               </div>
-
+              <?php 
+              //not show to subadmin
+              if($this->userhelper->current('role_id')==1){
+              ?>  
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-6 col-xs-6" for="purchase_expense">
                   Purchase Price :
@@ -221,7 +224,9 @@
                   <?php echo $this->My_model->getamount(ROUND($result[0]->purchase_expense,2));?>
                 </div>
               </div>
-
+              <?php
+                }
+              ?>
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
                   Size:

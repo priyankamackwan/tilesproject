@@ -1,4 +1,5 @@
 <?php
+
 	$this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
 	defined('BASEPATH') OR exit('No direct script access allowed');

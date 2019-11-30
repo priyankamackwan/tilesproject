@@ -161,16 +161,38 @@
             return $new_date.$break.$new_time;
         }
 		// balance amount and quantity
-		public function balance_quantity(){
-			$this->db->select('SUM(p.quantity-o.quantity) as totalQuantity,SUM(o.price) as amount,p.purchase_expense,p.quantity');
+		public function balance_quantity($condition,$low_stock){
+			// $this->db->select('SUM(p.quantity-o.quantity) as totalQuantity,SUM(o.price) as amount,p.purchase_expense,p.quantity');
+			// $this->db->from('order_products o');
+			// $this->db->join('products p','p.id=o.product_id','left');
+			// $this->db->where('p.is_deleted',0);
+			// $this->db->group_by('o.product_id');
+
+			// $balance_quantity=$this->db->get()->result_array(); 
+			// //echo $this->db->last_query();
+			// return $balance_quantity;
+			// For low stock yes 
+			if(isset($low_stock) && $low_stock!='' && $low_stock=='true'){
+			//Low stock constant 25 %	
+	          $stocklimit=Stock_Reminder;
+	          $this->db->select('ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity) as s_quantity');
+	          $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
+	          $this->db->order_by('p.name asc');
+	        } 
+	        // End for low stock conidtion
+			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
+			$this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+			$this->db->join('categories c','c.id=pc.cat_id','left');
 			$this->db->where('p.is_deleted',0);
+      		$this->db->where('c.is_deleted',0);
+			if(isset($condition) && $condition!=''){
+				$this->db->where($condition);
+			}
 			$this->db->group_by('o.product_id');
-
-			$balance_quantity=$this->db->get()->result_array(); 
-			//echo $this->db->last_query();
-			return $balance_quantity;
+            $query = $this->db->get()->result_array();
+			return $query;
 		}
 		function getamount($amount)
 		{

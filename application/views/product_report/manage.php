@@ -10,8 +10,8 @@ $Low_stock='false';
   
 $balance_amount=$balance_quantity = 0;
 foreach ($total_balance_quantity as $key => $value) {
-  $balance_quantity+= $value['totalQuantity'];
-  $balance_amount+= $value['purchase_expense']* $value['quantity'];
+  $balance_quantity+= $value['quantity']-$value['totalQuantity'];
+  $balance_amount+= $value['purchase_expense'] * $value['totalQuantity'];
 }
 
 ?>
@@ -136,7 +136,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                            <label class="control-label">Total Balance Quantity:</label>
                                          </div>
                                          <div class="col-md-5 col-sm-5 col-xs-5 pull-right">
-                                           <?php echo round($balance_quantity); ?>
+                                              <span id="totalBalancequantity"></span>
                                          </div>
                                         </div>
                                         
@@ -173,7 +173,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                            <label class="control-label">Total Balance    Amount:</label>
                                          </div>
                                          <div class="col-md-5 col-sm-5 col-xs-5 pull-right">
-                                           <?php echo $this->My_model->getamount(ROUND($balance_amount,2)); ?>
+                                              <span id="totalBalanceAmount"></span>
                                          </div>
                                         </div>
                                 </div>
@@ -366,9 +366,9 @@ foreach ($total_balance_quantity as $key => $value) {
                   return row;
               }          
               // Add row data
-              var r1 = Addrow(1, [{ key: 'G', value: 'Total Balance Quantity' }, { key: 'H', value: '<?php echo number_format($balance_quantity,2);?>'  }]);
+              var r1 = Addrow(1, [{ key: 'G', value: 'Total Balance Quantity' }, { key: 'H', value: $("#totalBalancequantity").html()  }]);
               
-              var r2 = Addrow(2, [{ key: 'G', value: 'Total Balance Amount' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($balance_amount,2));?>'  }]);
+              var r2 = Addrow(2, [{ key: 'G', value: 'Total Balance Amount' }, { key: 'H', value: $("#totalBalanceAmount").html()  }]);
                   
               var r3 = Addrow(3, [{ key: 'A', value: 'Filters' }]);
 
@@ -451,6 +451,11 @@ foreach ($total_balance_quantity as $key => $value) {
 				  //$("td:eq(3)", row).css({"background-color":"navy","text-align":"center"});
 			},
 			"order": [[ 0, "DESC"]],
+      "drawCallback": function(settings) {
+          console.log(settings.json.totalBalanceAmount);
+          $("#totalBalancequantity").html(settings.json.totalBalancequantity);
+          $("#totalBalanceAmount").html(settings.json.totalBalanceAmount);
+        },
                         
 		});
 
