@@ -97,3 +97,6 @@ define('Mail_Password','iqlwlulzkmvohcrs');
 
 /*********** Stock % for reminder  **********/
 define('Stock_Reminder','25');
+
+/*********** Vat constant  **********/
+define('Vat','51');

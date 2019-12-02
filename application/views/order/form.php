@@ -99,7 +99,7 @@ a:hover, a:active, a:focus {
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
-							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=[];
+							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
 								$sales_expense=$value['sales_expense'];
@@ -124,6 +124,12 @@ a:hover, a:active, a:focus {
 									$price=$value['flexible_rate'];
 									$client_type='flexible_rate';
 								}
+								//Show addtional info like mobile add order
+								
+								$cargo=$value['cargo'];
+								$cargo_number=$value['cargo_number'];
+								$location=$value['location'];
+								$mark=$value['mark'];
 							?>
 							<div id="delete_<?php echo $key+1;?>">
 								<div class="form-group select2">
@@ -173,6 +179,42 @@ a:hover, a:active, a:focus {
 								<?php echo $username;?>
 								</div>
 							</div>
+							<div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Cargo :
+				                </label>
+
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="cargo" value="<?php echo $cargo;?>" class="form-control " placeholder="Enter Cargo">
+				                </div>
+				              </div>
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Cargo Number :
+				                </label>
+
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="cargo_number" value="<?php echo $cargo_number;?>" class="form-control " placeholder="Enter Cargo Number">
+				                </div>
+				              </div>
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Location :
+				                </label>
+
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="location" value="<?php echo $location;?>" class="form-control " placeholder="Enter Location">
+				                </div>
+				              </div>
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Mark :
+				                </label>
+
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="mark" value="<?php echo $mark;?>" class="form-control " placeholder="Enter mark">
+				                </div>
+				              </div>
 							<div class="form-group">
 				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
 				                  Sales Expense :

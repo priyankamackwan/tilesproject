@@ -951,7 +951,7 @@ You can change this password from mobile application after you are logged in onc
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                        $vat = $subTotal*5/100;
+                        $vat = $subTotal* Vat/100;
                         $finalTotal =$subTotal+$vat;
                         //echo $id; exit;
                         include 'TCPDF/tcpdf.php';
@@ -1049,7 +1049,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html1 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td>'.$vat.'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td>'.$vat.'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
     <br><br/>
@@ -1102,7 +1102,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html2 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td>'.$vat.'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td>'.$vat.'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
     <br><br/>

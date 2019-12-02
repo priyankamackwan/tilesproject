@@ -340,8 +340,8 @@
                         $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
                     }
                     else
-                    {//<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;
-                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
+                    {//
+                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
                     }
 
                     // Push table data in to array.
@@ -355,17 +355,17 @@
                 }
             }
             if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
-                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount,2));
+                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount *5 / 100,2));
             }else{
                 $invoiceAmount=0;
             }
             if(isset($totalAmounts->paidAmount) && $totalAmounts->paidAmount!='' && $totalAmounts->paidAmount!=0){
-                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount,2));
+                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount *5 / 100,2));
             }else{
                 $paidAmount=0;
             }
             if(isset($totalAmounts->unpaidAmount) && $totalAmounts->unpaidAmount!='' && $totalAmounts->unpaidAmount!=0){
-                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount,2));
+                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount *5 / 100,2));
             }else{
                 $unpaidAmount=0;
             }
@@ -663,7 +663,7 @@
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                      $vat = $subTotal*5/100;
+                      $vat = $subTotal* Vat/100;
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -695,7 +695,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -818,7 +818,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                      $vat = $subTotal*5/100;
+                      $vat = $subTotal* Vat/100;
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -856,7 +856,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat 5%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -1072,6 +1072,10 @@ $pdf->Output($do_no, 'I');
             //$price = $this->input->post('price');
             // client type for amount
             $client_type = $this->input->post('client_type');
+            $cargo = $this->input->post('cargo');
+            $cargo_number = $this->input->post('cargo_number');
+            $location = $this->input->post('location');
+            $mark = $this->input->post('mark');
             //for total amount 
             $total_order_price=0;
             $product_arr=$quantity_arr=array();
@@ -1241,7 +1245,11 @@ $pdf->Output($do_no, 'I');
                     'invoice_status' => $invoice_status,
                     'delivery_date' => $delivery_date,
                     'payment_date' => $payment_date,
-                    'total_price'=>$total_order_price
+                    'total_price'=>$total_order_price,
+                    'cargo'=>$cargo,
+                    'cargo_number'=>$cargo_number,
+                    'location'=>$location,
+                    'mark'=>$mark
                 );
 
             $where = array($this->primary_id=>$id);
