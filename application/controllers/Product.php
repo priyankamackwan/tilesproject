@@ -161,6 +161,7 @@
             $this->db->join('product_categories as pc', 'pc.product_id = p.id');
             $this->db->join('categories as c', 'c.id = pc.cat_id');
             $this->db->where('p.is_deleted', 0);
+            $this->db->where('c.is_deleted', 0);
 
             if($statusFilter == 1) {
                 $this->db->where('status', 1);

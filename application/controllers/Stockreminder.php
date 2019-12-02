@@ -20,6 +20,7 @@
 	        $this->db->from('products AS p');
 	        $this->db->join('order_products AS o','p.id=o.product_id');
 	        $this->db->where('p.status',1);
+	        $this->db->where('p.is_deleted', 0); 
 	        $this->db->group_by('o.product_id');
 	        $this->db->having('ROUND((p.quantity*'.Stock_Reminder.')/100)>=p.quantity-SUM(o.quantity)');
 	        $this->db->order_by('rem asc');
