@@ -252,7 +252,10 @@
                                         $nestedData['quantity'] = $value['quantity'];
                                         $nestedData['cash_rate'] =$this->$model->getamount(ROUND($value['cash_rate'],2));
                                         $nestedData['credit_rate'] = $this->$model->getamount(ROUND($value['credit_rate'],2));
+                                        //Add flexible rate
+                                        $nestedData['flexible_rate'] = $this->$model->getamount(ROUND($value['flexible_rate'],2));
                                         $nestedData['walkin_rate'] = $this->$model->getamount(ROUND($value['walkin_rate'],2));
+                                        
    
                                         $nestedData['size'] = $value['size'];
                                         if ($value['unit'] == 1) {

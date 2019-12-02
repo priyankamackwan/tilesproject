@@ -145,7 +145,7 @@
                     <div class="col-md-3">
                         <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b></h4>
                         <p class="text-center" style="font-size: 17px;">
-                            <span id="debitBalance"> <?php echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
+                            <span id="debitBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
                             </span>
                         </p>
                     </div>

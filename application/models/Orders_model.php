@@ -71,11 +71,6 @@
         public function get_invoiceAmount($where)
         {
             $this->db->select('SUM('.$this->orders_table.'.total_price) as invoiceAmount,SUM(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,SUM(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
-            if(!empty($where)){
-                
-                // Filter condition to add where
-                $this->db->where($where);
-            }
 
             $this->db->from($this->orders_table);
             $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
@@ -86,7 +81,11 @@
             $this->db->where($this->users_table.'.is_deleted',0);
 
             $this->db->where($this->users_table.'.status',1);
-
+            if(!empty($where)){
+                
+                // Filter condition to add where
+                $this->db->where($where);
+            }
 
             $Amountdata = $this->db->get()->row();
             

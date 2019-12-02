@@ -123,7 +123,7 @@
       if(isset($total_balance_quantity) && $total_balance_quantity!='' && count($total_balance_quantity) > 0){
         foreach ($total_balance_quantity as $key => $value) {
           $totalBalancequantity+=$value['quantity']- $value['totalQuantity'];
-          $totalBalanceAmount+=$value['purchase_expense'] * $totalBalancequantity;
+          $totalBalanceAmount+=$value['purchase_expense'] * ($value['quantity']- $value['totalQuantity']);
         }
 
       }

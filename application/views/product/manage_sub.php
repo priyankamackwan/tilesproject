@@ -230,7 +230,7 @@
                 <th class="text-center">Cash Rate</th>
                 <th class="text-center">Credit Rate</th>
                 <th class="text-center">Walkin Rate</th>
-                <th class="text-center" style="display: none;">Purchase Price</th>
+                <th class="text-center">Flexible Rate</th>
                 <th class="text-center">Size</th>
                 <th class="text-center">Unit</th>
                 <th class="text-center">Status</th>
@@ -311,7 +311,7 @@
         sheetName:'Item List',
         action: newExportAction,
         exportOptions: {
-          columns: [1,2,3,5,6,7,8,10,11,12]
+          columns: [1,2,3,5,6,7,8,9,10,11,12]
         },
         customize: function (xlsx) {                            
           // console.log(rels);
@@ -432,6 +432,7 @@
         { "data": "cash_rate"},
         { "data": "credit_rate"},
         { "data": "walkin_rate"},
+        { "data": "flexible_rate"},
         // { "data": "purchase_expense"},
         { "data": "size"},
         { "data": "unit"},
@@ -449,7 +450,7 @@
       },
       {
         "className": 'text-center',
-        "targets":   [0],
+        "targets":   [0,13],
         "orderable": false
       },
       {

@@ -229,6 +229,7 @@
                 <th class="text-center">Cash Rate</th>
                 <th class="text-center">Credit Rate</th>
                 <th class="text-center">Walkin Rate</th>
+                <th class="text-center">Flexible Rate</th>
                 <th class="text-center">Purchase Price</th>
                 <th class="text-center">Size</th>
                 <th class="text-center">Unit</th>
@@ -310,7 +311,7 @@
         sheetName:'Item List',
         action: newExportAction,
         exportOptions: {
-          columns: [1,2,3,5,6,7,8,9,10,11,12]
+          columns: [1,2,3,5,6,7,8,9,10,11,12,13]
         },
         customize: function (xlsx) {                            
           // console.log(rels);
@@ -398,8 +399,10 @@
           $('row c[r="G7"]', sheet).attr('s', '2');
           $('row c[r^="H"]', sheet).attr('s', '52');
           $('row c[r="H7"]', sheet).attr('s', '2');
-          $('row c[r^="I"]', sheet).attr('s', '51');
+          $('row c[r^="I"]', sheet).attr('s', '52');
           $('row c[r="I7"]', sheet).attr('s', '2');
+          $('row c[r^="J"]', sheet).attr('s', '51');
+          $('row c[r="J7"]', sheet).attr('s', '2');
           $('row c[r="A2"]', sheet).attr('s', '7');
           $('row c[r="A3"]', sheet).attr('s', '7');
           $('row c[r="A5"]', sheet).attr('s', '7');
@@ -431,6 +434,7 @@
         { "data": "cash_rate"},
         { "data": "credit_rate"},
         { "data": "walkin_rate"},
+        { "data": "flexible_rate"},
         { "data": "purchase_expense"},
         { "data": "size"},
         { "data": "unit"},

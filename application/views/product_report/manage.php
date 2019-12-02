@@ -131,7 +131,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                             </select>
                                         </div>
 
-                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right ">
+                                        <div class="col-md-6 col-sm-12 col-xs-12 pull-right ">
                                           <div class="col-md-7 col-sm-7 col-xs-7 text-right">
                                            <label class="control-label">Total Balance Quantity:</label>
                                          </div>
@@ -168,7 +168,7 @@ foreach ($total_balance_quantity as $key => $value) {
                                               ?>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                                    <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                                         <div class="col-md-7 col-sm-7 col-xs-7 text-right">
                                            <label class="control-label">Total Balance    Amount:</label>
                                          </div>

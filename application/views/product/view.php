@@ -211,6 +211,15 @@
                   <?php echo $this->My_model->getamount(ROUND($result[0]->walkin_rate,2));?>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="walkin_rate">
+                  Flexible Rate :
+                </label>
+
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
+                  <?php echo $this->My_model->getamount(ROUND($result[0]->flexible_rate,2));?>
+                </div>
+              </div>
               <?php 
               //not show to subadmin
               if($this->userhelper->current('role_id')==1){

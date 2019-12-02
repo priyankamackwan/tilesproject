@@ -369,6 +369,8 @@
           $('row c[r^="E6"]', sheet).attr('s', '2');
           $('row c[r^="G"]', sheet).attr('s', '51');
           $('row c[r^="G6"]', sheet).attr('s', '2');
+          $('row c[r^="H"]', sheet).attr('s', '51');
+          $('row c[r^="H6"]', sheet).attr('s', '2');
           $('row c[r="A2"]', sheet).attr('s', '7');
           $('row c[r="A3"]', sheet).attr('s', '7');
           $('row c[r="A4"]', sheet).attr('s', '7');
