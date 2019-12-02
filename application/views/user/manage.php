@@ -191,6 +191,7 @@
                     <th class="text-center">Mobille No.</th>
                     <th class="text-center">Client Type</th>
                     <th class="text-center">Created On</th>
+                    <th class="text-center">Last Activity On</th>                    
                     <th class="text-center">Status</th>
                     <th class="text-center">Manage</th>
               </thead>
@@ -286,7 +287,7 @@
         filename: 'Contact List',
         sheetName:'Contact List',
         exportOptions: {
-          columns: [1,2,3,4,5,6,7,8]
+          columns: [1,2,3,4,5,6,7,8,9]
         },
         /*{
           text: 'Red',
@@ -399,15 +400,16 @@
         { "data": "phone_no"},
         { "data": "client_type"},
         { "data": "created"},
+        { "data": "last_activity"},
         { "data": "status"},
         { "data": "manage"}
       ],
       "columnDefs": [ {
-        "targets": [6,8,7],
+        "targets": [6,8,7,8,9],
         "orderable": true,  
       },{
         "className": 'text-center',
-        "targets":   [0,7,8,9],
+        "targets":   [0,7,8,9,10],
         "orderable": false
       }],
 

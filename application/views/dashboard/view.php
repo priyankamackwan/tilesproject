@@ -255,7 +255,8 @@
 													<td class="text-center"><?php echo $key+1;?></td>
 													<td><?php echo $value['company_name'];?>
 													<td class="text-right">
-														<?php echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
+														<?php echo $this->My_model->getamount(ROUND($value['total_price'],2));?>
+														<?php //echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
 													</td>
 													<td class="text-center">
 														<?php echo $invoice_status;?>
@@ -333,7 +334,8 @@
 													<td class="text-center"><?php echo $key+1;?></td>
 													<td><?php echo $value['company_name'];?>
 													<td class="text-right">
-														<?php echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
+														<?php echo $this->My_model->getamount(ROUND($value['total_price'],2));?>
+														<?php //echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
 													</td>
 													<td class="text-center">
 														<?php echo $invoice_status;?>
@@ -441,7 +443,9 @@
 												<tr role="row" class="odd">
 													<td><?php echo $value['company_name'];?>
 													</td>
-													<td class="text-right"><?php echo '<i class="fa fa-inr"></i> '.number_format($value['totalValue'],2);?></td>	
+													<td class="text-right"><?php //echo '<i class="fa fa-inr"></i> '.number_format($value['totalValue'],2);?>
+														<?php echo $this->My_model->getamount(ROUND($value['totalValue'],2));?>
+													</td>	
 													<td class="text-center"><a href="<?php echo base_url();?>Order?client_name=<?php echo str_replace('&', '_',str_replace(' ', '-',$value['company_name']));?>" target="_blank"  class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>
 													</td>
 												</tr>
