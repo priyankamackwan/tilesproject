@@ -355,17 +355,17 @@
                 }
             }
             if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
-                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount *5 / 100,2));
+                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount * Vat / 100,2));
             }else{
                 $invoiceAmount=0;
             }
             if(isset($totalAmounts->paidAmount) && $totalAmounts->paidAmount!='' && $totalAmounts->paidAmount!=0){
-                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount *5 / 100,2));
+                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount * Vat / 100,2));
             }else{
                 $paidAmount=0;
             }
             if(isset($totalAmounts->unpaidAmount) && $totalAmounts->unpaidAmount!='' && $totalAmounts->unpaidAmount!=0){
-                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount *5 / 100,2));
+                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount * Vat / 100,2));
             }else{
                 $unpaidAmount=0;
             }

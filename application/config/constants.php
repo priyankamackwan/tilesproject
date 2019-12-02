@@ -99,4 +99,4 @@ define('Mail_Password','iqlwlulzkmvohcrs');
 define('Stock_Reminder','25');
 
 /*********** Vat constant  **********/
-define('Vat','51');
+define('Vat','5');
