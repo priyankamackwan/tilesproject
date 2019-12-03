@@ -354,18 +354,23 @@
                     $srNo++;
                 }
             }
+            //default vat * amount
+            $invoiceVat=$paidVat=$unpaidVat=0;
             if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
-                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount * Vat / 100,2));
+                    $invoiceVat=$totalAmounts->invoiceAmount * Vat / 100;
+                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount + $invoiceVat,2));
             }else{
                 $invoiceAmount=0;
             }
             if(isset($totalAmounts->paidAmount) && $totalAmounts->paidAmount!='' && $totalAmounts->paidAmount!=0){
-                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount * Vat / 100,2));
+                    $paidVat=$totalAmounts->paidAmount * Vat / 100;
+                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount + $paidVat,2));
             }else{
                 $paidAmount=0;
             }
             if(isset($totalAmounts->unpaidAmount) && $totalAmounts->unpaidAmount!='' && $totalAmounts->unpaidAmount!=0){
-                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount * Vat / 100,2));
+                    $unpaidVat=$totalAmounts->unpaidAmount * Vat / 100;
+                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount + $unpaidVat,2));
             }else{
                 $unpaidAmount=0;
             }
