@@ -185,7 +185,7 @@ a:hover, a:active, a:focus {
 				                </label>
 
 				                <div class="col-md-9 col-sm-12 col-xs-12">
-				                  <input type="text" name="cargo" value="<?php echo $cargo;?>" class="form-control " placeholder="Enter Cargo">
+				                  <input type="text" name="cargo" value="<?php echo $cargo;?>" class="form-control " placeholder="Enter Cargo" required="required">
 				                </div>
 				              </div>
 				              <div class="form-group">
@@ -194,7 +194,7 @@ a:hover, a:active, a:focus {
 				                </label>
 
 				                <div class="col-md-9 col-sm-12 col-xs-12">
-				                  <input type="text" name="cargo_number" value="<?php echo $cargo_number;?>" class="form-control " placeholder="Enter Cargo Number">
+				                  <input type="text" name="cargo_number" value="<?php echo $cargo_number;?>" class="form-control " placeholder="Enter Cargo Number" required="required">
 				                </div>
 				              </div>
 				              <div class="form-group">
@@ -203,7 +203,7 @@ a:hover, a:active, a:focus {
 				                </label>
 
 				                <div class="col-md-9 col-sm-12 col-xs-12">
-				                  <input type="text" name="location" value="<?php echo $location;?>" class="form-control " placeholder="Enter Location">
+				                  <input type="text" name="location" value="<?php echo $location;?>" class="form-control " placeholder="Enter Location" required="required">
 				                </div>
 				              </div>
 				              <div class="form-group">
@@ -212,7 +212,7 @@ a:hover, a:active, a:focus {
 				                </label>
 
 				                <div class="col-md-9 col-sm-12 col-xs-12">
-				                  <input type="text" name="mark" value="<?php echo $mark;?>" class="form-control " placeholder="Enter mark">
+				                  <input type="text" name="mark" value="<?php echo $mark;?>" class="form-control " placeholder="Enter mark" required="required">
 				                </div>
 				              </div>
 							<div class="form-group">
