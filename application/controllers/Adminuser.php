@@ -393,16 +393,19 @@
                             array_push($permissionArray,$this->input->post('order'));
                         }
                         $permissions = implode(',', $permissionArray);
-                        
-	
+             // if password not update        
+            $new_password=$this->input->post('new_password');
+			
 			$data = array(
 				'first_name' => $first_name,
                                 'last_name' => $last_name,
                                 'email' => $email,
 				'mobile_no' => $number,
-                            'password' => md5($this->input->post('new_password')),
                                 'rights' => $permissions,
 			);
+			if(isset($new_password) && $new_password !=''){
+				$data['password']=md5($new_password);
+			}
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
     

@@ -85,9 +85,16 @@
 								<h3><?php if(isset($tatal_orders)){echo $tatal_orders;} ?></h3><p>Total Orders</p>
 							</div>
 							<div class="icon"><i class="ion ion-bag"></i></div>
+							<?php
+							// order rights show order
+							if (in_array('6',$this->userhelper->current('rights'))) {
+							?>
 							<a class="small-box-footer" target="_blank" href="<?php echo base_url();?>Order">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
+							<?php
+							}
+							?>
 						</div>
 					</div>
 					<div class="col-lg-3 col-xs-6">
@@ -98,9 +105,16 @@
 							<div class="icon">
 								<i class="ion ion-bag"></i>
 							</div>
+							<?php
+							// order rights show order
+							if (in_array('6',$this->userhelper->current('rights'))) {
+							?>
 							<a class="small-box-footer" href="<?php echo base_url();?>Order?status=unpaid"  target="_blank" >More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
+							<?php
+							}
+							?>
 							<!-- Pass data for unpaid order status -->
 							<form id="testForm" method="POST" action="<?php echo base_url();?>Order">
 								<input type="hidden" name="dash_status" value="unpaid">
@@ -116,9 +130,16 @@
 							<div class="icon">
 								<i class="ion ion-person-add"></i>
 							</div>
+							<?php
+							// user rights Registered Users
+							if (in_array('3',$this->userhelper->current('rights'))) {
+							?>
 							<a class="small-box-footer" target="_blank" href="<?php echo base_url();?>User">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
+							<?php
+							}
+							?>
 						</div>
 					</div>
 					<div class="col-lg-3 col-xs-6">
@@ -129,9 +150,16 @@
 							<div class="icon">
 								<i class="ion ion-refresh"></i>
 							</div>
+							<?php
+							// product rights Registered Users
+							if (in_array('5',$this->userhelper->current('rights'))) {
+							?>
 							<a class="small-box-footer" href="<?php echo base_url();?>Product_report?status=low_stock"  target="_blank">More info
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>	
+							<?php
+							}
+							?>
 							<form id="product_report" method="POST" action="<?php echo base_url();?>Product_report">
 								<input type="hidden" name="low_stock" value="true">
 							</form>
@@ -140,6 +168,10 @@
 				</div>
 			</div>
 				<div class="row">
+					<?php
+					// order rights show order
+					if (in_array('6',$this->userhelper->current('rights'))) {
+					?>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<div class="box box-info " id="order-statistics-box">
 							<div class="box-header with-border">
@@ -169,6 +201,11 @@
 							</div>
 						</div>
 					</div>
+					<?php
+					}
+					// user rights Registered Users
+					if (in_array('3',$this->userhelper->current('rights'))) {
+					?>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<div class="box box-info " id="customer-statistics-box">
 							<div class="box-header with-border">
@@ -198,9 +235,15 @@
 							</div>
 						</div>
 					</div>
+					<?php
+					}
+					?>
 				</div>
 				<div class="row">
-
+					<?php
+					// order rights show order
+					if (in_array('6',$this->userhelper->current('rights'))) {
+					?>
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<div class="box box-info " id="latest-orders-box">
 							<div class="box-header with-border">
@@ -280,6 +323,11 @@
 						</div>
 					</div>
 				</div>
+				<?php
+				}
+				// order rights show order
+				if (in_array('6',$this->userhelper->current('rights'))) {
+				?>
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<div class="box box-info " id="latest-orders-box">
 							<div class="box-header with-border">
@@ -359,8 +407,14 @@
 						</div>
 					</div>
 				</div>
+				<?php 
+				}
+				?>
 				</div>
 				<div class="row">
+					<?php
+					if (in_array(5,$this->userhelper->current('rights'))) {
+					?>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<div class="box box-info " id="latest-orders-box">
 							<div class="box-header with-border">
@@ -411,6 +465,11 @@
 						</div>
 					</div>
 				</div>
+				<?php
+				}
+				// order rights show order
+				if (in_array('6',$this->userhelper->current('rights')) && in_array('3',$this->userhelper->current('rights'))) {
+				?>
 				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<div class="box box-info " id="latest-orders-box">
 							<div class="box-header with-border">
@@ -473,6 +532,9 @@
 						</div>
 					</div>
 				</div>
+				<?php 
+				}
+				?>
 				</div>
 				</div>
 

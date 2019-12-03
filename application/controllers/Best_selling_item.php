@@ -35,7 +35,12 @@
       // Add for dispaly in filter
       $data['activeProducts'] = $this->db->where('is_deleted',0)->get("products")->result_array();
       $data['product_categories'] = $this->db->where('is_deleted',0)->get("categories")->result_array();
-      $this->load->view($this->view.'/manage',$data);
+      // accroding to according to role wise
+      if ($this->userhelper->current('role_id') ==1) {
+        $this->load->view($this->view.'/manage',$data);
+     } else {
+         $this->load->view($this->view.'/manage_sub',$data);
+     }
     }
                 
     public function server_data() {
