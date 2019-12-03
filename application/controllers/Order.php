@@ -231,6 +231,7 @@
                 
                 // Get all records with limit for data table.
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir);
+                // Get all Amounts of Invoice.
                 $totalAmounts = $this->orders_model->get_invoiceAmount('');
                 
             }else{
@@ -242,7 +243,7 @@
                 $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where);
 
                 $totalFiltered = $totalFiltered['count'];
-
+                // Get all Amounts of Invoice using where conidtion
                 $totalAmounts = $this->orders_model->get_invoiceAmount($where);
             }
 
