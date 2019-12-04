@@ -211,7 +211,8 @@
         <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
+<?php
+/*
     <!-- jQuery -->
     <!-- <script src="<?php //echo base_url();?>assets/js/jquery.min.js"></script>
     <script src="<?php //echo base_url();?>assets/js/bootstrap.min.js"></script>
@@ -256,7 +257,8 @@
     <!-- <script src="<?php //echo base_url();?>assets/js/jquery.validate.min.js"></script> -->
     <!-- <script src="<?php //echo base_url();?>assets/js/additional-methods.min.js"></script> -->
          <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script> -->
-
+*/
+?>
     <script type = 'text/javascript' src = "<?php echo base_url();?>assets/plugins/jQuery/jquery-2.2.3.min.js"></script>
 
     <script type = 'text/javascript' src = "<?php echo base_url();?>assets/bootstrap/js/bootstrap.min.js"></script>

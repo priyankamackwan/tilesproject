@@ -2,6 +2,8 @@
 	$this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
 ?>
+<?php
+/*
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
@@ -77,7 +79,8 @@
 		</div>
 	</div>
 </div> -->
-
+*/
+?>
 <!-- Main Container start-->
 <div class="content-wrapper">
   <section class="content-header">

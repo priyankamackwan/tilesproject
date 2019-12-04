@@ -27,9 +27,9 @@
                                 <div class="form-group">
                                     <div class="row">
                                       <!-- Products Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                        <!-- <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Item:</label>
-                                        </div>
+                                        </div> -->
 
                                         <!-- Products Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
@@ -53,9 +53,9 @@
                                         </div>
 
                                         <!-- Items Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                        <!-- <div class="col-md-1 col-sm-12 col-xs-12">
                                             <label class="control-label" style="margin-top:7px;">Item Group:</label>
-                                        </div>
+                                        </div> -->
 
                                         <!-- Items Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">

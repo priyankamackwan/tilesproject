@@ -4,7 +4,8 @@
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
-
+<?php
+/*
 <!-- page content -->
         <!-- <div class="right_col" role="main">
 		<div class="row">
@@ -56,6 +57,8 @@
             </div>
             </div> -->
         <!-- /page content -->
+*/
+?>        
 <!-- -------------------------------new design------------------------------- -->
 <!-- Main Container start-->
 <div class="content-wrapper">

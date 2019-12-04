@@ -29,7 +29,8 @@
 	}
 
 ?>
-
+<?php
+/*
 <!-- page content -->
         <!-- <div class="right_col" role="main">
 		<div class="row">
@@ -242,6 +243,8 @@
                               <?php } else { ?>
                                <option value="<?php echo $sub_categories[$i]['id'];?>"><?php echo $sub_categories[$i]['name'];?></option>
                               <?php } } */?>   
+                              <?php
+                              /*
 </select>
                         </div>
                       </div> -->
@@ -262,7 +265,8 @@
             </div>
             </div> -->
         <!-- /page content -->
-
+*/
+?>
         <!-- -------------------------------new design------------------------------- -->
 <!-- Main Container start-->
 <div class="content-wrapper">

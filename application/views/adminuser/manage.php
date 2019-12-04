@@ -8,6 +8,8 @@
     width: 60px!important;
   }
 </style>
+<?php
+/*
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
@@ -63,6 +65,7 @@
 		</div>
 	</div>
 </div> -->
+*/?>
 <!-- Main Container start-->
 <div class="content-wrapper">
 
@@ -76,7 +79,7 @@
     ?>
 
     <!-- <h1>
-      <?php echo $msgName;?>
+      <?php //echo $msgName;?>
     </h1> -->
     <!-- <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
