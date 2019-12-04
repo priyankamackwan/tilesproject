@@ -155,9 +155,9 @@
           $nestedData['size'] =$value['size'];
           $nestedData['category'] =$value['cate_name'];
           $nestedData['purchase_expense'] =$this->$model->getamount(round($value['purchase_expense'],2));
-          $nestedData['quantity'] =$value['quantity'];
-          $nestedData['sold_quantity'] = $value['totalQuantity'];
-          $nestedData['total_left_quantity'] =$value['quantity']-$value['totalQuantity'];
+          $nestedData['quantity'] =round($value['quantity'],2);
+          $nestedData['sold_quantity'] = round($value['totalQuantity'],2);
+          $nestedData['total_left_quantity'] =round($value['quantity']-$value['totalQuantity'],2);
           $nestedData['amount'] =$this->$model->getamount(round($value['amount'],2));
           $data[] = $nestedData;
           $srNo++;

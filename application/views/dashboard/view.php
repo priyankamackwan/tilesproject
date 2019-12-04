@@ -450,8 +450,8 @@
 													</td>
 													<td ><?php echo $value['cate_name'];?></td>					
 													</td>
-													<td class="text-right"><?php echo $value['totalQuantity'];?></td>
-													<td class="text-right		"><?php echo $value['quantity']-$value['totalQuantity'];?></td>
+													<td class="text-right"><?php echo ROUND($value['totalQuantity'],2);?></td>
+													<td class="text-right		"><?php echo ROUND($value['quantity']-$value['totalQuantity'],2);?></td>
 												</tr>
 												<?php
 													}
