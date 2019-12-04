@@ -85,9 +85,6 @@
                 }
             }
             if(!empty($client_type)){
-            	if($client_type==4){
-            		$client_type=0;
-            	}
                 if($where == null){
                     $where .= 'client_type = "'.$client_type.'"';
                 }else{
