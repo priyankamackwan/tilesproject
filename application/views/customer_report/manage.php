@@ -2,6 +2,8 @@
 	$this->load->view('include/header');
     $this->load->view('include/leftsidemenu');
 ?>
+<?php
+/*
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
@@ -11,6 +13,7 @@
 			/*	echo $this->session->flashdata('edit_profile');
                                 echo $this->session->flashdata('Change_msg');
                                 echo $this->session->flashdata($this->msgDisplay); */
+                                /*
 			?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -55,7 +58,8 @@
 		</div>
 	</div>
 </div> -->
-
+*/
+?>
 <!-- Main Container start-->
 <div class="content-wrapper">
     <section class="content-header">

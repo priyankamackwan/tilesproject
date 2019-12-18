@@ -10,6 +10,8 @@
         $client_name=str_replace('_', '&',str_replace('-', ' ',$_GET['client_name']));
     }
 ?>
+<?php
+/*
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
@@ -67,7 +69,8 @@
 		</div>
 	</div>
 </div> -->
-
+*/
+?>
 <!-- Main Container start-->
 <div class="content-wrapper">
     <section class="content-header">
@@ -80,7 +83,8 @@
 
 
     <section class="content">
-
+        <?php
+        /*
         <!--<div class="box"> <-- Balance Box Start ---
             <div class="box-body table-responsive">
                 <div class="col-md-12 no-padding">
@@ -117,7 +121,8 @@
                 </div>
             </div>
         </div> <-- Balance Box End --->
-
+        */
+        ?>
         <div class="box"> <!-- Balance Box Start --->
             <div class="box-body table-responsive">
                 <div class="col-md-12 no-padding">
@@ -156,6 +161,8 @@
 
         <div class="box">
             <div class="box-body">
+                <?php
+                /*
                 <!-- <div class="row form-group">
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <table class="pull-right">
@@ -179,6 +186,8 @@
                         </table>
                     </div>
                 </div> -->
+                */
+                ?>
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="row">

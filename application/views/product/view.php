@@ -13,7 +13,8 @@
             $choosen_subcategories[]=$val['sub_cat_id'];
         }
 ?>
-
+<?php
+/*
 <!-- page content -->
         <!-- <div class="right_col" role="main">
 		<div class="row">
@@ -130,6 +131,8 @@
             </div>
             </div>
             </div> -->
+*/
+?>
         <!-- /page content -->
 <!-- -------------------------------new design------------------------------- -->
 <style type="text/css">

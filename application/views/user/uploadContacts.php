@@ -6,7 +6,8 @@
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
 ?>
-
+<?php
+/*
 <!-- page content -->
         <!-- <div class="right_col" role="main">
 		<div class="row">
@@ -48,7 +49,8 @@
             </div>
             </div> -->
         <!-- /page content -->
-
+*/
+?>
 <div class="content-wrapper">
 
 	<!-- Content Header (Page header) -->
@@ -67,7 +69,7 @@
 
         <div class="box box-primary">
           <div class="box-header">
-            <!-- <h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3> -->
+            <!-- <h3 class="box-title"><?php //echo $btn.' '.$this->msgName;?></h3> -->
             <h3 class="box-title">Import Contacts</h3>
           </div>
 
