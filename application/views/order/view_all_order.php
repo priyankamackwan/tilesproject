@@ -8,7 +8,8 @@ echo '<pre>';print_r($result);exit;
 	error_reporting(0);
 
 ?>
-
+<?php
+/*
 <!-- page content -->
         <!-- <div class="right_col" role="main">
 		<div class="row">
@@ -196,7 +197,8 @@ echo '<pre>';print_r($result);exit;
             </div>
             </div> -->
         <!-- /page content -->
-
+*/
+?>
         <!-- Main Container start-->
 <div class="content-wrapper">
 

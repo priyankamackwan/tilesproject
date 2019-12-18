@@ -21,6 +21,8 @@ foreach ($total_balance_quantity as $key => $value) {
     float: right;
   }
 </style>
+<?php
+/*
 <!-- page content -->
      <!-- <div class="right_col" role="main">
             <div class="clearfix"></div>
@@ -76,7 +78,8 @@ foreach ($total_balance_quantity as $key => $value) {
 		</div>
 	</div>
 </div> -->
-
+*/
+?>
 <!-- Main Container start-->
 <div class="content-wrapper">
       <section class="content-header">

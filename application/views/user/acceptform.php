@@ -6,7 +6,8 @@
 	error_reporting(0);
 //  print_r($user_data);die();
 ?>
-
+<?php
+/*
 <!-- page content -->
         <!-- <div class="right_col" role="main">
 		<div class="row">
@@ -76,7 +77,8 @@
             </div>
             </div> -->
         <!-- /page content -->
-
+*/
+?>
 <div class="content-wrapper">
 
   <!-- Content Header (Page header) -->
