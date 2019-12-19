@@ -16,7 +16,7 @@
         }
 
         // All order Data.
-        function get_OrderDatatables($limit = NUll,$start = NUll,$order = NUll,$dir = NUll,$where = NULL) {
+        function get_OrderDatatables($limit = NUll,$start = NUll,$order = NUll,$dir = NUll,$where = NULL,$user_id = NUll,$role = NUll) {
             
            //$this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$this->orders_table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID');
 
@@ -49,6 +49,20 @@
                 $this->db->order_by($this->orders_table . '.id', "desc");
             }
 
+            if($user_id!="" && $role!="")
+            {
+                if($role==1)
+                {
+                    $this->db->where($this->orders_table.'.user_id',$user_id);
+                    $this->db->where($this->orders_table.'.admin_id',0);
+                }
+                else
+                {
+                    $this->db->where($this->orders_table.'.admin_id',$user_id);
+                    $this->db->where($this->orders_table.'.admin_id!=',0);
+                }
+            }
+
             $this->db->where($this->orders_table.'.is_deleted',0);
 
             $this->db->where($this->users_table.'.is_deleted',0);
@@ -56,6 +70,10 @@
             $this->db->where($this->users_table.'.status',1);
 
             $this->db->group_by($this->orders_table.'.id');
+
+            /*$this->db->get();
+
+            echo $this->db->last_query();*/
 
             $allorderData = $this->db->get();
             

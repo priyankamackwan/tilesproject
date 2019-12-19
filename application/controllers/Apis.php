@@ -12,8 +12,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                     
                     $this->model = "My_model";
                     parent::__construct();
+                    $this->load->model('orders_model', 'orders_model');
                     $headers = apache_request_headers();
-                 
                     $actionName = $this->router->fetch_method();
                     $this->db->select('*');
                     $this->db->where('value', $headers['Xapi']);
@@ -1399,6 +1399,138 @@ $pdf2->Output($fileNL_invoice, 'F');
                     // Returning back the response in JSON
                     echo json_encode($response);
                     exit();
+                }
+
+
+                public function getOrderList() // New function created on 19th dec 2019
+                { 
+                    $data = $_POST;
+                    if ( (isset($data['user_id']) && (!empty($data['user_id']))) && (isset($data['role']) && (!empty($data['role']))) ) 
+                    {
+                        $totalData = $this->orders_model->get_OrderDatatables('','','','','',$data['user_id'],$data['role']);
+
+                        if (sizeof($totalData)>0) // data found
+                        {
+                            $response['status'] = 'success';
+                            $response['data'] = $totalData;
+                        } 
+                        else 
+                        {
+                            $response['status'] = 'failure';
+                            $response['message'] = 'No order details found';
+                        }
+                    } 
+                    else // If any of the mandatory parameters are missing
+                    {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide user id';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+                }
+
+                public function getOrderListDetail() // Order detail by id created on 19th dec 2019 
+                {
+                    $data = $_POST;
+                    if ( (isset($data['order_id']) && (!empty($data['order_id'])))) 
+                    {
+                        $model = $this->model;
+                        $id=$data['order_id'];
+
+                        $data ['result'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
+   
+                        $multipleWhere = ['order_id' => $id];
+                        $this->db->where($multipleWhere);
+                        $data['Product'] = $this->db->get("order_products")->result_array();
+                        for($k=0;$k<count($data['Product']);$k++) {
+                            $productIdArray = $data['Product'][$k]['product_id'];
+                            $multipleWhere2 = ['id' => $productIdArray];
+                        $this->db->where($multipleWhere2);
+                        $productData= $this->db->get("products")->result_array();
+                        $productNameArray[] = $productData[0]['name'];
+                        $designNoArray[] = $productData[0]['design_no'];
+                        $quantityArray[]= $data['Product'][$k]['quantity'];
+                        $priceArray[]= $data['Product'][$k]['price'];
+                        }
+
+                        $data['productData'] = array();
+                        for($p=0;$p<count($productNameArray);$p++) {
+                            $data['productData'][$p]['name']= $productNameArray[$p];
+                            $data['productData'][$p]['design_no']= $designNoArray[$p];
+                             $data['productData'][$p]['quantity']= $quantityArray[$p];
+                             $data['productData'][$p]['price']= $priceArray[$p];
+                        }
+                       
+                        $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
+                        $this->db->where($multipleWhere2);
+                        $data['User'] = $this->db->get("users")->result_array();
+
+                        $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
+
+                        //Check status and assign string value
+  
+                        if($data['result']['0']->status==0)
+                        {
+                            $delivery_status = "Pending";
+                        }
+                        else if($data['result']['0']->status==1)
+                        {
+                            $delivery_status = "In Progress";
+                        }
+                        else if($data['result']['0']->status==2)
+                        {
+                            $delivery_status = "Completed";
+                        }
+
+                        if($data['result']['0']->invoice_status==0)
+                        {
+                            $invoice_status = "Unpaid";
+                        }
+                        else if($data['result']['0']->invoice_status==1)
+                        {
+                            $invoice_status = "Paid";
+                        }
+
+                        // replace status and date format in array
+                        $data['result']['0']->status = $delivery_status;
+                        $data['result']['0']->delivery_date = $this->$model->date_conversion($data['result']['0']->delivery_date,'d/m/Y H:i:s',' ');
+
+                        $data['result']['0']->invoice_status = $invoice_status;
+                        $data['result']['0']->payment_date = $this->$model->date_conversion($data['result']['0']->payment_date,'d/m/Y H:i:s',' ');
+
+                        $data['result']['0']->created = $this->$model->date_conversion($data['result']['0']->created,'d/m/Y H:i:s',' ');
+
+                        $data['User']['0']['created'] = $this->$model->date_conversion($data['User']['0']['created'],'d/m/Y H:i:s',' ');
+                        $data['User']['0']['last_activity'] = $this->$model->date_conversion($data['User']['0']['last_activity'],'d/m/Y H:i:s',' ');
+                        $data['User']['0']['modified'] = $this->$model->date_conversion($data['User']['0']['modified'],'d/m/Y H:i:s',' ');
+
+                        for($i=0;$i<sizeof($data['Product']);$i++) // change date format in product
+                        {
+                            $data['Product'][$i]['created'] = $this->$model->date_conversion($data['Product'][$i]['created'],'d/m/Y H:i:s',' ');
+                        }
+
+                        if (sizeof($data)>0) // data found
+                        {
+                            $response['status'] = 'success';
+                            $response['data'] = $data;
+                        } 
+                        else 
+                        {
+                            $response['status'] = 'failure';
+                            $response['message'] = 'No order details found';
+                        }
+                    } 
+                    else // If any of the mandatory parameters are missing
+                    {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Please provide order id';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+
+                    
                 }
                 
                 public function getOrderDetail() {
