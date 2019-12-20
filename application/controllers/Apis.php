@@ -1424,7 +1424,6 @@ $pdf2->Output($fileNL_invoice, 'F');
                             {
                                 $totalData['result'][$k]['payment_status']="Paid";
                                 $totalData['result'][$k]['created']=$this->$model->date_conversion($totalData['result'][$k]['created'],'d/m/Y H:i:s',' ');
-                                $totalData['result'][$k]['payment_status']="Unpaid";
                             }
                             unset($totalData['result'][$k]['invoice_status']);
                         }
