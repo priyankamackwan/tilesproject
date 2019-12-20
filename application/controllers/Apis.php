@@ -1415,14 +1415,15 @@ $pdf2->Output($fileNL_invoice, 'F');
                         {
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
-                                $totalData['result'][$k]['invoice_status']="Unpaid";
+                                $totalData['result'][$k]['payment_status']="Unpaid";
                                 $totalData['result'][$k]['created']=$this->$model->date_conversion($totalData['result'][$k]['created'],'d/m/Y H:i:s',' ');
                             }
                             else
                             {
-                                $totalData['result'][$k]['invoice_status']="Paid";
+                                $totalData['result'][$k]['payment_status']="Paid";
                                 $totalData['result'][$k]['created']=$this->$model->date_conversion($totalData['result'][$k]['created'],'d/m/Y H:i:s',' ');
                             }
+                            unset($totalData['result'][$k]['invoice_status']);
                         }
 
                         if (sizeof($totalData)>0) // data found
@@ -1497,7 +1498,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         //$this->db->where($multipleWhere2);
 
                         // remove unused key from additionalDetail
-                        $removeKeys1 = array('id', 'user_id','tax','total_price','invoice_no','modified','is_deleted','admin_id','sales_expense');
+                        $removeKeys1 = array('id', 'user_id','tax','total_price','modified','is_deleted','admin_id','sales_expense');
 
                         $data['additionalDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
 
@@ -1536,28 +1537,31 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         if($data['additionalDetail']['0']->invoice_status==0)
                         {
-                            $invoice_status = "Unpaid";
+                            $payment_status = "Unpaid";
                         }
                         else if($data['additionalDetail']['0']->invoice_status==1)
                         {
-                            $invoice_status = "Paid";
+                            $payment_status = "Paid";
                         }
 
                         // replace status and date format in array
-                        $data['additionalDetail']['0']->status = $delivery_status;
+                        $data['additionalDetail']['0']->delivery_status = $delivery_status;
                         $data['additionalDetail']['0']->delivery_date = $this->$model->date_conversion($data['additionalDetail']['0']->delivery_date,'d/m/Y H:i:s',' ');
 
-                        $data['additionalDetail']['0']->invoice_status = $invoice_status;
+                        $data['additionalDetail']['0']->payment_status = $payment_status;
                         $data['additionalDetail']['0']->payment_date = $this->$model->date_conversion($data['additionalDetail']['0']->payment_date,'d/m/Y H:i:s',' ');
 
                         $data['additionalDetail']['0']->created = $this->$model->date_conversion($data['additionalDetail']['0']->created,'d/m/Y H:i:s',' ');
 
+                        // remove key so delivery and payment status not repeated again
+                        unset($data['additionalDetail'][0]->invoice_status);
+                        unset($data['additionalDetail'][0]->status);
 
                         // remove unused key from orderDetail
 
                         $data['orderDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
                         
-                        $removeKeys = array('lpo_no','do_no','sales_expense','cargo','cargo_number','location','mark','placed_by','admin_id','customer_lpo','invoice_status','status','payment_date','delivery_date','is_deleted','created','modified');
+                        $removeKeys = array('lpo_no','do_no','sales_expense','cargo','cargo_number','location','mark','placed_by','admin_id','customer_lpo','invoice_status','status','payment_date','delivery_date','is_deleted','created','modified','invoice_no');
 
                         foreach($removeKeys as $key) 
                         {
