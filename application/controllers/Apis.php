@@ -1409,6 +1409,21 @@ $pdf2->Output($fileNL_invoice, 'F');
                     {
                         $totalData = $this->orders_model->get_OrderDatatables('','','','','',$data['user_id'],$data['role']);
 
+                        $model = $this->model; //Load My_model
+
+                        for($k=0;$k<sizeof($totalData['result']);$k++)
+                        {
+                            if($totalData['result'][$k]['invoice_status']==0)
+                            {
+                                $totalData['result'][$k]['invoice_status']="Unpaid";
+                                $totalData['result'][$k]['created']=$this->$model->date_conversion($totalData['result'][$k]['created'],'d/m/Y H:i:s',' ');
+                            }
+                            else
+                            {
+                                $totalData['result'][$k]['invoice_status']="Paid";
+                            }
+                        }
+
                         if (sizeof($totalData)>0) // data found
                         {
                             $response['status'] = 'success';
@@ -1435,7 +1450,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $data = $_POST;
                     if ( (isset($data['order_id']) && (!empty($data['order_id'])))) 
                     {
-                        $model = $this->model;
+                        $model = $this->model; //Load My_model
                         $id=$data['order_id'];
 
                         $data ['result'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
