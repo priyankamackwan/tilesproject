@@ -1449,11 +1449,11 @@ $pdf2->Output($fileNL_invoice, 'F');
                 public function getOrderListDetail() // Order detail by id created on 19th dec 2019 
                 {
                     $data = $_POST;
-                    if ( (isset($data['order_id']) && (!empty($data['order_id']))) && (isset($data['user_id']) && (!empty($data['user_id'])))) 
+                    if ((isset($data['order_id']) && (!empty($data['order_id'])))) 
                     {
-                        $user_id = $data['user_id'];
+                        $user_id = $this->user_id;
                         $model = $this->model; //Load My_model
-                        $id=$data['order_id'];
+                        $id = $data['order_id'];
 
                         $multipleWhere = ['order_id' => $id];
                         $this->db->where($multipleWhere);
@@ -1496,6 +1496,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         //$multipleWhere2 = ['id' => $user_id];
                         //$this->db->where($multipleWhere2);
 
+                        // remove unused key from additionalDetail
                         $removeKeys1 = array('id', 'user_id','tax','total_price','invoice_no','modified','is_deleted','admin_id','sales_expense');
 
                         $data['additionalDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
@@ -1507,7 +1508,6 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         if($data['additionalDetail'][0]->placed_by=="admin") // if order is placed by admin then display admin name
                         {
-                            //$adminid=$data['orderDetail'][0]->admin_id;
                             $adminDbData=$this->db->select('first_name,last_name')->from('admin_users')->where('id',$user_id)->get()->result_array();
                             $placed_by_name=$adminDbData[0]['first_name'].' '.$adminDbData[0]['last_name'];
                         }
@@ -1517,9 +1517,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $placed_by_name=$userDbData[0]['contact_person_name'];
                         }
 
-                        $data['additionalDetail'][0]->placed_by=$placed_by_name;
-   
-                        
+                        $data['additionalDetail'][0]->placed_by=$placed_by_name; // give placed by name
 
                         //Check status and assign string value
   
@@ -1555,6 +1553,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $data['additionalDetail']['0']->created = $this->$model->date_conversion($data['additionalDetail']['0']->created,'d/m/Y H:i:s',' ');
 
 
+                        // remove unused key from orderDetail
+
                         $data['orderDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
                         
                         $removeKeys = array('lpo_no','do_no','sales_expense','cargo','cargo_number','location','mark','placed_by','admin_id','customer_lpo','invoice_status','status','payment_date','delivery_date','is_deleted','created','modified');
@@ -1564,9 +1564,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                            unset($data['orderDetail'][0]->$key);
                         }
 
-                        //array_push($data['orderDetail']['0']->bagTotal,$bagTotal);
-                        $data['orderDetail']['0']->bagTotal = $bagTotal;
-                        //echo $bagTotal;
+                        $data['orderDetail']['0']->bagTotal = $bagTotal; // add bagtotal in array
 
                         if (sizeof($data)>0) // data found
                         {
