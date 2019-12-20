@@ -1413,6 +1413,8 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         for($k=0;$k<sizeof($totalData['result']);$k++) // replace status code to string
                         {
+                            $totalData['result'][$k]['total_price']=number_format($totalData['result'][$k]['total_price'],2); 
+
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
                                 $totalData['result'][$k]['payment_status']="Unpaid";
@@ -1422,6 +1424,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             {
                                 $totalData['result'][$k]['payment_status']="Paid";
                                 $totalData['result'][$k]['created']=$this->$model->date_conversion($totalData['result'][$k]['created'],'d/m/Y H:i:s',' ');
+                                $totalData['result'][$k]['payment_status']="Unpaid";
                             }
                             unset($totalData['result'][$k]['invoice_status']);
                         }
@@ -1479,7 +1482,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $data['productData'][$p]['name']= $productNameArray[$p];
                             $data['productData'][$p]['design_no']= $designNoArray[$p];
                             $data['productData'][$p]['quantity']= $quantityArray[$p];
-                            $data['productData'][$p]['price']= $priceArray[$p];
+                            $data['productData'][$p]['price']= number_format($priceArray[$p],2);
                             $data['productData'][$p]['size']= $sizeArray[$p];
 
                             if(file_exists("assets/uploads/".$imageArray[$p]))
@@ -1568,7 +1571,10 @@ $pdf2->Output($fileNL_invoice, 'F');
                            unset($data['orderDetail'][0]->$key);
                         }
 
-                        $data['orderDetail']['0']->bagTotal = $bagTotal; // add bagtotal in array
+                        $data['orderDetail']['0']->tax = number_format($data['orderDetail']['0']->tax,2);
+                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price,2);
+
+                        $data['orderDetail']['0']->bagTotal = number_format($bagTotal,2); // add bagtotal in array
 
                         if (sizeof($data)>0) // data found
                         {
