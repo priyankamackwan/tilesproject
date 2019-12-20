@@ -1449,82 +1449,124 @@ $pdf2->Output($fileNL_invoice, 'F');
                 public function getOrderListDetail() // Order detail by id created on 19th dec 2019 
                 {
                     $data = $_POST;
-                    if ( (isset($data['order_id']) && (!empty($data['order_id'])))) 
+                    if ( (isset($data['order_id']) && (!empty($data['order_id']))) && (isset($data['user_id']) && (!empty($data['user_id'])))) 
                     {
+                        $user_id = $data['user_id'];
                         $model = $this->model; //Load My_model
                         $id=$data['order_id'];
 
-                        $data ['result'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
-   
                         $multipleWhere = ['order_id' => $id];
                         $this->db->where($multipleWhere);
-                        $data['Product'] = $this->db->get("order_products")->result_array();
-                        for($k=0;$k<count($data['Product']);$k++) {
-                            $productIdArray = $data['Product'][$k]['product_id'];
+                        $dataProduct = $this->db->get("order_products")->result_array();
+                        for($k=0;$k<count($dataProduct);$k++) 
+                        {
+                            $productIdArray = $dataProduct[$k]['product_id'];
                             $multipleWhere2 = ['id' => $productIdArray];
-                        $this->db->where($multipleWhere2);
-                        $productData= $this->db->get("products")->result_array();
-                        $productNameArray[] = $productData[0]['name'];
-                        $designNoArray[] = $productData[0]['design_no'];
-                        $quantityArray[]= $data['Product'][$k]['quantity'];
-                        $priceArray[]= $data['Product'][$k]['price'];
+                            $this->db->where($multipleWhere2);
+                            $productData= $this->db->get("products")->result_array();
+                            $productNameArray[] = $productData[0]['name'];
+                            $designNoArray[] = $productData[0]['design_no'];
+                            $quantityArray[]= $dataProduct[$k]['quantity'];
+                            $priceArray[]= $dataProduct[$k]['price'];
+                            $sizeArray[]= $productData[0]['size'];
+                            $imageArray[]= $productData[0]['image'];
                         }
 
                         $data['productData'] = array();
-                        for($p=0;$p<count($productNameArray);$p++) {
+                        for($p=0;$p<count($productNameArray);$p++)
+                        {
                             $data['productData'][$p]['name']= $productNameArray[$p];
                             $data['productData'][$p]['design_no']= $designNoArray[$p];
-                             $data['productData'][$p]['quantity']= $quantityArray[$p];
-                             $data['productData'][$p]['price']= $priceArray[$p];
+                            $data['productData'][$p]['quantity']= $quantityArray[$p];
+                            $data['productData'][$p]['price']= $priceArray[$p];
+                            $data['productData'][$p]['size']= $sizeArray[$p];
+
+                            if(file_exists("assets/uploads/".$imageArray[$p]))
+                            {
+                                $data['productData'][$p]['image']= base_url()."assets/uploads/".$imageArray[$p];
+                            }
+                            else
+                            {
+                                $data['productData'][$p]['image']= base_url()."assets/default.png";
+                            }
+
+                            $bagTotal+=$priceArray[$p];
                         }
                        
-                        $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
-                        $this->db->where($multipleWhere2);
-                        $data['User'] = $this->db->get("users")->result_array();
+                        //$multipleWhere2 = ['id' => $user_id];
+                        //$this->db->where($multipleWhere2);
 
-                        $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
+                        $removeKeys1 = array('id', 'user_id','tax','total_price','invoice_no','modified','is_deleted','admin_id','sales_expense');
+
+                        $data['additionalDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
+
+                        foreach($removeKeys1 as $key) 
+                        {
+                           unset($data['additionalDetail'][0]->$key);
+                        }
+
+                        if($data['additionalDetail'][0]->placed_by=="admin") // if order is placed by admin then display admin name
+                        {
+                            //$adminid=$data['orderDetail'][0]->admin_id;
+                            $adminDbData=$this->db->select('first_name,last_name')->from('admin_users')->where('id',$user_id)->get()->result_array();
+                            $placed_by_name=$adminDbData[0]['first_name'].' '.$adminDbData[0]['last_name'];
+                        }
+                        else
+                        {
+                            $userDbData=$this->db->select('contact_person_name')->from('users')->where('id',$user_id)->get()->result_array();
+                            $placed_by_name=$userDbData[0]['contact_person_name'];
+                        }
+
+                        $data['additionalDetail'][0]->placed_by=$placed_by_name;
+   
+                        
 
                         //Check status and assign string value
   
-                        if($data['result']['0']->status==0)
+                        if($data['additionalDetail']['0']->status==0)
                         {
                             $delivery_status = "Pending";
                         }
-                        else if($data['result']['0']->status==1)
+                        else if($data['additionalDetail']['0']->status==1)
                         {
                             $delivery_status = "In Progress";
                         }
-                        else if($data['result']['0']->status==2)
+                        else if($data['additionalDetail']['0']->status==2)
                         {
                             $delivery_status = "Completed";
                         }
 
-                        if($data['result']['0']->invoice_status==0)
+                        if($data['additionalDetail']['0']->invoice_status==0)
                         {
                             $invoice_status = "Unpaid";
                         }
-                        else if($data['result']['0']->invoice_status==1)
+                        else if($data['additionalDetail']['0']->invoice_status==1)
                         {
                             $invoice_status = "Paid";
                         }
 
                         // replace status and date format in array
-                        $data['result']['0']->status = $delivery_status;
-                        $data['result']['0']->delivery_date = $this->$model->date_conversion($data['result']['0']->delivery_date,'d/m/Y H:i:s',' ');
+                        $data['additionalDetail']['0']->status = $delivery_status;
+                        $data['additionalDetail']['0']->delivery_date = $this->$model->date_conversion($data['additionalDetail']['0']->delivery_date,'d/m/Y H:i:s',' ');
 
-                        $data['result']['0']->invoice_status = $invoice_status;
-                        $data['result']['0']->payment_date = $this->$model->date_conversion($data['result']['0']->payment_date,'d/m/Y H:i:s',' ');
+                        $data['additionalDetail']['0']->invoice_status = $invoice_status;
+                        $data['additionalDetail']['0']->payment_date = $this->$model->date_conversion($data['additionalDetail']['0']->payment_date,'d/m/Y H:i:s',' ');
 
-                        $data['result']['0']->created = $this->$model->date_conversion($data['result']['0']->created,'d/m/Y H:i:s',' ');
+                        $data['additionalDetail']['0']->created = $this->$model->date_conversion($data['additionalDetail']['0']->created,'d/m/Y H:i:s',' ');
 
-                        $data['User']['0']['created'] = $this->$model->date_conversion($data['User']['0']['created'],'d/m/Y H:i:s',' ');
-                        $data['User']['0']['last_activity'] = $this->$model->date_conversion($data['User']['0']['last_activity'],'d/m/Y H:i:s',' ');
-                        $data['User']['0']['modified'] = $this->$model->date_conversion($data['User']['0']['modified'],'d/m/Y H:i:s',' ');
 
-                        for($i=0;$i<sizeof($data['Product']);$i++) // change date format in product
+                        $data['orderDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
+                        
+                        $removeKeys = array('lpo_no','do_no','sales_expense','cargo','cargo_number','location','mark','placed_by','admin_id','customer_lpo','invoice_status','status','payment_date','delivery_date','is_deleted','created','modified');
+
+                        foreach($removeKeys as $key) 
                         {
-                            $data['Product'][$i]['created'] = $this->$model->date_conversion($data['Product'][$i]['created'],'d/m/Y H:i:s',' ');
+                           unset($data['orderDetail'][0]->$key);
                         }
+
+                        //array_push($data['orderDetail']['0']->bagTotal,$bagTotal);
+                        $data['orderDetail']['0']->bagTotal = $bagTotal;
+                        //echo $bagTotal;
 
                         if (sizeof($data)>0) // data found
                         {
