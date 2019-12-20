@@ -1411,7 +1411,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         $model = $this->model; //Load My_model
 
-                        for($k=0;$k<sizeof($totalData['result']);$k++)
+                        for($k=0;$k<sizeof($totalData['result']);$k++) // replace status code to string
                         {
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
@@ -1421,6 +1421,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             else
                             {
                                 $totalData['result'][$k]['invoice_status']="Paid";
+                                $totalData['result'][$k]['created']=$this->$model->date_conversion($totalData['result'][$k]['created'],'d/m/Y H:i:s',' ');
                             }
                         }
 
