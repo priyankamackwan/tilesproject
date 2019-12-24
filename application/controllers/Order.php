@@ -189,7 +189,7 @@
             }
 
             // Get all records count. 
-            $totalData = $this->orders_model->get_OrderDatatables('','','','',$where,$whereDate);
+            $totalData = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate);
 
             $totalFiltered = $totalData['count'];
 
@@ -235,7 +235,7 @@
             if($where == NULL){
                 
                 // Get all records with limit for data table.
-                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'',$whereDate);
+                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate);
                 // Get all Amounts of Invoice.
                 $totalAmounts = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange);
 
@@ -246,10 +246,10 @@
             }else{
                 
                 // Get all records with limit and using search for data table.
-                $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,$whereDate);
+                $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,'','',$whereDate);
                       
                 // Get all records count using search for data table.
-                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where,$whereDate);
+                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate);
 
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion

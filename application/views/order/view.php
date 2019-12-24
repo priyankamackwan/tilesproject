@@ -431,7 +431,8 @@
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                     <?php 
-                    echo $this->My_model->date_conversion($result[0]->delivery_date,'d/m/Y h:i A',' ');
+                    /*echo $this->My_model->date_conversion($result[0]->delivery_date,'d/m/Y h:i A',' ');*/
+                    echo $this->My_model->date_conversion($result[0]->delivery_date,'d/m/Y H:i:s',' ');
                     ?>
                 </div>
               </div>
@@ -462,7 +463,7 @@
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <div class='input-group date' id='payment_datetimepicker'>
                       <?php 
-                      echo $this->My_model->date_conversion($result[0]->payment_date,'d/m/Y h:i A',' ');
+                      echo $this->My_model->date_conversion($result[0]->payment_date,'d/m/Y H:i:s',' ');
                       //echo date('d/m/Y h:i A',strtotime($result[0]->payment_date));
                       ?>
                   </div>
