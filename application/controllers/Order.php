@@ -66,7 +66,7 @@
         }
                 
 		public function server_data() {
-
+            $model = $this->model;
 
             // Column array
             $columnArray = array(
@@ -106,7 +106,9 @@
 
             $tableFieldData = [];
 
-            $where = '';
+            $where =  $whereDate ='';
+            //date change 
+            $whereDatechange='no';
 
             // User username for filter
             $username = $this->input->post('userName');
@@ -143,11 +145,14 @@
 
             if(!empty($salesOrderDate) && isset($_POST['startdate'])){
 
-                if($where == null){
-                    $where .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
-                }else{
-                    $where .= ' AND (DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
-                }
+                $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+                $whereDatechange='yes';
+            }else{
+                //Current month start-end date
+                $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+                $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+                $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
             }
             
             if(!empty($invoiceStatus)){
@@ -184,7 +189,7 @@
             }
 
             // Get all records count. 
-            $totalData = $this->orders_model->get_OrderDatatables();
+            $totalData = $this->orders_model->get_OrderDatatables('','','','',$where,$whereDate);
 
             $totalFiltered = $totalData['count'];
 
@@ -230,21 +235,28 @@
             if($where == NULL){
                 
                 // Get all records with limit for data table.
-                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir);
+                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'',$whereDate);
                 // Get all Amounts of Invoice.
-                $totalAmounts = $this->orders_model->get_invoiceAmount('');
+                $totalAmounts = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange);
+
+                //Get current Month amount
+
+                $totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount('');
                 
             }else{
                 
                 // Get all records with limit and using search for data table.
-                $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where);
+                $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,$whereDate);
                       
                 // Get all records count using search for data table.
-                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where);
+                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where,$whereDate);
 
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
-                $totalAmounts = $this->orders_model->get_invoiceAmount($where);
+                $totalAmounts = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange);
+                //Get current Month amount
+
+                $totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
             }
 
             // Initialized blank array to push data of data table.
@@ -375,6 +387,28 @@
             }else{
                 $unpaidAmount=0;
             }
+
+            //default vat * amount current month
+            $cMInvoiceVat=$cMPaidVat=$cMUnpaidVat=0;
+            // print_r($totalAmountsCurrentMonth);
+            if(isset($totalAmountsCurrentMonth->invoiceAmount) && $totalAmountsCurrentMonth->invoiceAmount!='' && $totalAmountsCurrentMonth->invoiceAmount!=0){
+                    $cMInvoiceVat=$totalAmountsCurrentMonth->invoiceAmount * Vat / 100;
+                    $cMInvoiceAmount=$this->$model->getamount(round($totalAmountsCurrentMonth->invoiceAmount + $cMInvoiceVat,2));
+            }else{
+                $cMInvoiceAmount=0;
+            }
+            if(isset($totalAmountsCurrentMonth->paidAmount) && $totalAmountsCurrentMonth->paidAmount!='' && $totalAmountsCurrentMonth->paidAmount!=0){
+                    $cMPaidVat=$totalAmountsCurrentMonth->paidAmount * Vat / 100;
+                    $cMPaidAmount=$this->$model->getamount(round($totalAmountsCurrentMonth->paidAmount + $cMPaidVat,2));
+            }else{
+                $cMPaidAmount=0;
+            }
+            if(isset($totalAmountsCurrentMonth->unpaidAmount) && $totalAmountsCurrentMonth->unpaidAmount!='' && $totalAmountsCurrentMonth->unpaidAmount!=0){
+                    $cMUnpaidVat=$totalAmountsCurrentMonth->unpaidAmount * Vat / 100;
+                    $cMUnpaidAmount=$this->$model->getamount(round($totalAmountsCurrentMonth->unpaidAmount + $cMUnpaidVat,2));
+            }else{
+                $cMUnpaidAmount=0;
+            }
             // Combine all data in json
             $json_data = array(
                 "draw"            => intval($this->input->post('draw')),  
@@ -383,7 +417,11 @@
                 "data"            => $data,
                 "invoiceAmount"   => $invoiceAmount,
                 "paidAmount"      => $paidAmount,
-                "unpaidAmount"    => $unpaidAmount
+                "unpaidAmount"    => $unpaidAmount,
+                "cmtotalBalance" => $cMInvoiceAmount,
+                "cmcreditBalance"    => $cMPaidAmount,
+                "cmdebitBalance"  => $cMUnpaidAmount
+
             );
 
             // Convert all data into Json

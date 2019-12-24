@@ -15,8 +15,8 @@
             // $this->load->database();
         }
 
-        // All order Data.
-        function get_OrderDatatables($limit = NUll,$start = NUll,$order = NUll,$dir = NUll,$where = NULL) {
+        // All order Data. date condition change
+        function get_OrderDatatables($limit = NUll,$start = NUll,$order = NUll,$dir = NUll,$where = NULL,$whereDate = NULL) {
             
            //$this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$this->orders_table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID');
 
@@ -35,6 +35,11 @@
                 
                 // Filter condition to add where
                 $this->db->where($where);
+            }
+            if(!empty($whereDate)){
+                
+                // Filter condition to add where
+                $this->db->where($whereDate);
             }
 
             // Record Limit
@@ -67,10 +72,11 @@
             return array('result' => $result,'count' => $count);
         }
 
-        // Get invoice paid total and unpaid amount
-        public function get_invoiceAmount($where)
+        // Get invoice paid total and unpaid amount and current date
+        public function get_invoiceAmount($where=null,$whereDate=null,$whereDatechange='no')
         {
-            $this->db->select('SUM('.$this->orders_table.'.total_price) as invoiceAmount,SUM(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,SUM(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+            $cMFirstDay=$cMLastDay='';
+            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
 
             $this->db->from($this->orders_table);
             $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
@@ -86,9 +92,51 @@
                 // Filter condition to add where
                 $this->db->where($where);
             }
+            
+            if($whereDatechange=='yes' && !empty($whereDate)){
+                $this->db->where($whereDate);
+            }
+            $this->db->group_by($this->orders_table.'.id');
+            $subQuery =  $this->db->get_compiled_select();
+            
+            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
+                from('('.$subQuery.') as tess');
 
             $Amountdata = $this->db->get()->row();
+            return $Amountdata;
+        }
+        // Get invoice paid total and unpaid amount and current date
+        public function currentmonth_invoiceAmount($where=null)
+        {
+            $cMFirstDay=$cMLastDay='';
+            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+
+            $this->db->from($this->orders_table);
+            $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
+
+            $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->orders_table.'.id');
+            $this->db->where($this->orders_table.'.is_deleted',0);
+
+            $this->db->where($this->users_table.'.is_deleted',0);
+
+            $this->db->where($this->users_table.'.status',1);
+            if(!empty($where)){
+                
+                // Filter condition to add where
+                $this->db->where($where);
+            }
+            $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+            $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+            $whereData .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+            $this->db->where($whereData);
+            $this->db->group_by($this->orders_table.'.id');
+            $subQuery =  $this->db->get_compiled_select();
             
+            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
+                from('('.$subQuery.') as tess');
+            $Amountdata = $rr->get()->row();
+            // echo $this->db->last_query();
             return $Amountdata;
         }
         //Fetch for all order in edit page

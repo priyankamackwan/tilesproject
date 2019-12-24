@@ -130,31 +130,56 @@
                     <div class="col-md-2">
                          <h4>Your Balance :</h4>
                     </div>
+                    <div class="col-md-10">
+                        <div class="row col-md-12">
+                            <div class="col-md-4">
+                                <h4 class="text-center"><b>Total Invoice Amount</b><br>(<?php echo date('F');?>)</h4>
+                                <p class="text-center" style="font-size: 17px;">
+                                    <span id="cmtotalBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
+                                    </span>
+                                </p>
+                            </div>
 
-                    <div class="col-md-3">
-                        <h4 class="text-center"><b>Total Invoice Amount</b></h4>
-                        <p class="text-center" style="font-size: 17px;">
-                            <span id="creditBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
-                            </span>
-                        </p>
+                            <div class="col-md-4">
+                                <h4 class="text-center" style="color:#00c400"><b>Total Paid Amount</b><br>(<?php echo date('F');?>)</h4>
+                                <p class="text-center" style="font-size: 17px;">
+                                    <span id="cmcreditBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b><br>(<?php echo date('F');?>)</h4>
+                                <p class="text-center" style="font-size: 17px;">
+                                    <span id="cmdebitBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-center"><b>Total Invoice Amount</b></h4>
+                                <p class="text-center" style="font-size: 17px;">
+                                    <span id="creditBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h4 class="text-center" style="color:#00c400"><b>Total Paid Amount</b></h4>
+                                <p class="text-center" style="font-size: 17px;">
+                                    <span id="totalBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b></h4>
+                                <p class="text-center" style="font-size: 17px;">
+                                    <span id="debitBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="col-md-3">
-                        <h4 class="text-center" style="color:#00c400"><b>Total Paid Amount</b></h4>
-                        <p class="text-center" style="font-size: 17px;">
-                            <span id="totalBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="col-md-3">
-                        <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b></h4>
-                        <p class="text-center" style="font-size: 17px;">
-                            <span id="debitBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
-                            </span>
-                        </p>
-                    </div>
-
                 </div>
             </div>
         </div> <!-- Balance Box End --->
@@ -259,7 +284,7 @@
                                         <!-- Date Range Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <div class="input-group">
-                                                <input class="form-control" placeholder="Orede Date" required="" id="salesOrderDate" name="salesOrderDate" type="text">
+                                                <input class="form-control" placeholder="Order Date" required="" id="salesOrderDate" name="salesOrderDate" type="text">
                                                 <label class="input-group-addon btn" for="salesOrderDate">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
@@ -498,24 +523,29 @@
                       return row;
                   }          
                   // Add row data 
-                  var r1 = Addrow(1, [{ key: 'G', value: 'Total Invoice Amount  ' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>'  }]);
-                  var r2 = Addrow(2, [{ key: 'G', value: 'Total Paid Amount' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>'  }]);
+                  var r1 = Addrow(1, [{ key: 'G', value: 'Total Invoice Amount (<?php echo date('F');?>)  ' }, { key: 'I', value: $("#cmtotalBalance").html()  }]);
+                  var r2 = Addrow(2, [{ key: 'G', value: 'Total Paid Amount (<?php echo date('F');?>)' }, { key: 'I', value: $("#cmcreditBalance").html()  }]);
                   
-                  var r3 = Addrow(3, [{ key: 'G', value: 'Total Unpaid Amount' }, { key: 'H', value: '<?php echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>'  }]);
+                  var r3 = Addrow(3, [{ key: 'G', value: 'Total Unpaid Amount (<?php echo date('F');?>)' }, { key: 'I', value: $("#cmdebitBalance").html()  }]);
 
-                  var r4 = Addrow(4, [{ key: '', value: '' }]);
-
-                  var r5 = Addrow(5, [{ key: 'A', value: 'Filters' }]);
-
-                  var r6 = Addrow(6, [{ key: 'A', value: 'Company Name: ' }, { key: 'B', value: $("#clientList option:selected").html() }]);
-
-                  var r7 = Addrow(7, [{ key: 'A', value: 'Item: ' },{ key: 'B', value: $("#productsList option:selected").html() },]);
-
-                  var r8 = Addrow(8, [{ key: 'A', value: 'Date: ' },{ key: 'B', value: $("#salesOrderDate").val() }]);
+                  var r4 = Addrow(4, [{ key: 'G', value: 'Total Invoice Amount  ' }, { key: 'I', value: $("#creditBalance").html()  }]);
+                  var r5 = Addrow(5, [{ key: 'G', value: 'Total Paid Amount' }, { key: 'I', value: $("#totalBalance").html()  }]);
                   
-                  var r9 = Addrow(9, [{ key: 'A', value: 'Invoice Status: ' },{ key: 'B', value: $("#invoiceStatus option:selected").html() }]);
+                  var r6 = Addrow(6, [{ key: 'G', value: 'Total Unpaid Amount' }, { key: 'I', value: $("#debitBalance").html() }]);
 
-                  var r10 = Addrow(10, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
+                  var r7 = Addrow(7, [{ key: '', value: '' }]);
+
+                  var r8 = Addrow(8, [{ key: 'A', value: 'Filters' }]);
+
+                  var r9 = Addrow(9, [{ key: 'A', value: 'Company Name: ' }, { key: 'B', value: $("#clientList option:selected").html() }]);
+
+                  var r10 = Addrow(10, [{ key: 'A', value: 'Item: ' },{ key: 'B', value: $("#productsList option:selected").html() },]);
+
+                  var r11 = Addrow(11, [{ key: 'A', value: 'Date: ' },{ key: 'B', value: $("#salesOrderDate").val() }]);
+                  
+                  var r12 = Addrow(12, [{ key: 'A', value: 'Invoice Status: ' },{ key: 'B', value: $("#invoiceStatus option:selected").html() }]);
+
+                  var r13 = Addrow(13, [{ key: 'A', value: 'Status: ' },{ key: 'B', value: $("#status option:selected").html() }]);
                   
                   var sheetData = sheet.getElementsByTagName('sheetData')[0];
 
@@ -582,6 +612,9 @@
               $("#creditBalance").html(settings.json.invoiceAmount);
               $("#totalBalance").html(settings.json.paidAmount);
               $("#debitBalance").html(settings.json.unpaidAmount);
+              $("#cmcreditBalance").html(settings.json.cmcreditBalance);
+              $("#cmtotalBalance").html(settings.json.cmtotalBalance);
+              $("#cmdebitBalance").html(settings.json.cmdebitBalance);
             },   
 		});
 
