@@ -226,7 +226,7 @@
             }
             $this->db->where('payment_history.order_id',$order_id);
             $this->db->or_where('payment_history.order_id',null);
-            $this->db->where('Orders.id',$order_id);
+            $this->db->where('orders.id',$order_id);
             $Amountdata = $this->db->get()->row();
             return $Amountdata;
         }
