@@ -219,7 +219,7 @@
         function payment_history($order_id,$payment_id,$action){
             $this->db->select('orders.id,sum(payment_history.amount) as paidamount,orders.total_price');
             $this->db->from('orders');
-            $this->db->join('payment_history','payment_history.order_id=orders.id');
+            $this->db->join('payment_history','payment_history.order_id=orders.id','left');
             if(isset($action) && $action!='' && $action=="edit"){
                 $this->db->select('payment_history.id as payment_id,payment_history.amount,payment_history.payment_mode,reference,payment_history.payment_date');
                 $this->db->where('payment_history.id',$payment_id);
