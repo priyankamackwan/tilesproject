@@ -707,4 +707,12 @@ function delete_payment(order_id,payment_id){
 	}
 
 }
+$('#datatables1').dataTable({
+		"ordering": false,
+		"bPaginate": false,
+		"lengthChange": false,
+		"info": false,
+		"searching": false,
+		"scrollX": true
+	} );
 </script>
