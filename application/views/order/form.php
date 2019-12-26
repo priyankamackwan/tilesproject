@@ -3,6 +3,7 @@
 	$this->load->view('include/leftsidemenu');	
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	error_reporting(0);
+	$totalPaidAmount=0;
 ?>
 <?php
 	if($action == 'insert')
@@ -21,6 +22,9 @@ a:hover, a:active, a:focus {
 .width_80{
 		width: 80px;
 	}
+	table#datatables1 th {
+    vertical-align: middle;
+    }
 	
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   	.width_80{
@@ -99,9 +103,10 @@ a:hover, a:active, a:focus {
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
-							$username=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=[];
+							$username=$total_price=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
+								$total_price=$value['total_price'];
 								$sales_expense=$value['sales_expense'];
 								$status=$value['status'];
 								$invoice_status=$value['invoice_status'];
@@ -273,7 +278,127 @@ a:hover, a:active, a:focus {
 			                  </select>
 			                </div>
 			              </div>
+			              <div class="form-group">
+			                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+			                  Payment Details :
+			                </label>
+			              </div>
+			              <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
+			              	<thead>
+				                    <tr class="">
+				                      <th style="text-align: center">Date</th>
+				                      <th style="text-align: center">Payment Mode</th>
+				                      <th style="text-align: center">Reference Id</th>
+				                      <th style="text-align: center">Amount</th>
+				                      <th style="text-align: center">Action</th>
+				                    </tr>
+			                	</thead>
+			              <?php
+			              if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
+			              ?>
+				              
+				              	
+			                	<tbody>
+			                    <?php
+			                    
+			                    foreach ($payment_history as $key => $payment_history_val) {
+			                    	$totalPaidAmount +=$payment_history_val['amount'];
+			                    	$delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($payment_history_val['id']));
+			                    ?>
+				                    <tr>
+					                    <td style="text-align: center" >
+					                    	<?php
+					                    	if(isset($payment_history_val['payment_date']) && $payment_history_val['payment_date']!=''){
+					                    		echo date('d/m/Y',strtotime($payment_history_val['payment_date']));
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td>
+					                    	<?php
+					                    	if(isset($payment_history_val['payment_mode']) && $payment_history_val['payment_mode']!=''){
+					                    		echo $payment_history_val['payment_mode'];
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td>
+					                    	<?php
+					                    	if(isset($payment_history_val['reference']) && $payment_history_val['reference']!=''){
+					                    		echo $payment_history_val['reference'];
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td style="text-align: right;">
+					                    	<?php
+					                    	if(isset($payment_history_val['amount']) && $payment_history_val['amount']!=''){
+					                    		echo $this->My_model->getamount(round($payment_history_val['amount'],2));
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td style="text-align: center;">
+					                    	<a onclick="edit_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
+					                    </td>
+				                	</tr>
+			                    <?php
+			                    }
+			                    ?> 
+			                	</tbody>
+			                	<tbody style="border-top: 2px solid black;">
+			                		<tr style="border: 1px solid black;">
+			                			<td></td>
+			                			<td></td>
+			                			<th>Total</th>
+			                			<td style="text-align: right;"><?php echo $this->My_model->getamount(round($totalPaidAmount,2));?></td>
+			                			<td></td>
+			                		</tr>
+			                		<tr>
+			                			<td></td>
+			                			<td></td>
+			                			<th>Balance</th>
+			                			<td style="text-align: right;">
+			                				<?php			                				
+			                				echo $this->My_model->getamount(round($total_price-$totalPaidAmount,2));
+			                				?>
+			                			</td>
+			                			<td></td>
+			                		</tr>
+			                		<tr>
+			                			<td></td>
+			                			<td></td>
+			                			<th>Total Invoice Amount</th>
+			                			<td style="text-align: right;">
+			                				<?php			                				
+			                				echo $this->My_model->getamount(round($total_price,2));
+			                				?>
+			                			</td>
+			                			<td></td>
+			                		</tr>
+			                	</tbody>
+			                
+		                <?php
+		            	}else{
+		            		echo '<tbody>
+
+              <tr class="odd"><td valign="top" colspan="9" class="dataTables_empty">No data available in table</td></tr></tbody>';
+		            	}
+		                ?>
+		                </table>
 			              <!-- payment date -->
+			              <?php
+			              $mpayment=$total_price-$totalPaidAmount;
+			              if($mpayment > 0){
+			              	?>
+			              <div class="form-group" id="id_payment_date" <?php /*if ($invoice_status == 0) { ?> style="display: none;" <?php }*/?> >
+			              	<label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">			              	
+				              	<a href="javascript:void(0);" title="Make Payment" id="prevousData" class="btn btn-success" onclick="make_payment(<?php echo $id;?>)">
+				              		Make Payment
+				              	</a>
+			              	</label>
+			              </div>
+			              <?php
+			          		}
+			              ?>
+			              <?php
+			              /*
 			              <div class="form-group" id="id_payment_date" <?php if ($invoice_status != 1) { ?> style="display: none;" <?php } ?> > 
 				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
 				                  Payment Date :
@@ -294,6 +419,8 @@ a:hover, a:active, a:focus {
 				                  </div>
 				                </div>
 				              </div>
+				              */
+				              ?>
 				              <input type="hidden" name="username" value="<?php echo $username;?>">
 				              <input type="hidden" name="price" value="<?php echo $price;?>">
 				              <input type="hidden" name="client_type" value="<?php echo $client_type;?>">
@@ -312,7 +439,23 @@ a:hover, a:active, a:focus {
 		</div>
 	</section>
 </div>
-
+<div class="modal fade" id="payment_popup" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header btn-primary">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title text-center headername" id="mySmallModalLabel">Update Payment</h4>
+        </div>
+        <div class="modal-body" id="prevMonthLeaveDatahtml">
+         
+        </div>
+<!--         <div class="modal-footer">
+        	
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+ -->      </div>
+    </div>
+  </div>
 <?php
 	$this->load->view('include/footer');
 ?>
@@ -351,6 +494,31 @@ $(document).ready(function (){
 			name: {
 				required: "Please Enter Item Group",
 				remote: "Item Group Name Exist"
+			}
+			
+		},
+		submitHandler: function(form){
+			form.submit();
+		}
+	});
+	$('#demo-form3').validate({
+		errorClass:"text-danger",
+		rules:{
+			paymentdate:{
+				required: true,
+			},
+			amount:{
+				noSpace: true,
+				required: true,
+			},   
+		},
+		messages: {
+                                    
+			paymentdate: {
+				required: "Please select Payment Date",
+			},
+			amount: {
+				required: "Please Enter Amount",
 			}
 			
 		},
@@ -433,12 +601,14 @@ $("#delivery_gly").click(function() {
 // Reselect payment date 
 $("#payment_gly").click(function() {
 
-  $("#txt_paymentdate").val('');
+  $("#paymentdate").val('');
   $('#payment_datetimepicker').datetimepicker({
     locale: 'ru',
       autoclose: true
   });
 });
+
+
 $("#delivery_status").change(function(){
 
   if($("#delivery_status").val()=="2") // if status is completed then display datetimepicker
@@ -451,16 +621,90 @@ $("#delivery_status").change(function(){
     $("#txt_deliverydate").val('');
   }
 });
-$("#payment_status").change(function(){
+// $("#payment_status").change(function(){
+//   if($("#payment_status").val()=="1") // if status is paid then display datetimepicker
+//   {
+//     document.getElementById("id_payment_date").style.display = "block";
+//   }
+//   else
+//   {
+//     document.getElementById("id_payment_date").style.display = "none";
+//     $("#txt_paymentdate").val('');
+//   }
+// });
+//Add popup fpr paymnet
+function make_payment(order_id,action='insert'){
+	if(order_id != ''){
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url().$this->controller."/ajax_order_payment/" ?>",
+        data : {order_id:order_id,action:action},
+        dataType: "json",
+        success : function (data){
+          if(data != ''){
+          	if(action=='insert'){
+          		$(".headername").html('Add Payment');
+          	}
+              $("#prevMonthLeaveDatahtml").html(data);
+              $("#payment_popup").modal('show');
+          }else{
+            $("#prevMonthLeaveDatahtml").html("<h1> This is new User </h1>");
+            $("#payment_popup").modal('show');
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(thrownError+ '\r\n' +xhr.statusText+ '\r\n' +xhr.responseText);
+        }
+      });
+    }else{
+      $("#prevMonthLeaveDatahtml").html("<h1> There is some Error </h1>");
+      $("#payment_popup").modal('show');
+    }
 
-  if($("#payment_status").val()=="1") // if status is paid then display datetimepicker
-  {
-    document.getElementById("id_payment_date").style.display = "block";
-  }
-  else
-  {
-    document.getElementById("id_payment_date").style.display = "none";
-    $("#txt_paymentdate").val('');
-  }
-});
+}
+function edit_payment(order_id,payment_id,action='edit'){
+	if(order_id != ''){
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url().$this->controller."/ajax_order_payment/" ?>",
+        data : {order_id:order_id,payment_id:payment_id,action:action,totalPaidAmount:<?php echo $totalPaidAmount;?>},
+        dataType: "json",
+        success : function (data){
+          if(data != ''){
+              $("#prevMonthLeaveDatahtml").html(data);
+              $("#payment_popup").modal('show');
+          }else{
+            $("#payment_popup").modal('show');
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(thrownError+ '\r\n' +xhr.statusText+ '\r\n' +xhr.responseText);
+        }
+      });
+    }else{
+      $("#prevMonthLeaveDatahtml").html("<h1> There is some Error </h1>");
+      $("#payment_popup").modal('show');
+    }
+
+}
+function delete_payment(order_id,payment_id){
+	if(order_id != '' && payment_id!=''){
+		if (confirm("Sure you want to delete this Payment ??")){
+	      $.ajax({
+	        type : "POST",
+	        url : "<?php echo base_url().$this->controller."/removePayment/" ?>",
+	        data : {order_id:order_id,payment_id:payment_id},
+	        dataType: "json",
+	        success : function (data){
+	        	alert(data.message);  
+	        	window.location.reload();
+	        }
+	        
+	      });
+	    }else{
+	    	alert('There is some Error..'); 
+  	    }
+	}
+
+}
 </script>

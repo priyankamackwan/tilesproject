@@ -566,6 +566,7 @@
             $data['primary_id'] = $this->primary_id;
             $data['controller'] = $this->controller;
             $data['activeProducts'] = $this->db->get("products")->result_array();
+            $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
             $data['id']=$id;
             $model = $this->model;
             $data ['result'] = $this->orders_model->view_all_order($id);
@@ -626,7 +627,7 @@
 
                         //$this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
                         $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
-
+            $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
@@ -1298,6 +1299,12 @@ $pdf->Output($do_no, 'I');
 
             $where = array($this->primary_id=>$id);
             $this->$model->update($this->table,$data,$where);
+            //IF invoice status is unpaid all order payment data is deleted from payment hisory table
+            if(isset($invoice_status) && $invoice_status!='' && $invoice_status==0){
+                $this->db->where('order_id', $id);
+                $delete=$this->db->delete('payment_history');
+            }
+            //End Of delete payment hisory
             $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$username.' has been updated successfully!</div>');
             redirect($this->controller);
         }
@@ -1473,6 +1480,87 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
             //Add meta title
             $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
 			$this->load->view($this->view.'/uploadOrders',$data);
+    }
+    //Popup for partially paid order
+    //payment_id is payment history table id
+    function ajax_order_payment($payment_id=null,$action='insert',$totalPaidAmount=null){
+        $order_id=$this->input->post('order_id');
+        $payment_id=$this->input->post('payment_id');
+        $action=$this->input->post('action');
+        $totalPaidAmount=$this->input->post('totalPaidAmount');
+        
+        $data['payment_history']=$this->orders_model->payment_history($order_id,$payment_id,$action);
+        $data['order_id']=$order_id;
+        $data['totalPaidAmount']=$totalPaidAmount;
+        $paymentHistoryHtml = $this->load->view($this->view.'/payment_history',$data,true);
+        echo json_encode($paymentHistoryHtml);
+        exit();
+    }
+    //inserted and Update payment history  data  payment_history table
+    function update_order_payment(){
+        $action=$payment_id='';
+        $message="Something went wrong..Try after sometime";
+        $status='fail';
+        
+        $payment_id=$this->input->post('payment_id');
+        $action=$this->input->post('action');
+        $paymentdate=$this->input->post('paymentdate');
+        $payment_date=date('Y-m-d H:i:s',strtotime($paymentdate));
+        $payment_mode=$this->input->post('payment_mode');
+        $reference=$this->input->post('reference');
+        $amount=$this->input->post('amount');
+        $id=$this->input->post('id');
+        if(isset($action) && $action!='' && $action='edit'){
+            $paymentDataUdpate = array(      
+                        'order_id' => $id,
+                        'amount' => $amount,
+                        'reference'=>$reference,
+                        'payment_mode' =>  $payment_mode,
+                        'payment_date' => $payment_date,
+                );
+            $this->db->where('order_id',$id);
+            $this->db->where('id',$payment_id);
+            $this->db->update('payment_history',$paymentDataUdpate);
+            $message='Payment Updated Successfully'; 
+            $status='success';
+
+        }else{
+            $paymentData = array(      
+                        'order_id' => $id,
+                        'amount' => $amount,
+                        'payment_mode' =>  $payment_mode,
+                        'reference'=>$reference,
+                        'payment_date' => $payment_date,
+                );
+            $insert=$this->db->insert('payment_history',$paymentData);
+            if($insert){
+                $message='Payment Done Successfully'; 
+                $status='success';
+            }
+        }
+        $orderPayment_date=array('payment_date' => $payment_date);
+        $this->db->where('id',$id);
+        $this->db->update('orders',$orderPayment_date);
+        echo json_encode(array("status"=>$status,"message"=>$message));
+        exit;
+    }
+    
+    // Delete payment from history from table payment_history
+    public function removePayment() {  
+        $message="Something went wrong..Try after sometime";
+        $status='fail';
+
+        $payment_id=$this->input->post('payment_id');
+        $order_id=$this->input->post('order_id');
+        $this->db->where('id', $payment_id);
+        $this->db->where('order_id', $order_id);
+        $delete=$this->db->delete('payment_history');
+        if($delete){
+            $message='Payment Deleted Successfully..'; 
+            $status='success';   
+        }        
+        echo json_encode(array("status"=>$status,"message"=>$message));
+        exit;
     }
                 
 	}

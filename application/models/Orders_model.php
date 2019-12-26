@@ -159,7 +159,7 @@
         }
         //Fetch for all order in edit page
         function view_all_order($id){
-            $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark');
+            $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark,orders.total_price');
 
             // Select from Order prodcuts main table
             $this->db->from('order_products');
@@ -215,5 +215,21 @@
             $data=$this->db->get()->row();
             return $data; 
         }
+        //payment_id is payment history and join from ordertbale for total price
+        function payment_history($order_id,$payment_id,$action){
+            $this->db->select('orders.id,sum(payment_history.amount) as paidamount,orders.total_price');
+            $this->db->from('orders');
+            $this->db->join('payment_history','payment_history.order_id=orders.id');
+            if(isset($action) && $action!='' && $action=="edit"){
+                $this->db->select('payment_history.id as payment_id,payment_history.amount,payment_history.payment_mode,reference,payment_history.payment_date');
+                $this->db->where('payment_history.id',$payment_id);
+            }
+            $this->db->where('payment_history.order_id',$order_id);
+            $this->db->or_where('payment_history.order_id',null);
+            $this->db->where('Orders.id',$order_id);
+            $Amountdata = $this->db->get()->row();
+            return $Amountdata;
+        }
+
         
     }

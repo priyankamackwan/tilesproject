@@ -472,8 +472,121 @@
               <?php
                 }   
               ?>
+              <?php
+                    if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
+                    ?>
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+                        Payment Details :
+                      </label>
+                    </div>     
+              <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
+                      <thead>
+                            <tr class="">
+                              <th style="text-align: center">Date</th>
+                              <th style="text-align: center">Payment Mode</th>
+                              <th style="text-align: center">Reference Id</th>
+                              <th style="text-align: center">Amount</th>
+                              <!-- <th style="text-align: center">Action</th> -->
+                            </tr>
+                        </thead>
+                    <?php
+                    if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
+                    ?>
+                      
+                        
+                        <tbody>
+                          <?php
+                          
+                          foreach ($payment_history as $key => $payment_history_val) {
+                            $totalPaidAmount +=$payment_history_val['amount'];
+                            $delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($payment_history_val['id']));
+                          ?>
+                            <tr>
+                              <td style="text-align: center" >
+                                <?php
+                                if(isset($payment_history_val['payment_date']) && $payment_history_val['payment_date']!=''){
+                                  echo date('d/m/Y',strtotime($payment_history_val['payment_date']));
+                                }
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                if(isset($payment_history_val['payment_mode']) && $payment_history_val['payment_mode']!=''){
+                                  echo $payment_history_val['payment_mode'];
+                                }
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                if(isset($payment_history_val['reference']) && $payment_history_val['reference']!=''){
+                                  echo $payment_history_val['reference'];
+                                }
+                                ?>
+                              </td>
+                              <td style="text-align: right;">
+                                <?php
+                                if(isset($payment_history_val['amount']) && $payment_history_val['amount']!=''){
+                                  echo $this->My_model->getamount(round($payment_history_val['amount'],2));
+                                }
+                                ?>
+                              </td>
+                              <?php
+                              /*
+                              <td style="text-align: center;">
+                                <a onclick="edit_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
+                              </td>
+                              */
+                              ?>
+                          </tr>
+                          <?php
+                          }
+                          ?> 
+                        </tbody>
+                        <tbody style="border-top: 2px solid black;">
+                          <tr style="border: 1px solid black;">
+                            <td></td>
+                            <td></td>
+                            <th>Total</th>
+                            <td style="text-align: right;"><?php echo $this->My_model->getamount(round($totalPaidAmount,2));?></td>
+                            <!-- <td></td> -->
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th>Balance</th>
+                            <td style="text-align: right;">
+                              <?php                             
+                              echo $this->My_model->getamount(round($result[0]->total_price-$totalPaidAmount,2));
+                              ?>
+                            </td>
+                            <!-- <td></td> -->
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th>Total Invoice Amount</th>
+                            <td style="text-align: right;">
+                              <?php                             
+                              echo $this->My_model->getamount(round($result[0]->total_price,2));
+                              ?>
+                            </td>
+                            <!-- <td></td> -->
+                          </tr>
+                        </tbody>
+                      
+                    <?php
+                  }else{
+                    echo '<tbody>
 
+              <tr class="odd"><td valign="top" colspan="9" class="dataTables_empty">No data available in table</td></tr></tbody>';
+                  }
+                    ?>
+                    </table>
 
+<?php
+                          }
+                          ?> 
               <!-- <div class="box-footer">
                 <input type="submit" class="btn btn-primary" value="Submit">
               </div> -->
