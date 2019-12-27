@@ -384,7 +384,7 @@ a:hover, a:active, a:focus {
 			              if($mpayment > 0){
 			              	?>
 			              <div class="form-group" id="id_payment_date" <?php /*if ($invoice_status == 0) { ?> style="display: none;" <?php }*/?> >
-			              	<label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">			              	
+			              	<label class="control-label col-md-3 col-sm-12 col-xs-12 pull-right" for="payment_date">			              	
 				              	<a href="javascript:void(0);" title="Make Payment" id="prevousData" class="btn btn-success" onclick="make_payment(<?php echo $id;?>)">
 				              		Make Payment
 				              	</a>
