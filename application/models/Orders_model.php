@@ -230,6 +230,44 @@
             $Amountdata = $this->db->get()->row();
             return $Amountdata;
         }
+        //fetch paid amount from payment history
+        function get_payment_history($type='all',$where=null,$whereDate=null,$whereDatechange='no'){
+            $this->db->select('payment_history.amount as historypaidamount');
+            $this->db->from('payment_history');
+            $this->db->join('orders','orders.id=payment_history.order_id','left');
+            $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
+            $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->orders_table.'.id');
+            $this->db->where($this->orders_table.'.is_deleted',0);
+
+            $this->db->where($this->users_table.'.is_deleted',0);
+
+            $this->db->where($this->users_table.'.status',1);
+            if(!empty($where)){
+                
+                // Filter condition to add where
+                $this->db->where($where);
+            }
+            if(isset($type) && $type!='' && $type=="current"){
+                $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+                $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+                $whereData .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+                $this->db->where($whereData);
+            }else{
+                if($whereDatechange=='yes' && !empty($whereDate)){
+                    $this->db->where($whereDate);
+                }
+            }
+            $this->db->group_by('payment_history.id');
+            $subQuery =  $this->db->get_compiled_select();
+            $rr=$this->db->select('sum(historypaidamount) as historypaidamount')->
+                from('('.$subQuery.') as tess');
+
+            $Amountdata = $rr->get()->row();
+            return $Amountdata;
+            
+
+        }
 
         
     }

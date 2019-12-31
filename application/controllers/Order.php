@@ -60,8 +60,7 @@
 
 
             // Get all Amounts of Invoice. 
-            $data['totalAmounts'] = $this->orders_model->get_invoiceAmount('');
-        
+            //$data['totalAmounts'] = $this->orders_model->get_payment_history('');
 			$this->load->view($this->view.'/manage',$data);
         }
                 
@@ -242,6 +241,11 @@
                 //Get current Month amount
 
                 $totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount('');
+
+                //total history paymnet amount
+                $get_payment_history_all = $this->orders_model->get_payment_history('all','',$whereDate,$whereDatechange);
+
+                $get_payment_history_currnet_month = $this->orders_model->get_payment_history('current','','','');
                 
             }else{
                 
@@ -254,9 +258,16 @@
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
                 $totalAmounts = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange);
+
+
                 //Get current Month amount
 
                 $totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
+
+                //total history paymnet amount
+                $get_payment_history_all = $this->orders_model->get_payment_history('all',$where,$whereDate,$whereDatechange);
+
+                $get_payment_history_currnet_month = $this->orders_model->get_payment_history('current',$where,'','');
             }
 
             // Initialized blank array to push data of data table.
@@ -368,59 +379,77 @@
                 }
             }
             //default vat * amount
-            $invoiceVat=$paidVat=$unpaidVat=0;
+            $invoiceVat=$paidVat=$unpaidVat=$historypaidamountVat=0;
             if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
                     $invoiceVat=$totalAmounts->invoiceAmount * Vat / 100;
-                    $invoiceAmount=$this->$model->getamount(round($totalAmounts->invoiceAmount + $invoiceVat,2));
+                    $invoiceAmount=$totalAmounts->invoiceAmount + $invoiceVat;
             }else{
                 $invoiceAmount=0;
             }
             if(isset($totalAmounts->paidAmount) && $totalAmounts->paidAmount!='' && $totalAmounts->paidAmount!=0){
                     $paidVat=$totalAmounts->paidAmount * Vat / 100;
-                    $paidAmount=$this->$model->getamount(round($totalAmounts->paidAmount + $paidVat,2));
+                    $paidAmount=$totalAmounts->paidAmount + $paidVat;
             }else{
                 $paidAmount=0;
             }
             if(isset($totalAmounts->unpaidAmount) && $totalAmounts->unpaidAmount!='' && $totalAmounts->unpaidAmount!=0){
                     $unpaidVat=$totalAmounts->unpaidAmount * Vat / 100;
-                    $unpaidAmount=$this->$model->getamount(round($totalAmounts->unpaidAmount + $unpaidVat,2));
+                    $unpaidAmount=$totalAmounts->unpaidAmount + $unpaidVat;
             }else{
                 $unpaidAmount=0;
             }
-
+            if(isset($get_payment_history_all->historypaidamount) && $get_payment_history_all->historypaidamount!='' && $get_payment_history_all->historypaidamount!=0){
+                    $historypaidamountVat=$get_payment_history_all->historypaidamount * Vat / 100;
+                    $paidhistoryAmount=$get_payment_history_all->historypaidamount + $historypaidamountVat;
+            }else{
+                $paidhistoryAmount=0;
+            }
+            //All order unpaid amount
+            $totalUnapidAmount=$invoiceAmount-$paidhistoryAmount;
             //default vat * amount current month
             $cMInvoiceVat=$cMPaidVat=$cMUnpaidVat=0;
             // print_r($totalAmountsCurrentMonth);
             if(isset($totalAmountsCurrentMonth->invoiceAmount) && $totalAmountsCurrentMonth->invoiceAmount!='' && $totalAmountsCurrentMonth->invoiceAmount!=0){
                     $cMInvoiceVat=$totalAmountsCurrentMonth->invoiceAmount * Vat / 100;
-                    $cMInvoiceAmount=$this->$model->getamount(round($totalAmountsCurrentMonth->invoiceAmount + $cMInvoiceVat,2));
+                    $cMInvoiceAmount=$totalAmountsCurrentMonth->invoiceAmount + $cMInvoiceVat;
             }else{
                 $cMInvoiceAmount=0;
             }
             if(isset($totalAmountsCurrentMonth->paidAmount) && $totalAmountsCurrentMonth->paidAmount!='' && $totalAmountsCurrentMonth->paidAmount!=0){
                     $cMPaidVat=$totalAmountsCurrentMonth->paidAmount * Vat / 100;
-                    $cMPaidAmount=$this->$model->getamount(round($totalAmountsCurrentMonth->paidAmount + $cMPaidVat,2));
+                    $cMPaidAmount=$totalAmountsCurrentMonth->paidAmount + $cMPaidVat;
             }else{
                 $cMPaidAmount=0;
             }
             if(isset($totalAmountsCurrentMonth->unpaidAmount) && $totalAmountsCurrentMonth->unpaidAmount!='' && $totalAmountsCurrentMonth->unpaidAmount!=0){
                     $cMUnpaidVat=$totalAmountsCurrentMonth->unpaidAmount * Vat / 100;
-                    $cMUnpaidAmount=$this->$model->getamount(round($totalAmountsCurrentMonth->unpaidAmount + $cMUnpaidVat,2));
+                    $cMUnpaidAmount=$totalAmountsCurrentMonth->unpaidAmount + $cMUnpaidVat;
             }else{
                 $cMUnpaidAmount=0;
             }
+            if(isset($get_payment_history_currnet_month->historypaidamount) && $get_payment_history_currnet_month->historypaidamount!='' && $get_payment_history_currnet_month->historypaidamount!=0){
+                    $curnthistorypaidamountVat=$get_payment_history_currnet_month->historypaidamount * Vat / 100;
+                    $curnthistorypaidamountAmount=$get_payment_history_currnet_month->historypaidamount + $curnthistorypaidamountVat;
+            }else{
+                $curnthistorypaidamountAmount=0;
+            }
+            //currnet month  order unpaid amount
+            $totalcUnapidAmount=$cMInvoiceAmount-$curnthistorypaidamountAmount;
+            
             // Combine all data in json
             $json_data = array(
                 "draw"            => intval($this->input->post('draw')),  
                 "recordsTotal"    => intval($totalData['count']),  
                 "recordsFiltered" => intval($totalFiltered),
                 "data"            => $data,
-                "invoiceAmount"   => $invoiceAmount,
-                "paidAmount"      => $paidAmount,
-                "unpaidAmount"    => $unpaidAmount,
-                "cmtotalBalance" => $cMInvoiceAmount,
-                "cmcreditBalance"    => $cMPaidAmount,
-                "cmdebitBalance"  => $cMUnpaidAmount
+                "invoiceAmount"   => $this->$model->getamount(round($invoiceAmount,2)),
+                "paidAmount"      => $this->$model->getamount(round($paidAmount,2)),
+                "unpaidAmount"    => $this->$model->getamount(round($totalUnapidAmount,2)),
+                "paidhistoryAmount"=> $this->$model->getamount(round($paidhistoryAmount,2)),
+                "cmtotalBalance" => $this->$model->getamount(round($cMInvoiceAmount,2)),
+                "cmcreditBalance"    => $this->$model->getamount(round($cMPaidAmount,2)),
+                "cmdebitBalance"  => $this->$model->getamount(round($totalcUnapidAmount,2)),
+                'curnthistorypaidamount'=> $this->$model->getamount(round($curnthistorypaidamountAmount,2))
 
             );
 

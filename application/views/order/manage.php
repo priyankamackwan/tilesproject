@@ -610,9 +610,11 @@
             "order": [[ 1, "DESC"]],  
             "drawCallback": function(settings) {
               $("#creditBalance").html(settings.json.invoiceAmount);
-              $("#totalBalance").html(settings.json.paidAmount);
+              // $("#totalBalance").html(settings.json.paidAmount);
+              $("#totalBalance").html(settings.json.paidhistoryAmount);
               $("#debitBalance").html(settings.json.unpaidAmount);
-              $("#cmcreditBalance").html(settings.json.cmcreditBalance);
+              $("#cmcreditBalance").html(settings.json.curnthistorypaidamount);
+              // $("#cmcreditBalance").html(settings.json.cmcreditBalance);
               $("#cmtotalBalance").html(settings.json.cmtotalBalance);
               $("#cmdebitBalance").html(settings.json.cmdebitBalance);
             },   
