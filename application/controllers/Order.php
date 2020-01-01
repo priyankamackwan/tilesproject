@@ -1310,6 +1310,8 @@ $pdf->Output($do_no, 'I');
             $invoice_status = $this->input->post('invoice_status');
             $delivery_date = $this->input->post('deliverydate');
             $payment_date = $this->input->post('paymentdate');
+            //total price
+            $total_price = $this->input->post('total_price');
 
             $delivery_date=date('Y-m-d H:i:s',strtotime($delivery_date));
             $payment_date=date('Y-m-d H:i:s',strtotime($payment_date));
@@ -1319,7 +1321,7 @@ $pdf->Output($do_no, 'I');
                     'invoice_status' => $invoice_status,
                     'delivery_date' => $delivery_date,
                     'payment_date' => $payment_date,
-                    'total_price'=>$total_order_price,
+                    'total_price'=>$total_price,
                     'cargo'=>$cargo,
                     'cargo_number'=>$cargo_number,
                     'location'=>$location,
@@ -1567,7 +1569,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                 $status='success';
             }
         }
-        $orderPayment_date=array('payment_date' => $payment_date);
+        $orderPayment_date=array('payment_date' => $payment_date,'invoice_status' => 1);
         $this->db->where('id',$id);
         $this->db->update('orders',$orderPayment_date);
         echo json_encode(array("status"=>$status,"message"=>$message));

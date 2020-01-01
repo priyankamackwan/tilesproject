@@ -91,7 +91,7 @@ a:hover, a:active, a:focus {
 									<div class="col-md-3 col-sm-12 col-xs-12 ">
 									</div>
 									<div class="col-md-5 col-sm-5 col-xs-5">
-										<label>Item Name (Design No)</label>
+										<label>Item Name (Design No)(Price)</label>
 									</div>
 									<div class="col-md-2 col-sm-4 col-xs-4 ">
 										<label >Quantity</label>
@@ -151,7 +151,7 @@ a:hover, a:active, a:focus {
 									        
 									            foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
 									    ?>
-									                <option value="<?php echo $activeProductsValue['id']; ?>" <?php if(isset($value['product_id']) && $value['product_id']!='' && $value['product_id']==$activeProductsValue['id']){echo 'selected';}?>><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
+									                <option value="<?php echo $activeProductsValue['id']; ?>" <?php if(isset($value['product_id']) && $value['product_id']!='' && $value['product_id']==$activeProductsValue['id']){echo 'selected';}?>><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )('.$price.')'; ?></option>
 									    <?php
 									            }
 									        }else{
@@ -178,12 +178,20 @@ a:hover, a:active, a:focus {
 							<div class="col-md-12 col-sm-12 col-xs-12 pull-right">
 									<a class="pull-right" data-toggle="tooltip" title="" data-original-title="Add more items" onclick="add_more_items();"><i class="fa fa-plus"></i> Add More Items</a>
 								</div>
+								<!-- Total price-->
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Total Price :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+									<input type="text" name="total_price" value="<?php echo $total_price;?>" class="form-control " placeholder="Enter total price" required="required">
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">User Name :</label>
 								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
 								<?php echo $username;?>
 								</div>
 							</div>
+
 							<div class="form-group">
 				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
 				                  Cargo :
