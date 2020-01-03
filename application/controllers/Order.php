@@ -378,6 +378,18 @@
                     $srNo++;
                 }
             }
+
+            //total top amount for all orders
+            // Total invoice mamount logic change invoiceAmount is tax with 0
+            $totalInvoiceAmount=$totalAmounts->invoiceAmount + $totalAmounts->invoiceAmountWithTax;
+
+            //Total paid amount from paymnet hostory table
+            $totalPaidAmount=$get_payment_history_all->historypaidamount;
+
+            //Total unpaid amount total invoice amount - total paid amount
+            $totalUnPaidAmount=$totalInvoiceAmount - $totalPaidAmount;
+
+            /*
             //default vat * amount
             $invoiceVat=$paidVat=$unpaidVat=$historypaidamountVat=0;
             if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
@@ -404,6 +416,8 @@
             }else{
                 $paidhistoryAmount=0;
             }
+            */
+            /*
             //All order unpaid amount
             $totalUnapidAmount=$invoiceAmount-$paidhistoryAmount;
             //default vat * amount current month
@@ -435,22 +449,30 @@
             }
             //currnet month  order unpaid amount
             $totalcUnapidAmount=$cMInvoiceAmount-$curnthistorypaidamountAmount;
-            
-            // Combine all data in json
+            */
+
+            //total top amount for current month orders
+            // Total invoice mamount logic change invoiceAmount is tax with 0
+            $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount + $totalAmountsCurrentMonth->invoiceAmountWithTax;
+
+            //Total paid amount from paymnet hostory table
+            $totalPaidAmountCurrentMonth=$get_payment_history_currnet_month->historypaidamount;
+
+            //Total unpaid amount total invoice amount - total paid amount
+            $totalUnPaidAmountCurrentMonth=$totalInvoiceAmountCurrentMonth - $totalPaidAmountCurrentMonth;
+
+            // Combine all data in json with top amount passed
             $json_data = array(
                 "draw"            => intval($this->input->post('draw')),  
                 "recordsTotal"    => intval($totalData['count']),  
                 "recordsFiltered" => intval($totalFiltered),
                 "data"            => $data,
-                "invoiceAmount"   => $this->$model->getamount(round($invoiceAmount,2)),
-                "paidAmount"      => $this->$model->getamount(round($paidAmount,2)),
-                "unpaidAmount"    => $this->$model->getamount(round($totalUnapidAmount,2)),
-                "paidhistoryAmount"=> $this->$model->getamount(round($paidhistoryAmount,2)),
-                "cmtotalBalance" => $this->$model->getamount(round($cMInvoiceAmount,2)),
-                "cmcreditBalance"    => $this->$model->getamount(round($cMPaidAmount,2)),
-                "cmdebitBalance"  => $this->$model->getamount(round($totalcUnapidAmount,2)),
-                'curnthistorypaidamount'=> $this->$model->getamount(round($curnthistorypaidamountAmount,2))
-
+                "invoiceAmount"   => $this->$model->getamount(round($totalInvoiceAmount,2)),
+                "paidAmount"      => $this->$model->getamount(round($totalPaidAmount,2)),
+                "unpaidAmount"    => $this->$model->getamount(round($totalUnPaidAmount,2)),
+                "totalInvoiceAmountCurrentMonth" => $this->$model->getamount(round($totalInvoiceAmountCurrentMonth,2)),
+                "totalPaidAmountCurrentMonth"    => $this->$model->getamount(round($totalPaidAmountCurrentMonth,2)),
+                "totalUnPaidAmountCurrentMonth"  => $this->$model->getamount(round($totalUnPaidAmountCurrentMonth,2)),
             );
 
             // Convert all data into Json
@@ -702,7 +724,10 @@
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
                         
-                        if ($userData[0]['client_type'] == 1) {
+                        //product price from order products table
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                       /* 
+                       if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -717,6 +742,7 @@
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
                         }
+                        */
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
@@ -737,7 +763,9 @@
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                      $vat = $subTotal* Vat/100;
+                      // $vat = $subTotal* Vat/100;
+                      //tax from order table
+                      $vat = $subTotal * $ordersData[0]['tax']/100;
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -769,7 +797,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$ordersData[0]['tax'].'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -857,7 +885,11 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
                         
-                        if ($userData[0]['client_type'] == 1) {
+                        //product price from order products table
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+
+                       /* 
+                       if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -872,6 +904,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
                         }
+                        */
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
@@ -892,7 +925,10 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                      $vat = $subTotal* Vat/100;
+                      // $vat = $subTotal * Vat/100;
+                      //tax from order table
+                      $vat = $subTotal * $ordersData[0]['tax']/100;
+                      
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -930,7 +966,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$ordersData[0]['tax'].'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -1156,14 +1192,19 @@ $pdf->Output($do_no, 'I');
             $old_product_array=$old_product_quantity=array();
             $erro_product=array();
             
-
+            //Price array for update
+            $priceArr=array();
+            
             $quantity_update=array();
 
             //Store request data in array for quantity and product 
             $product_count=$this->input->post('ordercount');
-            for($i=0;$i<=$product_count;$i++){
+            for($i=1;$i<=$product_count;$i++){
                 $p_id=$this->input->post('product_id'.$i);;
                 $quantity=$this->input->post('quantity_'.$i);
+                //Price store in array product item id wise
+                $price=$this->input->post('price_'.$i);
+                $priceArr[$p_id]=$price;
                 $product_arr[$p_id]=$p_id;
                 if(array_key_exists($p_id, $quantity_arr)){
                     $total_quantity=$quantity+$quantity_arr[$p_id];
@@ -1172,9 +1213,13 @@ $pdf->Output($do_no, 'I');
                     $quantity_arr[$p_id]=$quantity;
                 }
             }
+            
             //remove blank array exist
             $product_arr = array_filter($product_arr); 
             $quantity_arr = array_filter($quantity_arr); 
+            //price array
+            $priceArr = array_filter($priceArr); 
+            
 
             //Old order  array from database 
             $all_order=$this->orders_model->view_all_order($id);
@@ -1185,9 +1230,14 @@ $pdf->Output($do_no, 'I');
                 $old_product_quantity[$value['product_id']]=$value['quantity'];
                 $total_sold=$check_quantity->sold_quantity;
 
+                //rate form form input to update
+                $rate_type=$priceArr[$value['product_id']];
+                
+
                 // fetch quantity from product table
                 $check_quantity=$this->orders_model->check_items_quantity($value['product_id']);
                 // rate type for calculate amount
+                /*
                 if(isset($client_type) && $client_type!='' && $client_type=="cash_rate"){
 
                     $rate_type=$check_quantity->cash_rate;
@@ -1204,6 +1254,7 @@ $pdf->Output($do_no, 'I');
                         $rate_type=$check_quantity->flexible_rate;
                     
                 }
+                */
                 //Check quantity is updated or not
                 if($quantity_arr[$value['product_id']]> $value['quantity']){
                     $update_sold_quantity=$quantity_arr[$value['product_id']]-$value['quantity'];
@@ -1228,23 +1279,29 @@ $pdf->Output($do_no, 'I');
                     $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator);   
                     
                     //Update price according to client type
-                    
+                    /*
                     $price_update = array(
                             'price'=>$rate_type
                             );
                     $where_update = array('product_id'=>$$value['product_id'],'order_id'=>$id);
                     $this->My_model->update('order_products',$price_update,$where_update);
-
+                    */                    
 
                     //Update solde quantity in order product table
                     $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator,$id);
+                    
                 }/*else{
                     $this->session->set_flashdata('dispMessage','<span class="7"><div class="alert alert-danger"><strong>Some Item quantity Is Not Available</strong></div></span>');
                     redirect($this->controller.'/edit/'.$this->utility->encode($id));
                     $erro_product[$value['product_id']]=$value['product_id'];
-                } */               
+                } */ 
+                //Update price 
+                $price_update = array(
+                            'price'=>$rate_type
+                            );
+                $where_update = array('product_id'=>$value['product_id'],'order_id'=>$id);
+                $this->My_model->update('order_products',$price_update,$where_update);
             }
-
             // item removed  or delted   update sold quantity
             $array_remove=array_diff($old_product_array, $product_arr);
             if(isset($array_remove) && $array_remove!='' && count($array_remove) >0){
@@ -1271,7 +1328,11 @@ $pdf->Output($do_no, 'I');
                 foreach ($array_added as $key => $value) {
                     $check_quantity=$this->orders_model->check_items_quantity($value);
                     
+                    //rate form form input to update
+                    $rate_type=$priceArr[$value];
+
                     // rate type for calculate amount
+                    /*
                     if(isset($client_type) && $client_type!='' && $client_type=="cash_rate"){
 
                         $rate_type=$check_quantity->cash_rate;
@@ -1288,6 +1349,7 @@ $pdf->Output($do_no, 'I');
                             $rate_type=$check_quantity->flexible_rate;
                         
                     }
+                    */
                     // total of all product amount
                     $amount=$quantity_arr[$value] * $rate_type;
                     $total_order_price+=$amount;
@@ -1315,17 +1377,20 @@ $pdf->Output($do_no, 'I');
 
             $delivery_date=date('Y-m-d H:i:s',strtotime($delivery_date));
             $payment_date=date('Y-m-d H:i:s',strtotime($payment_date));
+
+            $tax= $this->input->post('tax');
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
                     'invoice_status' => $invoice_status,
                     'delivery_date' => $delivery_date,
-                    'payment_date' => $payment_date,
+                   // 'payment_date' => $payment_date,
                     'total_price'=>$total_price,
                     'cargo'=>$cargo,
                     'cargo_number'=>$cargo_number,
                     'location'=>$location,
-                    'mark'=>$mark
+                    'mark'=>$mark,
+                    'tax' =>$tax
                 );
 
             $where = array($this->primary_id=>$id);
@@ -1591,6 +1656,31 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
             $status='success';   
         }        
         echo json_encode(array("status"=>$status,"message"=>$message));
+        exit;
+    }
+    // price fetch on add items
+    function price_fetch(){
+        $message="Something went wrong..Try after sometime";
+        $status='fail';
+        //Product id from onchange event
+        $itemId=$this->input->post('itemId');
+        $client_type=$this->input->post('client_type');
+        //if client type blank default flexible rate
+        if(isset($client_type) && $client_type!=''){
+            $client_type=$client_type;
+        }else{
+            $client_type="flexible_rate";
+        }
+        
+        $this->db->select($client_type);
+        $this->db->from('products');
+        $this->db->where('id', $itemId);
+        $priceData = $this->db->get()->row();
+        if(isset($priceData) && $priceData!='' && count($priceData)> 0){
+            $message=$priceData->$client_type; 
+            $status='success';   
+        }        
+        echo json_encode(array("status"=>$status,"price"=>$message));
         exit;
     }
                 

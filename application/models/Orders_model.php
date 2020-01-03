@@ -94,7 +94,11 @@
         public function get_invoiceAmount($where=null,$whereDate=null,$whereDatechange='no')
         {
             $cMFirstDay=$cMLastDay='';
-            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+            // $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+
+            //order total price * tax
+            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price * orders.tax) as invoiceAmountWithTax,(IF('.$this->orders_table.'.tax = 0,'.$this->orders_table.'.total_price,0.00))as invoiceAmount');
+
 
             $this->db->from($this->orders_table);
             $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
@@ -117,7 +121,10 @@
             $this->db->group_by($this->orders_table.'.id');
             $subQuery =  $this->db->get_compiled_select();
             
-            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
+            // $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
+            //     from('('.$subQuery.') as tess');
+
+            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(invoiceAmountWithTax) as invoiceAmountWithTax')->
                 from('('.$subQuery.') as tess');
 
             $Amountdata = $this->db->get()->row();
@@ -127,7 +134,10 @@
         public function currentmonth_invoiceAmount($where=null)
         {
             $cMFirstDay=$cMLastDay='';
-            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+            // $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price * orders.tax) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
+
+            //order total price * tax
+            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price * orders.tax) as invoiceAmountWithTax,(IF('.$this->orders_table.'.tax = 0,'.$this->orders_table.'.total_price,0.00))as invoiceAmount');
 
             $this->db->from($this->orders_table);
             $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
@@ -151,15 +161,18 @@
             $this->db->group_by($this->orders_table.'.id');
             $subQuery =  $this->db->get_compiled_select();
             
-            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
+            // $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
+            //     from('('.$subQuery.') as tess');
+
+            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(invoiceAmountWithTax) as invoiceAmountWithTax')->
                 from('('.$subQuery.') as tess');
+                
             $Amountdata = $rr->get()->row();
-            // echo $this->db->last_query();
             return $Amountdata;
         }
         //Fetch for all order in edit page
         function view_all_order($id){
-            $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark,orders.total_price');
+            $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark,orders.total_price,orders.tax');
 
             // Select from Order prodcuts main table
             $this->db->from('order_products');
@@ -172,6 +185,8 @@
 
             $this->db->where('order_products.order_id',$id);
             
+            $this->db->order_by('order_products.order_id','asc');
+
             $allorderData = $this->db->get();
             
             $result = $allorderData->result_array();
@@ -217,7 +232,7 @@
         }
         //payment_id is payment history and join from ordertbale for total price
         function payment_history($order_id,$payment_id,$action){
-            $this->db->select('orders.id,sum(payment_history.amount) as paidamount,orders.total_price');
+            $this->db->select('orders.id,sum(payment_history.amount) as paidamount,orders.total_price,orders.tax');
             $this->db->from('orders');
             $this->db->join('payment_history','payment_history.order_id=orders.id','left');
             if(isset($action) && $action!='' && $action=="edit"){

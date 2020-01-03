@@ -492,6 +492,11 @@
                         </thead>
                     <?php
                     if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
+                      if(isset($result[0]->tax) && $result[0]->tax!='' ){
+                        $orderTax=$result[0]->total_price * $result[0]->tax /100; 
+                      }else{
+                        $orderTax=$result[0]->total_price * Vat /100; 
+                      }
                     ?>
                       
                         
@@ -557,7 +562,7 @@
                             <th>Balance</th>
                             <td style="text-align: right;">
                               <?php                             
-                              echo $this->My_model->getamount(round($result[0]->total_price-$totalPaidAmount,2));
+                              echo $this->My_model->getamount(round($result[0]->total_price + $orderTax-$totalPaidAmount,2));
                               ?>
                             </td>
                             <!-- <td></td> -->
@@ -568,7 +573,7 @@
                             <th>Total Invoice Amount</th>
                             <td style="text-align: right;">
                               <?php                             
-                              echo $this->My_model->getamount(round($result[0]->total_price,2));
+                              echo $this->My_model->getamount(round($result[0]->total_price + $orderTax,2));
                               ?>
                             </td>
                             <!-- <td></td> -->

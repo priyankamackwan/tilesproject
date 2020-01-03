@@ -28,15 +28,19 @@ a:hover, a:active, a:focus {
 	
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   	.width_80{
-		width: 80px;
+		width: 50px;
 	}
 	.dis_none{
 		display: none;
+
+	}
+	.maxwidth300{
+		    max-width: 300% !important;
 	}
 }
 @media only screen and (min-device-width:  768px) and (max-device-width: 1024px)  {
   	.width_80{
-			width: 80px;
+			width: 50px;
 	}
 	.marginright_20px{
 		margin-right: 20px;
@@ -47,7 +51,7 @@ a:hover, a:active, a:focus {
 }
 @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) {
   	.width_80{
-		width: 80px;
+		width: 50px;
 	}
 	.dis_none{
 		display: none;
@@ -90,26 +94,30 @@ a:hover, a:active, a:focus {
 							<input type="hidden" id="ordercount" name="ordercount" value="<?php echo count($result);?>">
 									<div class="col-md-3 col-sm-12 col-xs-12 ">
 									</div>
-									<div class="col-md-5 col-sm-5 col-xs-5">
-										<label>Item Name (Design No)(Price)</label>
+									<div class="col-md-4 col-sm-3 col-xs-3">
+										<label>Item Name (Design No)</label>
 									</div>
-									<div class="col-md-2 col-sm-4 col-xs-4 ">
-										<label >Quantity</label>
-										
+									<div class="col-md-2 col-sm-4 col-xs-4">
+										<label >Quantity</label>								
 									</div>
-									<div class="col-md-2 col-sm-3 col-xs-3">
-										<label >Delete</label>
+									<div class="col-md-2 col-sm-3 col-xs-3 ">
+										<label >Price</label>								
+									</div>
+									<div class="col-md-1 col-sm-2 col-xs-2 ">
+										<label class="maxwidth300" style="max-width: 125%;">Delete</label>
 									</div>
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
-							$username=$total_price=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=[];
+							$username=$total_price=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=$tax=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
 								$total_price=$value['total_price'];
 								$sales_expense=$value['sales_expense'];
 								$status=$value['status'];
 								$invoice_status=$value['invoice_status'];
+								//tax saved for orders
+								$tax=$value['tax'];
 								if(isset($value['payment_date']) && $value['payment_date']!=''){
 									$payment_date=$value['payment_date'];
 								}
@@ -128,6 +136,8 @@ a:hover, a:active, a:focus {
 								}elseif(isset($value['client_type']) && $value['client_type']!='' && $value['client_type']==4){
 									$price=$value['flexible_rate'];
 									$client_type='flexible_rate';
+								}else{
+									$client_type='flexible_rate';
 								}
 								//Show addtional info like mobile add order
 								
@@ -142,16 +152,16 @@ a:hover, a:active, a:focus {
 										Item <font color="red"><span class="required">*</span></font> :
 									</label>
 
-									<div class="col-md-5 col-sm-5 col-xs-5">
+									<div class="col-md-4 col-sm-4 col-xs-4">
 										
-									<select class="form-control select2" name="product_id<?php echo $key+1;?>" style="width:100%;" id="product_id" required="required">
+									<select class="form-control select2 product_id" name="product_id<?php echo $key+1;?>" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,<?php echo $key+1;?>)">
 									    <option value="" selected >All</option>
 									    <?php
 									        if(!empty($activeProducts) && count($activeProducts) > 0 ){
 									        
 									            foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
 									    ?>
-									                <option value="<?php echo $activeProductsValue['id']; ?>" <?php if(isset($value['product_id']) && $value['product_id']!='' && $value['product_id']==$activeProductsValue['id']){echo 'selected';}?>><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )('.$price.')'; ?></option>
+									                <option value="<?php echo $activeProductsValue['id']; ?>" <?php if(isset($value['product_id']) && $value['product_id']!='' && $value['product_id']==$activeProductsValue['id']){echo 'selected';}?>><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
 									    <?php
 									            }
 									        }else{
@@ -163,11 +173,14 @@ a:hover, a:active, a:focus {
 									</select>
 								
 									</div>
-									<div class="col-md-2 col-sm-4 col-xs-4">
-										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80">
+									<div class="col-md-2 col-sm-3 col-xs-3">
+										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onkeyup="order_sum()">
 									</div>
-									<div class="col-md-2 col-sm-2 col-xs-2 marginright_20px">
-										<a class='btn btn-danger '  onclick="remove_item(<?php echo $key+1;?>);" data-toggle='tooltip' title='Delete' ><i class='fa fa-close'></i></a>
+									<div class="col-md-2 col-sm-3 col-xs-3">
+										<input type="text" name="price_<?php echo $key+1;?>" id="price" value="<?php echo $value['price'];?>" required="required"  class=" form-control width_80 price_<?php echo $key+1;?>" onkeyup="order_sum()">
+									</div>
+									<div class="col-md-1 col-sm-1 col-xs-1 ">
+										<a class='btn btn-danger'  onclick="remove_item(<?php echo $key+1;?>);" data-toggle='tooltip' title='Delete' ><i class='fa fa-close'></i></a>
 									</div>
 								</div>
 							</div>
@@ -177,12 +190,19 @@ a:hover, a:active, a:focus {
 							</div>
 							<div class="col-md-12 col-sm-12 col-xs-12 pull-right">
 									<a class="pull-right" data-toggle="tooltip" title="" data-original-title="Add more items" onclick="add_more_items();"><i class="fa fa-plus"></i> Add More Items</a>
-								</div>
-								<!-- Total price-->
+							</div>
+							<!-- Tax-->
 							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Total Price :</label>
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Tax <font color="red"><span class="required">*</span></font> :</label>
 								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-									<input type="text" name="total_price" value="<?php echo $total_price;?>" class="form-control " placeholder="Enter total price" required="required">
+									<input type="text" name="tax" id="tax" value="<?php if(isset($tax) && $tax!='' ){ echo $tax;}else{ echo Vat;}?>" class="form-control " placeholder="Enter total tax" required="required">
+								</div>
+							</div>
+							<!-- Total price-->
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Total Price <font color="red"><span class="required">*</span></font> :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+									<input type="text" name="total_price" id="total_price" value="<?php echo $total_price;?>" class="form-control " placeholder="Enter total price" required="required">
 								</div>
 							</div>
 							<div class="form-group">
@@ -348,6 +368,8 @@ a:hover, a:active, a:focus {
 				                	</tr>
 			                    <?php
 			                    }
+			                    //order tax
+			                    $orderTax=$total_price * $tax /100; 
 			                    ?> 
 			                	</tbody>
 			                	<tbody style="border-top: 2px solid black;">
@@ -364,7 +386,7 @@ a:hover, a:active, a:focus {
 			                			<th>Balance</th>
 			                			<td style="text-align: right;">
 			                				<?php			                				
-			                				echo $this->My_model->getamount(round($total_price-$totalPaidAmount,2));
+			                				echo $this->My_model->getamount(round($total_price + $orderTax -$totalPaidAmount,2));
 			                				?>
 			                			</td>
 			                			<td></td>
@@ -374,8 +396,9 @@ a:hover, a:active, a:focus {
 			                			<td></td>
 			                			<th>Total Invoice Amount</th>
 			                			<td style="text-align: right;">
-			                				<?php			                				
-			                				echo $this->My_model->getamount(round($total_price,2));
+			                				<?php	
+			                				               				
+			                				echo $this->My_model->getamount(round($total_price+$orderTax,2));
 			                				?>
 			                			</td>
 			                			<td></td>
@@ -388,7 +411,8 @@ a:hover, a:active, a:focus {
 		                </table>
 			              <!-- payment date -->
 			              <?php
-			              $mpayment=$total_price-$totalPaidAmount;
+			              //balacne amount
+			              $mpayment=$total_price-$totalPaidAmount+ $orderTax;
 			              if($mpayment > 0){
 			              	?>
 			              <div class="form-group" id="id_payment_date" <?php /*if ($invoice_status == 0) { ?> style="display: none;" <?php }*/?> >
@@ -427,7 +451,7 @@ a:hover, a:active, a:focus {
 				              ?>
 				              <input type="hidden" name="username" value="<?php echo $username;?>">
 				              <input type="hidden" name="price" value="<?php echo $price;?>">
-				              <input type="hidden" name="client_type" value="<?php echo $client_type;?>">
+				              <input type="hidden" name="client_type" id="client_type" value="<?php echo $client_type;?>">
 				              
 				              <div class="form-group">
 				              	<div class="col-md-3 col-sm-12 col-xs-12"></div>
@@ -559,17 +583,23 @@ function add_more_items(){
 	$("#new_item_add").append('<div id="delete_'+total_item+'">');
 
 
-	$("#delete_"+total_item).append('<div class="form-group select2"><label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Item <font color="red"><span class="required">*</span></font>:</label><div class="col-md-5 col-sm-5 col-xs-5"><select class="form-control select2" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
+	$("#delete_"+total_item).append('<div class="form-group select2"><label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Item <font color="red"><span class="required">*</span></font>:</label><div class="col-md-4 col-sm-4 col-xs-4"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
-?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-4 col-xs-4"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80"></div><div class="col-md-2 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
+?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onkeyup="order_sum()"></div><div class="col-md-2 col-sm-3 col-xs-3 "><input type="text" name="price_'+total_item+'" id="price" required="required"  class=" form-control width_80 price_'+total_item+'" onkeyup="order_sum()"></div><div class="col-md-1 col-sm-1 col-xs-1 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
 }
 function remove_item(id){
-	if (confirm("Do you want to delete this items")){
-		$("#delete_"+id).remove();
+	//count product selected if item >  1 it not remove it
+	var numItems =$('select.product_id').length;
+	if(numItems >1){
+		if (confirm("Do you want to delete this items")){
+			$("#delete_"+id).remove();
+			$("#quantity").focus();
+		}
+	}else{
+		alert('You have must one item in your order..');
 	}
 	return false;
-	alert(id);
 }
 
 
@@ -711,6 +741,44 @@ function delete_payment(order_id,payment_id){
 	}
 
 }
+//price fetch on change prouct  itemid is product id and  itemNumber for div if balnck fetch last item_nmuber
+function price_fetch(itemId,itemNumber=null){
+	var item_nmuber=$("#ordercount").val();
+	if(itemNumber==null){
+		var total_item= parseInt(item_nmuber);	
+	}else{
+		var total_item= parseInt(itemNumber);
+	}
+	
+	if(itemId != '' ){
+		$.ajax({
+		    type : "POST",
+		    url : "<?php echo base_url().$this->controller."/price_fetch/" ?>",
+		    data : {itemId:itemId,client_type:$("#client_type").val()},
+		    dataType: "json",
+		    success : function (data){
+		    	if(data.status="success"){
+		    		$(".price_"+total_item).val(data.price);
+		    	}
+		    }	    
+		});
+	}else{
+		alert('There is some Error..'); 
+	}
+}
+//sum of order onkeyup of quanttiy and price and remove item
+function order_sum(){
+	var totalPrice = 0;
+	var itemNmuber=$("#ordercount").val();
+	var totalItem= parseInt(itemNmuber) ;
+	// alert(total_item);
+	for (var i = 1; i < totalItem+1; i++) {
+		//console.log($(".price_"+i).val() * $(".quantity_"+i).val());
+		totalPrice +=$(".price_"+i).val() * $(".quantity_"+i).val();
+	}
+	$("#total_price").val(totalPrice);
+}
+
 $('#datatables1').dataTable({
 		"ordering": false,
 		"bPaginate": false,

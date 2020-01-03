@@ -19,7 +19,13 @@ if(isset($totalPaidAmount) && $totalPaidAmount!=''){
 }else{
    $paidamount=$rangepaidamount=$payment_history->paidamount;
 }
-
+//order taxfrom order table
+if(isset($payment_history->tax) && $payment_history->tax!='' ){
+    $orderTax=$payment_history->total_price * $payment_history->tax /100; 
+}else{
+    $orderTax=$payment_history->total_price * Vat /100; 
+}
+ 
 ?>
 <!-- For Payment History Poup view -->
 <section class="content-header">
@@ -43,13 +49,13 @@ if(isset($totalPaidAmount) && $totalPaidAmount!=''){
     <div class="form-group">
         <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Invoice Amount :</label>
         <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-            <?php echo  $this->My_model->getamount(round($payment_history->total_price,2));?>
+            <?php echo  $this->My_model->getamount(round($payment_history->total_price  + $orderTax,2));?>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Balance Amount :</label>
         <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-            <?php echo  $this->My_model->getamount(round($payment_history->total_price-$paidamount));?>
+            <?php echo  $this->My_model->getamount(round($payment_history->total_price + $orderTax -$paidamount));?>
         </div>
     </div>
     <div class="form-group" id="id_payment_date"> 
@@ -113,7 +119,7 @@ $(document).ready(function (){
                 noSpace: true,
                 required: true,
                 number:true,
-                range:[1,<?php echo $payment_history->total_price-$rangepaidamount;?>],
+                range:[1,<?php echo $payment_history->total_price+ $orderTax-$rangepaidamount;?>],
             },   
         },
         messages: {

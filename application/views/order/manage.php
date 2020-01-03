@@ -609,14 +609,18 @@
             }], 
             "order": [[ 1, "DESC"]],  
             "drawCallback": function(settings) {
+                //all order invoice amount
               $("#creditBalance").html(settings.json.invoiceAmount);
-              // $("#totalBalance").html(settings.json.paidAmount);
-              $("#totalBalance").html(settings.json.paidhistoryAmount);
+              //all order paid amount
+              $("#totalBalance").html(settings.json.paidAmount);
+              //all order unpaid amount
               $("#debitBalance").html(settings.json.unpaidAmount);
-              $("#cmcreditBalance").html(settings.json.curnthistorypaidamount);
-              // $("#cmcreditBalance").html(settings.json.cmcreditBalance);
-              $("#cmtotalBalance").html(settings.json.cmtotalBalance);
-              $("#cmdebitBalance").html(settings.json.cmdebitBalance);
+              //currrent month order paid amount
+              $("#cmcreditBalance").html(settings.json.totalPaidAmountCurrentMonth);
+              //currrent month order invoice amount
+              $("#cmtotalBalance").html(settings.json.totalInvoiceAmountCurrentMonth);
+              //currrent month order unpaid amount
+              $("#cmdebitBalance").html(settings.json.totalUnPaidAmountCurrentMonth);
             },   
 		});
 

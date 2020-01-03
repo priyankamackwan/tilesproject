@@ -919,6 +919,9 @@ You can change this password from mobile application after you are logged in onc
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
                         
+                        //product price from order products table
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        /*
                             if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
@@ -934,6 +937,7 @@ You can change this password from mobile application after you are logged in onc
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
                         }
+                        */
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
