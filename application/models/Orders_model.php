@@ -242,6 +242,7 @@
             $this->db->where('payment_history.order_id',$order_id);
             $this->db->or_where('payment_history.order_id',null);
             $this->db->where('orders.id',$order_id);
+            $this->db->where($this->orders_table.'.is_deleted',0);
             $Amountdata = $this->db->get()->row();
             return $Amountdata;
         }
@@ -253,9 +254,7 @@
             $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
             $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->orders_table.'.id');
             $this->db->where($this->orders_table.'.is_deleted',0);
-
             $this->db->where($this->users_table.'.is_deleted',0);
-
             $this->db->where($this->users_table.'.status',1);
             if(!empty($where)){
                 

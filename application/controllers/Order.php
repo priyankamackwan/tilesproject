@@ -1681,6 +1681,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
         
         $this->db->select($client_type);
         $this->db->from('products');
+        $this->db->where('products.is_deleted',0);
         $this->db->where('id', $itemId);
         $priceData = $this->db->get()->row();
         if(isset($priceData) && $priceData!='' && count($priceData)> 0){
