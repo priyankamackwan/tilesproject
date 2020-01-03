@@ -1422,6 +1422,13 @@ $pdf->Output($do_no, 'I');
                 $this->db->where('product_id', $value['product_id']);
                 $this->db->where('order_id', $value['order_id']);
                 $this->db->delete('order_products');
+                //is delete 1 for order delete
+                $this->db->set('is_deleted','1');
+                $this->db->where('id',$id);
+                $this->db->update('orders');
+                //Delete From payment history table
+                $this->db->where('order_id', $id);
+                $delete=$this->db->delete('payment_history');
             }
             $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$user_data_name.' has been deleted successfully!</div>');
             redirect($this->controller);	
