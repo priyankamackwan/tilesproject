@@ -91,7 +91,7 @@
         }
 
         // Get invoice paid total and unpaid amount and current date
-        public function get_invoiceAmount($where=null,$whereDate=null,$whereDatechange='no')
+        public function get_invoiceAmount($where=null,$whereDate=null,$whereDatechange='no',$monthType='all')
         {
             $cMFirstDay=$cMLastDay='';
             // $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
@@ -114,9 +114,18 @@
                 // Filter condition to add where
                 $this->db->where($where);
             }
-            
-            if($whereDatechange=='yes' && !empty($whereDate)){
-                $this->db->where($whereDate);
+            //date selected for top arted amount this month not for all
+            if(isset($monthType) && $monthType!='' && $monthType=="current"){
+                if($whereDatechange=='yes' && !empty($whereDate)){
+                    $this->db->where($whereDate);
+                }else{
+                    //default for current month 
+                    $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+                    $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+                    $whereBetweenDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+                    $this->db->where($whereBetweenDate);
+                }
             }
             $this->db->group_by($this->orders_table.'.id');
             $subQuery =  $this->db->get_compiled_select();
@@ -127,9 +136,11 @@
             $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(invoiceAmountWithTax) as invoiceAmountWithTax')->
                 from('('.$subQuery.') as tess');
 
+
             $Amountdata = $this->db->get()->row();
             return $Amountdata;
         }
+        /*
         // Get invoice paid total and unpaid amount and current date
         public function currentmonth_invoiceAmount($where=null)
         {
@@ -170,6 +181,7 @@
             $Amountdata = $rr->get()->row();
             return $Amountdata;
         }
+        */
         //Fetch for all order in edit page
         function view_all_order($id){
             $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark,orders.total_price,orders.tax');
@@ -247,7 +259,7 @@
             return $Amountdata;
         }
         //fetch paid amount from payment history
-        function get_payment_history($type='all',$where=null,$whereDate=null,$whereDatechange='no'){
+        function get_payment_history($monthType='all',$where=null,$whereDate=null,$whereDatechange='no'){
             $this->db->select('payment_history.amount as historypaidamount');
             $this->db->from('payment_history');
             $this->db->join('orders','orders.id=payment_history.order_id','left');
@@ -256,22 +268,24 @@
             $this->db->where($this->orders_table.'.is_deleted',0);
             $this->db->where($this->users_table.'.is_deleted',0);
             $this->db->where($this->users_table.'.status',1);
-            if(!empty($where)){
-                
+            if(!empty($where)){                
                 // Filter condition to add where
                 $this->db->where($where);
             }
-            if(isset($type) && $type!='' && $type=="current"){
-                $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
-                $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
-
-                $whereData .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
-                $this->db->where($whereData);
-            }else{
+            //date selected for top arted amount this month not for all
+            if(isset($monthType) && $monthType!='' && $monthType=="current"){
                 if($whereDatechange=='yes' && !empty($whereDate)){
                     $this->db->where($whereDate);
+                }else{
+                    //default for current month 
+                    $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+                    $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+                    $whereBetweenDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+                    $this->db->where($whereBetweenDate);
                 }
             }
+
             $this->db->group_by('payment_history.id');
             $subQuery =  $this->db->get_compiled_select();
             $rr=$this->db->select('sum(historypaidamount) as historypaidamount')->

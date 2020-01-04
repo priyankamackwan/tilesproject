@@ -236,16 +236,15 @@
                 // Get all records with limit for data table.
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate);
                 // Get all Amounts of Invoice.
-                $totalAmounts = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange);
+                $totalAmounts = $this->orders_model->get_invoiceAmount();
 
                 //Get current Month amount
-
-                $totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount('');
-
+                $totalAmountsCurrentMonth =  $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
+                
                 //total history paymnet amount
-                $get_payment_history_all = $this->orders_model->get_payment_history('all','',$whereDate,$whereDatechange);
+                $get_payment_history_all = $this->orders_model->get_payment_history();
 
-                $get_payment_history_currnet_month = $this->orders_model->get_payment_history('current','','','');
+                $get_payment_history_currnet_month = $this->orders_model->get_payment_history('current','',$whereDate,$whereDatechange);
                 
             }else{
                 
@@ -257,17 +256,17 @@
 
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
-                $totalAmounts = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange);
+                $totalAmounts = $this->orders_model->get_invoiceAmount($where);
 
 
                 //Get current Month amount
-
-                $totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
+                $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange,'current');
+                //$totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
 
                 //total history paymnet amount
-                $get_payment_history_all = $this->orders_model->get_payment_history('all',$where,$whereDate,$whereDatechange);
+                $get_payment_history_all = $this->orders_model->get_payment_history('all',$where);
 
-                $get_payment_history_currnet_month = $this->orders_model->get_payment_history('current',$where,'','');
+                $get_payment_history_currnet_month = $this->orders_model->get_payment_history('current',$where,$whereDate,$whereDatechange);
             }
 
             // Initialized blank array to push data of data table.

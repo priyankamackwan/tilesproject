@@ -133,7 +133,7 @@
                     <div class="col-md-10">
                         <div class="row col-md-12">
                             <div class="col-md-4">
-                                <h4 class="text-center"><b>Total Invoice Amount</b><br>(<?php echo date('F');?>)</h4>
+                                <h4 class="text-center"><b>This Month Total Invoice Amount</b></h4>
                                 <p class="text-center" style="font-size: 17px;">
                                     <span id="cmtotalBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->invoiceAmount,2));?>
                                     </span>
@@ -141,7 +141,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <h4 class="text-center" style="color:#00c400"><b>Total Paid Amount</b><br>(<?php echo date('F');?>)</h4>
+                                <h4 class="text-center" style="color:#00c400"><b>This Month Total Total Paid Amount</b></h4>
                                 <p class="text-center" style="font-size: 17px;">
                                     <span id="cmcreditBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->paidAmount,2));?>
                                     </span>
@@ -149,7 +149,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <h4 class="text-center" style="color:red"><b>Total Unpaid Amount</b><br>(<?php echo date('F');?>)</h4>
+                                <h4 class="text-center" style="color:red"><b>This Month Total Total Unpaid Amount</b></h4>
                                 <p class="text-center" style="font-size: 17px;">
                                     <span id="cmdebitBalance"> <?php //echo $this->My_model->getamount(ROUND($totalAmounts->unpaidAmount,2));?>
                                     </span>
