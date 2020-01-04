@@ -97,7 +97,7 @@
             // $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
 
             //order total price * tax
-            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price * orders.tax) as invoiceAmountWithTax,(IF('.$this->orders_table.'.tax = 0,'.$this->orders_table.'.total_price,0.00))as invoiceAmount');
+            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price * orders.tax / 100) as invoiceAmountWithTax,'.$this->orders_table.'.total_price as invoiceAmount');
 
 
             $this->db->from($this->orders_table);
@@ -285,7 +285,6 @@
                     $this->db->where($whereBetweenDate);
                 }
             }
-
             $this->db->group_by('payment_history.id');
             $subQuery =  $this->db->get_compiled_select();
             $rr=$this->db->select('sum(historypaidamount) as historypaidamount')->
@@ -293,8 +292,6 @@
 
             $Amountdata = $rr->get()->row();
             return $Amountdata;
-            
-
         }
 
         
