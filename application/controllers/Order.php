@@ -466,12 +466,12 @@
                 "recordsTotal"    => intval($totalData['count']),  
                 "recordsFiltered" => intval($totalFiltered),
                 "data"            => $data,
-                "invoiceAmount"   => $this->$model->getamount(round($totalInvoiceAmount,2)),
-                "paidAmount"      => $this->$model->getamount(round($totalPaidAmount,2)),
-                "unpaidAmount"    => $this->$model->getamount(round($totalUnPaidAmount,2)),
-                "totalInvoiceAmountCurrentMonth" => $this->$model->getamount(round($totalInvoiceAmountCurrentMonth,2)),
-                "totalPaidAmountCurrentMonth"    => $this->$model->getamount(round($totalPaidAmountCurrentMonth,2)),
-                "totalUnPaidAmountCurrentMonth"  => $this->$model->getamount(round($totalUnPaidAmountCurrentMonth,2)),
+                "invoiceAmount"   => $this->$model->getamount(round($totalInvoiceAmount,2),'yes'),
+                "paidAmount"      => $this->$model->getamount(round($totalPaidAmount,2),'yes'),
+                "unpaidAmount"    => $this->$model->getamount(round($totalUnPaidAmount,2),'yes'),
+                "totalInvoiceAmountCurrentMonth" => $this->$model->getamount(round($totalInvoiceAmountCurrentMonth,2),'yes'),
+                "totalPaidAmountCurrentMonth"    => $this->$model->getamount(round($totalPaidAmountCurrentMonth,2),'yes'),
+                "totalUnPaidAmountCurrentMonth"  => $this->$model->getamount(round($totalUnPaidAmountCurrentMonth,2),'yes'),
             );
 
             // Convert all data into Json

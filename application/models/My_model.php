@@ -194,7 +194,7 @@
             $query = $this->db->get()->result_array();
 			return $query;
 		}
-		function getamount($amount)
+		function getamount($amount,$report='no')
 		{
 			$firstCharacter='';
 		   if ( strpos( $amount, "." ) !== false ) {
@@ -215,7 +215,12 @@
 		    }else{
 		    	$currency=$new_amount;
 		    }
-		   return 'AED '.$firstCharacter.$currency;
+		    if(isset($report) && $report!='' && $report=="yes"){
+		    	return 'AED '.$firstCharacter.$currency;
+		    }else{
+		    	return 'AED '.$new_amount;
+		    }
+		   
 		}
 		//best seller count 
 		public function best_seller_count($where){
