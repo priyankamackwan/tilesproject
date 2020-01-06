@@ -196,12 +196,26 @@
 		}
 		function getamount($amount)
 		{
+			$firstCharacter='';
 		   if ( strpos( $amount, "." ) !== false ) {
 		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount);
 		   }else{
 		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
 		   }
-		   return 'AED '.$new_amount;
+		   $firstCharacter = substr($amount, 0, 1);
+		   if(isset($firstCharacter) && $firstCharacter!='' && $firstCharacter=="-"){
+		   		$amount = ltrim($amount, $firstCharacter);
+		   }
+		   //length of amount and convert to lac and crore
+		   $length = strlen(round($amount));
+		    if($length>=6 && $length <=7){
+		        $currency=round($amount/100000,2).' Lac';
+		    }else if($length>=8){
+		        $currency= round($amount/10000000,2).' Cr.';
+		    }else{
+		    	$currency=$new_amount;
+		    }
+		   return 'AED '.$firstCharacter.$currency;
 		}
 		//best seller count 
 		public function best_seller_count($where){
