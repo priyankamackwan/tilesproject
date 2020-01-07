@@ -20,7 +20,7 @@
         // All order Data.
         function get_OrderDatatables($where) {
             
-            $this->db->select($this->orders_table.'.id,SUM('.$this->orders_table.'.total_price * '.$this->orders_table.'.tax + '.$this->orders_table.'.total_price) as invoiceAmount');
+            $this->db->select($this->orders_table.'.id,SUM('.$this->orders_table.'.total_price * '.$this->orders_table.'.tax / 100 + '.$this->orders_table.'.total_price) as invoiceAmount');
 
             // Select from Order main table
             $this->db->from($this->orders_table);
@@ -66,7 +66,7 @@
         }
         function count_price($where) {
             
-            $this->db->select('SUM('.$this->orders_table.'.total_price) as invoiceAmount');
+            $this->db->select('SUM('.$this->orders_table.'.total_price * '.$this->orders_table.'.tax / 100 + '.$this->orders_table.'.total_price) as invoiceAmount');
             $this->db->from($this->orders_table);
             if(!empty($where)){
                 $this->db->where($where);
