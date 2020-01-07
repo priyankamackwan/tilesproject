@@ -202,10 +202,10 @@
 		   }else{
 		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
 		   }
-		   $firstCharacter = substr($amount, 0, 1);
-		   if(isset($firstCharacter) && $firstCharacter!='' && $firstCharacter=="-"){
-		   		$amount = ltrim($amount, $firstCharacter);
-		   }
+		   //$firstCharacter = substr($amount, 0, 1);
+		   // if(isset($firstCharacter) && $firstCharacter!='' && $firstCharacter=="-" && $firstCharacter < 0){
+		   // 		$amount = ltrim($amount, $firstCharacter);
+		   // }
 		   //length of amount and convert to lac and crore
 		   $length = strlen(round($amount));
 		    if($length>=6 && $length <=7){
