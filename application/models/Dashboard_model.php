@@ -71,6 +71,7 @@
             if(!empty($where)){
                 $this->db->where($where);
             }
+            $this->db->where($this->orders_table.'.is_deleted',0);
             $allorderData=$this->db->get();
             $result = $allorderData->row();
             return $result;
