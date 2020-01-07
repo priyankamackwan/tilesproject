@@ -194,7 +194,7 @@
             $query = $this->db->get()->result_array();
 			return $query;
 		}
-		function getamount($amount,$report='no')
+		function getamount($amount,$convert='no')
 		{
 			$firstCharacter='';
 		   if ( strpos( $amount, "." ) !== false ) {
@@ -215,7 +215,7 @@
 		    }else{
 		    	$currency=$new_amount;
 		    }
-		    if(isset($report) && $report!='' && $report=="yes"){
+		    if(isset($convert) && $convert!='' && $convert=="yes"){
 		    	return 'AED '.$firstCharacter.$currency;
 		    }else{
 		    	return 'AED '.$new_amount;

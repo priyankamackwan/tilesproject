@@ -61,7 +61,7 @@ class Dashboard extends CI_Controller
 	    			}
 	  				
 	  				$orderStatistics[$i]['value']=$rr;
-	  				$orderStatistics[$i]['amount']=$this->My_model->getamount(round($count_price->invoiceAmount,2));
+	  				$orderStatistics[$i]['amount']=$this->My_model->getamount(round($count_price->invoiceAmount,2),'yes');
 	  				
 	  				$i++;
 				}
@@ -84,7 +84,7 @@ class Dashboard extends CI_Controller
 	    			}
   				
   					$orderStatistics[$i]['value']=$rr;
-  					$orderStatistics[$i]['amount']=$this->My_model->getamount(round($count_price->invoiceAmount,2));
+  					$orderStatistics[$i]['amount']=$this->My_model->getamount(round($count_price->invoiceAmount,2),'yes');
   					$i++;
 					}
 				}
