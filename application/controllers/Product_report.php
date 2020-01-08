@@ -417,8 +417,8 @@
                         $finalOrderData[$k]['description'] = $productData[0]['name'];
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
-                        
-                        if ($userData[0]['client_type'] == 1) {
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -428,7 +428,7 @@
                         
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
-                        }
+                        }*/
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
@@ -449,7 +449,8 @@
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                      $vat = $subTotal* Vat/100;
+//                      $vat = $subTotal* Vat/100;
+                      $vat = $subTotal * $ordersData[0]['tax']/100;
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -563,8 +564,8 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         $finalOrderData[$k]['description'] = $productData[0]['name'];
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
-                        
-                        if ($userData[0]['client_type'] == 1) {
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -574,7 +575,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
-                        }
+                        }*/
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
@@ -595,7 +596,8 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                      $vat = $subTotal* Vat/100;
+//                      $vat = $subTotal* Vat/100;
+                      $vat = $subTotal * $ordersData[0]['tax']/100;
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();

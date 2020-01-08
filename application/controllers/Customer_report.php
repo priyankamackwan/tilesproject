@@ -542,8 +542,8 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         $finalOrderData[$k]['description'] = $productData[0]['name'];
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
-                        
-                        if ($userData[0]['client_type'] == 1) {
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -553,7 +553,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
-                        }
+                        }*/
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
