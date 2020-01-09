@@ -146,13 +146,14 @@
 
                 $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
                 $whereDatechange='yes';
-            }else{
-                //Current month start-end date
-                $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
-                $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
-
-                $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
             }
+            // }else{
+            //     //Current month start-end date
+            //     $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+            //     $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+            //     $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+            // }
             
             if(!empty($invoiceStatus)){
                 

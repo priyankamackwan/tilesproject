@@ -77,17 +77,19 @@
       $limit = $_POST['length'];
 
                         
-      $this->db->select('o.id,o.user_id,SUM(o.total_price) as totalValue,SUM(o.sales_expense) as total_sales_expense,o.invoice_no,u.company_name,u.contact_person_name,o.created');
+      $this->db->select('o.id,o.user_id,SUM(o.total_price * o.tax / 100 + o.total_price) as totalValue,SUM(o.sales_expense) as total_sales_expense,o.invoice_no,u.company_name,u.contact_person_name,o.created');
       $this->db->from('orders as o');
       $this->db->join('users as u', 'u.id = o.user_id','left');
       $this->db->where('o.is_deleted', 0); 
       $this->db->where('u.is_deleted', 0); 
+      $this->db->where('u.status',1);
       if(!empty($where)){
         $this->db->where($where);
       }
       
       $this->db->limit($limit, $start);      
       $this->db->group_by('o.user_id');
+      // $this->db->group_by('o.user_id');
       if(isset($order) && $order!=''){
         $this->db->order_by($order,$dir);
       }else{
@@ -95,7 +97,6 @@
       }
       
       $q=$this->db->get()->result_array();  
-
       $data = array();
                  
       if(!empty($q)){
@@ -107,7 +108,7 @@
           $nestedData['id'] = $srNo;
           $nestedData['company_name'] =$value['company_name'];
           $nestedData['contact_person_name'] =$value['contact_person_name'];
-          $nestedData['totalValue'] =$this->$model->getamount(ROUND($value['totalValue'],2));
+          $nestedData['totalValue'] =$this->$model->getamount(ROUND($value['totalValue'],2),'yes');
           $data[] = $nestedData;
           $srNo++;
         }

@@ -283,14 +283,14 @@
         dt.ajax.reload();
     };
     //End For download    
-
+    /*
     $(document).on("change","#company_name",function(evt){
 
                 company_name=$("#company_name").val();
                 $("#contact_person_name").html('');
 
                 $.ajax({
-                    url: "<?php echo base_url().$this->controller."/companytocustomer/" ?>",
+                    url: "<?php //echo base_url().$this->controller."/companytocustomer/" ?>",
                     dataType: "json",
                     type: "POST",
                     data: {'company_name' : company_name},
@@ -302,7 +302,7 @@
                 });
                 dataTable2.api().draw();
             });
-     
+     */
 	var dataTable2 = $('#datatables').dataTable({
 			"processing": true,
 			"serverSide": true,

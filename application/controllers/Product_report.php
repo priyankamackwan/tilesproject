@@ -290,7 +290,7 @@
 						);
 			echo json_encode($json_data);
 		}
-                
+    /*           
 		public function add() {
                     //echo '3'; exit;
 			$data['action'] = "insert";
@@ -299,7 +299,8 @@
 
 			$this->load->view($this->view.'/form',$data);
 		}
-                
+    */  
+    /*
 		public function insert() {
                   
 			$model = $this->model;
@@ -316,7 +317,8 @@
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
-                
+    */ 
+    /*           
 		public function edit($id) {
                     
 			$model = $this->model;
@@ -332,7 +334,8 @@
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
 			$this->load->view($this->view.'/form',$data);
 		}
-                
+     */
+     /*           
                 public function view($id) {
                     
 			$model = $this->model;
@@ -351,7 +354,7 @@
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+                        /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['order_id' => $id];
@@ -379,8 +382,8 @@
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
-                
+    */            
+     /*           
             public function downloadinvoice($id) {
                     
 			$model = $this->model;
@@ -429,7 +432,7 @@
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
                         }*/
-                        
+                        /*
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -512,7 +515,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -526,8 +529,8 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
-                
+    */            
+    /*          
            public function downloadlpo($id) {
                     
 			$model = $this->model;
@@ -576,7 +579,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'D');
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
                         }*/
-                        
+                        /*
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -657,7 +660,7 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+       /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -779,7 +782,7 @@ $pdf->Output($do_no, 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -871,6 +874,6 @@ $pdf->Output($do_no, 'D');
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
                         redirect($this->controller);	
 		}
-                
+      */          
 	}
 ?>
