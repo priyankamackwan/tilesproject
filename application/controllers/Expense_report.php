@@ -50,20 +50,31 @@
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
-			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+			// $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+   //     if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+   //      $startDate = $_POST['startdate'];
+   //      $endDate = $_POST['enddate'];
+   //     }    
+      $where ="";
+      $where .= "orders.is_deleted=0";
        if(!empty($salesOrderDate) && isset($_POST['startdate'])){
-        $startDate = $_POST['startdate'];
-        $endDate = $_POST['enddate'];
-       }                 
-
+          if($where == null){
+                $where .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].' ") ';
+              }else{
+                $where .= ' and (DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].' ")';
+              }
+        }    
                         // $startDate = $_POST['columns'][1]['search']['value'];
                         // $endDate = $_POST['columns'][2]['search']['value'];
       
-			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
-                       
+			// $totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+
+        
+
+                      
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
-                        
+      /*                  
                          if (empty($startDate) || empty($endDate)){
                             $q = $this->db->select('*')->where('is_deleted', 0);
                                 if(empty($s))
@@ -119,15 +130,36 @@
 				$totalFiltered = count($q);
 			}
                         }
+*/
+      if(!empty($this->input->post('search')['value']))
+      {
+        if($where != null){
+            $where.= ' AND ';
+        }
+        // Serch bar value
+        $search=$this->input->post('search')['value'];
 
-             
+
+        $where .= '(lpo_no LIKE "%'.$search.'%" or ';
+
+        $where .= 'do_no LIKE "%'.$search.'%" or ';
+
+        $where .= 'invoice_no LIKE "%'.$search.'%" or ';
+
+        $where .= 'sales_expense LIKE "%'.$search.'%" )';
+      }
+      //tottal count
+      $totalData = $this->$model->expenseReport($where);
+      $totalFiltered = $totalData['count'];
+      //new query for report
+      $q=$this->$model->expenseReport($where,$limit,$start,$order,$dir);
 			$data = array();
         
-			if(!empty($q))
-			{
+			if(!empty($q['result'])){
+
                                $startNo = $_POST['start'];
                             $srNo = $startNo + 1;
-				foreach ($q as $key=>$value)
+				foreach ($q['result'] as $key=>$value)
 				{
           $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->id));
 					//$id = $this->primary_id;
@@ -137,10 +169,12 @@
                        // $this->db->where($multipleWhere2);
                        // $userData = $this->db->get("users")->result_array();
 					$nestedData['id'] = $srNo;
-                                        $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value->invoice_no.'</b></a>';
-                                        $nestedData['total_price'] =$this->$model->getamount(ROUND($value->total_price,2));
-                                        $nestedData['created'] =$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
-                                        $nestedData['sales_expense'] =$value->sales_expense;
+                                      //total price
+                                      $total=($value['total_price'] * $value['tax'] / 100 ) + $value['total_price'];
+                                        $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value['invoice_no'].'</b></a>';
+                                        $nestedData['total_price'] =$this->$model->getamount(ROUND($total,2),'yes');
+                                        $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
+                                        $nestedData['sales_expense'] =$value['sales_expense'];
 					$data[] = $nestedData;
                                         $srNo++;
 				}
@@ -148,7 +182,7 @@
 
 			$json_data = array(
 						"draw"            => intval($this->input->post('draw')),
-						"recordsTotal"    => intval($totalData),
+						"recordsTotal"    => intval($totalData['count']),  
 						"recordsFiltered" => intval($totalFiltered),
 						"data"            => $data
 						);

@@ -73,6 +73,7 @@
             $this->db->from('orders as o');
             $this->db->join('users as u', 'u.id = o.user_id','left');
             $this->db->where('o.is_deleted', 0);
+            $this->db->where('u.status', 1);
            // if(isset($pagename) && $pagename!=''){
             	//$this->db->group_by('o.user_id');
             	$this->db->group_by('u.id');
@@ -88,6 +89,7 @@
 			$this->db->join('users as u', 'u.id = o.user_id','left');
 			$this->db->where('o.is_deleted', 0);
 			$this->db->where('u.is_deleted', 0);
+			$this->db->where('u.status', 1);
 			if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
 			}
@@ -237,6 +239,32 @@
 			$best_seller=$this->db->get()->num_rows(); 
 			//echo $this->db->last_query();
 			return $best_seller;
+		}
+		//expense report
+		function expenseReport($where=null,$limit = NUll,$start = NUll,$order = NUll,$dir = NUll){
+			$this->db->select('invoice_no,total_price,orders.created,sales_expense');
+			$this->db->from('orders');
+			$this->db->join('users as u', 'u.id = orders.user_id','left');
+			$this->db->where('orders.is_deleted', 0);
+			$this->db->where('u.is_deleted', 0);
+			$this->db->where('u.status', 1);
+			if(isset($where) && $where!=''){
+				$this->db->where($where);
+			}
+			if(!empty($limit)){
+                
+                $this->db->limit($limit,$start);
+                $this->db->order_by($order,$dir); 
+
+            }
+            $allorderData = $this->db->get();
+            $result = $allorderData->result_array();
+            
+            //Get all records count
+            $count = $allorderData->num_rows();
+            return array('result' => $result,'count' => $count);
+			//return $query;
+
 		}
 	}
 ?>
