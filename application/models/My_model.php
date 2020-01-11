@@ -74,6 +74,7 @@
             $this->db->join('users as u', 'u.id = o.user_id','left');
             $this->db->where('o.is_deleted', 0);
             $this->db->where('u.status', 1);
+            $this->db->where('u.is_deleted', 0);
            // if(isset($pagename) && $pagename!=''){
             	//$this->db->group_by('o.user_id');
             	$this->db->group_by('u.id');

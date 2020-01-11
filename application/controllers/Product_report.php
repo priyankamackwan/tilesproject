@@ -42,7 +42,7 @@
       $data['activeProducts'] = $this->db->where('is_deleted',0)->where('status',1)->get("products")->result_array();
       $data['product_categories'] = $this->db->where('is_deleted',0)->where('status',1)->get("categories")->result_array();
       // Total balance quantity
-      $data['total_balance_quantity'] = $this->$model->balance_quantity('','');
+      //$data['total_balance_quantity'] = $this->$model->balance_quantity('','');
 			// accroding to according to role wise
       if ($this->userhelper->current('role_id') ==1) {
         $this->load->view($this->view.'/manage',$data);
