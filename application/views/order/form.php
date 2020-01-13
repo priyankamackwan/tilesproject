@@ -174,7 +174,7 @@ a:hover, a:active, a:focus {
 								
 									</div>
 									<div class="col-md-2 col-sm-3 col-xs-3">
-										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onkeyup="order_sum()">
+										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" >
 									</div>
 									<div class="col-md-2 col-sm-3 col-xs-3">
 										<input type="text" name="price_<?php echo $key+1;?>" id="price" value="<?php echo $value['price'];?>" required="required"  class=" form-control width_80 price_<?php echo $key+1;?>" onkeyup="order_sum()">
@@ -585,7 +585,7 @@ function add_more_items(){
 
 	$("#delete_"+total_item).append('<div class="form-group select2"><label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Item <font color="red"><span class="required">*</span></font>:</label><div class="col-md-4 col-sm-4 col-xs-4"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
-?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onkeyup="order_sum()"></div><div class="col-md-2 col-sm-3 col-xs-3 "><input type="text" name="price_'+total_item+'" id="price" required="required"  class=" form-control width_80 price_'+total_item+'" onkeyup="order_sum()"></div><div class="col-md-1 col-sm-1 col-xs-1 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
+?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" ></div><div class="col-md-2 col-sm-3 col-xs-3 "><input type="text" name="price_'+total_item+'" id="price" required="required"  class=" form-control width_80 price_'+total_item+'" onkeyup="order_sum()"></div><div class="col-md-1 col-sm-1 col-xs-1 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
 }
 function remove_item(id){
@@ -774,7 +774,10 @@ function order_sum(){
 	// alert(total_item);
 	for (var i = 1; i < totalItem+1; i++) {
 		//console.log($(".price_"+i).val() * $(".quantity_"+i).val());
-		totalPrice +=$(".price_"+i).val() * $(".quantity_"+i).val();
+		//totalPrice +=$(".price_"+i).val() * $(".quantity_"+i).val();
+		console.log($(".price_"+i).val());
+		totalPrice =parseInt(totalPrice) + parseInt($(".price_"+i).val());
+		console.log(totalPrice);
 	}
 	$("#total_price").val(totalPrice);
 }

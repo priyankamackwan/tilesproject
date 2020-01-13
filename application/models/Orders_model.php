@@ -63,7 +63,7 @@
                 if($role==1)
                 {
                     $this->db->where($this->orders_table.'.user_id',$user_id);
-                    $this->db->where($this->orders_table.'.admin_id',0);
+                    //$this->db->where($this->orders_table.'.admin_id',0);
                 }
                 else
                 {
@@ -97,7 +97,9 @@
             // $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
 
             //order total price * tax
-            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price * orders.tax / 100) as invoiceAmountWithTax,'.$this->orders_table.'.total_price as invoiceAmount');
+            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price + orders.tax ) as invoiceAmount');
+
+            //$this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price + orders.tax ) as invoiceAmountWithTax,'.$this->orders_table.'.total_price as invoiceAmount');
 
 
             $this->db->from($this->orders_table);
@@ -133,7 +135,10 @@
             // $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(paidAmount) as paidAmount,sum(unpaidAmount) as unpaidAmount')->
             //     from('('.$subQuery.') as tess');
 
-            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(invoiceAmountWithTax) as invoiceAmountWithTax')->
+            //$rr=$this->db->select('sum(invoiceAmount) as invoiceAmount,sum(invoiceAmountWithTax) as invoiceAmountWithTax')->
+              //  from('('.$subQuery.') as tess');
+
+            $rr=$this->db->select('sum(invoiceAmount) as invoiceAmount')->
                 from('('.$subQuery.') as tess');
 
 
