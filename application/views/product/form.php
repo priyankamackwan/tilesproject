@@ -688,7 +688,23 @@
         </div>
     </div>
   </section>
-
+<div class="modal fade" id="payment_popup" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header btn-primary">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title text-center headername" id="mySmallModalLabel">Update Payment</h4>
+        </div>
+        <div class="modal-body" id="prevMonthLeaveDatahtml">
+         
+        </div>
+<!--         <div class="modal-footer">
+          
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+ -->      </div>
+    </div>
+  </div>
 </div>
 <?php
 	$this->load->view('include/footer');
@@ -916,7 +932,7 @@ $('#datatables1').dataTable({
     "scrollX": true
   } );
 function add_item(productId,action='insert'){
-  if(order_id != ''){
+  if(productId != ''){
       $.ajax({
         type : "POST",
         url : "<?php echo base_url().$this->controller."/ajax_edit_item/" ?>",

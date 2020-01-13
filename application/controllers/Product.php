@@ -886,6 +886,17 @@
             curl_close($ch);
     
 	}
+    function ajax_edit_item($productId=null,$productHistoryId=null,$action='insert'){
+        $model = $this->model;
+        $productId=$this->input->post('productId');
+        $action=$this->input->post('action');
+        $data['procut_history']=$this->$model->purchase_history($productId,$productHistoryId,$action);
+        $data['productId']=$productId;
+        $data['productId']=$action;
+        $paymentHistoryHtml = $this->load->view($this->view.'/prodcut_history',$data,true);
+       // echo json_encode($paymentHistoryHtml);
+        exit();
+    }
     
 	}
 ?>
