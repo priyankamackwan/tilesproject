@@ -1417,7 +1417,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         for($k=0;$k<sizeof($totalData['result']);$k++) // replace status code to string
                         {
-                            $totalData['result'][$k]['total_price']=number_format($totalData['result'][$k]['total_price'],2); 
+                            $totalData['result'][$k]['total_price']=number_format($totalData['result'][$k]['total_price']+ $totalData['result'][$k]['tax'],2); 
 
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
