@@ -1575,7 +1575,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                         }
 
                         $data['orderDetail']['0']->tax = number_format($data['orderDetail']['0']->tax,2);
-                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price,2);
+                        //tax price
+                        $taxprice=$data['orderDetail']['0']->tax;
+                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price + $taxprice,2);
 
                         $data['orderDetail']['0']->bagTotal = number_format($bagTotal,2); // add bagtotal in array
 
