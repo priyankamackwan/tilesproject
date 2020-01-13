@@ -138,7 +138,8 @@
                        // $userData = $this->db->get("users")->result_array();
 					$nestedData['id'] = $srNo;
                                         $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value->invoice_no.'</b></a>';
-                                        $nestedData['total_price'] =$this->$model->getamount(ROUND($value->total_price,2));
+                                        //total price + tax
+                                        $nestedData['total_price'] =$this->$model->getamount(ROUND($value->total_price +  $value->tax,2));
                                         $nestedData['created'] =$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
                                         $nestedData['sales_expense'] =$value->sales_expense;
 					$data[] = $nestedData;

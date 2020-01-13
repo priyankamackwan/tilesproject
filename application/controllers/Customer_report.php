@@ -196,7 +196,8 @@
           $nestedData['id'] = $srNo;
           $nestedData['company_name'] =$value['company_name'];
           $nestedData['contact_person_name'] =$value['contact_person_name'];
-          $nestedData['total_price'] =$value['total_price'];
+          //total price + tax
+          $nestedData['total_price'] =$value['total_price'] + $value['tax'];
           $nestedData['location'] =$value['location'];
           $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value['invoice_no'].'</b></a>';
           $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
