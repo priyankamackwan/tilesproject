@@ -1830,7 +1830,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     
                      $data = $_POST;
                      if (empty($data)) {
-                    $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created');
+                    $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created,o.tax');
                     $this->db->from('orders as o');
                     $this->db->join('users as u', 'o.user_id = u.id');
                     $finalOrderData = $this->db->get()->result_array();
@@ -1868,7 +1868,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $orderData['invoice_status'] = 'Paid';
                         }
                         $orderData['created'] = $q[$k]->created;
-                        $orderData['total_price'] = $q[$k]->total_price;
+                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
                         $finalOrderData [] = $orderData;
                             }
                         } else {
@@ -1924,7 +1924,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                      $data = $_POST;
                      if (empty($data)) {
                          
-                         $q = $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
+                         $q = $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
                          
           
                     $finalOrderData = $q->get('orders')->result_array();
