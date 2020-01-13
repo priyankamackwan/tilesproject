@@ -267,5 +267,20 @@
 			//return $query;
 
 		}
+		//purchase history data 
+		function purchase_history($productId=NUll,$productHistoryId=NUll){
+			$this->db->select('product_purchase_history.*,products.name');
+            $this->db->from('product_purchase_history');
+            $this->db->join('products','products.id=product_purchase_history.product_id','left');
+            $this->db->where('products.is_deleted',0);
+            if(isset($productId) && $productId!=''){
+            	$this->db->where('product_purchase_history.product_id',$productId);
+            }
+            if(isset($productHistoryId) && $productHistoryId!=''){
+            	$this->db->where('product_purchase_history.id',$productHistoryId);
+            }            
+            $purchaseData = $this->db->get()->result_array();
+            return $purchaseData;
+		}
 	}
 ?>

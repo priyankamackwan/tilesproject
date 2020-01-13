@@ -156,9 +156,11 @@
                 $where .= 'p.cash_rate LIKE "'.$s.'%" )'; 
             }
             // Add new query 
-            $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name');
+            $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name,AVG(product_purchase_history.purchase_rate) as totalPurchaseExpense ,product_purchase_history.quantity as purchase_quantity,');
             $this->db->from('products as p');
-            $this->db->join('product_categories as pc', 'pc.product_id = p.id');
+            //koin product history table
+            $this->db->join('product_purchase_history', 'product_purchase_history.product_id = p.id');
+            $this->db->join('product_categories as pc', 'pc.product_id = p.id');            
             $this->db->join('categories as c', 'c.id = pc.cat_id');
             $this->db->where('p.is_deleted', 0);
             $this->db->where('c.is_deleted', 0);
@@ -182,6 +184,7 @@
             $this->db->limit($limit, $start);
             $this->db->group_by('pc.product_id');
             $q=$this->db->get()->result_array(); 
+            //echo $this->db->last_query();
             //Total count 
             $totalFiltered = $this->$model->filtercountTableRecords($where,$s);
 
@@ -223,6 +226,9 @@
 				{
                     // Chnage object to array value
 					$id = $this->primary_id;
+
+                    //total purchase expense
+                   // $totalPurchase=$value['purchase_expense'] + $value['purchase_rate'];
 					$edit = base_url($this->controller.'/edit/'.$this->utility->encode($value['id']));
                                         $view = base_url($this->controller.'/view/'.$this->utility->encode($value['id']));
                                         if ($value['status'] == 1){
@@ -249,7 +255,7 @@
                     }   
 
                     $nestedData['image'] = $image;
-                                        $nestedData['quantity'] = $value['quantity'];
+                                        $nestedData['quantity'] = $value['quantity']+ $value['purchase_quantity'];
                                         $nestedData['cash_rate'] =$this->$model->getamount(ROUND($value['cash_rate'],2));
                                         $nestedData['credit_rate'] = $this->$model->getamount(ROUND($value['credit_rate'],2));
                                         //Add flexible rate
@@ -268,7 +274,9 @@
                                             $nestedData['unit'] = 'SET';
                                         }
                                         
-                    $nestedData['purchase_expense'] = $this->$model->getamount(ROUND($value['purchase_expense'],2));
+                    //$nestedData['purchase_expense'] = $this->$model->getamount(ROUND($value['purchase_expense'],2));
+                                        $nestedData['purchase_expense'] = $this->$model->getamount(ROUND($value['totalPurchaseExpense'],2));
+                                        
 					$nestedData['status'] = $statusText;
                                         if ($value['status'] == 1){
                                             // $nestedData['manage'] = "<a href='$edit' class='btn  btn-warning  btn-xs'>Edit</a><a href='$delete' class='btn btn-danger btn-xs confirm-delete' >Delete</a><a href='$statusAction' class='btn  btn-warning  btn-xs confirm-statuschange'>Inactive</a>";
@@ -527,6 +535,7 @@
             $q_subcategories = $this->db->get('sub_categories');
             $data['sub_categories'] = $q_subcategories->result_array();
 
+            $data['purchase_history']=$this->$model->purchase_history($id);
 			$this->load->view($this->view.'/form',$data);
 		}
                 

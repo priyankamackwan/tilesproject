@@ -284,6 +284,9 @@
     .select2{
       width: 100% !important;
     }
+    table#datatables1 th {
+      vertical-align: middle;
+    }
   </style>
   <!-- <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -591,6 +594,89 @@
                       ?>
                     </select>
                   </div>
+                  <?php
+                  if($action == 'update'){
+                    ?>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+                        Payment Details :
+                      </label>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
+                      <thead>
+                            <tr class="">
+                              <th style="text-align: center">Sr No.</th>
+                              <th style="text-align: center">Item Name</th>
+                              <th style="text-align: center">Purchase Price</th>
+                              <th style="text-align: center">Quantity</th>
+                              <th style="text-align: center">Created On</th>
+                              <th style="text-align: center">Action</th>
+                            </tr>
+                        </thead>
+                    <?php
+                    if(isset($purchase_history) && $purchase_history!='' && count($purchase_history) >0){
+                    ?>
+                        <tbody>
+                          <?php
+                          foreach ($purchase_history as $key => $purchaseHistoryVal) {
+                            $delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($purchaseHistoryVal['id']));
+                          ?>
+                            <tr>
+                              <td style="text-align: center" >
+                                <?php echo $key+1;?>
+                              </td>
+                              <td style="text-align: center" >
+                                <?php
+                                if(isset($purchaseHistoryVal['name']) && $purchaseHistoryVal['name']!=''){
+                                  echo $purchaseHistoryVal['name'];
+                                }
+                                ?>
+                              </td>
+                              <td class="text-right">
+                                <?php
+                                if(isset($purchaseHistoryVal['purchase_rate']) && $purchaseHistoryVal['purchase_rate']!=''){
+                                  echo $purchaseHistoryVal['purchase_rate'];
+                                }
+                                ?>
+                              </td>
+                              <td class="text-right">
+                                <?php
+                                if(isset($purchaseHistoryVal['quantity']) && $purchaseHistoryVal['quantity']!=''){
+                                  echo $purchaseHistoryVal['quantity'];
+                                }
+                                ?>
+                              </td>
+                              <td style="text-align: center;">
+                                <?php
+                                if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
+                                  echo date('d/m/Y',strtotime($payment_history_val['created_at']));
+                                }
+                                ?>
+                              </td>
+                              <td style="text-align: center;">
+                                <a onclick="edit_item(<?php echo $id;?>,<?php echo $purchaseHistoryVal['id'];?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_item(<?php echo $id;?>,<?php echo $purchaseHistoryVal['id'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
+                              </td>
+                          </tr>
+                          <?php
+                          }                           
+                          ?> 
+                        </tbody>
+                    <?php
+                  }
+                    ?>
+                    </table>
+                      <div class="form-group" id="id_payment_date">
+                        <label class="control-label col-md-3 col-sm-12 col-xs-12 pull-right" for="payment_date">                      
+                          <a href="javascript:void(0);" title="Add Item" id="prevousData" class="btn btn-success" onclick="add_item(<?php echo $result[0]->id;?>)">
+                            Add Item
+                          </a>
+                        </label>
+                      </div>
+                    </div>
+                    <?php
+                  }
+                  ?>
                 </div> 
 
                 <div class="box-footer">
@@ -820,5 +906,42 @@ function readURL(input) {
     };
     reader.readAsDataURL(input.files[0]);
   }
+}
+$('#datatables1').dataTable({
+    "ordering": false,
+    "bPaginate": false,
+    "lengthChange": false,
+    "info": false,
+    "searching": false,
+    "scrollX": true
+  } );
+function add_item(productId,action='insert'){
+  if(order_id != ''){
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url().$this->controller."/ajax_edit_item/" ?>",
+        data : {productId:productId,action:action},
+        dataType: "json",
+        success : function (data){
+          if(data != ''){
+            if(action=='insert'){
+              $(".headername").html('Add Payment');
+            }
+              $("#prevMonthLeaveDatahtml").html(data);
+              $("#payment_popup").modal('show');
+          }else{
+            $("#prevMonthLeaveDatahtml").html("<h1> This is new User </h1>");
+            $("#payment_popup").modal('show');
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(thrownError+ '\r\n' +xhr.statusText+ '\r\n' +xhr.responseText);
+        }
+      });
+    }else{
+      $("#prevMonthLeaveDatahtml").html("<h1> There is some Error </h1>");
+      $("#payment_popup").modal('show');
+    }
+
 }
 	</script>
