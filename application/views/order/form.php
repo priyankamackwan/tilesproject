@@ -101,16 +101,19 @@ a:hover, a:active, a:focus {
 										<label>Item Name (Design No)</label>
 									</div>
 									<div class="col-md-2 col-sm-4 col-xs-4">
-										<label >Quantity</label>								
+										<label>Quantity</label>
 									</div>
-									<div class="col-md-2 col-sm-3 col-xs-3 ">
-										<label >Price</label>								
+									<div class="col-md-1 col-sm-4 col-xs-4">
+										<label>Rate</label>
+									</div>
+									<div class="col-md-1 col-sm-3 col-xs-3 ">
+										<label>Price</label>
 									</div>
 									<div class="col-md-1 col-sm-2 col-xs-2 ">
 										<label class="maxwidth300" style="max-width: 125%;">Delete</label>
 									</div>
 									<!-- Show byuing product -->
-							<div id="new_item_add">		
+							<div id="new_item_add">
 							<?php 
 							$username=$total_price=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=$tax=[];
 							foreach ($result as $key => $value) {
@@ -179,7 +182,10 @@ a:hover, a:active, a:focus {
 									<div class="col-md-2 col-sm-3 col-xs-3">
 										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" >
 									</div>
-									<div class="col-md-2 col-sm-3 col-xs-3">
+									<div class="col-md-1 col-sm-3 col-xs-3">
+										<input type="text" name="rate_<?php echo $key+1;?>" id="rate" value="<?php echo $value['rate'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 rate_<?php echo $key+1;?>" >
+									</div>
+									<div class="col-md-1 col-sm-3 col-xs-3">
 										<input type="text" name="price_<?php echo $key+1;?>" id="price" value="<?php echo $value['price'];?>" required="required" class=" form-control width_80 price_<?php echo $key+1;?>" onkeyup="order_sum()">
 									</div>
 									<div class="col-md-1 col-sm-1 col-xs-1 ">

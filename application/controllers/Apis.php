@@ -1,5 +1,5 @@
-    <?php
-    require 'PHPMailer/src/Exception.php';
+<?php
+require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 	class Apis extends CI_Controller
 	{
-                public $model;
+        public $model;
 		public function __construct() {
                     
                     $this->model = "My_model";
@@ -29,7 +29,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     
         if ($actionName == 'refreshToken')
         {
-                        $this->user_id = $headers['Userid'];
+            $this->user_id = $headers['Userid'];
         }
         elseif ($actionName != 'userLogin' && $actionName != 'userRegister' && $actionName != 'forgotpassword') 
         {
@@ -175,7 +175,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 		    // "data" => json_encode(array())
 		);
     	$data = json_encode($arr);
-                            $this->android_ios_notification($data,"Android");
+        $this->android_ios_notification($data,"Android");
 		/*//FCM API end-point
 		$url = 'https://fcm.googleapis.com/fcm/send';
 		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
@@ -892,71 +892,71 @@ You can change this password from mobile application after you are logged in onc
                             
                             
                             
-                        $do_no = $do;
+                $do_no = $do;
 
-                        $finalDate = date("d-M-Y");
-                        //echo $finalDate; exit;
-                         $multipleWhere = ['id' =>$this->user_id];
-                        $this->db->where($multipleWhere);
-                        $userData= $this->db->get("users")->result_array();
-                      //  echo '<pre>';
-                       // print_r($userData); exit;
-                        
-                             $multipleWhere = ['order_id' => $lastInsertedOrderId];
-                        $this->db->where($multipleWhere);
-                        $productOrder = $this->db->get("order_products")->result_array();
-                     // echo '<pre>';
-                     // print_r($productOrder); exit;
-                      $finalOrderData = array();
-                      $subTotal = 0;
-                      for($k=0;$k<count($productOrder);$k++) {
-                              $productIdArray = $productOrder[$k]['product_id'];
-                            $multipleWhere2 = ['id' => $productIdArray];
-                        $this->db->where($multipleWhere2);
-                        $productData= $this->db->get("products")->result_array();
-                        
-                        $finalOrderData[$k]['description'] = $productData[0]['name'];
-                        $finalOrderData[$k]['size'] = $productData[0]['size'];
-                        $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
-                        
-                        //product price from order products table
-                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
-                        /*
-                            if ($userData[0]['client_type'] == 1) {
-                            $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
-                        }
-                        
-                        if ($userData[0]['client_type'] == 2) {
-                            $finalOrderData[$k]['rate'] = $productData[0]['credit_rate'];
-                        }
-                        
-                        if ($userData[0]['client_type'] == 3) {
-                            $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
-                        }
-                        
-                        if ($userData[0]['client_type'] == 4) {
-                            $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
-                        */
-                        if ($productData[0]['unit'] == 1) {
-                            $finalOrderData[$k]['unit'] = 'CTN';
-                        }
-                        if ($productData[0]['unit'] == 2) {
-                            $finalOrderData[$k]['unit'] = 'SQM';
-                        }
-                        if ($productData[0]['unit'] == 3) {
-                            $finalOrderData[$k]['unit'] = 'PCS';
-                        }
-                        if ($productData[0]['unit'] == 4) {
-                            $finalOrderData[$k]['unit'] = 'SET';
-                        }
-                            $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                            $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
-                        $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
-                      }
-                        $vat = $subTotal* Vat/100;
-                        $finalTotal =$subTotal+$vat;
-                        include 'TCPDF/tcpdf.php';
+                $finalDate = date("d-M-Y");
+                //echo $finalDate; exit;
+                $multipleWhere = ['id' =>$this->user_id];
+                $this->db->where($multipleWhere);
+                $userData= $this->db->get("users")->result_array();
+
+                $multipleWhere = ['order_id' => $lastInsertedOrderId];
+                $this->db->where($multipleWhere);
+                $productOrder = $this->db->get("order_products")->result_array();
+
+                $finalOrderData = array();
+                $subTotal = 0;
+                for($k=0;$k<count($productOrder);$k++) 
+                {
+                    $productIdArray = $productOrder[$k]['product_id'];
+                    $multipleWhere2 = ['id' => $productIdArray];
+                    $this->db->where($multipleWhere2);
+                    $productData= $this->db->get("products")->result_array();
+
+                    $finalOrderData[$k]['description'] = $productData[0]['name'];
+                    $finalOrderData[$k]['size'] = $productData[0]['size'];
+                    $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
+
+                    //product price from order products table
+                    $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                    /*
+                        if ($userData[0]['client_type'] == 1) {
+                        $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
+                    }
+
+                    if ($userData[0]['client_type'] == 2) {
+                        $finalOrderData[$k]['rate'] = $productData[0]['credit_rate'];
+                    }
+
+                    if ($userData[0]['client_type'] == 3) {
+                        $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
+                    }
+
+                    if ($userData[0]['client_type'] == 4) {
+                        $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
+                    }*/
+
+                    if ($productData[0]['unit'] == 1) {
+                        $finalOrderData[$k]['unit'] = 'CTN';
+                    }
+                    if ($productData[0]['unit'] == 2) {
+                        $finalOrderData[$k]['unit'] = 'SQM';
+                    }
+                    if ($productData[0]['unit'] == 3) {
+                        $finalOrderData[$k]['unit'] = 'PCS';
+                    }
+                    if ($productData[0]['unit'] == 4) {
+                        $finalOrderData[$k]['unit'] = 'SET';
+                    }
+                    $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
+                    $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+
+                    $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
+                }
+                $vat = $subTotal*Vat/100;
+                $finalTotal = $subTotal+$vat;
+                //echo $id; exit;
+                include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
