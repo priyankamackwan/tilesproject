@@ -1,4 +1,7 @@
 <?php
+
+	$tax_percentage = $result[0]['tax_percentage'];
+
 	$this->load->view('include/header');
 	$this->load->view('include/leftsidemenu');	
 	defined('BASEPATH') OR exit('No direct script access allowed');
