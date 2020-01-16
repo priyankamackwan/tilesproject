@@ -950,14 +950,12 @@ You can change this password from mobile application after you are logged in onc
                         if ($productData[0]['unit'] == 4) {
                             $finalOrderData[$k]['unit'] = 'SET';
                         }
-                             $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                        $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
-                        
+                            $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
+                            $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
                         $vat = $subTotal* Vat/100;
                         $finalTotal =$subTotal+$vat;
-                        //echo $id; exit;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');

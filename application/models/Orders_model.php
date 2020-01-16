@@ -192,7 +192,7 @@
         */
         //Fetch for all order in edit page
         function view_all_order($id){
-            $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark,orders.total_price,orders.tax');
+            $this->db->select('order_products.id,order_products.order_id,order_products.product_id,products.name,products.design_no,order_products.quantity,order_products.price,orders.user_id,products.name,users.company_name,users.contact_person_name,orders.sales_expense,orders.delivery_date,orders.payment_date,orders.status,orders.invoice_status,users.client_type,products.cash_rate,products.credit_rate,products.walkin_rate,products.flexible_rate,orders.cargo,orders.cargo_number,orders.location,orders.mark,orders.total_price,orders.tax,orders.tax_percentage');
 
             // Select from Order prodcuts main table
             $this->db->from('order_products');

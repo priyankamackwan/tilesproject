@@ -1,6 +1,6 @@
 <?php
-//echo '<pre>';
-//print_r($productData); exit;
+/*echo '<pre>';
+print_r($result); exit;*/
   $this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
   defined('BASEPATH') OR exit('No direct script access allowed');
@@ -286,6 +286,7 @@
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(round($result[0]->tax,2));?>
+                  <?php echo "  ( ".$result[0]->tax_percentage. " % )"; ?> <!-- display tax in percentage -->
                 </div>
               </div>
 
