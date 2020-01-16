@@ -773,6 +773,7 @@
                       // $vat = $subTotal * $ordersData[0]['tax']/100;
 
                       $vat = $ordersData[0]['tax'];
+                      $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -804,7 +805,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -939,6 +940,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                       // $vat = $subTotal * $ordersData[0]['tax']/100;
 
                       $vat =$ordersData[0]['tax'];
+                      $tax_percentage =$ordersData[0]['tax_percentage'];
                       
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
@@ -977,7 +979,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -1390,6 +1392,8 @@ $pdf->Output($do_no, 'I');
             $payment_date=date('Y-m-d H:i:s',strtotime($payment_date));
 
             $tax= $this->input->post('tax');
+            $tax_percentage = $this->input->post('tax_percentage');
+
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
@@ -1401,7 +1405,8 @@ $pdf->Output($do_no, 'I');
                     'cargo_number'=>$cargo_number,
                     'location'=>$location,
                     'mark'=>$mark,
-                    'tax' =>$tax
+                    'tax' =>$tax,
+                    'tax_percentage' => $tax_percentage
                 );
 
             $where = array($this->primary_id=>$id);
@@ -1538,19 +1543,20 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                          $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
                          
            	$data = array(
-				'user_id' => $userData[0]['id'],
-                                'tax' => $Row[4],
-                                'total_price' => $Row[5],
-				'lpo_no' => $lpo,
-                                'do_no' => $do,
-                                'invoice_no' => $invoice,
-                     'sales_expense' => $Row[6],
-                     'cargo' => $Row[7],
-                     'cargo_number' => $Row[8],
-                    'location' => $Row[9],
-                    'mark' => $Row[10],
-                    'invoice_status' => $Row[11],
-                    'created' => date('Y-m-d h:i:s'),
+				            'user_id' => $userData[0]['id'],
+                            'tax' => $Row[4],
+                            'total_price' => $Row[5],
+				            'lpo_no' => $lpo,
+                            'do_no' => $do,
+                            'invoice_no' => $invoice,
+                            'sales_expense' => $Row[6],
+                            'cargo' => $Row[7],
+                            'cargo_number' => $Row[8],
+                            'location' => $Row[9],
+                            'mark' => $Row[10],
+                            'invoice_status' => $Row[11],
+                            'tax_percentage' => $ROW[12],
+                            'created' => date('Y-m-d h:i:s'),
 			);
 			$this->$model->insert('orders',$data); 
                         
@@ -1565,13 +1571,13 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                               $this->db->select('*');
                         $this->db->where('id', $countProducts[$k]);
                         $q = $this->db->get('products');
-            $productData = $q->result_array();
+                        $productData = $q->result_array();
                             
                               $orderProductData = array(
                                     'order_id' => $lastInsertedOrderId,
                                     'product_id' =>$productData[0]['id'],
                                     'quantity' => $countQuantity[$k],
-                              'price' => $countPrice[$k],
+                                    'price' => $countPrice[$k],
                             );
                             $this->$model->insert('order_products',$orderProductData);
               
