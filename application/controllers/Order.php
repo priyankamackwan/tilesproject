@@ -730,8 +730,9 @@
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -745,7 +746,7 @@
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
