@@ -50,20 +50,31 @@
                      
 			$order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
 
-			$s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+			// $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+   //     if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+   //      $startDate = $_POST['startdate'];
+   //      $endDate = $_POST['enddate'];
+   //     }    
+      $where ="";
+      $where .= "orders.is_deleted=0";
        if(!empty($salesOrderDate) && isset($_POST['startdate'])){
-        $startDate = $_POST['startdate'];
-        $endDate = $_POST['enddate'];
-       }                 
-
+          if($where == null){
+                $where .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].' ") ';
+              }else{
+                $where .= ' and (DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].' ")';
+              }
+        }    
                         // $startDate = $_POST['columns'][1]['search']['value'];
                         // $endDate = $_POST['columns'][2]['search']['value'];
       
-			$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
-                       
+			// $totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+
+        
+
+                      
 			$start = $_POST['start'];
 			$limit = $_POST['length'];
-                        
+      /*                  
                          if (empty($startDate) || empty($endDate)){
                             $q = $this->db->select('*')->where('is_deleted', 0);
                                 if(empty($s))
@@ -119,15 +130,36 @@
 				$totalFiltered = count($q);
 			}
                         }
+*/
+      if(!empty($this->input->post('search')['value']))
+      {
+        if($where != null){
+            $where.= ' AND ';
+        }
+        // Serch bar value
+        $search=$this->input->post('search')['value'];
 
-             
+
+        $where .= '(lpo_no LIKE "%'.$search.'%" or ';
+
+        $where .= 'do_no LIKE "%'.$search.'%" or ';
+
+        $where .= 'invoice_no LIKE "%'.$search.'%" or ';
+
+        $where .= 'sales_expense LIKE "%'.$search.'%" )';
+      }
+      //tottal count
+      $totalData = $this->$model->expenseReport($where);
+      $totalFiltered = $totalData['count'];
+      //new query for report
+      $q=$this->$model->expenseReport($where,$limit,$start,$order,$dir);
 			$data = array();
         
-			if(!empty($q))
-			{
+			if(!empty($q['result'])){
+
                                $startNo = $_POST['start'];
                             $srNo = $startNo + 1;
-				foreach ($q as $key=>$value)
+				foreach ($q['result'] as $key=>$value)
 				{
           $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->id));
 					//$id = $this->primary_id;
@@ -149,13 +181,13 @@
 
 			$json_data = array(
 						"draw"            => intval($this->input->post('draw')),
-						"recordsTotal"    => intval($totalData),
+						"recordsTotal"    => intval($totalData['count']),  
 						"recordsFiltered" => intval($totalFiltered),
 						"data"            => $data
 						);
 			echo json_encode($json_data);
 		}
-                
+    /*            
 		public function add() {
                     //echo '3'; exit;
 			$data['action'] = "insert";
@@ -164,7 +196,8 @@
 
 			$this->load->view($this->view.'/form',$data);
 		}
-                
+    */    
+    /*      
 		public function insert() {
                   
 			$model = $this->model;
@@ -181,7 +214,8 @@
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
-                
+    */ 
+    /*         
 		public function edit($id) {
                     
 			$model = $this->model;
@@ -197,7 +231,8 @@
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
 			$this->load->view($this->view.'/form',$data);
 		}
-                
+    */ 
+    /*         
                 public function view($id) {
                     
 			$model = $this->model;
@@ -216,7 +251,7 @@
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+        /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['order_id' => $id];
@@ -244,7 +279,7 @@
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
+    */           
     public function downloadinvoice($id) {
               
       $model = $this->model;
@@ -410,7 +445,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
       $this->load->view($this->view.'/view',$data);
     }
                 
-                
+    /*            
            public function downloadlpo($id) {
                     
 			$model = $this->model;
@@ -459,7 +494,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
                         }*/
-                        
+                        /*
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -540,7 +575,7 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -554,7 +589,8 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
+    */
+    /*            
                     public function download($id) {
                     
 			$model = $this->model;
@@ -662,7 +698,7 @@ $pdf->Output($do_no, 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -676,7 +712,8 @@ $pdf->Output($do_no, 'D');
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
+    */
+    /*            
 		public function Update() {
                     
 			$model = $this->model;
@@ -699,6 +736,8 @@ $pdf->Output($do_no, 'D');
 			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
 			redirect($this->controller);
 		}
+    */
+    /*
 		public function remove($id) {
                    
 			$model = $this->model;
@@ -717,8 +756,8 @@ $pdf->Output($do_no, 'D');
                         redirect($this->controller);	
 		}
                 
-       
-                
+      */ 
+    /*            
                 public function inactive($id) {
                    
 			$model = $this->model;
@@ -736,7 +775,8 @@ $pdf->Output($do_no, 'D');
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been blocked successfully!</div>');
                         redirect($this->controller);	
 		}
-                
+    */
+    /*            
                 public function active($id) {
                    
 			$model = $this->model;
@@ -754,6 +794,7 @@ $pdf->Output($do_no, 'D');
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
                         redirect($this->controller);	
 		}
+    */
                 
 	}
 ?>

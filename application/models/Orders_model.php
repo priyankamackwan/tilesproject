@@ -116,19 +116,22 @@
                 // Filter condition to add where
                 $this->db->where($where);
             }
-            //date selected for top arted amount this month not for all
-            if(isset($monthType) && $monthType!='' && $monthType=="current"){
-                if($whereDatechange=='yes' && !empty($whereDate)){
+            if($whereDatechange=='yes' && !empty($whereDate)){
                     $this->db->where($whereDate);
-                }else{
-                    //default for current month 
-                    $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
-                    $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
-
-                    $whereBetweenDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
-                    $this->db->where($whereBetweenDate);
-                }
             }
+            //date selected for top arted amount this month not for all
+            // if(isset($monthType) && $monthType!='' && $monthType=="current"){
+            //     if($whereDatechange=='yes' && !empty($whereDate)){
+            //         $this->db->where($whereDate);
+            //     }else{
+            //         //default for current month 
+            //         $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+            //         $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+            //         $whereBetweenDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+            //         $this->db->where($whereBetweenDate);
+            //     }
+            // }
             $this->db->group_by($this->orders_table.'.id');
             $subQuery =  $this->db->get_compiled_select();
             
@@ -277,19 +280,22 @@
                 // Filter condition to add where
                 $this->db->where($where);
             }
-            //date selected for top arted amount this month not for all
-            if(isset($monthType) && $monthType!='' && $monthType=="current"){
-                if($whereDatechange=='yes' && !empty($whereDate)){
+            if($whereDatechange=='yes' && !empty($whereDate)){
                     $this->db->where($whereDate);
-                }else{
-                    //default for current month 
-                    $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
-                    $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
-
-                    $whereBetweenDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
-                    $this->db->where($whereBetweenDate);
-                }
             }
+            //date selected for top arted amount this month not for all
+            // if(isset($monthType) && $monthType!='' && $monthType=="current"){
+            //     if($whereDatechange=='yes' && !empty($whereDate)){
+            //         $this->db->where($whereDate);
+            //     }else{
+            //         //default for current month 
+            //         $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+            //         $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+            //         $whereBetweenDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+            //         $this->db->where($whereBetweenDate);
+            //     }
+            // }
             $this->db->group_by('payment_history.id');
             $subQuery =  $this->db->get_compiled_select();
             $rr=$this->db->select('sum(historypaidamount) as historypaidamount')->
