@@ -876,7 +876,7 @@ You can change this password from mobile application after you are logged in onc
                             
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
-                                if(isset($orderProductArray[$k]['rate'] && !empty($orderProductArray[$k]['rate']))){
+                                if(isset($orderProductArray[$k]['rate']) && !empty($orderProductArray[$k]['rate'])){
                                     $rate = $orderProductArray[$k]['rate'];
                                 }else{
                                     $rate = number_format($orderProductArray[$k]['price']/$orderProductArray[$k]['quantity'], 2);
