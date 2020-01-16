@@ -764,6 +764,7 @@ You can change this password from mobile application after you are logged in onc
                 public function addOrder() {
                     
                     $model = $this->model;
+                    $orderData = array();
                     $data = $_POST;
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
 
@@ -875,8 +876,20 @@ You can change this password from mobile application after you are logged in onc
                             
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
-                                $product_orders = array('order_id'=>$lastInsertedOrderId,'product_id'=>$orderProductArray[$k]['product_id'],'quantity'=>$orderProductArray[$k]['quantity'],'price'=>$orderProductArray[$k]['price'],'created' => date('Y-m-d h:i:s'));
-                                $this->$model->insert('order_products',$product_orders);
+                                if(isset($orderProductArray[$k]['rate'] && !empty($orderProductArray[$k]['rate']))){
+                                    $rate = $orderProductArray[$k]['rate'];
+                                }else{
+                                    $rate = number_format($orderProductArray[$k]['price']/$orderProductArray[$k]['quantity'], 2);
+                                }
+                                
+                                $product_orders = array(
+                                    'order_id'  => $lastInsertedOrderId,
+                                    'product_id'=> $orderProductArray[$k]['product_id'],
+                                    'quantity'  => $orderProductArray[$k]['quantity'],
+                                    'price'     => $orderProductArray[$k]['price'],
+                                    'rate'      => $rate,
+                                    'created'   => date('Y-m-d h:i:s'));
+                                $this->$model->insert('order_products', $product_orders);
 
                                 $this->db->select('*');
                                 $this->db->where('id', $orderProductArray[$k]['product_id']);
@@ -920,7 +933,8 @@ You can change this password from mobile application after you are logged in onc
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
                         
                         //product price from order products table
-                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        // $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
                         /*
                             if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
@@ -951,11 +965,12 @@ You can change this password from mobile application after you are logged in onc
                             $finalOrderData[$k]['unit'] = 'SET';
                         }
                             $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                            $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+                            $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                        $vat = $subTotal* Vat/100;
-                        $finalTotal =$subTotal+$vat;
+                        // $vat = $subTotal* Vat/100;
+                        $vat = $orderData['tax'];
+                        $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');

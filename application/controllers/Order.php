@@ -896,9 +896,10 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
 
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -912,7 +913,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
@@ -1371,7 +1372,8 @@ $pdf->Output($do_no, 'I');
                     $insert_data=array('order_id'=>$id,
                                         'product_id'=>$value,
                                         'quantity'=>$quantity_arr[$value],
-                                        'price'=>$rate_type
+                                        'price'=>$rate_type,
+                                        'rate' => number_format($rate_type/$quantity_arr[$value], 2)
                                 );
                     $this->$model->insert('order_products',$insert_data);
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
