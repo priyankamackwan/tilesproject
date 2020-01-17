@@ -161,7 +161,7 @@
                             $srNo = $startNo + 1;
 				foreach ($q['result'] as $key=>$value)
 				{
-          $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value->id));
+          $downloadinvoice = base_url($this->controller.'/downloadinvoice/'.$this->utility->encode($value['id']));
 					//$id = $this->primary_id;
                                              
                     
@@ -169,11 +169,11 @@
                        // $this->db->where($multipleWhere2);
                        // $userData = $this->db->get("users")->result_array();
 					$nestedData['id'] = $srNo;
-                                        $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value->invoice_no.'</b></a>';
+                                        $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value['invoice_no'].'</b></a>';
                                         //total price + tax
-                                        $nestedData['total_price'] =$this->$model->getamount(ROUND($value->total_price +  $value->tax,2));
-                                        $nestedData['created'] =$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
-                                        $nestedData['sales_expense'] =$value->sales_expense;
+                                        $nestedData['total_price'] =$this->$model->getamount(ROUND($value['total_price'] +  $value['tax'],2));
+                                        $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
+                                        $nestedData['sales_expense'] =$value['sales_expense'];
 					$data[] = $nestedData;
                                         $srNo++;
 				}
@@ -321,8 +321,9 @@
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -336,7 +337,7 @@
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
@@ -365,6 +366,7 @@
                       // $vat = $subTotal * $ordersData[0]['tax']/100;
 
                       $vat = $ordersData[0]['tax'];
+                      $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -387,7 +389,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="32%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -396,7 +398,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>

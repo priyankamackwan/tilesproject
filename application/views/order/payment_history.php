@@ -1,6 +1,6 @@
 <?php
 // echo $this->db->last_query();
-$amount=$payment_mode=$reference=$payment_date='';
+$orderTax=0;
 if(isset($payment_history->amount) && $payment_history->amount!=''){
     $amount=$payment_history->amount;
 }
@@ -21,9 +21,7 @@ if(isset($totalPaidAmount) && $totalPaidAmount!=''){
 }
 //order taxfrom order table
 if(isset($payment_history->tax) && $payment_history->tax!='' ){
-    $orderTax=$payment_history->total_price * $payment_history->tax /100; 
-}else{
-    $orderTax=$payment_history->total_price * Vat /100; 
+    $orderTax=$payment_history->tax; 
 }
  
 ?>
