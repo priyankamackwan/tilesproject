@@ -1861,6 +1861,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         } else {
                             $finalOrderData[$l]['invoice_status'] = 'Paid';
                         }
+                        $finalOrderData[$l]['total_price'] = $finalOrderData[$l]['total_price']+ $finalOrderData[$l]['tax'];
                     }
 
                      } else {
@@ -1890,8 +1891,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $orderData['invoice_status'] = 'Paid';
                         }
                         $orderData['created'] = $q[$k]->created;
-                        $orderData['total_price'] = $q[$k]->total_price;
-                        $orderData['total_price'] = $q[$k]->tax;
+                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
+                        //$orderData['total_price'] = $q[$k]->tax;
                         $finalOrderData [] = $orderData;
                             }
                         } else {
