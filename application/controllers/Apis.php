@@ -999,7 +999,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['c
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$data['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$data['mark'].'</td></tr></table>     
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">Size</th><th style="text-align: center">Design</th><th style="text-align: center">quantity</th><th style="text-align: center">Unit</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">UNIT</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center" width="60%">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 

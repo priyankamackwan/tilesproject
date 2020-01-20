@@ -800,7 +800,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="32%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="31%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="11%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -1107,7 +1107,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. :
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table>     
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="60%">DESCRIPTION</th><th style="text-align: center" width="10%">Size</th><th style="text-align: center" width="10%">Design</th><th style="text-align: center" width="10%">quantity</th><th style="text-align: center" width="10%">Unit</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="60%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">UNIT</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 
@@ -1571,7 +1571,6 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                         $this->db->where('email', $Row[0]);
                         $q = $this->db->get('users');
             $userData = $q->result_array();
-       
                if ($userData){
                    
                       $this->db->select('id');
@@ -1606,16 +1605,19 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                             'location' => $Row[9],
                             'mark' => $Row[10],
                             'invoice_status' => $Row[11],
-                            'tax_percentage' => $ROW[12],
+                            'tax_percentage' => $Row[12],
                             'created' => date('Y-m-d h:i:s'),
 			);
 			$this->$model->insert('orders',$data); 
+            
                         
                         $lastInsertedOrderId = $this->db->insert_id();
                    
                         $countProducts = explode(',', $Row[1]);
                         $countQuantity = explode(',', $Row[2]);
                         $countPrice = explode(',', $Row[3]);
+
+
                      
                         for($k=0;$k<count($countPrice);$k++) {
                             
@@ -1623,15 +1625,31 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
                         $this->db->where('id', $countProducts[$k]);
                         $q = $this->db->get('products');
                         $productData = $q->result_array();
+                        //add rate in order product table
+                        if ($userData[0]['client_type'] == 1) {
+                            $rateAdd = $productData[0]['cash_rate'];
+                        }
+                        
+                        if ($userData[0]['client_type'] == 2) {
+                            $rateAdd = $productData[0]['credit_rate'];
+                        }
+                        
+                        if ($userData[0]['client_type'] == 3) {
+                            $rateAdd = $productData[0]['walkin_rate'];
+                        }
+                        
+                        if ($userData[0]['client_type'] == 4 || $userData[0]['client_type'] == 0) {
+                            $rateAdd = $productData[0]['flexible_rate'];
+                        }
                             
                               $orderProductData = array(
                                     'order_id' => $lastInsertedOrderId,
                                     'product_id' =>$productData[0]['id'],
                                     'quantity' => $countQuantity[$k],
                                     'price' => $countPrice[$k],
+                                    'rate'  => $rateAdd
                             );
                             $this->$model->insert('order_products',$orderProductData);
-              
                      
                        $updatedSoldQuantity = $productData[0]['sold_quantity'] + $countQuantity[$k]; 
                         $this->db->set('sold_quantity',$updatedSoldQuantity);
