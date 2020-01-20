@@ -1849,6 +1849,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created,o.tax');
                     $this->db->from('orders as o');
                     $this->db->join('users as u', 'o.user_id = u.id');
+                    $this->db->where('o.is_deleted',0);
+                    $this->db->where('u.is_deleted',0);
+                    $this->db->where('u.status',1);
                     $finalOrderData = $this->db->get()->result_array();
                     for($l=0;$l<count($finalOrderData);$l++) {
                         if ($finalOrderData[$l]['invoice_status'] == 0) {
@@ -1861,6 +1864,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                      } else {
                           $q= $this->db->select('*')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
+                            $this->db->where('is_deleted',0);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
                          //   echo '<pre>';
@@ -1905,11 +1909,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                      if (empty($data)) {
                     $this->db->select('o.id,o.sales_expense,o.invoice_no,o.created');
                     $this->db->from('orders as o');
+                    $this->db->where('o.is_deleted',0);
                     $finalOrderData = $this->db->get()->result_array();
                     
                      } else {
                           $q= $this->db->select('*')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
+                            $this->db->where('is_deleted',0);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
                             if ($q) {
@@ -1970,6 +1976,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                      } else {
                            $q= $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
+                            $this->db->where('is_deleted',0);
                           
                             $q = $q->get('orders')->result();
                            // if ($q){
