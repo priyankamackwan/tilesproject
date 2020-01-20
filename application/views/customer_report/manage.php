@@ -1,6 +1,9 @@
 <?php
 	$this->load->view('include/header');
     $this->load->view('include/leftsidemenu');
+    //start date and end date for datepickker filter
+    $from_dateshow = date("d/m/Y", strtotime("first day of this month"));
+    $to_dateshow = date("d/m/Y");
 ?>
 <?php
 /*
@@ -119,11 +122,14 @@
                                             <label class="control-label" style="margin-top:7px;">Date:</label>
                                         </div>
                                         <!-- Date Range Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <div class="col-md-4 col-sm-12 col-xs-12">
                                             <div class="input-group">
-                                                <input class="form-control" placeholder="Date" required="" id="salesOrderDates" name="salesOrderDates" type="text">
+                                                <input class="form-control" placeholder="Date" required="" id="salesOrderDates" name="salesOrderDates" type="text" value="<?php echo $from_dateshow.' - '.$to_dateshow; ?>">
                                                 <label class="input-group-addon btn" for="salesOrderDates">
                                                     <span class="fa fa-calendar"></span>
+                                                </label>
+                                                <label class="btn-danger input-group-addon btn " id="resetDatePicker" for="salesOrderDate " data-toggle="tooltip" title="Reset" onclick="resetDatePicker()">
+                                                    <span class="fa fa-refresh"></span>
                                                 </label>
                                             </div>
                                         </div>
@@ -218,6 +224,10 @@
 ?>
 
 <script>
+    //clear data picker value
+    function resetDatePicker(){
+        $("#salesOrderDates").val('');
+    }
     var dataTable2 = '';
     daterangeStartValue = '';
     daterangeEndValue= '';
@@ -237,6 +247,23 @@
         //     daterangeEndValue= end.format('YYYY-MM-DD');
         //     dataTable2.draw();
         // }
+
+        $('#salesOrderDates').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+
+            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
+            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
+
+            dataTable2.api().draw();
+        });
+
+        $('#salesOrderDates').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            dataTable2.api().draw();
+        });
+
+        daterangeStartValue = moment($('#salesOrderDates').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
+        daterangeEndValue = moment($('#salesOrderDates').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
 
         
     });   
@@ -283,14 +310,14 @@
         dt.ajax.reload();
     };
     //End For download    
-
+    /*
     $(document).on("change","#company_name",function(evt){
 
                 company_name=$("#company_name").val();
                 $("#contact_person_name").html('');
 
                 $.ajax({
-                    url: "<?php echo base_url().$this->controller."/companytocustomer/" ?>",
+                    url: "<?php //echo base_url().$this->controller."/companytocustomer/" ?>",
                     dataType: "json",
                     type: "POST",
                     data: {'company_name' : company_name},
@@ -302,7 +329,7 @@
                 });
                 dataTable2.api().draw();
             });
-     
+     */
 	var dataTable2 = $('#datatables').dataTable({
 			"processing": true,
 			"serverSide": true,
@@ -495,8 +522,16 @@
             $(document).on("change","#status",function(evt){
                 dataTable2.api().draw();
             });
+            // On reset date range
+            $(document).on("click","#resetDatePicker",function(evt){
+                //blank start and end date
+                daterangeStartValue="";
+                daterangeEndValue="";
+
+                dataTable2.api().draw();
+            });  
             
 	});
-        
+      
 
 </script>

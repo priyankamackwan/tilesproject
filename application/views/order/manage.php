@@ -9,6 +9,9 @@
     if(isset($_GET['client_name']) && $_GET['client_name']!='' ){
         $client_name=str_replace('_', '&',str_replace('-', ' ',$_GET['client_name']));
     }
+    //start date and end date for datepickker filter
+    $from_dateshow = date("d/m/Y", strtotime("first day of this month"));
+    $to_dateshow = date("d/m/Y");
 ?>
 <?php
 /*
@@ -277,17 +280,21 @@
                                         </div>
 
                                         <!-- Date Range Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
+                                        <!-- <div class="col-md-1 col-sm-12 col-xs-12"> -->
                                             <!-- <label class="control-label" style="margin-top:7px;">Date:</label> -->
-                                        </div>
+                                        <!-- </div> -->
 
                                         <!-- Date Range Filter Dropdown -->
-                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                        <div class="col-md-4 col-sm-12 col-xs-12 ">
                                             <div class="input-group">
-                                                <input class="form-control" placeholder="Order Date" required="" id="salesOrderDate" name="salesOrderDate" type="text">
+                                                <input class="form-control" placeholder="Order Date" required="" id="salesOrderDate" name="salesOrderDate" type="text" value="<?php echo $from_dateshow.' - '.$to_dateshow; ?>">
                                                 <label class="input-group-addon btn" for="salesOrderDate">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
+                                                <label class="btn-danger input-group-addon btn " id="resetDatePicker" for="salesOrderDate " data-toggle="tooltip" title="Reset" onclick="resetDatePicker()">
+                                                    <span class="fa fa-refresh"></span>
+                                                </label>
+
                                             </div>
                                         </div>
                                     </div>
@@ -375,6 +382,9 @@
 ?>
 
 <script>
+    function resetDatePicker(){
+        $("#salesOrderDate").val('');
+    }
     var dataTable1 = '';
 
     $(function(){
@@ -653,6 +663,14 @@
 
     // Filter for Status
     $(document).on("change","#status",function(evt){
+        dataTable1.draw();
+    });
+    // On reset date range
+    $(document).on("click","#resetDatePicker",function(evt){
+        //blank start and end date
+        daterangeStartValue="";
+        daterangeEndValue="";
+
         dataTable1.draw();
     });
 </script>

@@ -298,7 +298,7 @@
 													<td class="text-center"><?php echo $key+1;?></td>
 													<td><?php echo $value['company_name'];?>
 													<td class="text-right">
-														<?php echo $this->My_model->getamount(ROUND($value['total_price'],2));?>
+														<?php echo $this->My_model->getamount(ROUND($value['total_price'] + $value['tax'],2));?>
 														<?php //echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
 													</td>
 													<td class="text-center">
@@ -382,7 +382,7 @@
 													<td class="text-center"><?php echo $key+1;?></td>
 													<td><?php echo $value['company_name'];?>
 													<td class="text-right">
-														<?php echo $this->My_model->getamount(ROUND($value['total_price'],2));?>
+														<?php echo $this->My_model->getamount(ROUND($value['total_price'] + $value['tax'],2));?>
 														<?php //echo '<i class="fa fa-inr"></i> '.$value['total_price'];?>
 													</td>
 													<td class="text-center">

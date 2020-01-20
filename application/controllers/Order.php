@@ -49,11 +49,11 @@
              
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
-            $data['activeUsers'] = $this->db->where('is_deleted',0)->get("users")->result_array();
+            $data['activeUsers'] = $this->db->where('status',1)->where('is_deleted',0)->get("users")->result_array();
 
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
-            $data['activeProducts'] = $this->db->where('is_deleted',0)->get("products")->result_array();
+            $data['activeProducts'] = $this->db->where('status',1)->where('is_deleted',0)->get("products")->result_array();
 
             //get oder is placed by
 
@@ -145,13 +145,14 @@
 
                 $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
                 $whereDatechange='yes';
-            }else{
-                //Current month start-end date
-                $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
-                $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
-
-                $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
             }
+            // }else{
+            //     //Current month start-end date
+            //     $cMFirstDay = date("Y-m-d", strtotime("first day of this month"));
+            //     $cMLastDay = date("Y-m-d", strtotime("last day of this month"));
+
+            //     $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$cMFirstDay.'" AND "'.$cMLastDay.'")';
+            // }
             
             if(!empty($invoiceStatus)){
                 
@@ -664,6 +665,7 @@
                         $designNoArray[] = $productData[0]['design_no'];
                         $quantityArray[]= $data['Product'][$k]['quantity'];
                         $priceArray[]= $data['Product'][$k]['price'];
+                        $rateArray[]= $data['Product'][$k]['rate'];
                         }
 
                         $data['productData'] = array();
@@ -672,6 +674,7 @@
                             $data['productData'][$p]['design_no']= $designNoArray[$p];
                              $data['productData'][$p]['quantity']= $quantityArray[$p];
                              $data['productData'][$p]['price']= $priceArray[$p];
+                             $data['productData'][$p]['rate']= $rateArray[$p];
                         }
                        
                         $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
@@ -728,8 +731,9 @@
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -743,7 +747,7 @@
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
@@ -795,7 +799,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="32%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -894,9 +898,10 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
 
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -910,7 +915,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
@@ -1206,6 +1211,9 @@ $pdf->Output($do_no, 'I');
             
             //Price array for update
             $priceArr=array();
+
+            //Rate array for update
+            $rateArr=array();
             
             $quantity_update=array();
 
@@ -1213,10 +1221,12 @@ $pdf->Output($do_no, 'I');
             $product_count=$this->input->post('ordercount');
             for($i=1;$i<=$product_count;$i++){
                 $p_id=$this->input->post('product_id'.$i);;
-                $quantity=$this->input->post('quantity_'.$i);
+               $quantity=$this->input->post('quantity_'.$i);
                 //Price store in array product item id wise
                 $price=$this->input->post('price_'.$i);
-                $priceArr[$p_id]=$price;
+
+                //Rate store in array product item id wise
+                $rate=$this->input->post('rate_'.$i);
                 $product_arr[$p_id]=$p_id;
                 if(array_key_exists($p_id, $quantity_arr)){
                     $total_quantity=$quantity+$quantity_arr[$p_id];
@@ -1224,13 +1234,38 @@ $pdf->Output($do_no, 'I');
                 }else{                   
                     $quantity_arr[$p_id]=$quantity;
                 }
+                
+                //price array set for item
+                if(array_key_exists($p_id, $priceArr)){
+
+                    if(isset($priceArr[$p_id]) && $priceArr[$p_id]!='' && $priceArr[$p_id]!=$price){
+                        $totalprice=$price+$priceArr[$p_id];
+                        $priceArr[$p_id]=$totalprice;
+                    }else{                   
+                        $priceArr[$p_id]=$price;
+                    }
+                }else{                   
+                    $priceArr[$p_id]=$price;
+                }
+
+                //rate array set for item
+                if(array_key_exists($p_id, $rateArr)){
+                    //avreage arte
+                    $rateArr[$p_id]=$priceArr[$p_id]/$quantity_arr[$p_id];
+                }else{                   
+                    $rateArr[$p_id]=$rate;
+                }
+
+                
             }
-            
             //remove blank array exist
             $product_arr = array_filter($product_arr); 
             $quantity_arr = array_filter($quantity_arr); 
             //price array
             $priceArr = array_filter($priceArr); 
+
+            //rate array
+            $rateArr = array_filter($rateArr); 
             
 
             //Old order  array from database 
@@ -1242,9 +1277,13 @@ $pdf->Output($do_no, 'I');
                 $old_product_quantity[$value['product_id']]=$value['quantity'];
                 $total_sold=$check_quantity->sold_quantity;
 
+                //price form form input to update
+                $price=$priceArr[$value['product_id']];
+
                 //rate form form input to update
-                $rate_type=$priceArr[$value['product_id']];
-                
+                $rate=$rateArr[$value['product_id']];
+
+
 
                 // fetch quantity from product table
                 $check_quantity=$this->orders_model->check_items_quantity($value['product_id']);
@@ -1281,7 +1320,7 @@ $pdf->Output($do_no, 'I');
                 }
                 //echo $rate_type.'  '.$quantity_arr[$value['product_id']];
                 // total of all product amount
-                $amount=$quantity_arr[$value['product_id']] * $rate_type;
+                $amount=$quantity_arr[$value['product_id']] * $price;
                
                 $total_order_price+=$amount;  
                     // Check total quantity and buy  quantity and if old + new quantity same not to update
@@ -1309,10 +1348,12 @@ $pdf->Output($do_no, 'I');
                 } */ 
                 //Update price 
                 $price_update = array(
-                            'price'=>$rate_type
+                            'price'=>$price,
+                            'rate'=>$rate
                             );
                 $where_update = array('product_id'=>$value['product_id'],'order_id'=>$id);
                 $this->My_model->update('order_products',$price_update,$where_update);
+                //echo $this->db->last_query();die();
             }
             // item removed  or delted   update sold quantity
             $array_remove=array_diff($old_product_array, $product_arr);
@@ -1341,7 +1382,7 @@ $pdf->Output($do_no, 'I');
                     $check_quantity=$this->orders_model->check_items_quantity($value);
                     
                     //rate form form input to update
-                    $rate_type=$priceArr[$value];
+                   // $rate_type=$priceArr[$value];
 
                     // rate type for calculate amount
                     /*
@@ -1363,15 +1404,25 @@ $pdf->Output($do_no, 'I');
                     }
                     */
                     // total of all product amount
-                    $amount=$quantity_arr[$value] * $rate_type;
-                    $total_order_price+=$amount;
+                    // $amount=$quantity_arr[$value] * $rate_type;
+                    // $total_order_price+=$amount;
+                    
+                    //price form form input to update
+                    $price=$priceArr[$value];
+
+                    //rate form form input to update
+                    $rate=$rateArr[$value];
+
+
                     // insert in order prodcuts table
                     $insert_data=array('order_id'=>$id,
                                         'product_id'=>$value,
                                         'quantity'=>$quantity_arr[$value],
-                                        'price'=>$rate_type
+                                        'price'=>$price,
+                                        'rate' =>$rate
                                 );
                     $this->$model->insert('order_products',$insert_data);
+                   // echo $this->db->last_query();die();
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
 
                 }

@@ -145,6 +145,9 @@
         $where .= '(u.company_name LIKE "'.$s.'%" or ';
         $where .= 'u.contact_person_name LIKE "'.$s.'%" or ';
         $where .= 'o.location LIKE "'.$s.'%" or ';
+        $where .= 'o.do_no LIKE "'.$s.'%" or ';
+        $where .= 'o.invoice_no LIKE "'.$s.'%" or ';
+        $where .= 'o.lpo_no LIKE "'.$s.'%" or ';
         //$where .= 'users.client_type LIKE "'.$s.'%" or ';
         $where .= 'o.total_price LIKE "'.$s.'%" ) ';
       }
@@ -161,6 +164,7 @@
       $this->db->join('users as u', 'u.id = o.user_id','left');
       $this->db->where('o.is_deleted', 0);
       $this->db->where('u.is_deleted', 0);
+      $this->db->where('u.status',1);
 
       if(!empty($where)){
         $this->db->where($where);
@@ -222,7 +226,7 @@
 			echo json_encode($json_data);
 		}
 
-
+    /*
     public function companytocustomer()
     {
         $model = $this->model;
@@ -258,7 +262,7 @@
         echo json_encode($json_data);
 
     }
-                
+    /*            
 		public function add() {
                     //echo '3'; exit;
 			$data['action'] = "insert";
@@ -267,7 +271,7 @@
 
 			$this->load->view($this->view.'/form',$data);
 		}
-                
+    /*            
 		public function insert() {
                   
 			$model = $this->model;
@@ -284,7 +288,7 @@
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
-                
+    /*             
 		public function edit($id) {
                     
 			$model = $this->model;
@@ -300,7 +304,7 @@
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
 			$this->load->view($this->view.'/form',$data);
 		}
-                
+    /*            
                 public function view($id) {
                     
 			$model = $this->model;
@@ -319,7 +323,7 @@
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['order_id' => $id];
@@ -347,6 +351,7 @@
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
+    */
       public function downloadinvoice($id) {
               
       $model = $this->model;
@@ -388,8 +393,9 @@
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -403,7 +409,7 @@
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
@@ -432,6 +438,7 @@
                       // $vat = $subTotal * $ordersData[0]['tax']/100;
 
                       $vat = $ordersData[0]['tax'];
+                      $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -454,7 +461,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="32%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -463,7 +470,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -510,9 +517,9 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
 
                       //  print_r($data); exit;
       $this->load->view($this->view.'/view',$data);
-    }   
+    }
                             
-                
+    /*            
            public function downloadlpo($id) {
                     
 			$model = $this->model;
@@ -561,7 +568,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         if ($userData[0]['client_type'] == 3) {
                             $finalOrderData[$k]['rate'] = $productData[0]['walkin_rate'];
                         }*/
-                        
+                        /*
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -643,7 +650,7 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -657,7 +664,7 @@ $pdf->Output($ordersData[0]['lpo_no'], 'D');
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
+    /*            
                     public function download($id) {
                     
 			$model = $this->model;
@@ -765,7 +772,7 @@ $pdf->Output($do_no, 'D');
                          $multipleWhere2 = ['id' => $value->user_id];
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("orders")->result_array(); */
-
+      /*
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
    
                         $multipleWhere = ['id' => $data ['result'][0]->product_id];
@@ -779,7 +786,7 @@ $pdf->Output($do_no, 'D');
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
+    /*            
 		public function Update() {
                     
 			$model = $this->model;
@@ -802,6 +809,7 @@ $pdf->Output($do_no, 'D');
 			//$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been updated successfully!</div>');
 			redirect($this->controller);
 		}
+    /*
 		public function remove($id) {
                    
 			$model = $this->model;
@@ -821,7 +829,7 @@ $pdf->Output($do_no, 'D');
 		}
                 
        
-                
+    /*            
                 public function inactive($id) {
                    
 			$model = $this->model;
@@ -839,7 +847,7 @@ $pdf->Output($do_no, 'D');
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been blocked successfully!</div>');
                         redirect($this->controller);	
 		}
-                
+    /*            
                 public function active($id) {
                    
 			$model = $this->model;
@@ -857,6 +865,6 @@ $pdf->Output($do_no, 'D');
                         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
                         redirect($this->controller);	
 		}
-                
+     */           
 	}
 ?>

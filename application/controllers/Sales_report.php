@@ -104,7 +104,10 @@
         if($where != null){
             $where.= ' AND ';
         }
-            $where .= 'u.company_name LIKE "'.$s.'%"';
+            $where .= '(u.company_name LIKE "'.$s.'%" or ';
+            $where .= 'o.do_no LIKE "'.$s.'%" or ';
+            $where .= 'o.invoice_no LIKE "'.$s.'%" or ';
+            $where .= 'o.lpo_no LIKE "'.$s.'%" ) ';
         // $where .= 'o.totalValue LIKE "'.$s.'%" or ';
         // $where .= 'o.total_sales_expense LIKE "'.$s.'%" )';
       }                  
@@ -363,8 +366,9 @@ echo $this->db->last_query();*/
                         
                         //product price from order products table
                         $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
                         
-                       if ($userData[0]['client_type'] == 1) {
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -378,7 +382,7 @@ echo $this->db->last_query();*/
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
+                        }*/
                         
                         
                         if ($productData[0]['unit'] == 1) {
@@ -407,6 +411,7 @@ echo $this->db->last_query();*/
                       // $vat = $subTotal * $ordersData[0]['tax']/100;
 
                       $vat = $ordersData[0]['tax'];
+                      $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -429,7 +434,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="32%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -438,7 +443,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -485,8 +490,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
 
                       //  print_r($data); exit;
       $this->load->view($this->view.'/view',$data);
-    }
-                
+    }     
                 
            public function downloadlpo($id) {
                     
