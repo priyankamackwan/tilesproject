@@ -417,7 +417,7 @@ a:hover, a:active, a:focus {
 			                    <?php
 			                    }
 			                    //order tax
-			                    $orderTax=$total_price * $tax /100; 
+			                    $orderTax= $tax ; 
 			                    ?> 
 			                	</tbody>
 			                	<tbody style="border-top: 2px solid black;">
