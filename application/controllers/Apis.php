@@ -1521,7 +1521,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         //$this->db->where($multipleWhere2);
 
                         // remove unused key from additionalDetail
-                        $removeKeys1 = array('id', 'user_id','tax','total_price','modified','is_deleted','admin_id','sales_expense');
+                        $removeKeys1 = array('id', 'user_id','tax','total_price','modified','is_deleted','admin_id','sales_expense','tax_percentage');
 
                         $data['additionalDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
 
@@ -1591,12 +1591,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                            unset($data['orderDetail'][0]->$key);
                         }
 
-                        $data['orderDetail']['0']->tax = $this->$model->getamount(ROUND($data['orderDetail']['0']->tax,2));
+                        
                         //tax price
                         //$taxprice=$data['orderDetail']['0']->tax;
                         $data['orderDetail']['0']->total_price = $this->$model->getamount(ROUND($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2));
 
                         $data['orderDetail']['0']->bagTotal = $this->$model->getamount(ROUND($bagTotal,2)); // add bagtotal in array
+
+                        $data['orderDetail']['0']->tax = $this->$model->getamount(ROUND($data['orderDetail']['0']->tax,2));
 
                         if (sizeof($data)>0) // data found
                         {
@@ -1862,6 +1864,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $finalOrderData[$l]['invoice_status'] = 'Paid';
                         }
                         $finalOrderData[$l]['total_price'] = $finalOrderData[$l]['total_price']+ $finalOrderData[$l]['tax'];
+                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
                     }
 
                      } else {
