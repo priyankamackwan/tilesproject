@@ -1423,6 +1423,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function getOrderList() // New function created on 19th dec 2019
                 { 
+                    $this->model = "My_model";
                     $data = $_POST;
                     if ( (isset($data['user_id']) && (!empty($data['user_id']))) && (isset($data['role']) && (!empty($data['role']))) ) 
                     {
@@ -1432,7 +1433,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         for($k=0;$k<sizeof($totalData['result']);$k++) // replace status code to string
                         {
-                            $totalData['result'][$k]['total_price']=number_format($totalData['result'][$k]['total_price']+ $totalData['result'][$k]['tax'],2); 
+                            $totalData['result'][$k]['total_price']=$this->$model->getamount(ROUND($totalData['result'][$k]['total_price']+ $totalData['result'][$k]['tax'],2)); 
 
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
@@ -1470,6 +1471,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function getOrderListDetail() // Order detail by id created on 19th dec 2019 
                 {
+                    $this->model = "My_model";
                     $data = $_POST;
                     if ((isset($data['order_id']) && (!empty($data['order_id'])))) 
                     {
@@ -1589,12 +1591,12 @@ $pdf2->Output($fileNL_invoice, 'F');
                            unset($data['orderDetail'][0]->$key);
                         }
 
-                        $data['orderDetail']['0']->tax = number_format($data['orderDetail']['0']->tax,2);
+                        $data['orderDetail']['0']->tax = $this->$model->getamount(ROUND($data['orderDetail']['0']->tax,2));
                         //tax price
                         //$taxprice=$data['orderDetail']['0']->tax;
-                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2);
+                        $data['orderDetail']['0']->total_price = $this->$model->getamount(ROUND($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2));
 
-                        $data['orderDetail']['0']->bagTotal = number_format($bagTotal,2); // add bagtotal in array
+                        $data['orderDetail']['0']->bagTotal = $this->$model->getamount(ROUND($bagTotal,2)); // add bagtotal in array
 
                         if (sizeof($data)>0) // data found
                         {
