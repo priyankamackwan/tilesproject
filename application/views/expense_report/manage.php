@@ -274,7 +274,7 @@
                   // console.log(rels);
                   var sheet = xlsx.xl.worksheets['sheet1.xml'];
                   // To add new row count
-                  var numrows = 11;
+                  var numrows = 3;
                   // Get row from sheet
                   var clRow = $('row', sheet);
                   //console.log(clRow);
@@ -326,7 +326,7 @@
                   // Add row data 
                   var r1 = Addrow(1, [{ key: 'A', value: 'Filters' }]);
 
-                  var r2 = Addrow(2, [{ key: 'A', value: 'Date:' },{ key: 'B', value: $("#salesOrderDates").val() }]);
+                  var r2 = Addrow(2, [{ key: 'A', value: 'Date:' },{ key: 'B', value: $("#salesOrderDate").val() }]);
                   
                   var sheetData = sheet.getElementsByTagName('sheetData')[0];
 

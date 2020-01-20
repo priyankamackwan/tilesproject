@@ -506,11 +506,13 @@ print_r($result); exit;*/
                         </thead>
                     <?php
                     if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
-                      if(isset($result[0]->tax) && $result[0]->tax!='' ){
-                        $orderTax=$result[0]->total_price * $result[0]->tax /100; 
-                      }else{
-                        $orderTax=$result[0]->total_price * Vat /100; 
-                      }
+                      // if(isset($result[0]->tax) && $result[0]->tax!='' ){
+                      //   $orderTax=$result[0]->total_price * $result[0]->tax /100; 
+                      // }else{
+                      //   $orderTax=$result[0]->total_price * Vat /100; 
+                      // }
+                      //tax amount
+                      $orderTax=$result[0]->tax;
                     ?>
                       
                         

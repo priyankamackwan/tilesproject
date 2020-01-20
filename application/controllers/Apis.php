@@ -1001,7 +1001,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['c
  <table style="width:100%;"><tr><td style="width:60%;">Location : '.$data['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$data['mark'].'</td></tr></table>     
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
-<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">Size</th><th style="text-align: center">Design</th><th style="text-align: center">quantity</th><th style="text-align: center">Unit</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">UNIT</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center" width="60%">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 
@@ -1425,6 +1425,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function getOrderList() // New function created on 19th dec 2019
                 { 
+                    $this->model = "My_model";
                     $data = $_POST;
                     if ( (isset($data['user_id']) && (!empty($data['user_id']))) && (isset($data['role']) && (!empty($data['role']))) ) 
                     {
@@ -1434,7 +1435,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         for($k=0;$k<sizeof($totalData['result']);$k++) // replace status code to string
                         {
-                            $totalData['result'][$k]['total_price']=number_format($totalData['result'][$k]['total_price']+ $totalData['result'][$k]['tax'],2); 
+                            $totalData['result'][$k]['total_price']=$this->$model->getamount(ROUND($totalData['result'][$k]['total_price'] + $totalData['result'][$k]['tax'],2),'no','no'); 
 
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
@@ -1472,6 +1473,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function getOrderListDetail() // Order detail by id created on 19th dec 2019 
                 {
+                    $this->model = "My_model";
                     $data = $_POST;
                     if ((isset($data['order_id']) && (!empty($data['order_id'])))) 
                     {
@@ -1521,7 +1523,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         //$this->db->where($multipleWhere2);
 
                         // remove unused key from additionalDetail
-                        $removeKeys1 = array('id', 'user_id','tax','total_price','modified','is_deleted','admin_id','sales_expense');
+                        $removeKeys1 = array('id', 'user_id','tax','total_price','modified','is_deleted','admin_id','sales_expense','tax_percentage');
 
                         $data['additionalDetail'] = $this->$model->select(array(),'orders',array('id'=>$id),'','');
 
@@ -1591,12 +1593,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                            unset($data['orderDetail'][0]->$key);
                         }
 
-                        $data['orderDetail']['0']->tax = number_format($data['orderDetail']['0']->tax,2);
+                        
                         //tax price
-                        $taxprice=$data['orderDetail']['0']->tax;
-                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price + $taxprice,2);
+                        //$taxprice=$data['orderDetail']['0']->tax;
+                        $data['orderDetail']['0']->total_price =$this->$model->getamount(ROUND($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2),'no','no');
 
-                        $data['orderDetail']['0']->bagTotal = number_format($bagTotal,2); // add bagtotal in array
+                        $data['orderDetail']['0']->bagTotal = $this->$model->getamount(ROUND($bagTotal,2),'no','no'); // add bagtotal in array
+
+                        $data['orderDetail']['0']->tax = $this->$model->getamount(ROUND($data['orderDetail']['0']->tax,2),'no','no');
 
                         if (sizeof($data)>0) // data found
                         {
@@ -1846,10 +1850,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                    public function getCustomerReport() {
                     
                      $data = $_POST;
+
                      if (empty($data)) {
                     $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created,o.tax');
                     $this->db->from('orders as o');
                     $this->db->join('users as u', 'o.user_id = u.id');
+                    $this->db->where('o.is_deleted',0);
+                    $this->db->where('u.is_deleted',0);
+                    $this->db->where('u.status',1);
                     $finalOrderData = $this->db->get()->result_array();
                     for($l=0;$l<count($finalOrderData);$l++) {
                         if ($finalOrderData[$l]['invoice_status'] == 0) {
@@ -1857,11 +1865,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                         } else {
                             $finalOrderData[$l]['invoice_status'] = 'Paid';
                         }
+                        $finalOrderData[$l]['total_price'] = $finalOrderData[$l]['total_price']+ $finalOrderData[$l]['tax'];
+                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
                     }
 
                      } else {
                           $q= $this->db->select('*')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
+                            $this->db->where('is_deleted',0);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
                          //   echo '<pre>';
@@ -1886,6 +1897,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         }
                         $orderData['created'] = $q[$k]->created;
                         $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
+                        //$orderData['total_price'] = $q[$k]->tax;
                         $finalOrderData [] = $orderData;
                             }
                         } else {
@@ -1905,11 +1917,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                      if (empty($data)) {
                     $this->db->select('o.id,o.sales_expense,o.invoice_no,o.created');
                     $this->db->from('orders as o');
+                    $this->db->where('o.is_deleted',0);
                     $finalOrderData = $this->db->get()->result_array();
                     
                      } else {
                           $q= $this->db->select('*')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
+                            $this->db->where('is_deleted',0);
                             // $orderData = $this->db->get('orders')->result_array();
                             $q = $q->get('orders')->result();
                             if ($q) {
@@ -1968,8 +1982,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                     }
               
                      } else {
-                           $q= $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
+                           $q= $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
+                            $this->db->where('is_deleted',0);
                           
                             $q = $q->get('orders')->result();
                            // if ($q){

@@ -197,7 +197,7 @@
             $query = $this->db->get()->result_array();
 			return $query;
 		}
-		function getamount($amount,$convert='no')
+		function getamount($amount,$convert='no',$isCurrencyFormate='yes')
 		{
 			$firstCharacter='';
 		   if ( strpos( $amount, "." ) !== false ) {
@@ -218,8 +218,10 @@
 		    }else{
 		    	$currency=$new_amount;
 		    }
-		    if(isset($convert) && $convert!='' && $convert=="yes"){
+		    if(isset($convert) && $convert!='' && $convert=="yes" && $isCurrencyFormate=="yes"){
 		    	return 'AED '.$firstCharacter.$currency;
+		    }else if(isset($convert) && $convert!='' && $convert=="no" && $isCurrencyFormate=="no"){
+		    	return $new_amount;
 		    }else{
 		    	return 'AED '.$new_amount;
 		    }
