@@ -99,16 +99,16 @@ a:hover, a:active, a:focus {
 									</div> -->
 									<div class="col-md-12 col-sm-12 col-xs-12 ">
 										<div class="col-md-5 col-sm-3 col-xs-3">
-											<label>Item Name (Design No)</label>
+											<label class="maxwidth300">Item Name (Design No)</label>
 										</div>
 										<div class="col-md-2 col-sm-3 col-xs-3">
-											<label >Quantity</label>								
+											<label class="maxwidth300">Quantity</label>								
 										</div>
 										<div class="col-md-2 col-sm-2 col-xs-2">
-											<label >Rate</label>								
+											<label class="maxwidth300">Rate</label>								
 										</div>
 										<div class="col-md-2 col-sm-2 col-xs-2">
-											<label >Price</label>								
+											<label class="maxwidth300">Price</label>								
 										</div>
 										<div class="col-md-1 col-sm-2 col-xs-2">
 											<label class="maxwidth300" style="max-width: 125%;">Delete</label>
@@ -160,8 +160,8 @@ a:hover, a:active, a:focus {
 								$invoice_no=$value['invoice_no'];
 
 							?>
-							<div id="delete_<?php echo $key+1;?>">
-								<div class="form-group select2">
+							<div id="delete_<?php echo $key+1;?>" class="" >
+								<div class="col-md-12 col-sm-12 col-xs-12 " style="margin-top:10px;">
 									<!-- <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="category_name">
 										Item <font color="red"><span class="required">*</span></font> :
 									</label> -->
@@ -187,13 +187,13 @@ a:hover, a:active, a:focus {
 									</select>
 								
 									</div>
-									<div class="col-md-2 col-sm-3 col-xs-3">
+									<div class="col-md-2 col-sm-3 col-xs-3" >
 										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onchange="order_sum()">
 									</div>
-									<div class="col-md-2 col-sm-2 col-xs-2">
+									<div class="col-md-2 col-sm-2 col-xs-2" >
 										<input type="text" name="rate_<?php echo $key+1;?>" id="price" value="<?php echo $value['rate'];?>" required="required" class=" form-control width_80 rate_<?php echo $key+1;?>" onchange="order_sum()">
 									</div>
-									<div class="col-md-2 col-sm-2 col-xs-2">
+									<div class="col-md-2 col-sm-2 col-xs-2" >
 										<input type="text" name="price_<?php echo $key+1;?>" id="rate" value="<?php echo $value['price'];?>" required="required" class=" form-control width_80 price_<?php echo $key+1;?>" onchange="order_sum()" readonly>
 									</div>
 									<div class="col-md-1 col-sm-2 col-xs-2">
@@ -205,7 +205,7 @@ a:hover, a:active, a:focus {
 							}
 							?>
 							</div>
-							<div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+							<div class="control-label col-md-12 col-sm-12 col-xs-12 pull-right">
 									<a class="pull-right" data-toggle="tooltip" title="" data-original-title="Add more items" onclick="add_more_items();"><i class="fa fa-plus"></i> Add More Items</a>
 							</div>
 
@@ -628,7 +628,7 @@ function add_more_items(){
 	$("#new_item_add").append('<div id="delete_'+total_item+'">');
 
 
-	$("#delete_"+total_item).append('<div class="form-group"><div class="col-md-5 col-sm-3 col-xs-3"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
+	$("#delete_"+total_item).append('<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;"><div class="col-md-5 col-sm-3 col-xs-3"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
 ?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="rate_'+total_item+'" id="rate" required="required" class=" form-control width_80 rate_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
