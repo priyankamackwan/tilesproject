@@ -516,7 +516,7 @@
 
 
             
-            $(document).on("change","#contact_person_name",function(evt){
+            $(document).on("change","#company_name",function(evt){
                 dataTable2.api().draw();
             });
             $(document).on("change","#status",function(evt){
