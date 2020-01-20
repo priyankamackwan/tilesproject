@@ -1433,7 +1433,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         for($k=0;$k<sizeof($totalData['result']);$k++) // replace status code to string
                         {
-                            $totalData['result'][$k]['total_price']=$this->$model->getamount(ROUND($totalData['result'][$k]['total_price']+ $totalData['result'][$k]['tax'],2)); 
+                            $totalData['result'][$k]['total_price']=$this->$model->getamount(ROUND($totalData['result'][$k]['total_price'] + $totalData['result'][$k]['tax'],2),'no','no'); 
 
                             if($totalData['result'][$k]['invoice_status']==0)
                             {
@@ -1594,11 +1594,11 @@ $pdf2->Output($fileNL_invoice, 'F');
                         
                         //tax price
                         //$taxprice=$data['orderDetail']['0']->tax;
-                        $data['orderDetail']['0']->total_price = $this->$model->getamount(ROUND($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2));
+                        $data['orderDetail']['0']->total_price =$this->$model->getamount(ROUND($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2),'no','no');
 
-                        $data['orderDetail']['0']->bagTotal = $this->$model->getamount(ROUND($bagTotal,2)); // add bagtotal in array
+                        $data['orderDetail']['0']->bagTotal = $this->$model->getamount(ROUND($bagTotal,2),'no','no'); // add bagtotal in array
 
-                        $data['orderDetail']['0']->tax = $this->$model->getamount(ROUND($data['orderDetail']['0']->tax,2));
+                        $data['orderDetail']['0']->tax = $this->$model->getamount(ROUND($data['orderDetail']['0']->tax,2),'no','no');
 
                         if (sizeof($data)>0) // data found
                         {
