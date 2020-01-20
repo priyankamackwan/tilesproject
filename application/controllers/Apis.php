@@ -1591,8 +1591,8 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                         $data['orderDetail']['0']->tax = number_format($data['orderDetail']['0']->tax,2);
                         //tax price
-                        $taxprice=$data['orderDetail']['0']->tax;
-                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price + $taxprice,2);
+                        //$taxprice=$data['orderDetail']['0']->tax;
+                        $data['orderDetail']['0']->total_price = number_format($data['orderDetail']['0']->total_price + $data['orderDetail']['0']->tax,2);
 
                         $data['orderDetail']['0']->bagTotal = number_format($bagTotal,2); // add bagtotal in array
 
@@ -1844,6 +1844,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                    public function getCustomerReport() {
                     
                      $data = $_POST;
+
                      if (empty($data)) {
                     $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created,o.tax');
                     $this->db->from('orders as o');
@@ -1883,7 +1884,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $orderData['invoice_status'] = 'Paid';
                         }
                         $orderData['created'] = $q[$k]->created;
-                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
+                        $orderData['total_price'] = $q[$k]->total_price;
+                        $orderData['total_price'] = $q[$k]->tax;
                         $finalOrderData [] = $orderData;
                             }
                         } else {
@@ -1966,7 +1968,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     }
               
                      } else {
-                           $q= $this->db->select('user_id,SUM(total_price) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
+                           $q= $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
                             $this->db->where('created <=', $data['end_date']);
                           
                             $q = $q->get('orders')->result();
