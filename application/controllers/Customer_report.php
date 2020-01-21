@@ -145,6 +145,9 @@
         $where .= '(u.company_name LIKE "'.$s.'%" or ';
         $where .= 'u.contact_person_name LIKE "'.$s.'%" or ';
         $where .= 'o.location LIKE "'.$s.'%" or ';
+        $where .= 'o.do_no LIKE "'.$s.'%" or ';
+        $where .= 'o.invoice_no LIKE "'.$s.'%" or ';
+        $where .= 'o.lpo_no LIKE "'.$s.'%" or ';
         //$where .= 'users.client_type LIKE "'.$s.'%" or ';
         $where .= 'o.total_price LIKE "'.$s.'%" ) ';
       }
@@ -197,7 +200,8 @@
           $nestedData['id'] = $srNo;
           $nestedData['company_name'] =$value['company_name'];
           $nestedData['contact_person_name'] =$value['contact_person_name'];
-          $nestedData['total_price'] =$value['total_price'];
+          //total price + tax
+          $nestedData['total_price'] =$this->$model->getamount(round($value['total_price'] + $value['tax'],2));
           $nestedData['location'] =$value['location'];
           $nestedData['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$value['invoice_no'].'</b></a>';
           $nestedData['created'] =$this->$model->date_conversion($value['created'],'d/m/Y H:i:s');
@@ -386,10 +390,12 @@
                         $finalOrderData[$k]['description'] = $productData[0]['name'];
                         $finalOrderData[$k]['size'] = $productData[0]['size'];
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
+                        
                         //product price from order products table
-                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
-                       /* 
-                        if ($userData[0]['client_type'] == 1) {
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
+                        
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -403,8 +409,9 @@
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
-                        */
+                        }*/
+                        
+                        
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
                         }
@@ -420,13 +427,18 @@
                             $finalOrderData[$k]['unit'] = 'SET';
                         }
                         $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                        $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+                        // $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
-                     // $vat = $subTotal* Vat/100;
+                      // $vat = $subTotal* Vat/100;
                       //tax from order table
-                      $vat = $subTotal * $ordersData[0]['tax']/100;
+                      // $vat = $subTotal * $ordersData[0]['tax']/100;
+
+                      $vat = $ordersData[0]['tax'];
+                      $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -449,7 +461,7 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="31%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="11%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
@@ -458,7 +470,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$ordersData[0]['tax'].'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -505,7 +517,7 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
 
                       //  print_r($data); exit;
       $this->load->view($this->view.'/view',$data);
-    }          
+    }
                             
     /*            
            public function downloadlpo($id) {

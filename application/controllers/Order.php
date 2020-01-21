@@ -13,7 +13,6 @@
 
 		public function __construct()
 		{
-                    
 			parent::__construct();
 			date_default_timezone_set('Asia/Kolkata');
             $this->model = "My_model";
@@ -105,7 +104,7 @@
 
             $tableFieldData = [];
 
-            $where =  $whereDate ='';
+            $where = $whereDate ='';
             //date change 
             $whereDatechange='no';
 
@@ -195,7 +194,7 @@
 
             // Filter data using serach.
             if(!empty($this->input->post('search')['value']))
-            {            
+            {
                 if($where != null){
                     $where.= ' AND ';
                 }
@@ -240,7 +239,7 @@
                 $totalAmounts = $this->orders_model->get_invoiceAmount();
 
                 //Get current Month amount
-                $totalAmountsCurrentMonth =  $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
+                $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
                 
                 //total history paymnet amount
                 $get_payment_history_all = $this->orders_model->get_payment_history();
@@ -250,7 +249,7 @@
             }else{
                 
                 // Get all records with limit and using search for data table.
-                $AlltotalFiltered =  $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,'','',$whereDate);
+                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,'','',$whereDate);
                       
                 // Get all records count using search for data table.
                 $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate);
@@ -258,7 +257,6 @@
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
                 $totalAmounts = $this->orders_model->get_invoiceAmount($where);
-
 
                 //Get current Month amount
                 $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange,'current');
@@ -361,11 +359,11 @@
                     // Manage buttons.
                    /* if($SingleOrderData['status']==2 && $SingleOrderData['invoice_status']==1) // if order status is completed and status is paid then no need to display edit and delete button.
                     {
-                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+                        $tabledata['manage'] = "<a href='".$view."' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
                     }
                     else
                     {//*/
-                        $tabledata['manage'] = "<a href='".$view."' class='btn  btn-info  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn  btn-primary  btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
+                        $tabledata['manage'] = "<a href='".$view."' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>&nbsp;<a href='$edit' class='btn btn-primary btn-sm' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='$delete' class='btn btn-danger btn-sm confirm-delete' style='padding: 9px;margin-top:1px;' data-toggle='tooltip' title='Delete' ><i class='fa fa-trash'></i></a>";
                     //}
 
                     // Push table data in to array.
@@ -381,7 +379,9 @@
 
             //total top amount for all orders
             // Total invoice mamount logic change invoiceAmount is tax with 0
-            $totalInvoiceAmount=$totalAmounts->invoiceAmount + $totalAmounts->invoiceAmountWithTax;
+            //$totalInvoiceAmount=$totalAmounts->invoiceAmount + $totalAmounts->invoiceAmountWithTax;
+
+            $totalInvoiceAmount=$totalAmounts->invoiceAmount;
 
             //Total paid amount from paymnet hostory table
             $totalPaidAmount=$get_payment_history_all->historypaidamount;
@@ -447,13 +447,15 @@
             }else{
                 $curnthistorypaidamountAmount=0;
             }
-            //currnet month  order unpaid amount
+            //currnet month order unpaid amount
             $totalcUnapidAmount=$cMInvoiceAmount-$curnthistorypaidamountAmount;
             */
 
             //total top amount for current month orders
             // Total invoice mamount logic change invoiceAmount is tax with 0
-            $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount + $totalAmountsCurrentMonth->invoiceAmountWithTax;
+            // $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount + $totalAmountsCurrentMonth->invoiceAmountWithTax;
+
+             $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount;
 
             //Total paid amount from paymnet hostory table
             $totalPaidAmountCurrentMonth=$get_payment_history_currnet_month->historypaidamount;
@@ -463,16 +465,16 @@
 
             // Combine all data in json with top amount passed
             $json_data = array(
-                "draw"            => intval($this->input->post('draw')),  
-                "recordsTotal"    => intval($totalData['count']),  
+                "draw"            => intval($this->input->post('draw')), 
+                "recordsTotal"    => intval($totalData['count']), 
                 "recordsFiltered" => intval($totalFiltered),
                 "data"            => $data,
                 "invoiceAmount"   => $this->$model->getamount(round($totalInvoiceAmount,2),'yes'),
                 "paidAmount"      => $this->$model->getamount(round($totalPaidAmount,2),'yes'),
                 "unpaidAmount"    => $this->$model->getamount(round($totalUnPaidAmount,2),'yes'),
                 "totalInvoiceAmountCurrentMonth" => $this->$model->getamount(round($totalInvoiceAmountCurrentMonth,2),'yes'),
-                "totalPaidAmountCurrentMonth"    => $this->$model->getamount(round($totalPaidAmountCurrentMonth,2),'yes'),
-                "totalUnPaidAmountCurrentMonth"  => $this->$model->getamount(round($totalUnPaidAmountCurrentMonth,2),'yes'),
+                "totalPaidAmountCurrentMonth" => $this->$model->getamount(round($totalPaidAmountCurrentMonth,2),'yes'),
+                "totalUnPaidAmountCurrentMonth" => $this->$model->getamount(round($totalUnPaidAmountCurrentMonth,2),'yes'),
             );
 
             // Convert all data into Json
@@ -486,19 +488,17 @@
 			// $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
                  
 			// $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
-                        
       
 			// $totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
     
 			// $start = $_POST['start'];
 			// $limit = $_POST['length'];
 
-            //             $q = $this->db->select('*')->where('is_deleted', 0);
+            // $q = $this->db->select('*')->where('is_deleted', 0);
        
 		
-            //             if(empty($s))
+            // if(empty($s))
 			// {
-                           
 			// 	if(!empty($order))
 			// 	{
 			// 		$q = $q->order_by($order);
@@ -509,7 +509,6 @@
 			// }
 			// else
 			// {
-                         
 			// 	$q = $q->like('orders.sales_expense', $s, 'both');
 			// 	if(!empty($order))
 			// 	{
@@ -559,9 +558,8 @@
             //                             } else {
             //                                 $nestedData['status'] ='Completed';
             //                             }
-            //                             // $nestedData['manage'] = "<a href='$view' class='btn  btn-warning  btn-xs'>View</a>";
-            //                             $nestedData['manage'] = "<a href='$view' class='btn  btn-primary  btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
-                                     
+            //                             // $nestedData['manage'] = "<a href='$view' class='btn btn-warning btn-xs'>View</a>";
+            //                             $nestedData['manage'] = "<a href='$view' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
 
 			// 		$data[] = $nestedData;
             //                             $srNo++;
@@ -604,7 +602,7 @@
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
-        // For edit order        
+        // For edit order
 		public function edit($id){
                     
             $model = $this->model;
@@ -662,6 +660,7 @@
                         $designNoArray[] = $productData[0]['design_no'];
                         $quantityArray[]= $data['Product'][$k]['quantity'];
                         $priceArray[]= $data['Product'][$k]['price'];
+                        $rateArray[]= $data['Product'][$k]['rate'];
                         }
 
                         $data['productData'] = array();
@@ -670,6 +669,7 @@
                             $data['productData'][$p]['design_no']= $designNoArray[$p];
                              $data['productData'][$p]['quantity']= $quantityArray[$p];
                              $data['productData'][$p]['price']= $priceArray[$p];
+                             $data['productData'][$p]['rate']= $rateArray[$p];
                         }
                        
                         $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
@@ -679,7 +679,7 @@
                         //$this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
                         $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
             $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
-                      //  print_r($data); exit;
+                      // print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
         
@@ -725,9 +725,10 @@
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
                         
                         //product price from order products table
-                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
-                       /* 
-                       if ($userData[0]['client_type'] == 1) {
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
+                        
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -741,8 +742,8 @@
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
-                        */
+                        }*/
+                        
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
@@ -759,13 +760,18 @@
                             $finalOrderData[$k]['unit'] = 'SET';
                         }
                         $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                        $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+                        // $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
                       // $vat = $subTotal* Vat/100;
                       //tax from order table
-                      $vat = $subTotal * $ordersData[0]['tax']/100;
+                      // $vat = $subTotal * $ordersData[0]['tax']/100;
+
+                      $vat = $ordersData[0]['tax'];
+                      $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -788,16 +794,14 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="wi
 
 $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="31%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="11%">AMOUNT</th></tr>';
 $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
     $html .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: right">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: right">'.round($finalOrderData[$p]['rate'],2).'</td><td style="text-align: right">'.round($finalOrderData[$p]['amount'],2).'</td></tr>';
-                                
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
-                                  
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$ordersData[0]['tax'].'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -886,10 +890,11 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
                         
                         //product price from order products table
-                        $finalOrderData[$k]['rate'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
+                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
 
-                       /* 
-                       if ($userData[0]['client_type'] == 1) {
+                        
+                       /*if ($userData[0]['client_type'] == 1) {
                             $finalOrderData[$k]['rate'] = $productData[0]['cash_rate'];
                         }
                         
@@ -903,8 +908,8 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                         
                         if ($userData[0]['client_type'] == 4) {
                             $finalOrderData[$k]['rate'] = $productData[0]['flexible_rate'];
-                        }
-                        */
+                        }*/
+                        
                         
                         if ($productData[0]['unit'] == 1) {
                             $finalOrderData[$k]['unit'] = 'CTN';
@@ -921,13 +926,18 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                             $finalOrderData[$k]['unit'] = 'SET';
                         }
                         $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                        $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+                        // $finalOrderData[$k]['amount'] = $productOrder[$k]['quantity']*$finalOrderData[$k]['rate'];
+
+                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
                         
                         $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
                       }
                       // $vat = $subTotal * Vat/100;
                       //tax from order table
-                      $vat = $subTotal * $ordersData[0]['tax']/100;
+                      // $vat = $subTotal * $ordersData[0]['tax']/100;
+
+                      $vat =$ordersData[0]['tax'];
+                      $tax_percentage =$ordersData[0]['tax_percentage'];
                       
                       $finalTotal = $subTotal+$vat;
                         include 'TCPDF/tcpdf.php';
@@ -966,7 +976,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                           }
                           $html .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td style="text-align: right">'.round($subTotal,2).'</td></tr>
                                   
-                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$ordersData[0]['tax'].'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
+                                  <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.$tax_percentage.'%</td><td style="text-align: right">'.round($vat,2).'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td style="text-align: right">'.round($finalTotal,2).'</td></tr></table>
     <br><br/>
@@ -984,14 +994,13 @@ $pdf->SetTitle('Local Purchase Order | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output($ordersData[0]['lpo_no'], 'I');
                         
-                        
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
 
 			$model = $this->model;
-                      /*  $multipleWhere = ['id' => $value->product_id];
+                      /* $multipleWhere = ['id' => $value->product_id];
                         $this->db->where($multipleWhere);
                         $data['Product'] = $this->db->get("products")->result_array();
                     
@@ -1009,7 +1018,7 @@ $pdf->Output($ordersData[0]['lpo_no'], 'I');
                         $this->db->where($multipleWhere2);
                         $data['User'] = $this->db->get("users")->result_array();
 
-                      //  print_r($data); exit;
+                      // print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
                 
@@ -1086,10 +1095,10 @@ $html.='<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. :
 
  $html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
     <br><br/>
- <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table>     
+ <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table> 
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
-<table style="width:100%;" border="1"><tr><th style="text-align: center" width="60%">DESCRIPTION</th><th style="text-align: center" width="10%">Size</th><th style="text-align: center" width="10%">Design</th><th style="text-align: center" width="10%">quantity</th><th style="text-align: center" width="10%">Unit</th></tr>';
+<table style="width:100%;" border="1"><tr><th style="text-align: center" width="60%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">UNIT</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
                                 
@@ -1098,7 +1107,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
 
 $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the above goods in good condition</td></tr></table>
 <br><br/>
-<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table>     
+<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table> 
 <br><br/>
 <table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%;">Name : </td></tr></table>
 <br><br/>
@@ -1194,6 +1203,9 @@ $pdf->Output($do_no, 'I');
             
             //Price array for update
             $priceArr=array();
+
+            //Rate array for update
+            $rateArr=array();
             
             $quantity_update=array();
 
@@ -1201,27 +1213,54 @@ $pdf->Output($do_no, 'I');
             $product_count=$this->input->post('ordercount');
             for($i=1;$i<=$product_count;$i++){
                 $p_id=$this->input->post('product_id'.$i);;
-                $quantity=$this->input->post('quantity_'.$i);
+               $quantity=$this->input->post('quantity_'.$i);
                 //Price store in array product item id wise
                 $price=$this->input->post('price_'.$i);
-                $priceArr[$p_id]=$price;
+
+                //Rate store in array product item id wise
+                $rate=$this->input->post('rate_'.$i);
                 $product_arr[$p_id]=$p_id;
                 if(array_key_exists($p_id, $quantity_arr)){
                     $total_quantity=$quantity+$quantity_arr[$p_id];
                     $quantity_arr[$p_id]=$total_quantity;
-                }else{                   
+                }else{
                     $quantity_arr[$p_id]=$quantity;
                 }
+                
+                //price array set for item
+                if(array_key_exists($p_id, $priceArr)){
+
+                    if(isset($priceArr[$p_id]) && $priceArr[$p_id]!='' && $priceArr[$p_id]!=$price){
+                        $totalprice=$price+$priceArr[$p_id];
+                        $priceArr[$p_id]=$totalprice;
+                    }else{
+                        $priceArr[$p_id]=$price;
+                    }
+                }else{
+                    $priceArr[$p_id]=$price;
+                }
+
+                //rate array set for item
+                if(array_key_exists($p_id, $rateArr)){
+                    //avreage arte
+                    $rateArr[$p_id]=$priceArr[$p_id]/$quantity_arr[$p_id];
+                }else{
+                    $rateArr[$p_id]=$rate;
+                }
+
+                
             }
-            
             //remove blank array exist
             $product_arr = array_filter($product_arr); 
             $quantity_arr = array_filter($quantity_arr); 
             //price array
             $priceArr = array_filter($priceArr); 
+
+            //rate array
+            $rateArr = array_filter($rateArr); 
             
 
-            //Old order  array from database 
+            //Old order array from database 
             $all_order=$this->orders_model->view_all_order($id);
             foreach ($all_order as $key => $value) {
 
@@ -1230,9 +1269,13 @@ $pdf->Output($do_no, 'I');
                 $old_product_quantity[$value['product_id']]=$value['quantity'];
                 $total_sold=$check_quantity->sold_quantity;
 
+                //price form form input to update
+                $price=$priceArr[$value['product_id']];
+
                 //rate form form input to update
-                $rate_type=$priceArr[$value['product_id']];
-                
+                $rate=$rateArr[$value['product_id']];
+
+
 
                 // fetch quantity from product table
                 $check_quantity=$this->orders_model->check_items_quantity($value['product_id']);
@@ -1267,16 +1310,16 @@ $pdf->Output($do_no, 'I');
                 }elseif($quantity_arr[$value['product_id']]==$value['quantity']){
                     $total_check_q=$quantity_arr[$value['product_id']];
                 }
-                //echo $rate_type.'  '.$quantity_arr[$value['product_id']];
+                //echo $rate_type.' '.$quantity_arr[$value['product_id']];
                 // total of all product amount
-                $amount=$quantity_arr[$value['product_id']] * $rate_type;
+                $amount=$quantity_arr[$value['product_id']] * $price;
                
-                $total_order_price+=$amount;  
-                    // Check total quantity and buy  quantity and if old + new quantity same not to update
+                $total_order_price+=$amount; 
+                    // Check total quantity and buy quantity and if old + new quantity same not to update
                 if($check_quantity->quantity > $total_check_q && $quantity_arr[$value['product_id']]!=$value['quantity']){
 
                     //Update solde quantity in product table
-                    $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator);   
+                    $this->orders_model->update_items('products','sold_quantity',$value['product_id'],$total_check_q,$update_oprator); 
                     
                     //Update price according to client type
                     /*
@@ -1285,7 +1328,7 @@ $pdf->Output($do_no, 'I');
                             );
                     $where_update = array('product_id'=>$$value['product_id'],'order_id'=>$id);
                     $this->My_model->update('order_products',$price_update,$where_update);
-                    */                    
+                    */
 
                     //Update solde quantity in order product table
                     $this->orders_model->update_order_items('order_products','quantity',$value['product_id'],$total_check_q,$update_oprator,$id);
@@ -1297,20 +1340,22 @@ $pdf->Output($do_no, 'I');
                 } */ 
                 //Update price 
                 $price_update = array(
-                            'price'=>$rate_type
+                            'price'=>$price,
+                            'rate'=>$rate
                             );
                 $where_update = array('product_id'=>$value['product_id'],'order_id'=>$id);
                 $this->My_model->update('order_products',$price_update,$where_update);
+                //echo $this->db->last_query();die();
             }
             // item removed  or delted   update sold quantity
             $array_remove=array_diff($old_product_array, $product_arr);
             if(isset($array_remove) && $array_remove!='' && count($array_remove) >0){
                 foreach ($array_remove as $key => $value) { 
                     // Fetch single data from order products
-                    $single_datas=$this->orders_model->single_items($value,$id);  
+                    $single_datas=$this->orders_model->single_items($value,$id); 
                     $remove_amount=  $single_datas->price * $single_datas->quantity;
                     //minus for reove items
-                    $total_order_price=$total_order_price-$remove_amount;         
+                    $total_order_price=$total_order_price-$remove_amount;
                     // Update removed items sold wuantity
                     $this->orders_model->update_items('products','sold_quantity',$value,$single_datas->quantity,'-');
 
@@ -1329,7 +1374,7 @@ $pdf->Output($do_no, 'I');
                     $check_quantity=$this->orders_model->check_items_quantity($value);
                     
                     //rate form form input to update
-                    $rate_type=$priceArr[$value];
+                   // $rate_type=$priceArr[$value];
 
                     // rate type for calculate amount
                     /*
@@ -1351,22 +1396,32 @@ $pdf->Output($do_no, 'I');
                     }
                     */
                     // total of all product amount
-                    $amount=$quantity_arr[$value] * $rate_type;
-                    $total_order_price+=$amount;
+                    // $amount=$quantity_arr[$value] * $rate_type;
+                    // $total_order_price+=$amount;
+                    
+                    //price form form input to update
+                    $price=$priceArr[$value];
+
+                    //rate form form input to update
+                    $rate=$rateArr[$value];
+
+
                     // insert in order prodcuts table
                     $insert_data=array('order_id'=>$id,
                                         'product_id'=>$value,
                                         'quantity'=>$quantity_arr[$value],
-                                        'price'=>$rate_type
+                                        'price'=>$price,
+                                        'rate' =>$rate
                                 );
                     $this->$model->insert('order_products',$insert_data);
+                   // echo $this->db->last_query();die();
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
 
                 }
             }
-            // For check data old data is updated  or not
+            // For check data old data is updated or not
 
-                     //  echo $id; exit;
+                     // echo $id; exit;
             $sales_expense = $this->input->post('sales_expense');
             $status = $this->input->post('status');
             $invoice_status = $this->input->post('invoice_status');
@@ -1379,6 +1434,8 @@ $pdf->Output($do_no, 'I');
             $payment_date=date('Y-m-d H:i:s',strtotime($payment_date));
 
             $tax= $this->input->post('tax');
+            $tax_percentage = $this->input->post('tax_percentage');
+
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
@@ -1390,7 +1447,8 @@ $pdf->Output($do_no, 'I');
                     'cargo_number'=>$cargo_number,
                     'location'=>$location,
                     'mark'=>$mark,
-                    'tax' =>$tax
+                    'tax' =>$tax,
+                    'tax_percentage' => $tax_percentage
                 );
 
             $where = array($this->primary_id=>$id);
@@ -1405,14 +1463,14 @@ $pdf->Output($do_no, 'I');
             redirect($this->controller);
         }
         // Delete sales order
-		public function remove($id) {                   
+		public function remove($id) {
 			$model = $this->model;
             $company_name=array();
             $user_data_name='';
             //Order id
 			$id = $this->utility->decode($id);
             //Fetch order 
-            $delete_sales_order=$this->orders_model->view_all_order($id);  
+            $delete_sales_order=$this->orders_model->view_all_order($id);
             foreach ($delete_sales_order as $key => $value) {
                 if(isset($value['company_name']) && $value['company_name']!=''){
                     $user_data_name=$value['company_name'];
@@ -1434,156 +1492,175 @@ $pdf->Output($do_no, 'I');
             $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$user_data_name.' has been deleted successfully!</div>');
             redirect($this->controller);	
 		}
-                
-       
-                
-                public function inactive($id) {
-                   
-			$model = $this->model;
-			$id = $this->utility->decode($id);
-                  
-			$this->$model->select(array(),'categories',array('id'=>$id),'','');
-                        $this->db->set('status',0);
-                        $this->db->where('id',$id);
-                        $this->db->update('categories',$data);
-                        
-                        $this->db->select('name');
-                        $this->db->where('id', $id);
-                        $q = $this->db->get('categories');
-                        $userdata = $q->result_array();
-                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been blocked successfully!</div>');
-                        redirect($this->controller);	
-		}
-                
-                public function active($id) {
+        public function inactive($id) {
                    
 			$model = $this->model;
 			$id = $this->utility->decode($id);
 
 			$this->$model->select(array(),'categories',array('id'=>$id),'','');
-                        $this->db->set('status',1);
-                        $this->db->where('id',$id);
-                        $this->db->update('categories',$data);
-                        
-                        $this->db->select('name');
-                        $this->db->where('id', $id);
-                        $q = $this->db->get('categories');
-                        $userdata = $q->result_array();
-                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
-                        redirect($this->controller);	
+            $this->db->set('status',0);
+            $this->db->where('id',$id);
+            $this->db->update('categories',$data);
+            
+            $this->db->select('name');
+            $this->db->where('id', $id);
+            $q = $this->db->get('categories');
+            $userdata = $q->result_array();
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been blocked successfully!</div>');
+            redirect($this->controller);	
+		}
+                
+        public function active($id) {
+                   
+			$model = $this->model;
+			$id = $this->utility->decode($id);
+
+			$this->$model->select(array(),'categories',array('id'=>$id),'','');
+            $this->db->set('status',1);
+            $this->db->where('id',$id);
+            $this->db->update('categories',$data);
+            
+            $this->db->select('name');
+            $this->db->where('id', $id);
+            $q = $this->db->get('categories');
+            $userdata = $q->result_array();
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userdata['0']['name'].' has been activated successfully!</div>');
+            redirect($this->controller);
 		}
                 
                 
-                                   public function addOrders() {
-                    
-                                            $importFile = $_FILES['upload_orders']['name'];
-                    
-                    $ext = pathinfo($importFile,PATHINFO_EXTENSION);
-			$image = time().'.'.$ext;
+    public function addOrders() {
 
-			$config['upload_path'] = 'assets/uploads/';
-			$config['file_name'] = $image;
-			$config['allowed_types'] = "jpeg|jpg|png|gif|xlsx|xls";
+        $importFile = $_FILES['upload_orders']['name'];
 
-			$this->load->library('upload', $config);
-			$this->load->initialize($config);
-			$this->upload->do_upload('upload_orders');
-	$model = $this->model;
-require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+        $ext = pathinfo($importFile,PATHINFO_EXTENSION);
+		$image = time().'.'.$ext;
 
-	require('spreadsheet-reader-master/SpreadsheetReader.php');
+		$config['upload_path'] = 'assets/uploads/';
+		$config['file_name'] = $image;
+		$config['allowed_types'] = "xlsx|xls|csv";
 
-	$Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
+		$this->load->library('upload', $config);
+		$this->load->initialize($config);
+		if($this->upload->do_upload('upload_orders')) // Order file uploaded successfully
+        {
+            $model = $this->model;
+            require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
+            require('spreadsheet-reader-master/SpreadsheetReader.php');
+
+            $Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
           
-          $i=0;
-	foreach ($Reader as $Row)
-	{
-         
-            if ($i !=0) {
-             $this->db->select('*');
-                        $this->db->where('email', $Row[0]);
-                        $q = $this->db->get('users');
-            $userData = $q->result_array();
-       
-               if ($userData){
-                   
-                      $this->db->select('id');
-                        
-                       
-                            $q = $this->db->get('orders');
-                            
-                            $orderLast = $q->result_array();
+            $i=0;
+            foreach ($Reader as $Row)
+            {
+                if ($i!=0) //Headers has been skipped and start to insert value
+                {
+                    $this->db->select('*');
+                    $this->db->where('email', $Row[0]);
+                    $this->db->where('status',1); // user is active
+                    $this->db->where('is_deleted',0); // user is not deleted
+                    $q = $this->db->get('users');
+                    $userData = $q->result_array();
+                    if ($userData) //if user is exist,active and not deleted
+                    {
+                        $this->db->select('id');
+                        $q = $this->db->get('orders');
+                        $orderLast = $q->result_array();
+                        $newOrder = end($orderLast)['id'] + 1;
 
-                         $newOrder = end($orderLast)['id'] + 1;
-               
-                                 if (date('m') <= 3) {//Upto June 2014-2015
-    $financial_year = (date('y')-1) . '-' . date('y');
-} else {//After June 2015-2016
-    $financial_year = date('y') . '-' . (date('y') + 1);
-}
+                        if (date('m') <= 3) {//Upto June 2014-2015
+                            $financial_year = (date('y')-1) . '-' . date('y');
+                        } else {//After June 2015-2016
+                            $financial_year = date('y') . '-' . (date('y') + 1);
+                        }
 
-                         $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
-                         $do = 'DO/'.$newOrder.'/'.$financial_year;
-                         $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
+                        $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
+                        $do = 'DO/'.$newOrder.'/'.$financial_year;
+                        $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
                          
-           	$data = array(
-				'user_id' => $userData[0]['id'],
-                                'tax' => $Row[4],
-                                'total_price' => $Row[5],
-				'lpo_no' => $lpo,
-                                'do_no' => $do,
-                                'invoice_no' => $invoice,
-                     'sales_expense' => $Row[6],
-                     'cargo' => $Row[7],
-                     'cargo_number' => $Row[8],
-                    'location' => $Row[9],
-                    'mark' => $Row[10],
-                    'invoice_status' => $Row[11],
-                    'created' => date('Y-m-d h:i:s'),
-			);
-			$this->$model->insert('orders',$data); 
-                        
+                       	$data = array(
+            			            'user_id' => $userData[0]['id'],
+                                    'tax' => $Row[4],
+                                    'total_price' => $Row[5],
+            			            'lpo_no' => $lpo,
+                                    'do_no' => $do,
+                                    'invoice_no' => $invoice,
+                                    'sales_expense' => $Row[6],
+                                    'cargo' => $Row[7],
+                                    'cargo_number' => $Row[8],
+                                    'location' => $Row[9],
+                                    'mark' => $Row[10],
+                                    'invoice_status' => $Row[11],
+                                    'tax_percentage' => $Row[12],
+                                    'created' => date('Y-m-d h:i:s'),
+                		);
+
+                        $this->$model->insert('orders',$data); 
                         $lastInsertedOrderId = $this->db->insert_id();
-                   
                         $countProducts = explode(',', $Row[1]);
                         $countQuantity = explode(',', $Row[2]);
                         $countPrice = explode(',', $Row[3]);
                      
-                        for($k=0;$k<count($countPrice);$k++) {
+                        for($k=0;$k<count($countPrice);$k++)
+                        {
+                            $this->db->select('*');
+                            $this->db->where('id', $countProducts[$k]);
+                            $q = $this->db->get('products');
+                            $productData = $q->result_array();
+                            //add rate in order product table
+                            if ($userData[0]['client_type'] == 1) {
+                                $rateAdd = $productData[0]['cash_rate'];
+                            }
+                            else if ($userData[0]['client_type'] == 2) {
+                                $rateAdd = $productData[0]['credit_rate'];
+                            }
+                            else if ($userData[0]['client_type'] == 3) {
+                                $rateAdd = $productData[0]['walkin_rate'];
+                            }
+                            else if ($userData[0]['client_type'] == 4 || $userData[0]['client_type'] == 0) {
+                                $rateAdd = $productData[0]['flexible_rate'];
+                            }
                             
-                              $this->db->select('*');
-                        $this->db->where('id', $countProducts[$k]);
-                        $q = $this->db->get('products');
-            $productData = $q->result_array();
-                            
-                              $orderProductData = array(
+                            $orderProductData = array(
                                     'order_id' => $lastInsertedOrderId,
                                     'product_id' =>$productData[0]['id'],
                                     'quantity' => $countQuantity[$k],
-                              'price' => $countPrice[$k],
+                                    'price' => $countPrice[$k],
+                                    'rate'  => $rateAdd
                             );
                             $this->$model->insert('order_products',$orderProductData);
-              
                      
-                       $updatedSoldQuantity = $productData[0]['sold_quantity'] + $countQuantity[$k]; 
-                        $this->db->set('sold_quantity',$updatedSoldQuantity);
-                        $this->db->where('id',$productData[0]['id']);
-                        $this->db->update('products',$newdata);
+                            $updatedSoldQuantity = $productData[0]['sold_quantity'] + $countQuantity[$k]; 
+                            $this->db->set('sold_quantity',$updatedSoldQuantity);
+                            $this->db->where('id',$productData[0]['id']);
+                            $this->db->update('products',$newdata);
                         }
-                        
-	}
-            } 
-            $i++;
+                    }
+                    else // invalid email id or user is inactive or deleted
+                    {
+                        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Invalid email id or user is deleted</div>');
+                        redirect($this->controller);
+                    }
+                }
+                $i++;
+            }
+
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Orders has been imported successfully!</div>');
+            redirect($this->controller);
         }
-        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Orders has been imported successfully!</div>');
-       redirect($this->controller);	
+        else // Order file not uploaded successfully
+        {
+            //$error = $this->upload->display_errors();
+
+            $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Orders has been not imported successfully!</div>');
+            redirect($this->controller);
+        }
     }
-    
-            public function uploadOrders(){
-       
-            //Add meta title
-            $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
-			$this->load->view($this->view.'/uploadOrders',$data);
+
+    public function uploadOrders(){
+        //Add meta title
+        $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
+		$this->load->view($this->view.'/uploadOrders',$data);
     }
     //Popup for partially paid order
     //payment_id is payment history table id
@@ -1629,7 +1706,7 @@ require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
             $status='success';
 
         }else{
-            $paymentData = array(      
+            $paymentData = array(
                         'order_id' => $id,
                         'amount' => $amount,
                         'payment_mode' =>  $payment_mode,

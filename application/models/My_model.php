@@ -201,7 +201,7 @@
             $query = $this->db->get()->result_array();
 			return $query;
 		}
-		function getamount($amount,$convert='no')
+		function getamount($amount,$convert='no',$isCurrencyFormate='yes')
 		{
 			$firstCharacter='';
 		   if ( strpos( $amount, "." ) !== false ) {
@@ -222,8 +222,10 @@
 		    }else{
 		    	$currency=$new_amount;
 		    }
-		    if(isset($convert) && $convert!='' && $convert=="yes"){
+		    if(isset($convert) && $convert!='' && $convert=="yes" && $isCurrencyFormate=="yes"){
 		    	return 'AED '.$firstCharacter.$currency;
+		    }else if(isset($convert) && $convert!='' && $convert=="no" && $isCurrencyFormate=="no"){
+		    	return $new_amount;
 		    }else{
 		    	return 'AED '.$new_amount;
 		    }
@@ -247,7 +249,7 @@
 		}
 		//expense report
 		function expenseReport($where=null,$limit = NUll,$start = NUll,$order = NUll,$dir = NUll){
-			$this->db->select('invoice_no,total_price,orders.created,sales_expense');
+			$this->db->select('orders.id,invoice_no,total_price,orders.created,sales_expense,orders.tax');
 			$this->db->from('orders');
 			$this->db->join('users as u', 'u.id = orders.user_id','left');
 			$this->db->where('orders.is_deleted', 0);

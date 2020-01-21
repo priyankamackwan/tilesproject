@@ -1,10 +1,11 @@
 <?php
-//echo '<pre>';
-//print_r($productData); exit;
+/*echo '<pre>';
+print_r($result); exit;*/
   $this->load->view('include/header');
   $this->load->view('include/leftsidemenu');
   defined('BASEPATH') OR exit('No direct script access allowed');
   error_reporting(0);
+
 ?>
 
 <style type="text/css">
@@ -249,6 +250,7 @@
                       <th style="text-align: center">Item Name</th>
                       <th style="text-align: center">Design No</th>
                       <th style="text-align: center">Quantity</th>
+                      <th style="text-align: center">Rate</th>
                       <th style="text-align: center">Price</th>
                     </tr>      
                          
@@ -259,6 +261,7 @@
                             <td style="text-align: center"><?php echo $productData[$p]['name'];?></td>
                             <td style="text-align: center"><?php echo $productData[$p]['design_no'];?></td>
                             <td style="text-align: center"><?php echo $productData[$p]['quantity'];?></td>
+                            <td style="text-align: center"><?php echo $productData[$p]['rate'];?></td>
                             <td style="text-align: center"><?php echo $this->My_model->getamount(round($productData[$p]['price'],2));?></td>
                           </tr>
                                                   
@@ -286,6 +289,7 @@
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(round($result[0]->tax,2));?>
+                  <?php echo "  ( ".$result[0]->tax_percentage. " % )"; ?> <!-- display tax in percentage -->
                 </div>
               </div>
 
@@ -296,6 +300,16 @@
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <?php echo $this->My_model->getamount(round($result[0]->total_price,2));?>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
+                  Grand Total :
+                </label>
+
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
+                  <?php echo $this->My_model->getamount(round($result[0]->total_price+ $result[0]->tax,2));?>
                 </div>
               </div>
 
@@ -492,11 +506,13 @@
                         </thead>
                     <?php
                     if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
-                      if(isset($result[0]->tax) && $result[0]->tax!='' ){
-                        $orderTax=$result[0]->total_price * $result[0]->tax /100; 
-                      }else{
-                        $orderTax=$result[0]->total_price * Vat /100; 
-                      }
+                      // if(isset($result[0]->tax) && $result[0]->tax!='' ){
+                      //   $orderTax=$result[0]->total_price * $result[0]->tax /100; 
+                      // }else{
+                      //   $orderTax=$result[0]->total_price * Vat /100; 
+                      // }
+                      //tax amount
+                      $orderTax=$result[0]->tax;
                     ?>
                       
                         
