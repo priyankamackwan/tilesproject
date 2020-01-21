@@ -103,7 +103,9 @@
 
                 $where .= 'c.name LIKE "%'.$s.'%" or ';
 
-                $where .= 'p.design_no LIKE "%'.$s.'%" ) ';
+                $where .= 'p.design_no LIKE "%'.$s.'%"  ';
+
+                $where .= 'OR `ph`.`product_id` IS NULL ) ';
         }
       // Total count 
       $totalData = $this->$model->product_report_table_tecords($where,$low_stock);
@@ -112,9 +114,10 @@
       $limit = $_POST['length'];
 
                         
-      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity');
+      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity,AVG(ph.purchase_rate) as totalPurchaseExpense,p.sold_quantity');
       $this->db->from('order_products o');
       $this->db->join('products p','p.id=o.product_id','left');
+      $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
       $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
       $this->db->join('categories c','c.id=pc.cat_id','left');
       $this->db->where('p.is_deleted',0);
@@ -127,7 +130,10 @@
            $this->db->or_like('p.name', $s, 'both');
         }
       }
-      
+      //product history null
+      if(empty($where)){
+        $this->db->or_where('ph.product_id',null);
+      }
       $this->db->limit($limit, $start);
       $this->db->group_by('o.product_id');
 
@@ -154,11 +160,11 @@
           $nestedData['design_no'] =$value['design_no'];
           $nestedData['size'] =$value['size'];
           $nestedData['category'] =$value['cate_name'];
-          $nestedData['purchase_expense'] =$this->$model->getamount(round($value['purchase_expense'],2));
+          $nestedData['purchase_expense'] =$this->$model->getamount(round($value['totalPurchaseExpense'],2));
           $nestedData['quantity'] =round($value['quantity'],2);
-          $nestedData['sold_quantity'] = round($value['totalQuantity'],2);
-          $nestedData['total_left_quantity'] =round($value['quantity']-$value['totalQuantity'],2);
-          $nestedData['amount'] =$this->$model->getamount(round($value['amount'],2));
+          $nestedData['sold_quantity'] = round($value['sold_quantity'],2);
+          $nestedData['total_left_quantity'] =round($value['quantity']-$value['sold_quantity'],2);
+          $nestedData['amount'] =$this->$model->getamount(round($value['totalPurchaseExpense'] *$nestedData['total_left_quantity'],2));
           $data[] = $nestedData;
           $srNo++;
         }

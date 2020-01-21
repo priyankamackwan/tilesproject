@@ -147,7 +147,7 @@
                     $where.= ' AND ';
                 }
                 $where .= '(p.name LIKE "'.$s.'%" or ';
-                $where .= 'p.design_no LIKE "'.$s.'%" or ';
+                $where .= 'p.design_no LIKE "%'.$s.'" or ';
                 $where .= 'p.size LIKE "'.$s.'%" or ';
                 $where .= 'p.credit_rate LIKE "'.$s.'%" or ';
                 $where .= 'p.walkin_rate LIKE "'.$s.'%" or ';
@@ -159,12 +159,12 @@
             $this->db->select('p.*,pc.cat_id,GROUP_CONCAT(c.name) AS cate_name,AVG(product_purchase_history.purchase_rate) as totalPurchaseExpense ,product_purchase_history.quantity as purchase_quantity,');
             $this->db->from('products as p');
             //koin product history table
-            $this->db->join('product_purchase_history', 'product_purchase_history.product_id = p.id');
-            $this->db->join('product_categories as pc', 'pc.product_id = p.id');            
+            $this->db->join('product_purchase_history', 'product_purchase_history.product_id = p.id','left');
+            $this->db->join('product_categories as pc', 'pc.product_id = p.id','left');            
             $this->db->join('categories as c', 'c.id = pc.cat_id');
             $this->db->where('p.is_deleted', 0);
             $this->db->where('c.is_deleted', 0);
-
+            
             if($statusFilter == 1) {
                 $this->db->where('status', 1);
             } elseif($statusFilter == 2) {
@@ -177,6 +177,7 @@
                 $this->db->or_like('p.design_no', $s, 'both');
                 $this->db->or_like('p.size', $s, 'both');
 			}
+            $this->db->or_where('product_purchase_history.product_id',null);
             if(!empty($order))
             {
                 $this->db->order_by($order);
@@ -184,7 +185,7 @@
             $this->db->limit($limit, $start);
             $this->db->group_by('pc.product_id');
             $q=$this->db->get()->result_array(); 
-            //echo $this->db->last_query();
+            // echo $this->db->last_query();
             //Total count 
             $totalFiltered = $this->$model->filtercountTableRecords($where,$s);
 
@@ -535,7 +536,7 @@
             $q_subcategories = $this->db->get('sub_categories');
             $data['sub_categories'] = $q_subcategories->result_array();
 
-            $data['purchase_history']=$this->$model->purchase_history($id);
+            $data['purchase_history']=$this->db->where('product_id',$id)->order_by('product_purchase_history.id','desc')->get("product_purchase_history")->result_array();
 			$this->load->view($this->view.'/form',$data);
 		}
                 
@@ -569,6 +570,8 @@
             $data['sub_categories'] = $q_subcategories->result_array();
 
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+
+            $data['purchase_history']=$this->db->where('product_id',$id)->order_by('product_purchase_history.id','desc')->get("product_purchase_history")->result_array();
 			$this->load->view($this->view.'/view',$data);
 		}
 		public function Update()
@@ -889,13 +892,91 @@
     function ajax_edit_item($productId=null,$productHistoryId=null,$action='insert'){
         $model = $this->model;
         $productId=$this->input->post('productId');
+        $productHistoryId=$this->input->post('history_id');
         $action=$this->input->post('action');
-        $data['procut_history']=$this->$model->purchase_history($productId,$productHistoryId,$action);
+        $data['procut_history']=$this->$model->purchase_history($productId,$productHistoryId,$action,'yes');
         $data['productId']=$productId;
-        $data['productId']=$action;
+        $data['action']=$action;
         $paymentHistoryHtml = $this->load->view($this->view.'/prodcut_history',$data,true);
-       // echo json_encode($paymentHistoryHtml);
+       echo json_encode($paymentHistoryHtml);
         exit();
+    }
+    //inserted and Update payment history  data  payment_history table
+    function updateProductHistory($historyId=null){
+        $model = $this->model;
+        $action=$payment_id='';
+        $message="Something went wrong..Try after sometime";
+        $status='fail';
+        $productId=$this->input->post('id');
+        $historyId=$this->input->post('productHistoryId');
+        $action=$this->input->post('action');
+        $created_at=date('Y-m-d H:i:s');
+        $purchase_rate=$this->input->post('purchase_rate');
+        $quantity=$this->input->post('quantity');
+        if(isset($action) && $action!='' && $action=='edit'){
+            $itemDataUdpate = array(      
+                        'purchase_rate' => $purchase_rate,
+                        'quantity' =>  $quantity,
+                );
+            //Check quantity is updated or not
+            $check_quantity=$this->$model->check_items_quantity('product_purchase_history',$productId,$historyId);
+            if($check_quantity->quantity > $quantity){
+                $totalQuantity=$check_quantity->quantity - $quantity;
+                $update_oprator='-';
+
+            }elseif($check_quantity->quantity < $quantity){
+                $totalQuantity=$quantity - $check_quantity->quantity;
+                $update_oprator='+';
+            }
+            $this->$model->updateItems($productId,$totalQuantity,$update_oprator);
+            
+            $this->db->where('product_id',$productId);
+            $this->db->where('id',$historyId);
+            $this->db->update('product_purchase_history',$itemDataUdpate);
+
+            
+            $message='Item Updated Successfully'; 
+            $status='success';
+
+        }else{
+            $paymentData = array(      
+                        'product_id' => $productId,
+                        'purchase_rate' => $purchase_rate,
+                        'quantity' =>  $quantity,
+                        'created_at'=> $created_at,
+                );
+            $insert=$this->db->insert('product_purchase_history',$paymentData);
+            if($insert){
+
+                $this->$model->updateItems($productId,$quantity,'+');
+
+                $message='Item Add Done Successfully'; 
+                $status='success';
+            }
+        }
+        echo json_encode(array("status"=>$status,"message"=>$message));
+        exit;
+    }
+    // Delete item from history from table payment_history
+    public function removehistory() {  
+        $model = $this->model;
+        $message="Something went wrong..Try after sometime";
+        $status='fail';
+
+        $productId=$this->input->post('productId');
+        $historyId=$this->input->post('productHistoryId');
+        $quantity=$this->input->post('quantity');
+        $this->db->where('id', $historyId);
+        $this->db->where('product_id', $productId);
+        $delete=$this->db->delete('product_purchase_history');
+        if($delete){
+            //update Items
+            $this->$model->updateItems($productId,$quantity,'-');
+            $message='Item history Deleted Successfully..'; 
+            $status='success';   
+        }        
+        echo json_encode(array("status"=>$status,"message"=>$message));
+        exit;
     }
     
 	}

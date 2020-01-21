@@ -1,5 +1,5 @@
 <?php
-print_r($procut_history);die(); 
+// print_r($procut_history);die(); 
 ?>
 <!-- For Payment History Poup view -->
 <section class="content-header">
@@ -13,58 +13,32 @@ print_r($procut_history);die();
     </div>
 </section>
 <form enctype="multipart/form-data" action="" method="post" id="demo-form3" data-parsley-validate class="form-horizontal form-label-left">
-    <input type="hidden" name="id" id="id" value="<?php echo $order_id;?>">
+    <input type="hidden" name="id" id="id" value="<?php echo $procut_history->id;?>">
+    <input type="hidden" name="productHistoryId" id="productHistoryId" value="<?php echo $procut_history->productHistoryId;?>">
     <input type="hidden" name="action" id="action" value="<?php echo $action;?>">
+    <input type="hidden" name="purchase_expense" id="purchase_expense" value="<?php echo $procut_history->purchase_expense;?>">
     <div class="form-group">
-        <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Invoice Amount :</label>
+        <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Item Name :</label>
         <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-            <?php echo  $this->My_model->getamount(round($payment_history->total_price  + $orderTax,2));?>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Balance Amount :</label>
-        <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-            <?php echo  $this->My_model->getamount(round($payment_history->total_price + $orderTax -$paidamount));?>
-        </div>
-    </div>
-    <div class="form-group" id="id_payment_date"> 
-    <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
-      Payment Date <font color="red"><span class="required">*</span></font>:
-    </label>
-    <div class="col-md-9 col-sm-12 col-xs-12">
-      <div class='input-group date' id='payment_datetimepicker'>
-          <input type='text' class="form-control" id="paymentdate" name="paymentdate"   required="required"/ value="<?php echo $payment_date;?>">
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
-          </span>
-      </div>
-    </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-          Payment Mode :
-        </label>
-
-        <div class="col-md-9 col-sm-12 col-xs-12">
-          <input type="text" name="payment_mode" id="payment_mode" class="form-control " placeholder="Payment Mode" value="<?php echo $payment_mode;?>" >
+            <?php echo  $procut_history->name;?>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-          Reference Id :
+          Purchase Price <font color="red"><span class="required">*</span></font> :
         </label>
 
         <div class="col-md-9 col-sm-12 col-xs-12">
-          <input type="text" name="reference" id="reference" class="form-control " placeholder="Enter Reference Id" value="<?php echo $reference;?>">
+          <input type="text" name="purchase_rate" id="purchase_rate" class="form-control " placeholder="Enter Reference Purchase Price" required="required" value="<?php if(!empty($procut_history->purchase_rate)){echo  $procut_history->purchase_rate;}?>">
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-          Amount <font color="red"><span class="required">*</span></font>:
+          Quantity <font color="red"><span class="required">*</span></font>:
         </label>
 
         <div class="col-md-9 col-sm-12 col-xs-12">
-          <input type="text" name="amount" id="amount" class="form-control " placeholder="Enter Amount" required="required" value="<?php echo $amount;?>">
+          <input type="text" name="quantity" id="quantity" class="form-control " placeholder="Enter Quantity" required="required" value="<?php if(!empty($procut_history->quantity)){echo  $procut_history->quantity;}?>" read>
         </div>
     </div>
     <input type="submit" class="btn btn-primary text-center" value="Save">
@@ -81,14 +55,15 @@ $(document).ready(function (){
     $('#demo-form3').validate({
         errorClass:"text-danger",
         rules:{
-            paymentdate:{
-                required: true,
-            },
-            amount:{
+            purchase_rate:{
                 noSpace: true,
                 required: true,
                 number:true,
-                range:[1,<?php echo $payment_history->total_price+ $orderTax-$rangepaidamount;?>],
+            },
+            quantity:{
+                noSpace: true,
+                required: true,
+                number:true,
             },   
         },
         messages: {
@@ -107,7 +82,7 @@ $(document).ready(function (){
             // form.submit();
             $.ajax({
                 type : "POST",
-                url : "<?php echo base_url().$this->controller."/update_order_payment/" ?>",
+                url : "<?php echo base_url().$this->controller."/updateProductHistory/" ?>",
                 data : $('#demo-form3').serialize(),
                 dataType: "json",
                  success: function (data) {
@@ -124,11 +99,13 @@ $(document).ready(function (){
                         $(".alert-danger").show();
                         $("#dangerpaid").html(data.message);
                     }
-                   setTimeout(function(){ window.location.reload(); }, 1000);
+                  setTimeout(function(){ window.location.reload(); }, 1000);
                  }
              });
              return false;
         }
     });
 });
+
+
 </script>

@@ -476,7 +476,7 @@
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
-                    <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control" placeholder="Enter Quantity">
+                    <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control" placeholder="Enter Quantity" readonly>
                   </div>
                 </div>
 
@@ -491,6 +491,7 @@
                 </div>
 
                 <?php 
+                /*
                   if ($this->userhelper->current('role_id') ==1) { 
                 ?>
                     <div class="form-group">
@@ -504,6 +505,7 @@
                     </div>
                 <?php
                   } 
+                  */
                 ?>
 
                 <div class="form-group">
@@ -599,7 +601,7 @@
                     ?>
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-                        Payment Details :
+                        Item History Details :
                       </label>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -619,7 +621,10 @@
                     ?>
                         <tbody>
                           <?php
+                          $purchaseAvg=$totalQuantity=0;
                           foreach ($purchase_history as $key => $purchaseHistoryVal) {
+                            $purchaseAvg +=$purchaseHistoryVal['purchase_rate'];
+                            $totalQuantity += $purchaseHistoryVal['quantity'];
                             $delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($purchaseHistoryVal['id']));
                           ?>
                             <tr>
@@ -627,11 +632,7 @@
                                 <?php echo $key+1;?>
                               </td>
                               <td style="text-align: center" >
-                                <?php
-                                if(isset($purchaseHistoryVal['name']) && $purchaseHistoryVal['name']!=''){
-                                  echo $purchaseHistoryVal['name'];
-                                }
-                                ?>
+                                <?php echo $result[0]->name;?>
                               </td>
                               <td class="text-right">
                                 <?php
@@ -655,12 +656,20 @@
                                 ?>
                               </td>
                               <td style="text-align: center;">
-                                <a onclick="edit_item(<?php echo $id;?>,<?php echo $purchaseHistoryVal['id'];?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_item(<?php echo $id;?>,<?php echo $purchaseHistoryVal['id'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
+                                <a onclick="edit_item(<?php echo $purchaseHistoryVal['id'];?>,<?php echo $result[0]->id;?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_item(<?php echo $purchaseHistoryVal['id'];?>,<?php echo $result[0]->id;?>,<?php echo $purchaseHistoryVal['quantity'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
                               </td>
                           </tr>
                           <?php
                           }                           
                           ?> 
+                        </tbody>
+                        <tbody>
+                          <td></td>
+                          <td><b>Total</b></td>
+                          <td><b>Avg Purchase Price</b> : <?php echo $purchaseAvg/count($purchase_history); ?></td>
+                          <td class="text-right"><?php echo $totalQuantity; ?></td>
+                          <td></td>
+                          <td></td>
                         </tbody>
                     <?php
                   }
@@ -941,7 +950,7 @@ function add_item(productId,action='insert'){
         success : function (data){
           if(data != ''){
             if(action=='insert'){
-              $(".headername").html('Add Payment');
+              $(".headername").html('Add Item');
             }
               $("#prevMonthLeaveDatahtml").html(data);
               $("#payment_popup").modal('show');
@@ -957,6 +966,51 @@ function add_item(productId,action='insert'){
     }else{
       $("#prevMonthLeaveDatahtml").html("<h1> There is some Error </h1>");
       $("#payment_popup").modal('show');
+    }
+
+}
+function edit_item(history_id,productId,action='edit'){
+  if(history_id != ''){
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url().$this->controller."/ajax_edit_item/" ?>",
+        data : {productId:productId,history_id:history_id,action:action},
+        dataType: "json",
+        success : function (data){
+          if(data != ''){
+              $("#prevMonthLeaveDatahtml").html(data);
+              $("#payment_popup").modal('show');
+          }else{
+            $("#payment_popup").modal('show');
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(thrownError+ '\r\n' +xhr.statusText+ '\r\n' +xhr.responseText);
+        }
+      
+      });
+    } else{
+      $("#prevMonthLeaveDatahtml").html("<h1> There is some Error </h1>");
+      $("#payment_popup").modal('show');
+    }
+}
+function delete_item(productHistoryId,productId,quantity){
+    if(productHistoryId != '' && productId!=''){
+        if (confirm("Sure you want to delete this Item ??")){
+          $.ajax({
+            type : "POST",
+            url : "<?php echo base_url().$this->controller."/removehistory/" ?>",
+            data : {productHistoryId:productHistoryId,productId:productId,quantity:quantity},
+            dataType: "json",
+            success : function (data){
+                alert(data.message);  
+                window.location.reload();
+            }
+            
+          });
+        }else{
+            alert('There is some Error..'); 
+        }
     }
 
 }

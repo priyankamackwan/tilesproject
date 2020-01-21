@@ -114,6 +114,7 @@
 			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
+			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
 			$this->db->join('product_categories pc','pc.product_id=o.product_id','left');
 			$this->db->join('categories c','c.id=pc.cat_id','left');
 			$this->db->where('p.is_deleted',0);
@@ -121,6 +122,7 @@
 			if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
 			}
+			$this->db->or_where('ph.product_id',null);
 			$this->db->group_by('o.product_id');
             $query = $this->db->get()->num_rows();
 			return $query;
@@ -186,6 +188,7 @@
 			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
+			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
 			$this->db->join('product_categories pc','pc.product_id=o.product_id','left');
 			$this->db->join('categories c','c.id=pc.cat_id','left');
 			$this->db->where('p.is_deleted',0);
@@ -193,6 +196,7 @@
 			if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
 			}
+			$this->db->or_where('ph.product_id',null);
 			$this->db->group_by('o.product_id');
             $query = $this->db->get()->result_array();
 			return $query;
@@ -268,22 +272,53 @@
 
 		}
 		//purchase history data 
-		function purchase_history($productId=NUll,$productHistoryId=NUll,$action='insert'){
-			$this->db->select('product_purchase_history.*,products.name');
+		function purchase_history($productId=NUll,$productHistoryId=NUll,$action='insert',$getRowArray="no"){
+			$this->db->select('products.id,products.name,products.purchase_expense');
+			if(isset($action) && $action!='' && $action=="edit"){
+				$this->db->select('product_purchase_history.id as productHistoryId,product_purchase_history.purchase_rate,product_purchase_history.quantity');
+			}
             $this->db->from('products');
-            $this->db->join('product_purchase_history','products.id=product_purchase_history.product_id','left');
+            $this->db->join('product_purchase_history','product_purchase_history.product_id=products.id','left');
             $this->db->where('products.is_deleted',0);
-            $this->db->where('products.id',$productId);
-            if(isset($productId) && $productId!=''){
-            	$this->db->where('product_purchase_history.product_id',$productId);
-            }
+            
             if(isset($productHistoryId) && $productHistoryId!=''){
             	$this->db->where('product_purchase_history.id',$productHistoryId);
+            }
+            if(isset($productId) && $productId!=''){
+            	$this->db->where('product_purchase_history.product_id',$productId);
+            	$this->db->or_where('product_purchase_history.product_id',null);
             }         
-            $this->db->or_where('product_purchase_history.product_id',null);   
-            $purchaseData = $this->db->get()->result_array();
-            echo $this->db->last_query();
+            $this->db->where('products.id',$productId);
+            if(isset($getRowArray) && $getRowArray!='' & $getRowArray=="yes"){
+            	$purchaseData = $this->db->get()->row();
+            }else{  
+            	$purchaseData = $this->db->get()->result_array();
+            }
             return $purchaseData;
 		}
+		//update item quantity on edit delete, update
+		function updateItems($productId,$quantity,$oprator){
+			$fieldname='quantity';
+			$table_name='products';
+            // update  current  quantity - deleted
+             $this->db->set($fieldname, $fieldname.$oprator.$quantity, FALSE);
+             $this->db->where($table_name.'.id',$productId);
+             $this->db->update($table_name);
+             return true;
+        }
+        // items quntity fetech data
+        function check_items_quantity($table,$productId,$historyId=null){
+            $this->db->select('quantity');
+            $this->db->from($table);
+            if(isset($historyId) && $historyId!=''){
+            	$this->db->where('id',$historyId);	
+            }
+            if(isset($productId) && $productId!=''){
+            	$this->db->where('product_id',$productId);	
+            }            
+            $data=$this->db->get()->row();
+            return $data; 
+        }
+
 	}
 ?>
