@@ -225,6 +225,7 @@
               </div>
               <?php 
               //not show to subadmin
+              /*
               if($this->userhelper->current('role_id')==1){
               ?>  
               <div class="form-group">
@@ -238,6 +239,7 @@
               </div>
               <?php
                 }
+                */
               ?>
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
@@ -316,7 +318,77 @@
                   </select>
                 </div>
               </div>
-
+              <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+                        Item History Details :
+                      </label>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
+                      <thead>
+                            <tr class="">
+                              <th style="text-align: center">Sr No.</th>
+                              <th style="text-align: center">Item Name</th>
+                              <th style="text-align: center">Purchase Price</th>
+                              <th style="text-align: center">Quantity</th>
+                              <th style="text-align: center">Created On</th>
+                            </tr>
+                        </thead>
+                    <?php
+                    if(isset($purchase_history) && $purchase_history!='' && count($purchase_history) >0){
+                    ?>
+                        <tbody>
+                          <?php
+                          $purchaseAvg=$totalQuantity=0;
+                          foreach ($purchase_history as $key => $purchaseHistoryVal) {
+                            $purchaseAvg +=$purchaseHistoryVal['purchase_rate'];
+                            $totalQuantity += $purchaseHistoryVal['quantity'];
+                            $delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($purchaseHistoryVal['id']));
+                          ?>
+                            <tr>
+                              <td style="text-align: center" >
+                                <?php echo $key+1;?>
+                              </td>
+                              <td style="text-align: center" >
+                                <?php echo $result[0]->name;?>
+                              </td>
+                              <td class="text-right">
+                                <?php
+                                if(isset($purchaseHistoryVal['purchase_rate']) && $purchaseHistoryVal['purchase_rate']!=''){
+                                  echo $purchaseHistoryVal['purchase_rate'];
+                                }
+                                ?>
+                              </td>
+                              <td class="text-right">
+                                <?php
+                                if(isset($purchaseHistoryVal['quantity']) && $purchaseHistoryVal['quantity']!=''){
+                                  echo $purchaseHistoryVal['quantity'];
+                                }
+                                ?>
+                              </td>
+                              <td style="text-align: center;">
+                                <?php
+                                if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
+                                  echo date('d/m/Y',strtotime($payment_history_val['created_at']));
+                                }
+                                ?>
+                              </td>
+                          </tr>
+                          <?php
+                          }                           
+                          ?> 
+                        </tbody>
+                        <tbody>
+                          <td></td>
+                          <td><b>Total</b></td>
+                          <td><b>Avg Purchase Price</b> : <b class="text-right"><?php echo round($purchaseAvg/count($purchase_history),2); ?></b></td>
+                          <td class="text-right"><?php echo $totalQuantity; ?></td>
+                          <td></td>
+                        </tbody>
+                    <?php
+                  }
+                    ?>
+                    </table>
             </form>
           </div>
         </div>
