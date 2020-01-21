@@ -54,3 +54,5 @@ vendor/*
 /vendors/*
 /assets/uploads
 application_bkp
+/application/stockreminderfile/*
+/stockreminderfile/*

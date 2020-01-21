@@ -53,8 +53,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 				$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Design No');
 				$objPHPExcel->getActiveSheet()->SetCellValue('D1', 'Total Quantity');
 				$objPHPExcel->getActiveSheet()->SetCellValue('E1', 'Required Quantity');
-				$objPHPExcel->getActiveSheet()->SetCellValue('F1', 'Total Sold Quantity');
-				$objPHPExcel->getActiveSheet()->SetCellValue('G1', 'Remaining Quantity');
+				$objPHPExcel->getActiveSheet()->SetCellValue('F1', 'Sold Quantity');
+				$objPHPExcel->getActiveSheet()->SetCellValue('G1', 'Balance Quantity');
 
 				// database data
 				$this->db->select('p.id,p.name,p.design_no,p.quantity,ROUND((p.quantity*'.Stock_Reminder.')/100) as req,SUM(o.quantity) as sold,p.quantity-SUM(o.quantity) as rem');
@@ -72,14 +72,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 					$objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $srno1++);
 					$objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $list['name']);
 					$objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, $list['design_no']);
-					$objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, $list['quantity']);
-					$objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $list['req']);
-					$objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, $list['sold']);
-					$objPHPExcel->getActiveSheet()->SetCellValue('G' . $rowCount, $list['rem']);
+					$objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, round($list['quantity'],2));
+					$objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, round($list['req'],2));
+					$objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, round($list['sold'],2));
+					$objPHPExcel->getActiveSheet()->SetCellValue('G' . $rowCount, round($list['rem'],2));
 					$rowCount++;
 				}
 
-				$fileName='Stockreminder of '.date('j-F').",".date('Y').".csv";
+				//$fileName='Stockreminder of '.date('j-F').",".date('Y').".csv";
+				$fileName='Stockreminder-of-'.date('j-F')."-".date('Y').".csv";
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV'); 
 				//ob_end_clean();
 				$objWriter->save(str_replace(__FILE__,APPPATH.'stockreminderfile/'.$fileName,__FILE__)); // save file in folder
@@ -110,7 +111,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 				// Email body content
 				/*$mailContent = "<h1><font color='red'>Low Stock Reminder Mail</font></h1><p style='font-size:20px;'>Dear Admin, Kindly find the attached excelsheet which indicated some products are less than 25% in your stock. Kindly take some rapid action to deny that.</p><p style='font-size:20px;'>Thank You.</p>";*/
-				$mail->MsgHTML("<h1><font color='red'>Low Stock Reminder</font></h1><p style='font-size:20px;'>Dear Admin, Kindly find the attached excelsheet which indicated some products are less than 25% in the stock.</p><p style='font-size:20px;'>Thank You.</p>");
+				$mail->MsgHTML("<h1><font color='red'>Low Stock Reminder</font></h1><p style='font-size:20px;'>Dear Admin, Kindly find the attached excelsheet which indicated some products are less than ".Stock_Reminder."% in the stock.</p><p style='font-size:20px;'>Thank You.</p>");
 				//$mail->Body = $mailContent;
 				$mail->AddAttachment(APPPATH.'stockreminderfile/'.$fileName);
 
@@ -118,7 +119,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 				if(sizeof($sendmailto)>=1) // if admin is exist and not deleted
 				{
-					foreach ($sendmailto as $value) // create array having email address of admin
+					foreach ($sendmailto as $value) // create an array having email address of admin
 					{
 						// $sendto[] = trim($value['email']);
 						$mail->addAddress(trim($value['email']));
