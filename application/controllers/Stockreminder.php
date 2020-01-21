@@ -120,14 +120,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 				{
 					foreach ($sendmailto as $value) // create array having email address of admin
 					{
-						$sendto[] = trim($value['email']);
+						// $sendto[] = trim($value['email']);
+						$mail->addAddress(trim($value['email']));
 					}
-
-					if(sizeof($sendto)>=1) // array is not empty & fill up with admin's array
-					{
-						$mail->addAddress($sendto);
-						$mail->send();
-					}
+					$mail->send();
 				}
 			}
 		}
