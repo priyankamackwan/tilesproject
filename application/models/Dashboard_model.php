@@ -148,6 +148,7 @@
             $this->db->from('order_products o');
             $this->db->join('products p','p.id=o.product_id','left');
             $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+            //product history table avrage price
             $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
             $this->db->join('categories c','c.id=pc.cat_id','left');
             $this->db->where('p.is_deleted',0);
@@ -199,6 +200,7 @@
           $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
           $this->db->join('categories c','c.id=pc.cat_id','left');
           //where condition
+          //product history table avrage price
           $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
           $this->db->where('p.is_deleted',0);
           $this->db->where('c.is_deleted',0);

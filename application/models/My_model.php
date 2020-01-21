@@ -111,7 +111,7 @@
 	          $this->db->order_by('p.name asc');
 	        } 
 	        // End for low stock conidtion
-			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
 			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
@@ -185,7 +185,7 @@
 	          $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
 	        } 
 	        // End for low stock conidtion
-			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as purchase_expense');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
 			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
@@ -275,7 +275,7 @@
 		}
 		//purchase history data 
 		function purchase_history($productId=NUll,$productHistoryId=NUll,$action='insert',$getRowArray="no"){
-			$this->db->select('products.id,products.name,products.purchase_expense');
+			$this->db->select('products.id,products.name');
 			if(isset($action) && $action!='' && $action=="edit"){
 				$this->db->select('product_purchase_history.id as productHistoryId,product_purchase_history.purchase_rate,product_purchase_history.quantity');
 			}

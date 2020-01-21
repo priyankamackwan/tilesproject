@@ -50,7 +50,7 @@
                 2 => 'p.design_no',
                 3 => 'p.size',
                 4 => 'cate_name',
-                5 => 'p.purchase_expense' ,
+                5 => 'totalPurchaseExpense' ,
                 6 => 'p.quantity' ,
                 7 => 'totalQuantity',
                 8 => 's_quantity',
@@ -114,7 +114,7 @@
       $limit = $_POST['length'];
 
                         
-      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity,AVG(ph.purchase_rate) as totalPurchaseExpense,p.sold_quantity');
+      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity,AVG(ph.purchase_rate) as totalPurchaseExpense,p.sold_quantity');
       $this->db->from('order_products o');
       $this->db->join('products p','p.id=o.product_id','left');
       $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
