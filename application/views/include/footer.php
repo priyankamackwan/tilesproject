@@ -2,7 +2,10 @@
         <div class="pull-right hidden-xs">
         
         </div>
-        <strong>Copyright &copy; 2016-2017 <a href="#">The Web Patriot</a>.</strong> All rights
+        <?php 
+            $dateCurrentYear = date('Y');
+            $dateNextYear = date('Y')+1; ?>
+        <strong>Copyright &copy; <?php echo $dateCurrentYear.'-'.$dateNextYear; ?> <a href="#">PNP Building Materials Trading L.L.C</a>.</strong> All rights
         reserved.  
     </footer>
 

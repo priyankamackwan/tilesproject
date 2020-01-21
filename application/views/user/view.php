@@ -224,19 +224,22 @@
                     } 
                   ?>
                   <?php 
-                    if ($result[0]->client_type == 2) { 
+                    else if ($result[0]->client_type == 2) { 
                   ?>
                       Credit
                   <?php 
                     } 
                   ?>  
                   <?php 
-                    if ($result[0]->client_type == 3) { 
+                    else if ($result[0]->client_type == 3) { 
                   ?>
                       Walkin
                   <?php
                     } 
+                    else if ($result[0]->client_type == 4 || $result[0]->client_type == 0) { 
                   ?>
+                    Flexible Rate
+                  <?php } ?>
                 </div>
               </div>
             </form>
