@@ -144,13 +144,15 @@
             $stocklimit=Stock_Reminder;
             $this->db->select('ROUND((o.quantity*'.$stocklimit.')/100),p.quantity-SUM(o.quantity) as s_quantity');
             $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
-            $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,p.quantity,c.name AS cate_name');
+            $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as purchase_expense,p.sold_quantity');
             $this->db->from('order_products o');
             $this->db->join('products p','p.id=o.product_id','left');
             $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+            $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
             $this->db->join('categories c','c.id=pc.cat_id','left');
             $this->db->where('p.is_deleted',0);
             $this->db->where('c.is_deleted',0);
+            $this->db->or_where('ph.product_id',null);
             $this->db->limit($limit, $start);
             $this->db->group_by('o.product_id');
             $listInfo=$this->db->get()->num_rows();
@@ -191,14 +193,16 @@
         }
         //For best selling by product
         function selling_product($order_by){
-           $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.purchase_expense,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity');
+           $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,c.name AS cate_name,p.quantity-SUM(o.quantity) as s_quantity,AVG(ph.purchase_rate) as purchase_expense');
           $this->db->from('order_products o');
           $this->db->join('products p','p.id=o.product_id','left');
           $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
           $this->db->join('categories c','c.id=pc.cat_id','left');
           //where condition
+          $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
           $this->db->where('p.is_deleted',0);
           $this->db->where('c.is_deleted',0);
+          $this->db->or_where('ph.product_id',null);
           $this->db->limit($limit, $start);
           $this->db->group_by('o.product_id');
             $this->db->order_by('totalQuantity',' desc');
