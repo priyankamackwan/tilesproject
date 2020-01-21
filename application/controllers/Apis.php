@@ -214,7 +214,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                             "phone_no" => $phone_no,
                             "created" => $created,
                             );
-                            /*      Old array      
+                            /*      Old array
                             $arr = array(
                                     "registration_ids" => array($adminUserdata[$k]['firebase_token']),
                                     "notification" => [
@@ -833,11 +833,11 @@ You can change this password from mobile application after you are logged in onc
                         
                         if($placed_by=='admin')
                         {
-                            $orderData = array(      
+                            $orderData = array(
                                     'user_id' => $customer_id,
                                     'lpo_no' => $lpo,
-                                    'do_no' =>  $do,
-                                    'invoice_no' => $invoice,       
+                                    'do_no' => $do,
+                                    'invoice_no' => $invoice,
                                     'tax' => $data['tax'],
                                     'tax_percentage' => Vat,
                                     'total_price' => $data['total_price'],
@@ -854,11 +854,11 @@ You can change this password from mobile application after you are logged in onc
                         }
                         else
                         {
-                            $orderData = array(      
+                            $orderData = array(
                                     'user_id' => $this->user_id,
                                     'lpo_no' => $lpo,
-                                    'do_no' =>  $do,
-                                    'invoice_no' => $invoice,       
+                                    'do_no' => $do,
+                                    'invoice_no' => $invoice, 
                                     'tax' => $data['tax'],
                                     'tax_percentage' => Vat,
                                     'total_price' => $data['total_price'],
@@ -874,16 +874,21 @@ You can change this password from mobile application after you are logged in onc
                         }
                             $this->$model->insert('orders',$orderData);
                             $lastInsertedOrderId = $this->db->insert_id();
-                     
-                            
+
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
                                 if(isset($orderProductArray[$k]['rate']) && !empty($orderProductArray[$k]['rate'])){
                                     $rate = $orderProductArray[$k]['rate'];
-                                }else{
-                                    $rate = number_format($orderProductArray[$k]['price']/$orderProductArray[$k]['quantity'], 2);
+                                }else{ // if rate filed is not found so working for old version of application and take walkin_rate as per instruction
+
+                                    $productData = $this->db->select('walkin_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
+
+                                    $rate=$productData->walkin_rate;
+
+                                    //$rate = number_format($orderProductArray[$k]['price']/$orderProductArray[$k]['quantity'], 2);
                                 }
                                 
+
                                 $product_orders = array(
                                     'order_id'  => $lastInsertedOrderId,
                                     'product_id'=> $orderProductArray[$k]['product_id'],
@@ -904,8 +909,6 @@ You can change this password from mobile application after you are logged in onc
                                 $this->db->where('id',$orderProductArray[$k]['product_id']);
                                 $this->db->update('products',$dataUser);
                             }
-                            
-                            
                             
                         $do_no = $do;
 
@@ -994,21 +997,20 @@ if(trim($customer_lpo)!="") // if customer lpo field not null then display it'
     <br><br/>';
 }
 
-$html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$data['cargo_number'].'</td></tr></table>  
+$html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$data['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$data['cargo_number'].'</td></tr></table>
     <br><br/>
- <table style="width:100%;"><tr><td style="width:60%;">Location : '.$data['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$data['mark'].'</td></tr></table>     
+ <table style="width:100%;"><tr><td style="width:60%;">Location : '.$data['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$data['mark'].'</td></tr></table> 
 <br><br/>
 <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
 <table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">UNIT</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center" width="60%">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['unit'].'</td></tr>';
-                                
                           }
                           $html .= '<tr><td></td><td></td><td colspan="2"></td><td></td></tr></table>';
 
 $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the above goods in good condition</td></tr></table>
 <br><br/>
-<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table>     
+<table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table> 
 <br><br/>
 <table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%;">Name : </td></tr></table>
 <br><br/>
@@ -1117,10 +1119,9 @@ $count = 0;
 for($p=0;$p<count($finalOrderData);$p++) {
     $count++;
     $html2 .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
-                                
                           }
                           $html2 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
-                                  
+
                                   <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td>'.$vat.'</td></tr>
                                   
 <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
@@ -1847,9 +1848,10 @@ $pdf2->Output($fileNL_invoice, 'F');
                 
                    public function getCustomerReport() {
                     
-                     $data = $_POST;
+                    $model = $this->model;
+                    $data = $_POST;
 
-                     if (empty($data)) {
+                    if (empty($data)) {
                     $this->db->select('u.company_name, u.contact_person_name,o.id,o.total_price,o.location,o.invoice_status,o.created,o.tax');
                     $this->db->from('orders as o');
                     $this->db->join('users as u', 'o.user_id = u.id');
@@ -1857,14 +1859,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $this->db->where('u.is_deleted',0);
                     $this->db->where('u.status',1);
                     $finalOrderData = $this->db->get()->result_array();
-                    for($l=0;$l<count($finalOrderData);$l++) {
-                        if ($finalOrderData[$l]['invoice_status'] == 0) {
+                    for($l=0;$l<count($finalOrderData);$l++){
+                        if ($finalOrderData[$l]['invoice_status'] == 0){
                             $finalOrderData[$l]['invoice_status'] = 'Unpaid';
-                        } else {
+                        }else{
                             $finalOrderData[$l]['invoice_status'] = 'Paid';
                         }
-                        $finalOrderData[$l]['total_price'] = $finalOrderData[$l]['total_price']+ $finalOrderData[$l]['tax'];
-                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
+
+                        $finalOrderData[$l]['total_price'] = $this->$model->getamount(ROUND($finalOrderData[$l]['total_price'] + $finalOrderData[$l]['tax'],2),'no','no');
                     }
 
                      } else {
@@ -1878,9 +1880,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                         if ($q) {
                             $orderData = array(); 
                          
-                            for($k=0;$k<count($q);$k++) {
-                              
-                                  $multipleWhere2 = ['id' => $q[$k]->user_id];
+                        for($k=0;$k<count($q);$k++) {
+
+                        $multipleWhere2 = ['id' => $q[$k]->user_id];
                         $this->db->where($multipleWhere2);
                         $userData = $this->db->get("users")->result_array();
                         
@@ -1894,8 +1896,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $orderData['invoice_status'] = 'Paid';
                         }
                         $orderData['created'] = $q[$k]->created;
-                        $orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
-                        //$orderData['total_price'] = $q[$k]->tax;
+                        //$orderData['total_price'] = $q[$k]->total_price + $q[$k]->tax;
+                        $orderData['total_price'] = $this->$model->getamount(ROUND($q[$k]->total_price + $q[$k]->tax,2),'no','no');
                         $finalOrderData [] = $orderData;
                             }
                         } else {
@@ -1910,9 +1912,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                 }
                 
                 public function getExpenseReport() {
-                    
-                     $data = $_POST;
-                     if (empty($data)) {
+                
+                    $data = $_POST;
+                    if (empty($data)) {
                     $this->db->select('o.id,o.sales_expense,o.invoice_no,o.created');
                     $this->db->from('orders as o');
                     $this->db->where('o.is_deleted',0);
@@ -1949,82 +1951,75 @@ $pdf2->Output($fileNL_invoice, 'F');
                 
                 
                 public function getSalesReport() {
+
+                    $model = $this->model;
                     
-                     $data = $_POST;
-                     if (empty($data)) {
-                         
-                         $q = $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
-                         
-          
-                    $finalOrderData = $q->get('orders')->result_array();
-                       //  echo '<pre>';
-               //print_r($finalOrderData); exit;
-                    if ($finalOrderData) {
-                    for($k=0;$k<count($finalOrderData);$k++) {
-                           $invoiceData = $this->db->order_by('id',"desc")
+                    $data = $_POST;
+                    if (empty($data)) 
+                    { 
+                        $q = $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('is_deleted', 0);
 
-		->limit(1)
-->where('user_id',$finalOrderData[$k]['user_id'])
-		->get('orders')
+                        $finalOrderData = $q->get('orders')->result_array();
 
-		->row();
-                            $multipleWhere2 = ['id' => $finalOrderData[$k]['user_id']];
-                        $this->db->where($multipleWhere2);
-                        $userData = $this->db->get("users")->result_array();
-                        
-                        $finalOrderData[$k]['company_name'] = $userData[0]['company_name'];
-                           $finalOrderData[$k]['invoice_no'] = $invoiceData->invoice_no;
-                    }
-                    } else {
-                        $finalOrderData = array();
-                    }
-              
-                     } else {
-                           $q= $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
-                            $this->db->where('created <=', $data['end_date']);
-                            $this->db->where('is_deleted',0);
-                          
-                            $q = $q->get('orders')->result();
-                           // if ($q){
-                        for($k=0;$k<count($q);$k++) {
-                           $invoiceData = $this->db->order_by('id',"desc")
 
-		->limit(1)
-->where('user_id',$q[$k]->user_id)
-		->get('orders')
+                        if ($finalOrderData) {
+                            for($k=0;$k<count($finalOrderData);$k++){
+                                $invoiceData = $this->db->order_by('id',"desc")->limit(1)->where('user_id',$finalOrderData[$k]['user_id'])->get('orders')->row();
 
-		->row();
+                                $multipleWhere2 = ['id' => $finalOrderData[$k]['user_id']];
+                                $this->db->where($multipleWhere2);
+                                $userData = $this->db->get("users")->result_array();
+                                
+                                $finalOrderData[$k]['company_name'] = $userData[0]['company_name'];
+                                $finalOrderData[$k]['invoice_no'] = $invoiceData->invoice_no;
+
+                                $finalOrderData[$k]['totalValue'] = $this->$model->getamount(ROUND($finalOrderData[$k]['totalValue'],2),'no','no');
+                            }
+                        }
+                        else 
+                        {
+                            $finalOrderData = array();
+                        }
+                    } 
+                    else 
+                    {
+                       $q= $this->db->select('user_id,SUM(total_price + tax) as totalValue,SUM(sales_expense) as total_sales_expense')->group_by('user_id')->where('created >=', $data['start_date']);
+                        $this->db->where('created <=', $data['end_date']);
+                        $this->db->where('is_deleted',0);
+
+                        $q = $q->get('orders')->result();
+
+                        for($k=0;$k<count($q);$k++) 
+                        {
+                            $invoiceData = $this->db->order_by('id',"desc")->limit(1)->where('user_id',$q[$k]->user_id)->get('orders')->row();
                            
                             $multipleWhere2 = ['id' => $q[$k]->user_id];
-                        $this->db->where($multipleWhere2);
-                        $userData = $this->db->get("users")->result_array();
+                            $this->db->where($multipleWhere2);
+                            $userData = $this->db->get("users")->result_array();
                         
-                        $q[$k]->company_name = $userData[0]['company_name'];
-                           $q[$k]->invoice_no = $invoiceData->invoice_no;
-                    }
-                         
-                      $finalOrderData = $q;
-                     } 
-                     $response['status'] = 'success';
-                 $response['data'] = $finalOrderData;
-                   // Returning back the response in JSON
+                            $q[$k]->company_name = $userData[0]['company_name'];
+                            $q[$k]->invoice_no = $invoiceData->invoice_no;
+                            $q[$k]->totalValue = $this->$model->getamount(ROUND($q[$k]->totalValue,2),'no','no');
+                        }
+                        $finalOrderData = $q;
+                    } 
+                    $response['status'] = 'success';
+                    $response['data'] = $finalOrderData;
+                    // Returning back the response in JSON
                     echo json_encode($response);
                     exit();
                 }
                 
                 public function getProductsReport() {
                     
-                 
-                         
                 $q = $this->db->select('order_id,product_id,SUM(quantity) as totalQuantity,SUM(price) as amount')->group_by('product_id');
                          
                  
                     $finalOrderData = $q->get('order_products')->result();
                     if ($finalOrderData) {
-                 		foreach ($finalOrderData as $key=>$value)
-				{
+                 		foreach ($finalOrderData as $key=>$value){
 
-                         $multipleWhere2 = ['id' => $value->product_id];
+                        $multipleWhere2 = ['id' => $value->product_id];
                         $this->db->where($multipleWhere2);
                         $productData = $this->db->get("products")->result_array();
              
@@ -2093,7 +2088,6 @@ $pdf2->Output($fileNL_invoice, 'F');
                 //die('Oops! FCM Send Error: ' . curl_error($ch));
             }
             curl_close($ch);
-
         }
         public function update_last_activity() {
             $data = $_POST;
