@@ -381,7 +381,7 @@
                         <tbody>
                           <td></td>
                           <td><b>Total</b></td>
-                          <td><b>Avg Purchase Price</b> : <b class="text-right"><?php echo $purchaseAvg/count($purchase_history); ?></b></td>
+                          <td><b>Avg Purchase Price</b> : <b class="text-right"><?php echo round($purchaseAvg/count($purchase_history),2); ?></b></td>
                           <td class="text-right"><?php echo $totalQuantity; ?></td>
                           <td></td>
                         </tbody>
