@@ -256,7 +256,7 @@
                     }   
 
                     $nestedData['image'] = $image;
-                                        $nestedData['quantity'] = $value['quantity']+ $value['purchase_quantity'];
+                                        $nestedData['quantity'] = $value['quantity'];
                                         $nestedData['cash_rate'] =$this->$model->getamount(ROUND($value['cash_rate'],2));
                                         $nestedData['credit_rate'] = $this->$model->getamount(ROUND($value['credit_rate'],2));
                                         //Add flexible rate
