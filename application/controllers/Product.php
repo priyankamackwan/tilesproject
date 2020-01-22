@@ -183,7 +183,7 @@
                 $this->db->order_by($order);
             }
             $this->db->limit($limit, $start);
-            $this->db->group_by('pc.product_id');
+            $this->db->group_by('p.id');
             $q=$this->db->get()->result_array(); 
             // echo $this->db->last_query();
             //Total count 

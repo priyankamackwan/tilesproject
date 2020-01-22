@@ -431,6 +431,8 @@
                   $('row c[r="D3"]', sheet).attr('s', '7'); 
                   $('row c[r="A5"]', sheet).attr('s', '7'); 
                   $('row c[r="B5"]', sheet).attr('s', '7'); 
+                  $('row c[r^="C"]', sheet).attr('s', '52');
+                  $('row c[r="C6"]', sheet).attr('s', '2');
                 },
             }],
 			"ajax":{

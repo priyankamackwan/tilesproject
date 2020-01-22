@@ -533,10 +533,10 @@
                       return row;
                   }          
                   // Add row data 
-                  var r1 = Addrow(1, [{ key: 'G', value: 'Total Invoice Amount (<?php echo date('F');?>)  ' }, { key: 'I', value: $("#cmtotalBalance").html()  }]);
-                  var r2 = Addrow(2, [{ key: 'G', value: 'Total Paid Amount (<?php echo date('F');?>)' }, { key: 'I', value: $("#cmcreditBalance").html()  }]);
+                  var r1 = Addrow(1, [{ key: 'G', value: 'This Month Total Total Paid Amount' }, { key: 'I', value: $("#cmtotalBalance").html()  }]);
+                  var r2 = Addrow(2, [{ key: 'G', value: 'This Month Total Total Paid Amount' }, { key: 'I', value: $("#cmcreditBalance").html()  }]);
                   
-                  var r3 = Addrow(3, [{ key: 'G', value: 'Total Unpaid Amount (<?php echo date('F');?>)' }, { key: 'I', value: $("#cmdebitBalance").html()  }]);
+                  var r3 = Addrow(3, [{ key: 'G', value: 'This Month Total Total Paid Amount' }, { key: 'I', value: $("#cmdebitBalance").html()  }]);
 
                   var r4 = Addrow(4, [{ key: 'G', value: 'Total Invoice Amount  ' }, { key: 'I', value: $("#creditBalance").html()  }]);
                   var r5 = Addrow(5, [{ key: 'G', value: 'Total Paid Amount' }, { key: 'I', value: $("#totalBalance").html()  }]);
