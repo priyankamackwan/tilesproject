@@ -131,8 +131,8 @@
       $total_balance_quantity = $this->$model->balance_quantity($where,$low_stock);
       if(isset($total_balance_quantity) && $total_balance_quantity!='' && count($total_balance_quantity) > 0){
         foreach ($total_balance_quantity as $key => $value) {
-          $totalBalancequantity+=$value['quantity']- $value['totalQuantity'];
-          $totalBalanceAmount+=$value['purchase_expense'] * ($value['quantity']- $value['totalQuantity']);
+          $totalBalancequantity+=round($value['quantity']-$value['sold_quantity'],2);
+          $totalBalanceAmount+=$value['purchase_expense'] * ($value['quantity']- $value['sold_quantity']);
         }
 
       }
@@ -208,7 +208,7 @@
           $this->db->select('p.quantity-SUM(o.quantity) as s_quantity');
         }                 
       // End for low stock condition
-      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as totalPurchaseExpense,p.sold_quantity');
+      $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as totalPurchaseExpense,p.sold_quantity');
       $this->db->from('order_products o');
       $this->db->join('products p','p.id=o.product_id','left');
       $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');

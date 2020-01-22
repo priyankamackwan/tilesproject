@@ -185,7 +185,7 @@
 	          $this->db->having('ROUND((p.quantity*'.$stocklimit.')/100)>=p.quantity-SUM(o.quantity)');
 	        } 
 	        // End for low stock conidtion
-			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as purchase_expense');
+			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as purchase_expense,p.sold_quantity');
 			$this->db->from('order_products o');
 			$this->db->join('products p','p.id=o.product_id','left');
 			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
@@ -196,9 +196,10 @@
 			if(isset($condition) && $condition!=''){
 				$this->db->where($condition);
 			}
-			$this->db->or_where('ph.product_id',null);
-			$this->db->group_by('o.product_id');
+			// $this->db->or_where('ph.product_id',null);
+			$this->db->group_by('p.id');
             $query = $this->db->get()->result_array();
+            // echo $this->db->last_query();
 			return $query;
 		}
 		function getamount($amount,$convert='no',$isCurrencyFormate='yes')
