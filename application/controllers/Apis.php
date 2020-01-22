@@ -655,7 +655,7 @@ You can change this password from mobile application after you are logged in onc
                                 // $productData[$i]['purchase_price']= $productData[$i]['purchase_expense'];
                                 //avreage gfrom history table
                                 $productData[$i]['purchase_price']=$productData[$i]['totalPurchaseExpense'];
-                                unset($productData[$i]['purchase_expense']);
+                                //unset($productData[$i]['purchase_expense']);
                                 unset($productData[$i]['totalPurchaseExpense']);
                                 
                                 $productData[$i]['categories_name']= $categoryString;
@@ -734,7 +734,7 @@ You can change this password from mobile application after you are logged in onc
                                      // $productData[0]['purchase_price']= $productData[0]['purchase_expense'];
                                 $productData[0]['purchase_price']= $productData[0]['totalPurchaseExpense'];
 
-                                unset($productData[0]['purchase_expense']);
+                                //unset($productData[0]['purchase_expense']);
                                 unset($productData[0]['totalPurchaseExpense']);
                                 $productData[0]['categories_name']= $categoryString;
                                 $response['status'] = 'success';
@@ -2055,7 +2055,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                         $nestedData['design_no'] =$productData[0]['design_no'];
                                         $nestedData['size'] =$productData[0]['size'];
                                         $nestedData['category'] =$categoryData[0]['name'];
-                                        $nestedData['purchase_price'] =$productData[0]['purchase_expense'];
+                                        //$nestedData['purchase_price'] =$productData[0]['purchase_expense'];
                                         $nestedData['quantity'] = $productData[0]['quantity'];
                                         $nestedData['sold_quantity'] = $value->totalQuantity;
                                         $nestedData['balance_quantity'] =$productData[0]['quantity']-$totalQuantity;

@@ -358,11 +358,11 @@
                                 'credit_rate' => $credit_rate,
                                 'walkin_rate' => $walkin_rate,
                                 'flexible_rate' => $flexible_rate,
-                                'purchase_expense' => $purchase_expense,
+                                //'purchase_expense' => $purchase_expense,
                                 'size' => $size,
                                 'unit' => $unit,
                                 'image' => $image,
-                                'quantity' => $quantity,
+                                //'quantity' => $quantity,
                             'quantity_per_unit' => $quantity_per,
                             'factor' => $factor,
                                 'created' => date('Y-m-d h:i:s'),
@@ -592,7 +592,7 @@
                         $credit_rate = $this->input->post('credit_rate');
                         $walkin_rate = $this->input->post('walkin_rate');
                         $flexible_rate = $this->input->post('flexible_rate');
-                        $purchase_expense = $this->input->post('purchase_expense');
+                      //  $purchase_expense = $this->input->post('purchase_expense');
                         if (!empty($_FILES['updated_image']['name'])) {
                             
                          $img = $_FILES['updated_image']['name'];
@@ -620,7 +620,7 @@
                                 'credit_rate' => $credit_rate,
                                 'walkin_rate' => $walkin_rate,
                             'flexible_rate' => $flexible_rate,
-                                'purchase_expense' => $purchase_expense,
+                               // 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
                                 'quantity_per_unit' => $quantity_per,
                                 'factor' => $factor,
@@ -782,12 +782,13 @@
                         'walkin_rate' => $Row[4],
                         'size' => $Row[5],
                         'unit' =>$Row[6],
-                        'purchase_expense' => $Row[7],
+                       // 'purchase_expense' => $Row[7],
                         'image' => $Row[8],
-                        'quantity' => $Row[9],
+                        //'quantity' => $Row[9],
                         'factor' => $Row[10],
                         'quantity_per_unit' => $Row[11],
                         'flexible_rate' => $Row[13],
+                        'created' => date('Y-m-d h:i:s')
     		         );
 
                     $this->$model->insert('products',$data);
@@ -799,7 +800,17 @@
                         'created' => date('Y-m-d h:i:s'),
                     );
 
-                    $this->$model->insert('product_categories',$productCategoryData); 
+                    $this->$model->insert('product_categories',$productCategoryData);
+                    //update and insert in product history table and product table
+                    $productPurchaseHistory=array(
+                                            'product_id' => $lastInsertedProductId,
+                                            'purchase_rate' => $Row[7],
+                                            'quantity' => $Row[9],
+                                            'created_at' => date('Y-m-d h:i:s')
+                                            );
+                    $this->$model->insert('product_purchase_history',$productPurchaseHistory);
+
+                    $this->$model->updateItems($lastInsertedProductId,$Row[9],'+');
                 } 
                 else 
                 {
@@ -818,12 +829,13 @@
                         'walkin_rate' => $Row[4],
                         'size' => $Row[5],
                         'unit' => $Row[6],
-                        'purchase_expense' => $Row[7],
+                        //'purchase_expense' => $Row[7],
                         'image' => $Row[8],
-                        'quantity' => $Row[9],
+                        //'quantity' => $Row[9],
                         'factor' => $Row[10],
                         'quantity_per_unit' => $Row[11],
-                        'flexible_rate' => $Row[13],               
+                        'flexible_rate' => $Row[13],   
+                        'created' => date('Y-m-d h:i:s')            
                     );
 
                     $this->$model->insert('products',$data);
@@ -836,7 +848,18 @@
                             'created' => date('Y-m-d h:i:s'),
                         );
 
-                    $this->$model->insert('product_categories',$productCategoryData); 
+                    $this->$model->insert('product_categories',$productCategoryData);
+
+                    //update and insert in product history table and product table
+                    $productPurchaseHistory=array(
+                                            'product_id' => $lastInsertedProductId,
+                                            'purchase_rate' => $Row[7],
+                                            'quantity' => $Row[9],
+                                            'created_at' => date('Y-m-d h:i:s')
+                                            );
+                    $this->$model->insert('product_purchase_history',$productPurchaseHistory);
+
+                    $this->$model->updateItems($lastInsertedProductId,$Row[9],'+'); 
                 }
             }
         }
