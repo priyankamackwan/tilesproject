@@ -472,7 +472,7 @@
                                        
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-12 col-xs-12" for="Quantity">
-                    Quantity<font color="red"><span class="required">*</span></font> :
+                    Quantity<!-- <font color="red"><span class="required">*</span></font> --> :
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
@@ -876,9 +876,9 @@ return value == '' || value.trim().length != 0;
                                                 price:{
 							required: true,
 						},
-                                                quantity:{
-							required: true,
-						},
+      //                                           quantity:{
+						// 	required: true,
+						// },
                                                  unit:{
 							required: true,
 						},
@@ -898,10 +898,10 @@ return value == '' || value.trim().length != 0;
 							required: "Please Enter Price",
                                                         noSpace: true,
 						},
-                                                quantity: {
-							required: "Please Enter Quantity",
-                                                        noSpace: true,
-						},
+      //                                           quantity: {
+						// 	required: "Please Enter Quantity",
+      //                                                   noSpace: true,
+						// },
              "categories[]": {
               required: "Please Select  Item Group",
              noSpace: true,
