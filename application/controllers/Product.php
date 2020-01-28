@@ -362,13 +362,23 @@
                                 'size' => $size,
                                 'unit' => $unit,
                                 'image' => $image,
-                                //'quantity' => $quantity,
+                                'quantity' => $quantity,
                             'quantity_per_unit' => $quantity_per,
                             'factor' => $factor,
                                 'created' => date('Y-m-d h:i:s'),
 			);
 			$this->$model->insert($this->table,$data);
                         $insert_id = $this->db->insert_id();
+                        // add in purchase hitory
+                        $productPurchaseHistory=array(
+                                            'product_id' => $insert_id,
+                                            'purchase_rate' => $purchase_expense,
+                                            'quantity' => $quantity,
+                                            'created_at' => date('Y-m-d h:i:s')
+                                            );
+                        $this->$model->insert('product_purchase_history',$productPurchaseHistory);
+                        //end purchase history
+
                         $dataSub = array();
                         for ($i=0;$i<count($cat_id);$i++) {
                           

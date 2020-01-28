@@ -320,7 +320,7 @@
               </div>
               <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-                        Item History Details :
+                        Purchase Price History :
                       </label>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -369,7 +369,8 @@
                               <td style="text-align: center;">
                                 <?php
                                 if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
-                                  echo date('d/m/Y',strtotime($payment_history_val['created_at']));
+                                  echo $this->My_model->date_conversion(
+                                    $purchaseHistoryVal['created_at'],'d/m/Y H:i:s');
                                 }
                                 ?>
                               </td>

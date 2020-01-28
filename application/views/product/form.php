@@ -476,7 +476,7 @@
                   </label>
 
                   <div class="col-md-9 col-sm-12 col-xs-12">
-                    <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control" placeholder="Enter Quantity" readonly>
+                    <input type="text" name="quantity" id="quantity" value="<?php echo $result[0]->quantity;?>" class="form-control" placeholder="Enter Quantity" <?php if($action == 'update'){echo 'readonly';}?>>
                   </div>
                 </div>
 
@@ -491,8 +491,7 @@
                 </div>
 
                 <?php 
-                /*
-                  if ($this->userhelper->current('role_id') ==1) { 
+                  if ($this->userhelper->current('role_id') ==1 && $action != 'update') { 
                 ?>
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="purchase_expense">
@@ -500,14 +499,12 @@
                       </label>
 
                       <div class="col-md-9 col-sm-12 col-xs-12">
-                        <input type="text" name="purchase_expense" value="<?php echo ROUND($result[0]->purchase_expense,2);?>" class="form-control" placeholder="Enter Purchase Price">
+                        <input type="text" name="purchase_expense" value="<?php echo ROUND($result[0]->purchase_expense,2);?>" class="form-control" placeholder="Enter Purchase Price" <?php if($action == 'update'){echo 'readonly';}?>>
                       </div>
                     </div>
                 <?php
                   } 
-                  */
                 ?>
-
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-12 col-xs-12" for="latitude">
                     Unit<font color="red"><span class="required">*</span></font> :
@@ -599,12 +596,19 @@
                   <?php
                   if($action == 'update'){
                     ?>
-                    <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group" id="id_payment_date">
+                        <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="payment_date">                      
+                          <a href="javascript:void(0);" title="Add Item" id="prevousData" class="btn btn-success" onclick="add_item(<?php echo $result[0]->id;?>)">
+                            Add Purchase Price
+                          </a>
+                        </label>
+                      </div>
+                      <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-                        Item History Details :
+                        Purchase Price History :
                       </label>
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
                     <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
                       <thead>
                             <tr class="">
@@ -651,7 +655,8 @@
                               <td style="text-align: center;">
                                 <?php
                                 if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
-                                  echo date('d/m/Y',strtotime($payment_history_val['created_at']));
+                                  echo $this->My_model->date_conversion(
+                                    $purchaseHistoryVal['created_at'],'d/m/Y H:i:s');
                                 }
                                 ?>
                               </td>
@@ -675,21 +680,14 @@
                   }
                     ?>
                     </table>
-                      <div class="form-group" id="id_payment_date">
-                        <label class="control-label col-md-3 col-sm-12 col-xs-12 pull-right" for="payment_date">                      
-                          <a href="javascript:void(0);" title="Add Item" id="prevousData" class="btn btn-success" onclick="add_item(<?php echo $result[0]->id;?>)">
-                            Add Item
-                          </a>
-                        </label>
-                      </div>
+                      
                     </div>
                     <?php
                   }
                   ?>
                 </div> 
-
                 <div class="box-footer">
-                  <input type="submit" class="btn btn-primary" value="Save<?php //echo $btn;?>">
+                  <input type="submit" class="btn btn-primary" value="Save">
                 </div>
               </form>
             </div>
