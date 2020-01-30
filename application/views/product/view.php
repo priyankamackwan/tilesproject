@@ -328,7 +328,6 @@
                       <thead>
                             <tr class="">
                               <th style="text-align: center">Sr No.</th>
-                              <th style="text-align: center">Item Name</th>
                               <th style="text-align: center">Purchase Price</th>
                               <th style="text-align: center">Quantity</th>
                               <th style="text-align: center">Created On</th>
@@ -348,9 +347,6 @@
                             <tr>
                               <td style="text-align: center" >
                                 <?php echo $key+1;?>
-                              </td>
-                              <td style="text-align: center" >
-                                <?php echo $result[0]->name;?>
                               </td>
                               <td class="text-right">
                                 <?php

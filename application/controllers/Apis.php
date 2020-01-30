@@ -787,12 +787,15 @@ You can change this password from mobile application after you are logged in onc
                     $orderData = array();
                     $data = $_POST;
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
-
-
+                        //order for particular user
+                        $orderUserId=$this->user_id;
                         if(!empty($data['placed_by']) && isset($data['placed_by'])) // placed by is set or not
                         {
                             $placed_by=trim($data['placed_by']);
                             $placed_by=strtolower($placed_by);
+                            if($placed_by=='admin'){
+                                $orderUserId=trim($data['customer_id']);
+                            }
                         }
                         else
                         {
@@ -934,7 +937,7 @@ You can change this password from mobile application after you are logged in onc
 
                         $finalDate = date("d-M-Y");
                         //echo $finalDate; exit;
-                         $multipleWhere = ['id' =>$this->user_id];
+                         $multipleWhere = ['id' =>$orderUserId];
                         $this->db->where($multipleWhere);
                         $userData= $this->db->get("users")->result_array();
                       //  echo '<pre>';
@@ -1157,7 +1160,6 @@ for($p=0;$p<count($finalOrderData);$p++) {
 <table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
                             <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>';
 $html2 .='</body></html>';
-
 $pdf2->writeHTML($html2, true, false, true, false, '');
 $filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
 $filename_invoice = str_replace('/','_', $invoice).'.pdf';
