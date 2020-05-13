@@ -832,21 +832,26 @@
                     $pQuanity  = explode(",",$Row[9]);
                     //total quantity
                     $tQuantity = 0;
-                    foreach ($pprice as $pkey => $pvalue) {
-                        if(!empty($pvalue)) {
+                    if(!empty($pprice) && count($pprice) > 0){
+                        foreach ($pprice as $pkey => $pvalue) {
+                            if(!empty(trim($pvalue))) {
 
-                            //sum of total inserted quantity
-                            $tQuantity += $pQuanity[$pkey];
-                            $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
-                            $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
-                            $productPurchaseHistory[$pkey]['quantity'] = (isset($pQuanity[$pkey]) && !empty($pQuanity[$pkey]))? trim($pQuanity[$pkey]):'0';
-                            $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
+                                //sum of total inserted quantity
+                                $productQuantity = isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
+                                
+                                //sum of total inserted quantity
+                                $tQuantity += isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
+                                $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
+                                $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
+                                $productPurchaseHistory[$pkey]['quantity'] = (isset($productQuantity) && !empty($productQuantity))?$productQuantity :'0';
+                                $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
+                            }
                         }
+                        //insert in product purchase history
+                        $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
+                        //update qunatity in product table
+                        $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                     }
-                    //insert in product purchase history
-                    $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
-                    //update qunatity in product table
-                    $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                 } 
                 else 
                 {
@@ -908,21 +913,24 @@
                     $pQuanity  = explode(",",$Row[9]);
                     //total quantity
                     $tQuantity = 0;
-                    foreach ($pprice as $pkey => $pvalue) {
-                        if(!empty($pvalue)) {
-
-                            //sum of total inserted quantity
-                            $tQuantity += trim($pQuanity[$pkey]);
-                            $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
-                            $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
-                            $productPurchaseHistory[$pkey]['quantity'] = (isset($pQuanity[$pkey]) && !empty($pQuanity[$pkey]))? trim($pQuanity[$pkey]):'0';
-                            $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
+                    if(!empty($pprice) && count($pprice) > 0){
+                        foreach ($pprice as $pkey => $pvalue) {
+                            if(!empty(trim($pvalue))) {
+                                $productQuantity = isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
+                                
+                                //sum of total inserted quantity
+                                $tQuantity += isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
+                                $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
+                                $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
+                                $productPurchaseHistory[$pkey]['quantity'] = (isset($productQuantity) && !empty($productQuantity))?$productQuantity:'0';
+                                $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
+                            }
                         }
+                        //insert in product purchase history
+                        $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
+                        //update qunatity in product table
+                        $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                     }
-                    //insert in product purchase history
-                    $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
-                    //update qunatity in product table
-                    $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                 }
             }
         }
