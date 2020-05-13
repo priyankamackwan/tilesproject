@@ -812,19 +812,7 @@
 
                     $this->$model->insert('product_categories',$productCategoryData);
                     //update and insert in product history table and product table
-                    /* old code
-                    $productPurchaseHistory=array(
-                                            'product_id' => $lastInsertedProductId,
-                                            'purchase_rate' => $Row[7],
-                                            'quantity' => $Row[9],
-                                            'created_at' => date('Y-m-d h:i:s')
-                                            );
-                    $this->$model->insert('product_purchase_history',$productPurchaseHistory);
 
-                    $this->$model->updateItems($lastInsertedProductId,$Row[9],'+'); 
-                    */
-                    
-                    //new code multiple product purchase price
                     $productPurchaseHistory = array();
                     //product purchase price
                     $pprice = explode(",",$Row[7]);
@@ -843,9 +831,8 @@
                             $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
                         }
                     }
-                    //insert in product purchase history
                     $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
-                    //update qunatity in product table
+
                     $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                 } 
                 else 
@@ -887,20 +874,6 @@
                     $this->$model->insert('product_categories',$productCategoryData);
 
                     //update and insert in product history table and product table
-                    /* old code
-                    $productPurchaseHistory=array(
-                                            'product_id' => $lastInsertedProductId,
-                                            'purchase_rate' => $Row[7],
-                                            'quantity' => $Row[9],
-                                            'created_at' => date('Y-m-d h:i:s')
-                                            );
-                    $this->$model->insert('product_purchase_history',$productPurchaseHistory);
-
-                    $this->$model->updateItems($lastInsertedProductId,$Row[9],'+'); 
-                    */
-
-                    //new code multiple product purchase price
-                    //update and insert in product history table and product table
                     $productPurchaseHistory = array();
                     //product purchase price
                     $pprice = explode(",",$Row[7]);
@@ -919,9 +892,8 @@
                             $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
                         }
                     }
-                    //insert in product purchase history
                     $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
-                    //update qunatity in product table
+
                     $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                 }
             }
