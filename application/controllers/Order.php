@@ -68,15 +68,16 @@
 
             // Column array
             $columnArray = array(
-                0 => 'users.company_name' ,
-                1 => 'orders.lpo_no' ,
-                2 => 'orders.do_no' ,
-                3 => 'orders.invoice_no' ,
-                4 => 'orders.placed_by',
-                5 => 'orders.sales_expense' ,
-                6 => 'orders.invoice_status' ,
-                7 => 'orders.status',
-                8 => 'orders.created' ,
+                1 => 'users.company_name' ,
+                2 => 'orders.lpo_no' ,
+                3 => 'orders.do_no' ,
+                4 => 'orders.invoice_no' ,
+                5 => 'orders.legacy_invoice_no' ,
+                6 => 'orders.placed_by',
+                7 => 'orders.sales_expense' ,
+                8 => 'orders.invoice_status' ,
+                9 => 'orders.status',
+                10 => 'orders.created' ,
             );
 
             /*$columnArray = array(
@@ -223,6 +224,8 @@
                 $where .= 'orders.do_no LIKE "%'.$search.'%" or ';
 
                 $where .= 'orders.invoice_no LIKE "%'.$search.'%" or ';
+                //Legacy Invoice Number 
+                $where .= 'orders.legacy_invoice_no LIKE "%'.$search.'%" or ';
 
                 $where .= 'orders.sales_expense LIKE "%'.$search.'%" or ';
 
@@ -323,6 +326,9 @@
 
                     // Create Invoice link for table.
                     $tabledata['invoice_no'] ='<a href="'.$downloadinvoice.'" target="_blank"><b>'.$SingleOrderData['invoice_no'].'</b></a>';
+
+                    $tabledata['legacy_invoice_no'] = $SingleOrderData['legacy_invoice_no'];
+                    
 
                     $tabledata['placed_by'] = $placed_by_name;
 
@@ -1565,7 +1571,7 @@ $pdf->Output($do_no, 'I');
                     $this->db->where('is_deleted',0); // user is not deleted
                     $q = $this->db->get('users');
                     $userData = $q->result_array();
-                    if ($userData) //if user is exist,active and not deleted
+                    if (!empty($userData) && count($userData) > 0) //if user is exist,active and not deleted
                     {
                         $this->db->select('id');
                         $q = $this->db->get('orders');
@@ -1596,6 +1602,7 @@ $pdf->Output($do_no, 'I');
                                     'mark' => $Row[10],
                                     'invoice_status' => $Row[11],
                                     'tax_percentage' => $Row[12],
+                                    'legacy_invoice_no' => $Row[13],
                                     'created' => date('Y-m-d h:i:s'),
                 		);
 
@@ -1633,7 +1640,6 @@ $pdf->Output($do_no, 'I');
                                     'rate'  => $rateAdd
                             );
                             $this->$model->insert('order_products',$orderProductData);
-                     
                             $updatedSoldQuantity = $productData[0]['sold_quantity'] + $countQuantity[$k]; 
                             $this->db->set('sold_quantity',$updatedSoldQuantity);
                             $this->db->where('id',$productData[0]['id']);

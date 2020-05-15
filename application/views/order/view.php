@@ -378,6 +378,16 @@ print_r($result); exit;*/
                   <?php echo $result[0]->cargo_number;?>
                 </div>
               </div>
+              <!-- Add new feild  Legacy Invoice Number-->
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
+                  Legacy Invoice Number :
+                </label>
+
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
+                  <?php echo $result[0]->legacy_invoice_no;?>
+                </div>
+              </div>
 
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
