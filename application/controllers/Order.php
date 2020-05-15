@@ -1436,6 +1436,9 @@ $pdf->Output($do_no, 'I');
             $tax= $this->input->post('tax');
             $tax_percentage = $this->input->post('tax_percentage');
 
+            //add leagacy invoice number
+            $legacy_invoice_no = $this->input->post('legacy_invoice_no');
+
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
@@ -1448,7 +1451,8 @@ $pdf->Output($do_no, 'I');
                     'location'=>$location,
                     'mark'=>$mark,
                     'tax' =>$tax,
-                    'tax_percentage' => $tax_percentage
+                    'tax_percentage' => $tax_percentage,
+                    'legacy_invoice_no' => $legacy_invoice_no
                 );
 
             $where = array($this->primary_id=>$id);

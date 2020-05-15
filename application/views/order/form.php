@@ -280,6 +280,16 @@ a:hover, a:active, a:focus {
 				                  <input type="text" name="cargo_number" value="<?php echo $cargo_number;?>" class="form-control " placeholder="Enter Cargo Number" required="required">
 				                </div>
 				              </div>
+				              <!-- add new feild Legacy Invoice Number -->
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Legacy Invoice Number :
+				                </label>
+
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="legacy_invoice_no" value="<?php if(!empty($result[0]['legacy_invoice_no'])) {echo $result[0]['legacy_invoice_no'];}?>" class="form-control " placeholder="Enter Legacy Invoice Number" >
+				                </div>
+				              </div>
 				              <div class="form-group">
 				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
 				                  Location :
