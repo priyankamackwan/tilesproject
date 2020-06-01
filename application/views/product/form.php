@@ -560,7 +560,9 @@
                     </select>
                   </div>
                 </div>
-
+                <?php
+                if($action == 'insert') {
+                  ?>
                 <div class="form-group" id="quanity_div">
                     <label class="control-label col-md-3 col-sm-12 col-xs-12" for="quantity_per">
                       Quantity per <span id="unit_name"></span> unit<font color="red"><span class="required">*</span></font> :
@@ -570,6 +572,9 @@
                         <input type="text" name="quantity_per_unit" id="quantity_per" readonly="" value="<?php echo ROUND($result[0]->quantity_per_unit,2);?>" class="form-control" placeholder="Quantity Per">
                     </div>
                 </div>
+                <?php
+                }
+                ?>
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-12 col-xs-12" for="latitude">
@@ -615,6 +620,7 @@
                               <th style="text-align: center">Sr No.</th>
                               <th style="text-align: center">Purchase Price</th>
                               <th style="text-align: center">Quantity</th>
+                              <th style="text-align: center">Quantity Per Unit</th>
                               <th style="text-align: center">Created On</th>
                               <th style="text-align: center">Action</th>
                             </tr>
@@ -648,6 +654,13 @@
                                 }
                                 ?>
                               </td>
+                              <td class="text-right">
+                                <?php
+                                if(isset($purchaseHistoryVal['quantity_per_unit']) && $purchaseHistoryVal['quantity_per_unit']!=''){
+                                  echo round($purchaseHistoryVal['quantity_per_unit'],2);
+                                }
+                                ?>
+                              </td>
                               <td style="text-align: center;">
                                 <?php
                                 if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
@@ -664,14 +677,14 @@
                           }                           
                           ?> 
                         </tbody>
-                        <tbody>
-                          <td></td>
+                        <tfoot>
                           <td><b>Total</b></td>
                           <td><b>Avg Purchase Price</b> : <?php echo round($purchaseAvg/count($purchase_history),2); ?></td>
                           <td class="text-right"><?php echo $totalQuantity; ?></td>
                           <td></td>
                           <td></td>
-                        </tbody>
+                          <td></td>
+                        </tfoot>
                     <?php
                   }
                     ?>

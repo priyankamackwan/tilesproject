@@ -276,9 +276,9 @@
 		}
 		//purchase history data 
 		function purchase_history($productId=NUll,$productHistoryId=NUll,$action='insert',$getRowArray="no"){
-			$this->db->select('products.id,products.name');
+			$this->db->select('products.id,products.name,products.factor');
 			if(isset($action) && $action!='' && $action=="edit"){
-				$this->db->select('product_purchase_history.id as productHistoryId,product_purchase_history.purchase_rate,product_purchase_history.quantity');
+				$this->db->select('product_purchase_history.id as productHistoryId,product_purchase_history.purchase_rate,product_purchase_history.quantity,product_purchase_history.quantity_per_unit');
 			}
             $this->db->from('products');
             $this->db->join('product_purchase_history','product_purchase_history.product_id=products.id','left');

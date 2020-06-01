@@ -38,12 +38,38 @@
         </label>
 
         <div class="col-md-9 col-sm-12 col-xs-12">
-          <input type="text" name="quantity" id="quantity" class="form-control " placeholder="Enter Quantity" required="required" value="<?php if(!empty($procut_history->quantity)){echo  $procut_history->quantity;}?>" read>
+          <input type="text" name="quantity" id="quantity" class="form-control " placeholder="Enter Quantity" required="required" value="<?php if(!empty($procut_history->quantity)){echo  $procut_history->quantity;}?>" onchange="calculateunit(this)">
         </div>
     </div>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+          Factor :
+        </label>
+
+        <div class="col-md-9 col-sm-12 col-xs-12">
+          <input type="text" name="factor"  id="factor" class="form-control " placeholder="Enter Quantity"  value="<?php if(!empty($procut_history->factor)){echo  $procut_history->factor;}?>" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+          Quantity per unit :
+        </label>
+
+        <div class="col-md-9 col-sm-12 col-xs-12">
+          <input type="text" name="quantity_per_unit"  id="quantity_per_unit" class="form-control " placeholder="Quantity Per Unit"  value="<?php if(!empty($procut_history->quantity_per_unit)){echo  round($procut_history->quantity_per_unit,2);}?>" disabled>
+        </div>
+    </div>
+    
     <input type="submit" class="btn btn-primary text-center" value="Save">
 </form>
 <script type="text/javascript">
+    //count qunatity per unit
+function calculateunit(quantity){
+     quantity =  $(quantity).val();
+    factor =  $("#factor").val();
+    quantity_per = quantity*factor;
+    $("#quantity_per_unit").val(quantity_per);
+}
 $(document).ready(function (){
     $("#payment_gly").click(function() {
         $("#paymentdate").val('');
@@ -79,11 +105,13 @@ $(document).ready(function (){
         submitHandler: function(form){
             $(".alert-success").hide();
             $(".alert-danger").hide();
+            var data = $('#demo-form3').serialize();
+            var quantity_per_unit = $("#quantity_per_unit").val();
             // form.submit();
             $.ajax({
                 type : "POST",
                 url : "<?php echo base_url().$this->controller."/updateProductHistory/" ?>",
-                data : $('#demo-form3').serialize(),
+                data : data+'&quantity_per_unit='+quantity_per_unit,
                 dataType: "json",
                  success: function (data) {
 
