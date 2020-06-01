@@ -861,7 +861,7 @@
                 else 
                 {
                 	$categoryData = array(
-    			        'name' => $Row[12],
+    			        'name' => $Row[11],
                     );
                     $this->$model->insert('categories',$categoryData);
                     
