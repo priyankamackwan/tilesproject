@@ -779,26 +779,25 @@
                       $vat = $ordersData[0]['tax'];
                       $tax_percentage = $ordersData[0]['tax_percentage'];
                       $finalTotal = $subTotal+$vat;
+                      $address = "Saja'a Industrial Area, Sharjah, U.A.E";
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
+        
 $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Tax Invoice</head>
 <body>
-<img src = "'.base_url().'image.png">
-<h2><b><p align="center">Tax Invoice</p></b></h2>
-<table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$ordersData[0]['lpo_no'].'</td> </tr></table>
-<br><br/>';
+<div style="text-align:center;display:block;margin:auto;" id="div">
+<img src = "'.base_url().'image1.png"></div>
+<h2><b><p align="center" style="margin-top:5px;">Tax Invoice</p></b></h2>
+<table  cellspacing="2px" style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
+<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
+<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$ordersData[0]['lpo_no'].'</td> </tr></table>';
 
 if(trim($ordersData[0]['customer_lpo'])!='') { // if customer lpo is exist then display it.
-$html.='<table style="width:100%;"><tr><td style="width:60%;"></td><td style="width:40%; text-align:right;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td> </tr></table>
-<br><br/>'; }
+$html.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;"></td><td style="width:40%; text-align:right;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td> </tr></table>'; }
 
-$html.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
+$html.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
 <br><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="31%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="11%">AMOUNT</th></tr>';
 $count = 0;
@@ -819,13 +818,13 @@ for($p=0;$p<count($finalOrderData);$p++) {
 </table><br><br/>
 <table style="width:100%;"><tr><td width="50%";>Buyer Signature:</td><td width="50%";>For PNP Building Materials Trading L.L.C</td></tr></table>
 <br><br/><br><br/>
-<table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
-                            <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>';
+<table style="width:100%;"><tr><td style="text-align:center">Tel: 06-5952061/ Mob: 055-8532631/050-4680842 | '.$address.'</td></tr>
+                            <tr><td style="text-align:center">Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr></table>';
 $html .='</body></html>';
 //Add meta title
 $pdf->SetTitle('Tax Invoice | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output($ordersData[0]['invoice_no'], 'I');
+$pdf->Output($ordersData[0]['invoice_no'].'.pdf','D');
                         
                         
 			$data['action'] = "update";
@@ -946,12 +945,15 @@ $pdf->Output($ordersData[0]['invoice_no'], 'I');
                       $tax_percentage =$ordersData[0]['tax_percentage'];
                       
                       $finalTotal = $subTotal+$vat;
+                      $address = "Saja'a Industrial Area, Sharjah, U.A.E";
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
 <body>
-<h2><b><p align="center">Local Purchase Order</p></b></h2>
+<div style="text-align:center;display:block;margin:auto;" id="div">
+<img src = "'.base_url().'image1.png"></div>
+<h2><b><p align="center" style="margin-top:5px;">Local Purchase Order</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
 <table style="width:100%;"><tr><td style="width:40%;">From</td><td style="width:60%; text-align:center;">To</td> </tr></table>
@@ -998,7 +1000,7 @@ $html .='</body></html>';
 //Add meta title
 $pdf->SetTitle('Local Purchase Order | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output($ordersData[0]['lpo_no'], 'I');
+$pdf->Output($ordersData[0]['lpo_no'].'.pdf','D');
                         
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
@@ -1080,30 +1082,26 @@ $pdf->Output($ordersData[0]['lpo_no'], 'I');
                       }
                   
                         //echo $id; exit;
+                       $address = "Saja'a Industrial Area, Sharjah, U.A.E";
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Delivery Note</head>
 <body>
-<img src ="'.base_url().'image.png">
-<h2><b><p align="center">Delivery Note</p></b></h2>
-<table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$ordersData[0]['lpo_no'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>
-    <br><br/>';
+<div style="text-align:center;display:block;margin:auto;" id="div">
+<img src = "'.base_url().'image1.png"></div>
+<h2><b><p align="center" style="margin-top:5px;">Delivery Note</p></b></h2>
+<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
+<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
+<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$ordersData[0]['lpo_no'].'</td><td style="width:40%; text-align:right;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td></tr></table>';
 
 if(trim($ordersData[0]['customer_lpo'])!=="") { // if customer lpo is exist then display it.
-$html.='<table style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;"></td></tr></table>
-<br><br/>'; }
+$html.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$ordersData[0]['customer_lpo'].'</td><td style="width:40%; text-align:right;"></td></tr></table>'; }
 
- $html.='<table style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
-    <br><br/>
- <table style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table> 
-<br><br/>
-<table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
+ $html.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Cargo : '.$ordersData[0]['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$ordersData[0]['cargo_number'].'</td></tr></table>  
+ <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Location : '.$ordersData[0]['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$ordersData[0]['mark'].'</td></tr></table><br><br/>
+<table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table><br/>
 <table style="width:100%;" border="1"><tr><th style="text-align: center" width="60%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">UNIT</th></tr>';
 for($p=0;$p<count($finalOrderData);$p++) {
     $html .= '<tr><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td></tr>';
@@ -1119,14 +1117,14 @@ $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the abo
 <br><br/>
 <table style="width:100%;"><tr><td style="width:100%;">Mobile : </td></tr></table>
 <br><br/><br><br/><br><br/>
-<table style="width:100%;"><tr><td style="text-align:center">Tel: 055-8532631/050-4680842 | Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr>
-                            <tr><td style="text-align:center">Industrial Area 2, Ras Al Khor, P.O Box: 103811, Dubai, U.A.E</td></tr></table>
+<table style="width:100%;"><tr><td style="text-align:center">Tel: 06-5952061/ Mob: 055-8532631/050-4680842 | '.$address.'</td></tr>
+    <tr><td style="text-align:center">Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr></table>
 
 </body></html>';
 //Add meta title
 $pdf->SetTitle('Delivery Note | PNP Building Materials Trading L.L.C');
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output($do_no, 'I');
+$pdf->Output($do_no.'.pdf','D');
                         
                         
 			$data['action'] = "update";
