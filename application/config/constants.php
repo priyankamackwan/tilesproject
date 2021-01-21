@@ -100,3 +100,5 @@ define('Stock_Reminder','25');
 
 /*********** Vat constant  **********/
 define('Vat','5');
+
+define('invoiceincrement','6857');

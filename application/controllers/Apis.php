@@ -1,4 +1,4 @@
-    <?php
+f    <?php
     require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
@@ -845,10 +845,7 @@ You can change this password from mobile application after you are logged in onc
                             
                             $orderLast = $q->result_array();
 
-                            if($orderLast!==6856){
-                               $orderLast = 6856 
-                            }
-                         $newOrder = end($orderLast)['id'] + 1;
+                         $newOrder = end($orderLast)['id'] + invoiceincrement;
                          if (date('m') <= 3) {//Upto June 2014-2015
                             $financial_year = (date('y')-1) . '-' . date('y');
                         } else {//After June 2015-2016
