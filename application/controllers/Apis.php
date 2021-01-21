@@ -845,7 +845,10 @@ You can change this password from mobile application after you are logged in onc
                             
                             $orderLast = $q->result_array();
 
-                         $newOrder = end($orderLast)['6857'] + 1;
+                            if($orderLast!==6856){
+                               $orderLast = 6856 
+                            }
+                         $newOrder = end($orderLast)['id'] + 1;
                          if (date('m') <= 3) {//Upto June 2014-2015
                             $financial_year = (date('y')-1) . '-' . date('y');
                         } else {//After June 2015-2016
