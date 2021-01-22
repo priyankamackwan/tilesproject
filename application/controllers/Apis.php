@@ -788,7 +788,9 @@ You can change this password from mobile application after you are logged in onc
                     $model = $this->model;
                     $orderData = array();
                     $data = $_POST;
-                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['ftotal_price'])))) {
+                  
+                    if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
+
                         //order for particular user
                         $orderUserId=$this->user_id;
                         if(!empty($data['placed_by']) && isset($data['placed_by'])) // placed by is set or not
