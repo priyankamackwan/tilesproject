@@ -3,12 +3,12 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
-	defined('BASEPATH') OR exit('No direct script access allowed');
+    defined('BASEPATH') OR exit('No direct script access allowed');
 
-	class Apis extends CI_Controller
-	{
+    class Apis extends CI_Controller
+    {
                 public $model;
-		public function __construct() {
+        public function __construct() {
                     
                     $this->model = "My_model";
                     parent::__construct();
@@ -81,7 +81,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                         }
                          
                     }
-		}
+        }
                 
                 public function userRegister() {
                     $model = $this->model;
@@ -166,27 +166,27 @@ use PHPMailer\PHPMailer\PHPMailer;
                                             "created" => $created
                                         );
                                         $arr = array(
-		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-		    "data" => [
-		        "body" => $notificationArray,
-		        "title" => "New User Registered",
-		        // "icon" => "ic_launcher"
-		    ],
-		    // "data" => json_encode(array())
-		);
-    	$data = json_encode($arr);
+            "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+            "data" => [
+                "body" => $notificationArray,
+                "title" => "New User Registered",
+                // "icon" => "ic_launcher"
+            ],
+            // "data" => json_encode(array())
+        );
+        $data = json_encode($arr);
                             $this->android_ios_notification($data,"Android");
-		/*//FCM API end-point
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-		//header with content_type api key
-		$headers = array(
-		    'Content-Type:application/json',
-		    'Authorization:key='.$server_key
-		);
-		//CURL request to route notification to FCM connection server (provided by Google)
-		
+        /*//FCM API end-point
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+        $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+        //header with content_type api key
+        $headers = array(
+            'Content-Type:application/json',
+            'Authorization:key='.$server_key
+        );
+        //CURL request to route notification to FCM connection server (provided by Google)
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -197,11 +197,11 @@ use PHPMailer\PHPMailer\PHPMailer;
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($ch);
-		//echo "----".$result;
-		if ($result === FALSE) {
-		    //die('Oops! FCM Send Error: ' . curl_error($ch));
-		}
-		curl_close($ch);*/
+        //echo "----".$result;
+        if ($result === FALSE) {
+            //die('Oops! FCM Send Error: ' . curl_error($ch));
+        }
+        curl_close($ch);*/
                                     } else {
                                         // For IOS
                                         $notificationArray = array(
@@ -499,15 +499,15 @@ use PHPMailer\PHPMailer\PHPMailer;
                             $mail->MsgHTML('Dear '.$userdata[0]['company_name'].',<br/><br/>
                                 
 There was recently a request to reset the password for your account.<br/>
-	If you requested this password reset, please enter this new temporarily created password.<br/><br/>
+    If you requested this password reset, please enter this new temporarily created password.<br/><br/>
             New temporary password is "'.$randomPassword.'"<br/><br/>
                 
 You can change this password from mobile application after you are logged in once.<br/><br/>
 
 
-	Best Regards,<br/>
-	Customer Service<br/>
-	www.pnptiles.com<br/><br/>
+    Best Regards,<br/>
+    Customer Service<br/>
+    www.pnptiles.com<br/><br/>
         
         This is an automatically generated mail.Please do not reply.If you have any queries regarding your account, please contact us.
 ');
@@ -1203,27 +1203,27 @@ $pdf2->Output($fileNL_invoice, 'F');
                                             "created" => $created
                                         );
                                         $arr = array(
-		    "registration_ids" => array($adminUserdata[$k]['firebase_token']),
-		    "data" => [
-		        "body" => $notificationArray,
-		        "title" => "New Order Added",
-		        // "icon" => "ic_launcher"
-		    ],
-		    // "data" => json_encode(array())
-		);
-    	$data = json_encode($arr);
+            "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+            "data" => [
+                "body" => $notificationArray,
+                "title" => "New Order Added",
+                // "icon" => "ic_launcher"
+            ],
+            // "data" => json_encode(array())
+        );
+        $data = json_encode($arr);
         $this->android_ios_notification($data,'Android');
-		/*//FCM API end-point
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-		//header with content_type api key
-		$headers = array(
-		    'Content-Type:application/json',
-		    'Authorization:key='.$server_key
-		);
-		//CURL request to route notification to FCM connection server (provided by Google)
-		
+        /*//FCM API end-point
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+        $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+        //header with content_type api key
+        $headers = array(
+            'Content-Type:application/json',
+            'Authorization:key='.$server_key
+        );
+        //CURL request to route notification to FCM connection server (provided by Google)
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -1237,11 +1237,11 @@ $pdf2->Output($fileNL_invoice, 'F');
         //echo '<pre>';print_r($result);
         //echo '<pre>';print_r(curl_error($ch));
         //die;
-		//echo "----".$result;
-		if ($result === FALSE) {
-		    //die('Oops! FCM Send Error: ' . curl_error($ch));
-		}
-		curl_close($ch);*/
+        //echo "----".$result;
+        if ($result === FALSE) {
+            //die('Oops! FCM Send Error: ' . curl_error($ch));
+        }
+        curl_close($ch);*/
                                     } else {
                                         // For IOS
                                         //for ios
@@ -1307,23 +1307,23 @@ $pdf2->Output($fileNL_invoice, 'F');
                  
                              $mail->MsgHTML('
                                 Dear Admin,<br/><br/>
-	You have received a new Order from '.$userData[0]['company_name'].'<br/>
-	New order number is #'.$newOrder.'<br/><br/>
-	
-	Order Grand Total is '.$finalTotal.'<br/><br/>
-	
-	Your order is now being processed.<br/>
-	We are attaching a copy of LPO,DO and Invoice in this email. And your merchandise will be delivered to :<br/>
-    '.$userData[0]['company_address'].'<br/>
-	'.$userData[0]['phone_no'].'<br/><br/>
-	
-	For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+    You have received a new Order from '.$userData[0]['company_name'].'<br/>
+    New order number is #'.$newOrder.'<br/><br/>
     
-	Best Regards,<br/>
-	Customer Service<br/>
-	www.pnptiles.com<br/><br/>
-	
-	This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
+    Order Grand Total is '.$finalTotal.'<br/><br/>
+    
+    Your order is now being processed.<br/>
+    We are attaching a copy of LPO,DO and Invoice in this email. And your merchandise will be delivered to :<br/>
+    '.$userData[0]['company_address'].'<br/>
+    '.$userData[0]['phone_no'].'<br/><br/>
+    
+    For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+    
+    Best Regards,<br/>
+    Customer Service<br/>
+    www.pnptiles.com<br/><br/>
+    
+    This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
                             $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
@@ -1336,23 +1336,23 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $new_mail->Subject = "Order Confirmation";
                             $new_mail->MsgHTML('
                                 Dear '.$userData[0]['company_name'].',<br/><br/>
-	Thanks for your order.We hope you had a good time shopping with us.<br/>
-	Your order number is #'.$newOrder.'<br/><br/>
-	
-	Order Grand Total is '.$finalTotal.'<br/><br/>
-	
-	Your order is now being processed.<br/>
-	We are attaching a copy of LPO and Invoice in this email.And we will deliver your merchandise to :<br/>
-    '.$userData[0]['company_address'].'<br/>
-	'.$userData[0]['phone_no'].'<br/><br/>
-	
-	For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+    Thanks for your order.We hope you had a good time shopping with us.<br/>
+    Your order number is #'.$newOrder.'<br/><br/>
     
-	Best Regards,<br/>
-	Customer Service<br/>
-	www.pnptiles.com<br/><br/>
-	
-	This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
+    Order Grand Total is '.$finalTotal.'<br/><br/>
+    
+    Your order is now being processed.<br/>
+    We are attaching a copy of LPO and Invoice in this email.And we will deliver your merchandise to :<br/>
+    '.$userData[0]['company_address'].'<br/>
+    '.$userData[0]['phone_no'].'<br/><br/>
+    
+    For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+    
+    Best Regards,<br/>
+    Customer Service<br/>
+    www.pnptiles.com<br/><br/>
+    
+    This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
                             $new_mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $new_mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $new_mail->addAddress($userData[0]['email'],$userData[0]['company_name']);
@@ -1746,27 +1746,27 @@ $pdf2->Output($fileNL_invoice, 'F');
                 function sendGCM() {
                     
                     $arr = array(
-		    "registration_ids" => array('dno8AtTMSnU:APA91bEj_YXvr3T3iI0e3d2wXgDGTTrPpaa_hFHO5pJvOzfUqI9cE-wsKVW6myyCEtZMzj7EJxFnU0yPRe5ng-H2PJM8q2q2n9fySU8uMefMO34C6QAOGwgayNKjNQZdnmMtrPFOV2ue'),
-		    "data" => [
-		        "body" => "{'notification_type':1,'company_name':'IOS'}",
-		        "title" => "Latest Code IOS",
-		        // "icon" => "ic_launcher"
-		    ],
-		    // "data" => json_encode(array())
-		);
-    	$data = json_encode($arr);
+            "registration_ids" => array('dno8AtTMSnU:APA91bEj_YXvr3T3iI0e3d2wXgDGTTrPpaa_hFHO5pJvOzfUqI9cE-wsKVW6myyCEtZMzj7EJxFnU0yPRe5ng-H2PJM8q2q2n9fySU8uMefMO34C6QAOGwgayNKjNQZdnmMtrPFOV2ue'),
+            "data" => [
+                "body" => "{'notification_type':1,'company_name':'IOS'}",
+                "title" => "Latest Code IOS",
+                // "icon" => "ic_launcher"
+            ],
+            // "data" => json_encode(array())
+        );
+        $data = json_encode($arr);
         echo $data; exit;
-		//FCM API end-point
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-		//header with content_type api key
-		$headers = array(
-		    'Content-Type:application/json',
-		    'Authorization:key='.$server_key
-		);
-		//CURL request to route notification to FCM connection server (provided by Google)
-		
+        //FCM API end-point
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+        $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+        //header with content_type api key
+        $headers = array(
+            'Content-Type:application/json',
+            'Authorization:key='.$server_key
+        );
+        //CURL request to route notification to FCM connection server (provided by Google)
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -1777,38 +1777,38 @@ $pdf2->Output($fileNL_invoice, 'F');
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($ch);
-		echo "----".$result;
-		if ($result === FALSE) {
-		    die('Oops! FCM Send Error: ' . curl_error($ch));
-		}
-		die("sent");
-		curl_close($ch);
+        echo "----".$result;
+        if ($result === FALSE) {
+            die('Oops! FCM Send Error: ' . curl_error($ch));
+        }
+        die("sent");
+        curl_close($ch);
                      
                 }
                 
                 function sendIOSGCM() {
             
                     $arr = array(
-		    "registration_ids" => array('cs4h5yYUByU:APA91bEV6HqKsp2aLeCjJOq1jGOKefRCVsdDN4Imx9t-7WcteuushA_ILkRHzjlOoX2c0M25ciGQHV_EL1ucBkiA1SKoWuxcLZICWRnFw4Lm0FcnVfDkJ-LgXBIZJljHAPRlJpxpiDXq'),
-		    "data" => [
-		        "body" => "{'notification_type':1,'company_name':'IOS''}",
-		        "title" => "Latest Code IOS",
-		        // "icon" => "ic_launcher"
-		    ],
-		    // "data" => json_encode(array())
-		);
-    	$data = json_encode($arr);
-		//FCM API end-point
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		//api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-		$server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-		//header with content_type api key
-		$headers = array(
-		    'Content-Type:application/json',
-		    'Authorization:key='.$server_key
-		);
-		//CURL request to route notification to FCM connection server (provided by Google)
-		
+            "registration_ids" => array('cs4h5yYUByU:APA91bEV6HqKsp2aLeCjJOq1jGOKefRCVsdDN4Imx9t-7WcteuushA_ILkRHzjlOoX2c0M25ciGQHV_EL1ucBkiA1SKoWuxcLZICWRnFw4Lm0FcnVfDkJ-LgXBIZJljHAPRlJpxpiDXq'),
+            "data" => [
+                "body" => "{'notification_type':1,'company_name':'IOS''}",
+                "title" => "Latest Code IOS",
+                // "icon" => "ic_launcher"
+            ],
+            // "data" => json_encode(array())
+        );
+        $data = json_encode($arr);
+        //FCM API end-point
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+        $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
+        //header with content_type api key
+        $headers = array(
+            'Content-Type:application/json',
+            'Authorization:key='.$server_key
+        );
+        //CURL request to route notification to FCM connection server (provided by Google)
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -1819,12 +1819,12 @@ $pdf2->Output($fileNL_invoice, 'F');
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($ch);
-		echo "----".$result;
-		if ($result === FALSE) {
-		    die('Oops! FCM Send Error: ' . curl_error($ch));
-		}
-		die("sent");
-		curl_close($ch);
+        echo "----".$result;
+        if ($result === FALSE) {
+            die('Oops! FCM Send Error: ' . curl_error($ch));
+        }
+        die("sent");
+        curl_close($ch);
                      
                 }
                 
@@ -2046,7 +2046,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                  
                     $finalOrderData = $q->get('order_products')->result();
                     if ($finalOrderData) {
-                 		foreach ($finalOrderData as $key=>$value){
+                        foreach ($finalOrderData as $key=>$value){
 
                         $multipleWhere2 = ['id' => $value->product_id];
                         $this->db->where($multipleWhere2);
@@ -2069,8 +2069,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                                         $nestedData['sold_quantity'] = $value->totalQuantity;
                                         $nestedData['balance_quantity'] =$productData[0]['quantity']-$totalQuantity;
                                         $nestedData['total_amount_balance'] =$value->amount;
-					$data[] = $nestedData;
-				}
+                    $data[] = $nestedData;
+                }
     
                     } else {
                         $data = array();
@@ -2089,7 +2089,7 @@ $pdf2->Output($fileNL_invoice, 'F');
             if($type=="Android")
             {
                 $server_key = 'AAAA22AuYrc:APA91bEEpsym7Vr7cEDmOJVVdgwhxL91vZxp1bsMCoklAq3NBErrPliuxBsQKt-4i7cuXRAZ-6sb4rq-bX1zs63D_FTVZzrJU_dVNQA0C_PGZbAXehDVMk9QsiEA4qLheGCKRCcV5g3H';
-	}
+    }
             if($type=="Ios")
             {
                $server_key="AIzaSyA-sjPOj001dkK6gHJztu4taMJeYXLBDrM";
@@ -2130,5 +2130,5 @@ $pdf2->Output($fileNL_invoice, 'F');
             echo json_encode($response);
             exit();
         }
-	}
+    }
 ?>
