@@ -317,7 +317,7 @@
 		}
 		public function insert()
 		{
-                
+                  
 			$model = $this->model;
 			$name = $this->input->post('name');
                         $size = $this->input->post('size');
@@ -334,7 +334,7 @@
                         $unit = $this->input->post('unit');
                         $purchase_expense = $this->input->post('purchase_expense');
                         $img = $_FILES['image']['name'];
-                      
+                      //  echo '<pre>';
                         //print_r($_FILES); exit;
                         $ext = pathinfo($img,PATHINFO_EXTENSION);
 			$image = time().'.'.$ext;
@@ -363,7 +363,7 @@
                                 'unit' => $unit,
                                 'image' => $image,
                                 'quantity' => $quantity,
-                            //'quantity_per_unit' => $quantity_per,
+                            'quantity_per_unit' => $quantity_per,
                             'factor' => $factor,
                                 'created' => date('Y-m-d h:i:s'),
 			);
@@ -374,11 +374,9 @@
                                             'product_id' => $insert_id,
                                             'purchase_rate' => $purchase_expense,
                                             'quantity' => $quantity,
-                                            'created_at' => date('Y-m-d h:i:s'),
-                                            'quantity_per_unit'=> $quantity_per,
-                                            );  
+                                            'created_at' => date('Y-m-d h:i:s')
+                                            );
                         $this->$model->insert('product_purchase_history',$productPurchaseHistory);
-						
                         //end purchase history
 
                         $dataSub = array();
@@ -596,7 +594,7 @@
           
                         $quantity = $this->input->post('quantity');
                         $categories = $this->input->post('categories[]');
-                        //$quantity_per = $this->input->post('quantity_per_unit');
+                        $quantity_per = $this->input->post('quantity_per_unit');
                         $factor = $this->input->post('factor');
                         $design_no = $this->input->post('design_no');
                         $unit = $this->input->post('unit');
@@ -634,7 +632,7 @@
                             'flexible_rate' => $flexible_rate,
                                // 'purchase_expense' => $purchase_expense,
                                 'size' => $size,
-                                //'quantity_per_unit' => $quantity_per,
+                                'quantity_per_unit' => $quantity_per,
                                 'factor' => $factor,
                                 'unit' => $unit,
                                 'image' => $image,
@@ -781,7 +779,7 @@
             else
             {
                 $this->db->select('*');
-                $this->db->where('name', $Row[11]);
+                $this->db->where('name', $Row[12]);
                 $q = $this->db->get('categories');
                 $categoryData = $q->result_array();
                 if ($categoryData)
@@ -798,8 +796,8 @@
                         'image' => $Row[8],
                         //'quantity' => $Row[9],
                         'factor' => $Row[10],
-//                        'quantity_per_unit' => $Row[11],
-                        'flexible_rate' => $Row[12],
+                        'quantity_per_unit' => $Row[11],
+                        'flexible_rate' => $Row[13],
                         'created' => date('Y-m-d h:i:s')
     		         );
 
@@ -814,19 +812,7 @@
 
                     $this->$model->insert('product_categories',$productCategoryData);
                     //update and insert in product history table and product table
-                    /* old code
-                    $productPurchaseHistory=array(
-                                            'product_id' => $lastInsertedProductId,
-                                            'purchase_rate' => $Row[7],
-                                            'quantity' => $Row[9],
-                                            'created_at' => date('Y-m-d h:i:s')
-                                            );
-                    $this->$model->insert('product_purchase_history',$productPurchaseHistory);
 
-                    $this->$model->updateItems($lastInsertedProductId,$Row[9],'+'); 
-                    */
-                    
-                    //new code multiple product purchase price
                     $productPurchaseHistory = array();
                     //product purchase price
                     $pprice = explode(",",$Row[7]);
@@ -834,35 +820,25 @@
                     $pQuanity  = explode(",",$Row[9]);
                     //total quantity
                     $tQuantity = 0;
-                    if(!empty($pprice) && count($pprice) > 0){
-                        foreach ($pprice as $pkey => $pvalue) {
-                            if(!empty(trim($pvalue))) {
+                    foreach ($pprice as $pkey => $pvalue) {
+                        if(!empty($pvalue)) {
 
-                                //sum of total inserted quantity
-                                $productQuantity = isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
-
-                                //count  Quantity per unit
-                                $quantity_per_unit = $productQuantity * $Row[10];
-                                //sum of total inserted quantity
-                                $tQuantity += isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
-                                $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
-                                $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
-                                $productPurchaseHistory[$pkey]['quantity'] = (isset($productQuantity) && !empty($productQuantity))?$productQuantity :'0';
-                                $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
-                                //update quantity per unit in history table
-                                $productPurchaseHistory[$pkey]['quantity_per_unit'] = (isset($quantity_per_unit) && !empty($quantity_per_unit))?$quantity_per_unit:'0';
-                            }
+                            //sum of total inserted quantity
+                            $tQuantity += $pQuanity[$pkey];
+                            $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
+                            $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
+                            $productPurchaseHistory[$pkey]['quantity'] = (isset($pQuanity[$pkey]) && !empty($pQuanity[$pkey]))? trim($pQuanity[$pkey]):'0';
+                            $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
                         }
-                        //insert in product purchase history
-                        $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
-                        //update qunatity in product table
-                        $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                     }
+                    $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
+
+                    $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                 } 
                 else 
                 {
                 	$categoryData = array(
-    			        'name' => $Row[11],
+    			        'name' => $Row[12],
                     );
                     $this->$model->insert('categories',$categoryData);
                     
@@ -880,8 +856,8 @@
                         'image' => $Row[8],
                         //'quantity' => $Row[9],
                         'factor' => $Row[10],
-//                        'quantity_per_unit' => $Row[11],
-                        'flexible_rate' => $Row[12],   
+                        'quantity_per_unit' => $Row[11],
+                        'flexible_rate' => $Row[13],   
                         'created' => date('Y-m-d h:i:s')            
                     );
 
@@ -898,20 +874,6 @@
                     $this->$model->insert('product_categories',$productCategoryData);
 
                     //update and insert in product history table and product table
-                    /* old code
-                    $productPurchaseHistory=array(
-                                            'product_id' => $lastInsertedProductId,
-                                            'purchase_rate' => $Row[7],
-                                            'quantity' => $Row[9],
-                                            'created_at' => date('Y-m-d h:i:s')
-                                            );
-                    $this->$model->insert('product_purchase_history',$productPurchaseHistory);
-
-                    $this->$model->updateItems($lastInsertedProductId,$Row[9],'+'); 
-                    */
-
-                    //new code multiple product purchase price
-                    //update and insert in product history table and product table
                     $productPurchaseHistory = array();
                     //product purchase price
                     $pprice = explode(",",$Row[7]);
@@ -919,29 +881,20 @@
                     $pQuanity  = explode(",",$Row[9]);
                     //total quantity
                     $tQuantity = 0;
-                    if(!empty($pprice) && count($pprice) > 0){
-                        foreach ($pprice as $pkey => $pvalue) {
-                            if(!empty(trim($pvalue))) {
-                                $productQuantity = isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
-                                //count  Quantity per unit
-                                $quantity_per_unit = $productQuantity * $Row[10];
-                                //sum of total inserted quantity
-                                $tQuantity += isset($pQuanity[$pkey])?trim($pQuanity[$pkey]):0;
-                                $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
-                                $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
-                                $productPurchaseHistory[$pkey]['quantity'] = (isset($productQuantity) && !empty($productQuantity))?$productQuantity:'0';
-                                $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
+                    foreach ($pprice as $pkey => $pvalue) {
+                        if(!empty($pvalue)) {
 
-                                //update quantity per unit in history table
-                                $productPurchaseHistory[$pkey]['quantity_per_unit'] = (isset($quantity_per_unit) && !empty($quantity_per_unit))?$quantity_per_unit:'0';
-                                
-                            }
+                            //sum of total inserted quantity
+                            $tQuantity += trim($pQuanity[$pkey]);
+                            $productPurchaseHistory[$pkey]['product_id'] = $lastInsertedProductId;
+                            $productPurchaseHistory[$pkey]['purchase_rate'] = trim($pvalue);
+                            $productPurchaseHistory[$pkey]['quantity'] = (isset($pQuanity[$pkey]) && !empty($pQuanity[$pkey]))? trim($pQuanity[$pkey]):'0';
+                            $productPurchaseHistory[$pkey]['created_at'] = date('Y-m-d h:i:s');
                         }
-                        //insert in product purchase history
-                        $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
-                        //update qunatity in product table
-                        $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                     }
+                    $this->db->insert_batch('product_purchase_history',$productPurchaseHistory);
+
+                    $this->$model->updateItems($lastInsertedProductId,$tQuantity,'+');
                 }
             }
         }
@@ -1017,14 +970,11 @@
         $action=$this->input->post('action');
         $created_at=date('Y-m-d H:i:s');
         $purchase_rate=$this->input->post('purchase_rate');
-        $quantity_per_unit=round($this->input->post('quantity_per_unit'),2);
-        //update quantity per unit
         $quantity=$this->input->post('quantity');
         if(isset($action) && $action!='' && $action=='edit'){
             $itemDataUdpate = array(      
                         'purchase_rate' => $purchase_rate,
                         'quantity' =>  $quantity,
-                        'quantity_per_unit'=>$quantity_per_unit
                 );
             //Check quantity is updated or not
             $check_quantity=$this->$model->check_items_quantity('product_purchase_history',$productId,$historyId);
@@ -1052,7 +1002,6 @@
                         'purchase_rate' => $purchase_rate,
                         'quantity' =>  $quantity,
                         'created_at'=> $created_at,
-                        'quantity_per_unit'=>$quantity_per_unit
                 );
             $insert=$this->db->insert('product_purchase_history',$paymentData);
             if($insert){

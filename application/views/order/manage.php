@@ -357,6 +357,7 @@
                                 <th class="text-center">LPO No</th>
                                 <th class="text-center">Delivery No</th>
                                 <th class="text-center">Invoice No</th>
+                                <th class="text-center">Legacy Invoice No</th>
                                 <th class="text-center">Placed By</th>
                                 <th class="text-center">Sales Expense</th>
                                 <th class="text-center">Invoice Status</th>
@@ -476,7 +477,7 @@
                 title:'',
                 sheetName: 'Order List',                
                 exportOptions: {
-                    columns: [1,2,3,4,5,6,7,8,9]
+                    columns: [1,2,3,4,5,6,7,8,9,10]
                 },
                 action: newExportAction,
                 customize: function (xlsx) {                            
@@ -572,8 +573,8 @@
                   sheetData.insertBefore(r1,sheetData.childNodes[0]);
 
                   // Style of rows
-                  $('row c[r^="I"]', sheet).attr('s', '51');
-                  $('row c[r="I12"]', sheet).attr('s', '2');
+                  $('row c[r^="J"]', sheet).attr('s', '51');
+                  $('row c[r="J12"]', sheet).attr('s', '2');
                   $('row c[r="A6"]', sheet).attr('s', '7');
                   $('row c[r="A7"]', sheet).attr('s', '7');
                   $('row c[r="A8"]', sheet).attr('s', '7');
@@ -603,6 +604,7 @@
                 { "data": "lpo_no"},
                 { "data": "do_no"},
                 { "data": "invoice_no"},
+                { "data": "legacy_invoice_no"},
                 { "data": "placed_by"},
                 { "data": "sales_expense"},
                 { "data": "invoice_status"},
@@ -611,7 +613,7 @@
 				{ "data": "manage"}
 			],
 			"columnDefs": [ {
-				"targets": [0,10],
+				"targets": [0,11],
 				"orderable": false
 			},{
                 "className": 'text-center',

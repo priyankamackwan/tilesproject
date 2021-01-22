@@ -330,6 +330,7 @@
                               <th style="text-align: center">Sr No.</th>
                               <th style="text-align: center">Purchase Price</th>
                               <th style="text-align: center">Quantity</th>
+                              <th style="text-align: center">Quantity Per Unit</th>
                               <th style="text-align: center">Created On</th>
                             </tr>
                         </thead>
@@ -362,6 +363,13 @@
                                 }
                                 ?>
                               </td>
+                              <td class="text-right">
+                                <?php
+                                if(isset($purchaseHistoryVal['quantity_per_unit']) && $purchaseHistoryVal['quantity_per_unit']!=''){
+                                  echo round($purchaseHistoryVal['quantity_per_unit'],2);
+                                }
+                                ?>
+                              </td>
                               <td style="text-align: center;">
                                 <?php
                                 if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
@@ -375,13 +383,14 @@
                           }                           
                           ?> 
                         </tbody>
-                        <tbody>
-                          <td></td>
+                        <tfoot>
+                          
                           <td><b>Total</b></td>
                           <td><b>Avg Purchase Price</b> : <b class="text-right"><?php echo round($purchaseAvg/count($purchase_history),2); ?></b></td>
                           <td class="text-right"><?php echo $totalQuantity; ?></td>
                           <td></td>
-                        </tbody>
+                          <td></td>
+                        </tfoot>
                     <?php
                   }
                     ?>
