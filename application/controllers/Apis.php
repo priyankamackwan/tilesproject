@@ -1,4 +1,4 @@
-<?php
+f<?php
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
@@ -10,22 +10,22 @@ use PHPMailer\PHPMailer\PHPMailer;
                 public $model;
         public function __construct() {
                     
-                    $this->model = "My_model";
-                    parent::__construct();
-                    $this->load->model('orders_model', 'orders_model');
-                    $headers = apache_request_headers();
-                    $actionName = $this->router->fetch_method();
-                    $this->db->select('*');
-                    $this->db->where('value', $headers['Xapi']);
-                    $q = $this->db->get('x_api_keys');
-                    $apiKeyData = $q->result_array();
-                    if (count($apiKeyData) == 0) {
-                        $response['status'] = 'failure';
-                        $response['message'] = 'API Key is not matching';
-                        // Returning back the response in JSON
-                        echo json_encode($response);
-                        exit();
-                    }
+            $this->model = "My_model";
+            parent::__construct();
+            $this->load->model('orders_model', 'orders_model');
+            $headers = apache_request_headers();
+            $actionName = $this->router->fetch_method();
+            $this->db->select('*');
+            $this->db->where('value', $headers['Xapi']);
+            $q = $this->db->get('x_api_keys');
+            $apiKeyData = $q->result_array();
+            if (count($apiKeyData) == 0) {
+                $response['status'] = 'failure';
+                $response['message'] = 'API Key is not matching';
+                // Returning back the response in JSON
+                echo json_encode($response);
+                exit();
+            }
                     
         if ($actionName == 'refreshToken')
         {
