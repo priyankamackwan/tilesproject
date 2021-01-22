@@ -837,8 +837,8 @@ You can change this password from mobile application after you are logged in onc
                         exit();
                     }
                       
-                        //$orderProductArray = json_decode($data['product_id'], true);
-                        $orderProductArray = $this->db->get("products")->result_array();
+                         $orderProductArray = json_decode($data['product_id'], true);
+                        //$orderProductArray = $this->db->get("products")->result_array();
                         // Checking Email exist in our application
                         
                         $this->db->select('id');
@@ -955,7 +955,7 @@ You can change this password from mobile application after you are logged in onc
                       //  echo '<pre>';
                        // print_r($userData); exit;
                         
-                             $multipleWhere = ['order_id' => $lastInsertedOrderId];
+                        $multipleWhere = ['order_id' => $lastInsertedOrderId];
                         $this->db->where($multipleWhere);
                         $productOrder = $this->db->get("order_products")->result_array();
                      // echo '<pre>';
