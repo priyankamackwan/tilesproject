@@ -1,5 +1,26 @@
 RewriteEngine on
-RewriteCond $1 !^(index\.php|resources|robots\.txt)
+
 RewriteCond %{REQUEST_FILENAME} !-f
+
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L,QSA] 
+
+RewriteRule .* index.php?/$0 [PT,L] 
+
+
+
+
+
+ 
+## EXPIRES CACHING ##
+
+
+
+<IfModule mod_headers.c>
+
+  <FilesMatch "\.(js|css|xml|gz)$">
+
+    Header append Vary: Accept-Encoding
+
+  </FilesMatch>
+
+</IfModule>
