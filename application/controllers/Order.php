@@ -1105,9 +1105,9 @@ $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the abo
 <table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table> 
 <br><br/>
 <table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%;">Name : </td></tr></table>
-<br><br/>
+<br>
 <table style="width:100%;"><tr><td style="width:100%;">Mobile : </td></tr></table>
-<br><br/><br><br/><br><br/>
+<br><br/><br><br/><br>
 <table style="width:100%;"><tr><td style="text-align:center">Tel: 06-5952061/ Mob: 055-8532631/050-4680842 | '.$address.'</td></tr>
     <tr><td style="text-align:center">Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr></table>
 
