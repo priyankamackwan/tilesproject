@@ -691,7 +691,8 @@ $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Delivery Note</head>
 <body>
-<img src ="http://tiles.thewebpatriot.com/image.png">
+<div style="text-align:center;display:block;margin:auto;" id="div">
+<img src = "'.base_url().'image1.png"></div>
 <h2><b><p align="center">Delivery Note</p></b></h2>
 <table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
