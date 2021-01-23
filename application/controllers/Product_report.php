@@ -129,6 +129,7 @@
       //Show total balance amount and quantity
       $totalBalancequantity=$totalBalanceAmount=0; 
       $total_balance_quantity = $this->$model->balance_quantity($where,$low_stock);
+	  
       if(isset($total_balance_quantity) && $total_balance_quantity!='' && count($total_balance_quantity) > 0){
         foreach ($total_balance_quantity as $key => $value) {
           $totalBalancequantity+=round($value['quantity']-$value['sold_quantity'],2);
@@ -297,7 +298,7 @@
 						"data"            => $data,
             'totalBalancequantity'=>round($totalBalancequantity),
             'totalBalanceAmount'=>$this->$model->getamount(round($totalBalanceAmount,2)),
-						);
+						);	
 			echo json_encode($json_data);
 		}
     /*           
