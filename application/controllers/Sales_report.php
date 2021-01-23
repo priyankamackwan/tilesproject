@@ -419,8 +419,7 @@ $pdf = new TCPDF();
 $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Tax Invoice</head>
-<div style="text-align:center;display:block;margin:auto;" id="div">
-<img src = "'.base_url().'image1.png"></div>
+<p align="center"><img src = "'.base_url().'image1.png"></p>
 <h2><b><p align="center" style="margin-top:5px;">Tax Invoice</p></b></h2>
 <table cellspacing="1px" style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$ordersData[0]['invoice_no'].'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
@@ -567,6 +566,7 @@ $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Local Purchase Order</head>
 <body>
+<p align="center"><img src = "'.base_url().'image1.png"></p>
 <h2><b><p align="center">Local Purchase Order</p></b></h2>
 <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
@@ -691,7 +691,7 @@ $pdf->AddPage('P', 'A4');
 $html = '<html>
 <head>Delivery Note</head>
 <body>
-<img src ="http://tiles.thewebpatriot.com/image.png">
+<p align="center"><img src = "'.base_url().'image1.png"></p>
 <h2><b><p align="center">Delivery Note</p></b></h2>
 <table style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
 <br><br/>
