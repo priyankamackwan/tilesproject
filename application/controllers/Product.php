@@ -317,7 +317,7 @@
 		}
 		public function insert()
 		{
-                  
+                
 			$model = $this->model;
 			$name = $this->input->post('name');
                         $size = $this->input->post('size');
@@ -334,7 +334,7 @@
                         $unit = $this->input->post('unit');
                         $purchase_expense = $this->input->post('purchase_expense');
                         $img = $_FILES['image']['name'];
-                      //  echo '<pre>';
+                      
                         //print_r($_FILES); exit;
                         $ext = pathinfo($img,PATHINFO_EXTENSION);
 			$image = time().'.'.$ext;
@@ -378,6 +378,7 @@
                                             'quantity_per_unit'=> $quantity_per,
                                             );
                         $this->$model->insert('product_purchase_history',$productPurchaseHistory);
+						
                         //end purchase history
 
                         $dataSub = array();

@@ -129,6 +129,7 @@
       //Show total balance amount and quantity
       $totalBalancequantity=$totalBalanceAmount=0; 
       $total_balance_quantity = $this->$model->balance_quantity($where,$low_stock);
+	  
       if(isset($total_balance_quantity) && $total_balance_quantity!='' && count($total_balance_quantity) > 0){
         foreach ($total_balance_quantity as $key => $value) {
           $totalBalancequantity+=round($value['quantity']-$value['sold_quantity'],2);
@@ -209,10 +210,10 @@
         }                 
       // End for low stock condition
       $this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as totalPurchaseExpense,p.sold_quantity');
-      $this->db->from('order_products o');
-      $this->db->join('products p','p.id=o.product_id','left');
-      $this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
-      $this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+      $this->db->from('products p');
+      $this->db->join('order_products o','o.product_id=p.id','left');
+      $this->db->join('product_purchase_history ph','ph.product_id=p.id','left');
+      $this->db->join('product_categories pc','pc.product_id=p.id','left');
       $this->db->join('categories c','c.id=pc.cat_id','left');
       $this->db->where('p.is_deleted',0);
       $this->db->where('c.is_deleted',0);
@@ -297,7 +298,7 @@
 						"data"            => $data,
             'totalBalancequantity'=>round($totalBalancequantity),
             'totalBalanceAmount'=>$this->$model->getamount(round($totalBalanceAmount,2)),
-						);
+						);	
 			echo json_encode($json_data);
 		}
     /*           

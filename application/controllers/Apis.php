@@ -581,26 +581,26 @@ You can change this password from mobile application after you are logged in onc
                     $data = $_POST;
                     if ((isset($data['cat_id']) && (!empty($data['cat_id'])))) {
                       //totalPurchaseExpense from history table
-                            $this->db->select('u.*');
+                            $this->db->select('u.*,AVG(ph.purchase_rate) as totalPurchaseExpense, sum(ph.quantity_per_unit) as quantity_per_unit');
                             $this->db->from('product_categories as s');
                             $this->db->where('u.is_deleted =', 0);
                             $this->db->where('u.status =', 1);
                             $this->db->where('s.cat_id', $data['cat_id']);
-                            // $this->db->or_where('ph.product_id',null);
-                            // $this->db->group_by('u.id');
+                            $this->db->or_where('ph.product_id',null);
+                            $this->db->group_by('u.id');
                             $this->db->join('products as u', 'u.id = s.product_id');
                             //for purchase price
-                            // $this->db->join('product_purchase_history as ph', 'ph.product_id = s.product_id');
+                            $this->db->join('product_purchase_history as ph', 'ph.product_id = s.product_id');
                             $productData = $this->db->get()->result_array();
                         
                     } else {
-                        $this->db->select('*');
+                        $this->db->select('products.*,AVG(ph.purchase_rate) as totalPurchaseExpense, sum(ph.quantity_per_unit) as quantity_per_unit');
                         $this->db->where('status', 1);
                         $this->db->where('is_deleted', 0);
-                        // $this->db->or_where('ph.product_id',null);
-                        // $this->db->group_by('products.id');
+                        $this->db->or_where('ph.product_id',null);
+                        $this->db->group_by('products.id');
                         //for purchase price
-                        // $this->db->join('product_purchase_history as ph', 'ph.product_id = products.id');
+                        $this->db->join('product_purchase_history as ph', 'ph.product_id = products.id');
                         $q = $this->db->get('products');
                         $productData = $q->result_array();
                     }
@@ -654,9 +654,9 @@ You can change this password from mobile application after you are logged in onc
                                 $categoryString = implode(',',$categoryName);
                                 // $productData[$i]['purchase_price']= $productData[$i]['purchase_expense'];
                                 //avreage gfrom history table
-                                // $productData[$i]['purchase_price']=$productData[$i]['totalPurchaseExpense'];
+                                $productData[$i]['purchase_price']=$productData[$i]['totalPurchaseExpense'];
                                 // unset($productData[$i]['purchase_expense']);
-                                // unset($productData[$i]['totalPurchaseExpense']);
+                                unset($productData[$i]['totalPurchaseExpense']);
                                 $productData[$i]['purchase_price']=0;
                                 
                                 $productData[$i]['categories_name']= $categoryString;
@@ -681,14 +681,14 @@ You can change this password from mobile application after you are logged in onc
                     $data = $_POST;
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) ) {
                         
-                        $this->db->select('*');
+                        $this->db->select('products.*,AVG(ph.purchase_rate) as totalPurchaseExpense, sum(ph.quantity_per_unit) as quantity_per_unit');
                         $this->db->where('status', 1);
                         $this->db->where('is_deleted', 0);
                         $this->db->where('products.id', $data['product_id']);
-                        // $this->db->or_where('ph.product_id',null);
-                        // $this->db->group_by('products.id');
+                        $this->db->or_where('ph.product_id',null);
+                        $this->db->group_by('products.id');
                         //for purchase price
-                        // $this->db->join('product_purchase_history as ph', 'ph.product_id = products.id');
+                        $this->db->join('product_purchase_history as ph', 'ph.product_id = products.id');
                         $q = $this->db->get('products');
                         $productData = $q->result_array();
                
@@ -733,10 +733,10 @@ You can change this password from mobile application after you are logged in onc
                              
                                 $categoryString = implode(',',$categoryName);
                                      // $productData[0]['purchase_price']= $productData[0]['purchase_expense'];
-                                // $productData[0]['purchase_price']= $productData[0]['totalPurchaseExpense'];
+                                $productData[0]['purchase_price']= $productData[0]['totalPurchaseExpense'];
 
-                                //unset($productData[0]['purchase_expense']);
-                                // unset($productData[0]['totalPurchaseExpense']);
+                                // unset($productData[0]['purchase_expense']);
+                                unset($productData[0]['totalPurchaseExpense']);
                                 $productData[0]['purchase_price']=0;
                                 $productData[0]['categories_name']= $categoryString;
                                 $response['status'] = 'success';

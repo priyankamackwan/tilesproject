@@ -112,10 +112,10 @@
 	        } 
 	        // End for low stock conidtion
 			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name');
-			$this->db->from('order_products o');
-			$this->db->join('products p','p.id=o.product_id','left');
-			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
-			$this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+			$this->db->from('products p');
+			$this->db->join('order_products o','o.product_id=p.id','left');
+			$this->db->join('product_purchase_history ph','ph.product_id=p.id','left');
+			$this->db->join('product_categories pc','pc.product_id=p.id','left');
 			$this->db->join('categories c','c.id=pc.cat_id','left');
 			$this->db->where('p.is_deleted',0);
       		$this->db->where('c.is_deleted',0);
@@ -123,7 +123,7 @@
 				$this->db->where($condition);
 			}
 			$this->db->or_where('ph.product_id',null);
-			$this->db->group_by('o.product_id');
+			$this->db->group_by('p.id');
             $query = $this->db->get()->num_rows();
 			return $query;
 		}
@@ -186,10 +186,10 @@
 	        } 
 	        // End for low stock conidtion
 			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,c.name AS cate_name,AVG(ph.purchase_rate) as purchase_expense,p.sold_quantity');
-			$this->db->from('order_products o');
-			$this->db->join('products p','p.id=o.product_id','left');
-			$this->db->join('product_purchase_history ph','ph.product_id=o.product_id','left');
-			$this->db->join('product_categories pc','pc.product_id=o.product_id','left');
+			$this->db->from('products p');
+			$this->db->join('order_products o','o.product_id=p.id','left');
+			$this->db->join('product_purchase_history ph','ph.product_id=p.id','left');
+			$this->db->join('product_categories pc','pc.product_id=p.id','left');
 			$this->db->join('categories c','c.id=pc.cat_id','left');
 			$this->db->where('p.is_deleted',0);
       		$this->db->where('c.is_deleted',0);
