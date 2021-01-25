@@ -14,7 +14,7 @@
 		public function __construct()
 		{
 			parent::__construct();
-			date_default_timezone_set('Asia/Kolkata');
+			date_default_timezone_set('Asia/Dubai');
 			$this->model = "My_model";
 
 			/****** if adminuser is blocked then redirect to login page start*****/

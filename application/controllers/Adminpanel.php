@@ -6,7 +6,7 @@
 		public function __construct()
 		{
 			parent::__construct();
-			date_default_timezone_set("Asia/Kolkata");
+			date_default_timezone_set("Asia/Dubai");
 			$this->load->library('form_validation');
 			
 			
