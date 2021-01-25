@@ -75,6 +75,11 @@
 								<i class="fa ion-stats-bars"></i> Common Statistics
 							</div>
 						</div>
+						<div class="col-md-6 col-sm-12 col-xs-12">
+							<div class="box-title" style="float:right !important;">
+							<i class="fa fa-clock-o"></i> Current Time UAE: <?php if(isset($time)) { echo $time;}?>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="box-body">

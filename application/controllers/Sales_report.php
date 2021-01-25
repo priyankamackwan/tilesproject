@@ -15,7 +15,7 @@
     {
                     
       parent::__construct();
-      date_default_timezone_set('Asia/Kolkata');
+      date_default_timezone_set('Asia/Dubai');
       $this->model = "My_model";
                     
                       if (!in_array(4,$this->userhelper->current('rights'))) {

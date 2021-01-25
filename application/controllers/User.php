@@ -14,7 +14,7 @@
 		public function __construct()
 		{
 			parent::__construct();
-			date_default_timezone_set('Asia/Kolkata');
+			date_default_timezone_set('Asia/Dubai');
 			$this->model = "My_model";
 
 			/****** if adminuser is blocked then redirect to login page start*****/
@@ -269,19 +269,18 @@
 			$model = $this->model;
            
 			$first_name = $this->input->post('first_name');
-                        $last_name = $this->input->post('last_name');
-                        $email = $this->input->post('email');
+            $last_name = $this->input->post('last_name');
+            $email = $this->input->post('email');
 			$number = $this->input->post('number');
-                        $gender = $this->input->post('gender');
-                        $age_group = $this->input->post('age_group');
+            $gender = $this->input->post('gender');
+            $age_group = $this->input->post('age_group');
 			$data = array(
 				'first_name' => $first_name,
-                                'last_name' => $last_name,
-                                'email' => $email,
+                'last_name' => $last_name,
+                'email' => $email,
 				'mobile_no' => $number,
-                                'gender' => $gender,
-                                'age_group' => $age_group,
-
+                'gender' => $gender,
+                'age_group' => $age_group,
 			);
 			$this->$model->insert($this->table,$data);
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$this->msgName.' Insert Successfully!</div>');
