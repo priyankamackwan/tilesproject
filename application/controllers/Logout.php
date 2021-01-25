@@ -5,7 +5,7 @@ class Logout extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		date_default_timezone_set("Asia/Kolkata");
+		date_default_timezone_set("Asia/Dubai");
 	}
 	public function index()
 	{   

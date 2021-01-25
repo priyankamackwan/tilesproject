@@ -95,7 +95,6 @@ define('Mail_Username','info.emailtest1@gmail.com');
 //define('Mail_Password','iqlwlulzkmvohcrs');
 define('Mail_Password','');
 
-
 /*********** Stock % for reminder  **********/
 define('Stock_Reminder','25');
 
