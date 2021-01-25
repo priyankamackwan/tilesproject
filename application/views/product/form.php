@@ -600,100 +600,103 @@
                   </div>
                   <?php
                   if($action == 'update'){
+                    if ($this->userhelper->current('role_id') == 1) { 
                     ?>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                      <div class="form-group" id="id_payment_date">
-                        <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="payment_date">                      
-                          <a href="javascript:void(0);" title="Add Item" id="prevousData" class="btn btn-success" onclick="add_item(<?php echo $result[0]->id;?>)">
-                            Add Purchase Price
-                          </a>
-                        </label>
-                      </div>
-                      <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-                        Purchase Price History :
-                      </label>
-                    </div>
-                    <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
-                      <thead>
-                            <tr class="">
-                              <th style="text-align: center">Sr No.</th>
-                              <th style="text-align: center">Purchase Price</th>
-                              <th style="text-align: center">Quantity</th>
-                              <th style="text-align: center">Quantity Per Unit</th>
-                              <th style="text-align: center">Created On</th>
-                              <th style="text-align: center">Action</th>
-                            </tr>
-                        </thead>
-                    <?php
-                    if(isset($purchase_history) && $purchase_history!='' && count($purchase_history) >0){
-                    ?>
-                        <tbody>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="form-group" id="id_payment_date">
+                            <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="payment_date">                      
+                              <a href="javascript:void(0);" title="Add Item" id="prevousData" class="btn btn-success" onclick="add_item(<?php echo $result[0]->id;?>)">
+                                Add Purchase Price
+                              </a>
+                            </label>
+                          </div>
+                          <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+                            Purchase Price History :
+                          </label>
+                        </div>
+                        <table border ="1" width="100%" class="table main-table  table-bordered table-hover  table-striped  dataTable no-footer" id="datatables1">
+                          <thead>
+                                <tr class="">
+                                  <th style="text-align: center">Sr No.</th>
+                                  <th style="text-align: center">Purchase Price</th>
+                                  <th style="text-align: center">Quantity</th>
+                                  <th style="text-align: center">Quantity Per Unit</th>
+                                  <th style="text-align: center">Created On</th>
+                                  <th style="text-align: center">Action</th>
+                                </tr>
+                            </thead>
                           <?php
-                          $purchaseAvg=$totalQuantity=0;
-                          foreach ($purchase_history as $key => $purchaseHistoryVal) {
-                            $purchaseAvg +=$purchaseHistoryVal['purchase_rate'];
-                            $totalQuantity += $purchaseHistoryVal['quantity'];
-                            $delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($purchaseHistoryVal['id']));
+                          if(isset($purchase_history) && $purchase_history!='' && count($purchase_history) >0){
                           ?>
-                            <tr>
-                              <td style="text-align: center" >
-                                <?php echo $key+1;?>
-                              </td>
-                              <td class="text-right">
-                                <?php
-                                if(isset($purchaseHistoryVal['purchase_rate']) && $purchaseHistoryVal['purchase_rate']!=''){
-                                  echo $purchaseHistoryVal['purchase_rate'];
-                                }
-                                ?>
-                              </td>
-                              <td class="text-right">
-                                <?php
-                                if(isset($purchaseHistoryVal['quantity']) && $purchaseHistoryVal['quantity']!=''){
-                                  echo $purchaseHistoryVal['quantity'];
-                                }
-                                ?>
-                              </td>
-                              <td class="text-right">
-                                <?php
-                                if(isset($purchaseHistoryVal['quantity_per_unit']) && $purchaseHistoryVal['quantity_per_unit']!=''){
-                                  echo round($purchaseHistoryVal['quantity_per_unit'],2);
-                                }
-                                ?>
-                              </td>
-                              <td style="text-align: center;">
-                                <?php
-                                if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
-                                  echo $this->My_model->date_conversion(
-                                    $purchaseHistoryVal['created_at'],'d/m/Y H:i:s');
-                                }
-                                ?>
-                              </td>
-                              <td style="text-align: center;">
-                                <a onclick="edit_item(<?php echo $purchaseHistoryVal['id'];?>,<?php echo $result[0]->id;?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_item(<?php echo $purchaseHistoryVal['id'];?>,<?php echo $result[0]->id;?>,<?php echo $purchaseHistoryVal['quantity'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
-                              </td>
-                          </tr>
-                          <?php
-                          }                           
-                          ?> 
-                        </tbody>
-                        <tfoot>
-                          <td><b>Total</b></td>
-                          <td><b>Avg Purchase Price</b> : <?php echo round($purchaseAvg/count($purchase_history),2); ?></td>
-                          <td class="text-right"><?php echo $totalQuantity; ?></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tfoot>
-                    <?php
-                  }
-                    ?>
-                    </table>
-                      
-                    </div>
-                    <?php
-                  }
-                  ?>
+                            <tbody>
+                              <?php
+                              $purchaseAvg=$totalQuantity=0;
+                              foreach ($purchase_history as $key => $purchaseHistoryVal) {
+                                $purchaseAvg +=$purchaseHistoryVal['purchase_rate'];
+                                $totalQuantity += $purchaseHistoryVal['quantity'];
+                                $delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($purchaseHistoryVal['id']));
+                              ?>
+                                <tr>
+                                  <td style="text-align: center" >
+                                    <?php echo $key+1;?>
+                                  </td>
+                                  <td class="text-right">
+                                    <?php
+                                    if(isset($purchaseHistoryVal['purchase_rate']) && $purchaseHistoryVal['purchase_rate']!=''){
+                                      echo $purchaseHistoryVal['purchase_rate'];
+                                    }
+                                    ?>
+                                  </td>
+                                  <td class="text-right">
+                                    <?php
+                                    if(isset($purchaseHistoryVal['quantity']) && $purchaseHistoryVal['quantity']!=''){
+                                      echo $purchaseHistoryVal['quantity'];
+                                    }
+                                    ?>
+                                  </td>
+                                  <td class="text-right">
+                                    <?php
+                                    if(isset($purchaseHistoryVal['quantity_per_unit']) && $purchaseHistoryVal['quantity_per_unit']!=''){
+                                      echo round($purchaseHistoryVal['quantity_per_unit'],2);
+                                    }
+                                    ?>
+                                  </td>
+                                  <td style="text-align: center;">
+                                    <?php
+                                    if(isset($purchaseHistoryVal['created_at']) && $purchaseHistoryVal['created_at']!=''){
+                                      echo $this->My_model->date_conversion(
+                                        $purchaseHistoryVal['created_at'],'d/m/Y H:i:s');
+                                    }
+                                    ?>
+                                  </td>
+                                  <td style="text-align: center;">
+                                    <a onclick="edit_item(<?php echo $purchaseHistoryVal['id'];?>,<?php echo $result[0]->id;?>)" class="btn  btn-primary  btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_item(<?php echo $purchaseHistoryVal['id'];?>,<?php echo $result[0]->id;?>,<?php echo $purchaseHistoryVal['quantity'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
+                                  </td>
+                              </tr>
+                              <?php
+                              }                           
+                              ?> 
+                            </tbody>
+                            <tfoot>
+                              <td><b>Total</b></td>
+                              <td><b>Avg Purchase Price</b> : <?php echo round($purchaseAvg/count($purchase_history),2); ?></td>
+                              <td class="text-right"><?php echo $totalQuantity; ?></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tfoot>
+                        <?php
+                        }
+                        ?>
+                        </table>
+                          
+                        </div>
+                        <?php
+                      }
+                      }
+                      ?>
                 </div> 
                 <div class="box-footer">
                   <input type="submit" class="btn btn-primary" value="Save">
