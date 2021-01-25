@@ -217,7 +217,28 @@
 		   //length of amount and convert to lac and crore
 		   $length = strlen(round($amount));
 		    if($length>=6 && $length <=7){
-		        $currency=round($amount/100000,2).' Lac';
+		    	
+		    	$decimal = (string)(round($amount) - floor(round($amount)));
+		        $money = floor(round($amount));
+		        $length = strlen($money);
+		        $delimiter = '';
+		        $money = strrev($money);
+
+		        for($i=0;$i<$length;$i++){
+		            if(( $i==3 || ($i%3==0))&& $i!=$length){
+		                $delimiter .=',';
+		            }
+		            $delimiter .=$money[$i];
+		        }
+		        $result = strrev($delimiter);
+		        $decimal = preg_replace("/0\./i", ".", $decimal);
+		        $decimal = substr($decimal, 1, 3);
+		        if( $decimal != '0'){
+		            $result = $result.$decimal;
+		        }
+		        $currency = rtrim($result, ',').".00";
+			   
+		        //$currency=round($amount/100000,2).' Lac';
 		    }else if($length>=8){
 		        $currency= round($amount/10000000,2).' Cr.';
 		    }else{
