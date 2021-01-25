@@ -7,6 +7,8 @@ class Dashboard extends CI_Controller
 		parent::__construct(); 
 		$this->load->model('Dashboard_model');
 		$this->load->model('My_model');
+		date_default_timezone_set('Asia/Dubai');
+		
 	}
 	public  function index(){
 		//$this->userhelper->current('logged_in')['is_logged'] = 1;
@@ -21,6 +23,7 @@ class Dashboard extends CI_Controller
 		$data['unpaid_l_orders'] = $this->Dashboard_model->latest_orders('1');
 		$data['sold_quantity'] = $this->Dashboard_model->selling_product('products.sold_quantity');
 		$data['sold_amount'] = $this->Dashboard_model->best_seller();
+		$data['time'] = date('H:i', time());
         $this->load->view($this->view.'dashboard/view',$data);;
       }
     public  function orderStatistics($period=''){
