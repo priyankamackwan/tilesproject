@@ -91,8 +91,9 @@ define('IMAGE_PATH','http://localhost/cake1/app/webroot/img/');
 
 /*********** Mail Credential **********/
 define('Mail_Host','smtp.gmail.com');
-define('Mail_Username','info.emailtest@yopmail.com');
-define('Mail_Password','iqlwlulzkmvohcrs');
+define('Mail_Username','info.emailtest1@gmail.com');
+//define('Mail_Password','iqlwlulzkmvohcrs');
+define('Mail_Password','');
 
 
 /*********** Stock % for reminder  **********/

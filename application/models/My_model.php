@@ -214,8 +214,10 @@
 		   // if(isset($firstCharacter) && $firstCharacter!='' && $firstCharacter=="-" && $firstCharacter < 0){
 		   // 		$amount = ltrim($amount, $firstCharacter);
 		   // }
+		   return 'AED '.number_format($amount,2);
+
 		   //length of amount and convert to lac and crore
-		   $length = strlen(round($amount));
+		   /*$length = strlen(round($amount));
 		    if($length>=6 && $length <=7){
 		    	
 		    	$decimal = (string)(round($amount) - floor(round($amount)));
@@ -250,7 +252,7 @@
 		    	return $new_amount;
 		    }else{
 		    	return 'AED '.$new_amount;
-		    }
+		    }*/
 		   
 		}
 		//best seller count 
