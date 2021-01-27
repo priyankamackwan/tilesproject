@@ -103,3 +103,5 @@ define('Stock_Reminder','25');
 define('Vat','5');
 
 define('invoiceincrement','6857');
+
+define('admin_role','1');

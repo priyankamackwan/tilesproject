@@ -491,7 +491,7 @@
                 </div>
 
                 <?php 
-                  if ($this->userhelper->current('role_id') ==1 && $action != 'update') { 
+                  if ($this->userhelper->current('role_id') == admin_role && $action != 'update') { 
                 ?>
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-12 col-xs-12" for="purchase_expense">
@@ -600,7 +600,7 @@
                   </div>
                   <?php
                   if($action == 'update'){
-                    if ($this->userhelper->current('role_id') == 1) { 
+                    if ($this->userhelper->current('role_id') == admin_role) { 
                     ?>
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
