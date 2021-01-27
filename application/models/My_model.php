@@ -100,7 +100,7 @@
             $query = $this->db->get()->num_rows();
 			return $query;
 		}
-		public function product_report_table_tecords($condition,$low_stock)
+		public function product_report_table_tecords($condition,$low_stock,$record_type="")
 		{
 			// For low stock yes 
 			if(isset($low_stock) && $low_stock!='' && $low_stock=='true'){
@@ -113,7 +113,12 @@
 	        // End for low stock conidtion
 			$this->db->select('o.id,o.order_id,o.product_id,SUM(o.quantity) as totalQuantity,SUM(o.price) as amount,p.name,p.design_no,p.size,p.quantity,p.quantity,c.name AS cate_name');
 			$this->db->from('products p');
-			$this->db->join('order_products o','o.product_id=p.id','left');
+			if(isset($record_type) && $record_type != "" && $record_type == "order_based"){
+				$this->db->join('order_products o','o.product_id=p.id');
+			}else{
+				$this->db->join('order_products o','o.product_id=p.id','left');
+			}
+
 			$this->db->join('product_purchase_history ph','ph.product_id=p.id','left');
 			$this->db->join('product_categories pc','pc.product_id=p.id','left');
 			$this->db->join('categories c','c.id=pc.cat_id','left');

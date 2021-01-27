@@ -108,7 +108,7 @@
                 $where .= 'OR `ph`.`product_id` IS NULL ) ';
         }
       // Total count 
-      $totalData = $this->$model->product_report_table_tecords($where,$low_stock);
+      $totalData = $this->$model->product_report_table_tecords($where,$low_stock, "order_based");
                        
       $start = $_POST['start'];
       $limit = $_POST['length'];
