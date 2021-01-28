@@ -239,7 +239,13 @@ a:hover, a:active, a:focus {
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">User Name :</label>
 								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-								<?php echo $username;?>
+								<select name="username" id="username">
+									<?php 
+									if(!empty($activecustomer)){
+										foreach ($activecustomer as $key => $value) { ?>
+											<option value="<?=$value['id'];?>" <?php if ($value['company_name']==$username) { ?>selected="selected"<?php } ?>><?=$value['company_name'];?></option>
+									<?php }}?>
+								</select>
 								</div>
 							</div>
 							<!-- Add lpo,do and invoice number -->
@@ -506,7 +512,7 @@ a:hover, a:active, a:focus {
 				              </div>
 				              */
 				              ?>
-				              <input type="hidden" name="username" value="<?php echo $username;?>">
+				            <!--   <input type="hidden" name="username" value="<?php echo $username;?>"> -->
 				              <input type="hidden" name="price" value="<?php echo $price;?>">
 				              <input type="hidden" name="client_type" id="client_type" value="<?php echo $client_type;?>">
 				              
