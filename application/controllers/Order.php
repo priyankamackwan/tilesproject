@@ -1652,7 +1652,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                     $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                     $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
                     $mail->MsgHTML('
-                                Dear Admin,<br/><br/>
+                                Dear Customer,<br/><br/>
     You have received a new Order from '.$company_name.'<br/>
     New order number is #'.$id.'<br/><br/>
     
