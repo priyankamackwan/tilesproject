@@ -52,11 +52,11 @@ use PHPMailer\PHPMailer\PHPMailer;
             $data['msgDisplay'] = $this->msgDisplay;
              
             // temp query
-            $update =  $this->db->get('orders')->result_array();
+           /* $update =  $this->db->get('orders')->result_array();
             foreach ($update as $key => $value) {
                 $this->db->where('order_id',$value['id']);
                 $this->db->update('order_products',['status' => $value['status']]);
-            }
+            }*/
 
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
@@ -194,9 +194,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                 }
 
                 if($where == null){
-                    $where .= 'orders.status = "'.$order_status.'"';
+                    $where .= 'order_products.status = "'.$order_status.'"';
                 }else{
-                    $where .= ' AND orders.status = "'.$order_status.'"';
+                    $where .= ' AND order_products.status = "'.$order_status.'"';
                 }
             }
 
@@ -251,11 +251,33 @@ use PHPMailer\PHPMailer\PHPMailer;
                 // Get all records with limit for data table.
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate);
                 // Get all Amounts of Invoice.
-                $totalAmounts = $this->orders_model->get_invoiceAmount();
+               // $totalAmounts = $this->orders_model->get_invoiceAmount();
+                    // NEW changes for Get all Amounts of Invoice.
+                $invoiceamt = $this->orders_model->get_invoiceAmount_for_product($where,$whereDate);
+                $totalAmounts = 0; 
+                foreach ($invoiceamt as $key => $invoicePayment) {
+                    //$totalTax = $invoicePayment['total_rate']*$invoicePayment['tax_percentage']/100; 
 
+                    $invoiceAmounts = $invoicePayment['total_rate']+$invoicePayment['tax'];
+                    
+                    $totalAmounts += $invoiceAmounts; 
+
+                }
                 //Get current Month amount
-                $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
-                
+                //$totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
+                 //NEW CHANGES FOR Get current Month amount
+                $invoiceamt = $this->orders_model->get_invoiceAmount_for_product($where,$whereDate,$whereDatechange,'current');
+                $totalAmountsCurrentMonth = 0; 
+                foreach ($invoiceamt as $key => $invoicePayment) {
+                    //$totalTax = $invoicePayment['total_rate']*$invoicePayment['tax_percentage']/100; 
+
+                    $invoiceAmounts = $invoicePayment['total_rate']+$invoicePayment['tax'];
+                    
+                    $totalAmountsCurrentMonth += $invoiceAmounts; 
+
+                }
+
+
                 //total history paymnet amount
                 $get_payment_history_all = $this->orders_model->get_payment_history();
 
@@ -271,10 +293,34 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
-                $totalAmounts = $this->orders_model->get_invoiceAmount($where);
+                //$totalAmounts = $this->orders_model->get_invoiceAmount($where);
+                 $invoiceamt = $this->orders_model->get_invoiceAmount_for_product($where,$whereDate);
+                $totalAmounts = 0; 
+                foreach ($invoiceamt as $key => $invoicePayment) {
+                    //$totalTax = $invoicePayment['total_rate']*$invoicePayment['tax_percentage']/100; 
+
+                    $invoiceAmounts = $invoicePayment['total_rate']+$invoicePayment['tax'];
+                    
+                    $totalAmounts += $invoiceAmounts; 
+
+                }
 
                 //Get current Month amount
-                $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange,'current');
+                //$totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange,'current');
+
+                 //NEW CHANGES FOR Get current Month amount
+                $invoiceamt = $this->orders_model->get_invoiceAmount_for_product($where,$whereDate,$whereDatechange,'current');
+                $totalAmountsCurrentMonth = 0; 
+                foreach ($invoiceamt as $key => $invoicePayment) {
+                    //$totalTax = $invoicePayment['total_rate']*$invoicePayment['tax_percentage']/100; 
+
+                    $invoiceAmounts = $invoicePayment['total_rate']+$invoicePayment['tax'];
+                    
+                    $totalAmountsCurrentMonth += $invoiceAmounts; 
+
+                }
+
+
                 //$totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
 
                 //total history paymnet amount
@@ -399,7 +445,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             // Total invoice mamount logic change invoiceAmount is tax with 0
             //$totalInvoiceAmount=$totalAmounts->invoiceAmount + $totalAmounts->invoiceAmountWithTax;
 
-            $totalInvoiceAmount=$totalAmounts->invoiceAmount;
+            $totalInvoiceAmount=$totalAmounts;
 
             //Total paid amount from paymnet hostory table
             $totalPaidAmount=$get_payment_history_all->historypaidamount;
@@ -473,7 +519,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             // Total invoice mamount logic change invoiceAmount is tax with 0
             // $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount + $totalAmountsCurrentMonth->invoiceAmountWithTax;
 
-             $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount;
+             $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth;
 
             //Total paid amount from paymnet hostory table
             $totalPaidAmountCurrentMonth=$get_payment_history_currnet_month->historypaidamount;
