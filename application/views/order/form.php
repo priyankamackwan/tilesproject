@@ -181,7 +181,7 @@ a:hover, a:active, a:focus {
 										if($value['item_status']==2){?>
 								    			<input type="checkbox" <?php if($val['status']==1) {?> checked="checked"<?php } ?>  id="mark_us_deliver_<?php echo $value['item_id'];?>" value="<?php echo $value['item_id'];?>" disabled readonly>
 								   			 <?php  } else {?>
-								    			<input type="checkbox" id="mark_us_deliver_<?php echo $value['item_id'];?>" name="ch[]" value="<?php echo $value['item_id'];?>" onchange="mark_check()">
+								    			<input type="checkbox" id="mark_us_deliver_<?php echo $value['item_id'];?>" name="ch[]" value="<?php echo $value['item_id'];?>" onchange="mark_check()" class="check">
 								    	<?php } ?>
 									</div>
 									<div class="col-md-3 col-sm-3 col-xs-3">
@@ -914,14 +914,19 @@ $("#delivered").click(function(){
 	});
 }); 
 
-$("input[type='checkbox']").change(function () { 
-	if ($(this).is(":checked")) {
-    	$(".delivered").removeAttr("disabled");
-	} else {
-		$(".delivered").attr("disabled",true);
-	}
+// $("input[type='checkbox']").change(function () { 
+// 	if ($(this).is(":checked")) {
+//     	$(".delivered").removeAttr("disabled");
+// 	} else {
+// 		$(".delivered").attr("disabled",true);
+// 	}
+// });
+
+var checks = $(':checkbox.check');
+
+checks.change(function() {
+    $('.delivered').attr('disabled', ! checks.filter(':checked').length);
 });
-	
     
 
 
