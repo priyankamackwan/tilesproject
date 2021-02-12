@@ -82,15 +82,18 @@ a:hover, a:active, a:focus {
 	<!-- Main content section start-->
 	<section class="content">
 		<div class="row">
-			<div class="col-md-9 col-sm-12 col-xs-12">
+			<div class="col-md-11 col-sm-12 col-xs-12">
 
 				<div class="box box-primary">
 					<div class="box-header">
 						<h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
+						&nbsp;&nbsp;
+
+						<input type="submit" name="delivered" id="delivered" class="btn btn-primary delivered" value="Mark us delivered" disabled="disabled">
 					</div>
 
 					<div class="box-body">
-						<form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update_order';?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+						
 							
 							<input type="hidden" id="id" name="id" value="<?php echo $id;?>">
 							<input type="hidden" id="action" name="action" value="<?php echo $action;?>">
@@ -98,7 +101,10 @@ a:hover, a:active, a:focus {
 									<!-- <div class="col-md-3 col-sm-12 col-xs-12 ">
 									</div> -->
 									<div class="col-md-12 col-sm-12 col-xs-12 ">
-										<div class="col-md-5 col-sm-3 col-xs-3">
+										<div class="col-md-1 col-sm-2 col-xs-2">
+											<label class="maxwidth300">Select</label>					
+										</div>
+										<div class="col-md-3 col-sm-3 col-xs-3">
 											<label class="maxwidth300">Item Name (Design No)</label>
 										</div>
 										<div class="col-md-2 col-sm-3 col-xs-3">
@@ -111,12 +117,16 @@ a:hover, a:active, a:focus {
 											<label class="maxwidth300">Price</label>								
 										</div>
 										<div class="col-md-1 col-sm-2 col-xs-2">
+											<label class="maxwidth300">Status</label>					
+										</div>
+										<div class="col-md-1 col-sm-2 col-xs-2">
 											<label class="maxwidth300" style="max-width: 125%;">Delete</label>
 										</div>
 									</div>
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
+							
 							$username=$total_price=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=$invoice_no=$do_no=$lpo_no=$tax=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
@@ -124,6 +134,7 @@ a:hover, a:active, a:focus {
 								$sales_expense=$value['sales_expense'];
 								$status=$value['status'];
 								$invoice_status=$value['invoice_status'];
+								
 								//tax saved for orders
 								$tax=$value['tax'];
 								if(isset($value['payment_date']) && $value['payment_date']!=''){
@@ -165,9 +176,16 @@ a:hover, a:active, a:focus {
 									<!-- <label class="control-label col-md-3 col-sm-12 col-xs-12 " for="category_name">
 										Item <font color="red"><span class="required">*</span></font> :
 									</label> -->
+									<div class="col-md-1 col-sm-2 col-xs-2">
+										<?php
+										if($value['item_status']==1){?>
+								    			<input type="checkbox" <?php if($val['status']==1) {?> checked="checked"<?php } ?>  id="mark_us_deliver_<?php echo $value['item_id'];?>" value="<?php echo $value['item_id'];?>" disabled readonly>
+								   			 <?php  } else {?>
+								    			<input type="checkbox" id="mark_us_deliver_<?php echo $value['item_id'];?>" name="ch[]" value="<?php echo $value['item_id'];?>" onchange="mark_check()">
+								    	<?php } ?>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-3">
 
-									<div class="col-md-5 col-sm-3 col-xs-3">
-										
 									<select class="form-control select2 product_id" name="product_id<?php echo $key+1;?>" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,<?php echo $key+1;?>)">
 									    <option value="" selected >All</option>
 									    <?php
@@ -195,6 +213,15 @@ a:hover, a:active, a:focus {
 									</div>
 									<div class="col-md-2 col-sm-2 col-xs-2" >
 										<input type="text" name="price_<?php echo $key+1;?>" id="rate" value="<?php echo $value['price'];?>" required="required" class=" form-control width_80 price_<?php echo $key+1;?>" onchange="order_sum()" readonly>
+									</div>
+									<div class="col-md-1 col-sm-2 col-xs-2">
+										<?php 
+											if($value['item_status']==1){
+												echo 'Delivered';
+											}else {
+												echo 'Pending';
+											}
+										?>
 									</div>
 									<div class="col-md-1 col-sm-2 col-xs-2">
 										<a class='btn btn-danger' onclick="remove_item(<?php echo $key+1;?>);" data-toggle='tooltip' title='Delete' ><i class='fa fa-close'></i></a>
@@ -870,6 +897,34 @@ function order_sum(){
 		$("#tax").val(amountAfterTax);
 	}
 }
+
+$("#delivered").click(function(){
+    var checked = []
+    $("input[name='ch[]']:checked").each(function (){
+        checked.push(parseInt($(this).val()));
+    });
+    $.ajax({
+	    type : "POST",
+	    url : "<?php echo base_url().$this->controller."/price_fetch1/" ?>",
+	    data : {checked:checked},
+	    dataType: "json",
+	    success : function (data){
+	    	if(data.status="success"){
+	    		window.location.reload();
+	    	}
+	    }
+	});
+}); 
+
+$("input[type='checkbox']").change(function () { 
+	if ($(this).is(":checked")) {
+    	$(".delivered").removeAttr("disabled");
+	} else {
+		$(".delivered").attr("disabled",true);
+	}
+});
+	
+    
 
 
 function taxToRateConversion() 

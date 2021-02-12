@@ -838,6 +838,7 @@ You can change this password from mobile application after you are logged in onc
                     }
                       
                          $orderProductArray = json_decode($data['product_id'], true);
+
                         //$orderProductArray = $this->db->get("products")->result_array();
                         // Checking Email exist in our application
                         
@@ -930,7 +931,7 @@ You can change this password from mobile application after you are logged in onc
                                     'price'     => $orderProductArray[$k]['price'],
                                     'rate'      => $rate,
                                     'created'   => date('Y-m-d h:i:s'));
-                                
+                            
                                 $this->$model->insert('order_products', $product_orders);
 
                                 $this->db->select('*');
@@ -1297,9 +1298,22 @@ $pdf2->Output($fileNL_invoice, 'F');
                     }
                      $companyName = $userData[0]['company_name'];
                    
-                       $mail = new PHPMailer;
+                            $mail = new PHPMailer;
                             //$mail->isSMTP();
                             $mail->isMail();
+                            $mail->Host = Mail_Host;                      
+                            $mail->SMTPAuth = true;                               
+                            $mail->Username = Mail_Username;     
+                            $mail->Password = Mail_Password;                    
+                            $mail->SMTPOptions = array(
+                              'ssl' => array(
+                              'verify_peer' => false,
+                              'verify_peer_name' => false,
+                                'allow_self_signed' => true
+                                )
+                            );                         
+                            $mail->SMTPSecure = 'tls';                           
+                            $mail->Port = 587; 
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                    
                             $mail->Subject = "New Order from $companyName";
@@ -1331,6 +1345,19 @@ $pdf2->Output($fileNL_invoice, 'F');
                             
                             $new_mail = new PHPMailer;
                             $new_mail->isMail();
+                            $mail->Host = Mail_Host;                      
+                            $mail->SMTPAuth = true;                               
+                            $mail->Username = Mail_Username;     
+                            $mail->Password = Mail_Password;                    
+                            $mail->SMTPOptions = array(
+                              'ssl' => array(
+                              'verify_peer' => false,
+                              'verify_peer_name' => false,
+                                'allow_self_signed' => true
+                                )
+                            );                         
+                            $mail->SMTPSecure = 'tls';                           
+                            $mail->Port = 587; 
                             $new_mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $new_mail->Subject = "Order Confirmation";
                             $new_mail->MsgHTML('

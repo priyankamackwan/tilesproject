@@ -625,6 +625,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             $data['primary_id'] = $this->primary_id;
             $data['controller'] = $this->controller;
             $data['activeProducts'] = $this->db->get("products")->result_array();
+            $data['subProduct'] = $this->db->where('order_id',$id)->get("order_products")->result_array();
             $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
             $data['activecustomer'] = $this->db->where('status',1)->get("users")->result_array();
             $data['id']=$id;
@@ -1986,6 +1987,20 @@ for($p=0;$p<count($finalOrderData);$p++) {
         echo json_encode(array("status"=>$status,"message"=>$message));
         exit;
     }
+    
+    public function price_fetch1() { 
+        foreach($_POST['checked'] as $page_id) {
+            $this->db->where('id',$page_id);
+            $order_status = $this->db->update('order_products',['status' => 1]);
+        }
+        if($order_status){
+            $message='Order Delivery Status Updated Successfully....'; 
+            $status='success';   
+        }        
+        echo json_encode(array("status"=>$status,"message"=>$message));
+        exit;
+    } 
+
     // price fetch on add items
     function price_fetch(){
         $message="Something went wrong..Try after sometime";
@@ -2014,4 +2029,6 @@ for($p=0;$p<count($finalOrderData);$p++) {
     }
                 
 	}
+
+    
 ?>
