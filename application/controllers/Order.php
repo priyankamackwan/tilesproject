@@ -2006,8 +2006,9 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $this->db->where('id',$order_id);
             $this->db->update('orders',['status' => 0]);
         }else {
+            $current = date('Y-m-d H:i:s');
             $this->db->where('id',$order_id);
-            $this->db->update('orders',['status' => 1]);
+            $this->db->update('orders',['status' => 1,'delivery_date' => $current]);
         }
         if($order_status){
             $message='Order Delivery Status Updated Successfully....'; 

@@ -915,7 +915,6 @@ $("#delivered").click(function(){
 	    	}
 	    }
 	});
-	return false;
 }); 
 
 $("input[type='checkbox']").change(function () { 
