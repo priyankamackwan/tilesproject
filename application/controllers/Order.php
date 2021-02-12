@@ -52,11 +52,11 @@ use PHPMailer\PHPMailer\PHPMailer;
             $data['msgDisplay'] = $this->msgDisplay;
              
             // temp query
-            $update =  $this->db->get('orders')->result_array();
-            foreach ($update as $key => $value) {
-                $this->db->where('order_id',$value['id']);
-                $this->db->update('order_products',['status' => $value['status']]);
-            }
+            // $update =  $this->db->get('orders')->result_array();
+            // foreach ($update as $key => $value) {
+            //     $this->db->where('order_id',$value['id']);
+            //     $this->db->update('order_products',['status' => $value['status']]);
+            // }
 
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
