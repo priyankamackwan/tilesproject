@@ -625,7 +625,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             $data['primary_id'] = $this->primary_id;
             $data['controller'] = $this->controller;
             $data['activeProducts'] = $this->db->get("products")->result_array();
-            $data['subProduct'] = $this->db->where('order_id',$id)->get("order_products")->result_array();
+
             $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
             $data['activecustomer'] = $this->db->where('status',1)->get("users")->result_array();
             $data['id']=$id;
@@ -1992,6 +1992,22 @@ for($p=0;$p<count($finalOrderData);$p++) {
         foreach($_POST['checked'] as $page_id) {
             $this->db->where('id',$page_id);
             $order_status = $this->db->update('order_products',['status' => 1]);
+        }
+
+        $order_id = $_POST['id'];
+        $items = $this->db->get_where("order_products",array('order_id =' => $order_id))->result_array();
+        $pending=0;
+        foreach ($items as $key => $val) {
+            if($val['status']==0) {
+                $pending = $pending + 1;
+            }
+        }
+        if($pending!=0) {
+            $this->db->where('id',$order_id);
+            $this->db->update('orders',['status' => 0]);
+        }else {
+            $this->db->where('id',$order_id);
+            $this->db->update('orders',['status' => 1]);
         }
         if($order_status){
             $message='Order Delivery Status Updated Successfully....'; 

@@ -899,6 +899,7 @@ function order_sum(){
 }
 
 $("#delivered").click(function(){
+	var id = "<?php echo $id;?>";
     var checked = []
     $("input[name='ch[]']:checked").each(function (){
         checked.push(parseInt($(this).val()));
@@ -906,7 +907,7 @@ $("#delivered").click(function(){
     $.ajax({
 	    type : "POST",
 	    url : "<?php echo base_url().$this->controller."/price_fetch1/" ?>",
-	    data : {checked:checked},
+	    data : {checked:checked,id:id},
 	    dataType: "json",
 	    success : function (data){
 	    	if(data.status="success"){
@@ -914,6 +915,7 @@ $("#delivered").click(function(){
 	    	}
 	    }
 	});
+	return false;
 }); 
 
 $("input[type='checkbox']").change(function () { 
