@@ -51,12 +51,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 			$data['view'] = $this->view;
             $data['msgDisplay'] = $this->msgDisplay;
              
-            // temp
+            // temp query
             $update =  $this->db->get('orders')->result_array();
             foreach ($update as $key => $value) {
                 $this->db->where('order_id',$value['id']);
                 $this->db->update('order_products',['status' => $value['status']]);
             }
+
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
             $data['activeUsers'] = $this->db->where('status',1)->where('is_deleted',0)->get("users")->result_array();
@@ -1995,10 +1996,11 @@ for($p=0;$p<count($finalOrderData);$p++) {
         exit;
     }
     
+    // item status update
     public function price_fetch1() { 
         foreach($_POST['checked'] as $page_id) {
             $this->db->where('id',$page_id);
-            $order_status = $this->db->update('order_products',['status' => 1]);
+            $order_status = $this->db->update('order_products',['status' => 2]);
         }
 
         $order_id = $_POST['id'];
