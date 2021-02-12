@@ -327,7 +327,7 @@
                                             <option value="">All Delivery Status</option>
                                             <option value="pending">Pending</option>
                                             <option value="inprogress">In Progress</option>
-                                            <option value="completed">Completed</option>
+                                            <option value="delivered">Delivered</option>
                                         </select>
                                     </div>
                                 </div>

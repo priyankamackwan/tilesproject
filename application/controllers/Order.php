@@ -51,6 +51,12 @@ use PHPMailer\PHPMailer\PHPMailer;
 			$data['view'] = $this->view;
             $data['msgDisplay'] = $this->msgDisplay;
              
+            // temp
+            $update =  $this->db->get('orders')->result_array();
+            foreach ($update as $key => $value) {
+                $this->db->where('order_id',$value['id']);
+                $this->db->update('order_products',['status' => $value['status']]);
+            }
             $this->db->where('status',1);
             $this->db->where('is_deleted',0);
             $data['activeUsers'] = $this->db->where('status',1)->where('is_deleted',0)->get("users")->result_array();
@@ -69,6 +75,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 
 		public function server_data() {
             $model = $this->model;
+
 
             // Column array
             $columnArray = array(
@@ -181,7 +188,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $order_status = 0;
                 }elseif (strtolower($status) == 'inprogress') {
                     $order_status = 1;
-                }elseif (strtolower($status) == 'completed') {
+                }elseif (strtolower($status) == 'delivered') {
                     $order_status = 2;
                 }
 
@@ -214,7 +221,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $status = 0;
                 }elseif (strtolower($this->input->post('search')['value']) == 'inprogress') {
                     $status = 1;
-                }elseif (strtolower($this->input->post('search')['value']) == 'completed') {
+                }elseif (strtolower($this->input->post('search')['value']) == 'delivered') {
                     $status = 2;
                 }
 
@@ -359,7 +366,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                     } else {
 
-                        $tabledata['status'] ='Completed';
+                        $tabledata['status'] ='Delivered';
                     }
 
                     // Created date for sales order.
@@ -2008,7 +2015,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
         }else {
             $current = date('Y-m-d H:i:s');
             $this->db->where('id',$order_id);
-            $this->db->update('orders',['status' => 1,'delivery_date' => $current]);
+            $this->db->update('orders',['status' => 2,'delivery_date' => $current]);
         }
         if($order_status){
             $message='Order Delivery Status Updated Successfully....'; 
