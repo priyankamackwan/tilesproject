@@ -203,10 +203,20 @@ a:hover, a:active, a:focus {
 								
 									</div>
 									<div class="col-md-2 col-sm-3 col-xs-3" >
-										<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onchange="order_sum()">
+										<?php
+										if($value['item_status']==2){?>
+											<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onchange="order_sum()" disabled readonly>
+										<?php } else { ?>
+											<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" value="<?php echo $value['quantity'];?>" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onchange="order_sum()">
+										<?php } ?>
 									</div>
 									<div class="col-md-2 col-sm-2 col-xs-2" >
-										<input type="text" name="rate_<?php echo $key+1;?>" id="price" value="<?php echo $value['rate'];?>" required="required" class=" form-control width_80 rate_<?php echo $key+1;?>" onchange="order_sum()">
+										<?php
+										if($value['item_status']==2){?>
+										<input type="text" name="rate_<?php echo $key+1;?>" id="price" value="<?php echo $value['rate'];?>" required="required" class=" form-control width_80 rate_<?php echo $key+1;?>" onchange="order_sum()" disabled readonly>
+										<?php } else { ?>
+											<input type="text" name="rate_<?php echo $key+1;?>" id="price" value="<?php echo $value['rate'];?>" required="required" class=" form-control width_80 rate_<?php echo $key+1;?>" onchange="order_sum()">
+										<?php } ?>
 									</div>
 									<div class="col-md-2 col-sm-2 col-xs-2" >
 										<input type="text" name="price_<?php echo $key+1;?>" id="rate" value="<?php echo $value['price'];?>" required="required" class=" form-control width_80 price_<?php echo $key+1;?>" onchange="order_sum()" readonly>
