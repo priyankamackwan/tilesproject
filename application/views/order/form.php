@@ -866,6 +866,7 @@ $("#delivered").click(function(){
 	    dataType: "json",
 	    success : function (data){
 	    	if(data.status="success"){
+	    		$("#prevMonthLeaveDatahtml").html("<h1> Order Delivered Status Updated Succeessfully..... </h1>");
 	    		window.location.reload();
 	    	}
 	    }

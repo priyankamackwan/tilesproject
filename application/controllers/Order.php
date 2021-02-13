@@ -2065,6 +2065,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $this->db->where('id',$order_id);
             $this->db->update('orders',['status' => 2,'delivery_date' => $current]);
         }
+        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Order Delivery Status Updated Successfully....</div>');
         if($order_status){
             $message='Order Delivery Status Updated Successfully....'; 
             $status='success';   
