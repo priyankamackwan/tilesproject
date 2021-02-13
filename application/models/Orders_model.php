@@ -338,7 +338,7 @@
 
             $this->db->where($this->users_table.'.status',1);
 
-            // $this->db->group_by($this->orders_table.'.id');
+             $this->db->group_by($this->order_products_table.'.order_id');
 
             $allorderData = $this->db->get();
             
