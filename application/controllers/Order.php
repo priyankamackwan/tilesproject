@@ -1215,7 +1215,6 @@ $pdf->Output($do_no.'.pdf','D');
                 
 		public function Update() 
         {
-                    
 			$model = $this->model;
 			$id = $this->input->post('id');
 			$sales_expense = $this->input->post('sales_expense');

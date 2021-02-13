@@ -82,18 +82,17 @@ a:hover, a:active, a:focus {
 	<!-- Main content section start-->
 	<section class="content">
 		<div class="row">
-			<div class="col-md-10 col-sm-12 col-xs-12">
+			<div class="col-md-11 col-sm-12 col-xs-12">
 
 				<div class="box box-primary">
 					<div class="box-header">
 						<h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
 						&nbsp;&nbsp;
-
 						<input type="submit" name="delivered" id="delivered" class="btn btn-primary delivered" value="Mark us delivered" disabled="disabled">
 					</div>
 
 					<div class="box-body">
-						
+						<form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update_order';?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 							
 							<input type="hidden" id="id" name="id" value="<?php echo $id;?>">
 							<input type="hidden" id="action" name="action" value="<?php echo $action;?>">
@@ -102,7 +101,7 @@ a:hover, a:active, a:focus {
 									</div> -->
 									<div class="col-md-12 col-sm-12 col-xs-12 ">
 										<div class="col-md-1 col-sm-2 col-xs-2">
-											<label class="maxwidth300">Select</label>					
+											<label class="maxwidth300">Select</label>
 										</div>
 										<div class="col-md-3 col-sm-3 col-xs-3">
 											<label class="maxwidth300">Item Name (Design No)</label>
@@ -117,7 +116,7 @@ a:hover, a:active, a:focus {
 											<label class="maxwidth300">Price</label>								
 										</div>
 										<div class="col-md-1 col-sm-2 col-xs-2">
-											<label class="maxwidth300">Status</label>					
+											<label class="maxwidth300">Status</label>
 										</div>
 										<div class="col-md-1 col-sm-2 col-xs-2">
 											<label class="maxwidth300" style="max-width: 125%;">Delete</label>
@@ -126,7 +125,6 @@ a:hover, a:active, a:focus {
 									<!-- Show byuing product -->
 							<div id="new_item_add">		
 							<?php 
-							
 							$username=$total_price=$sales_expense=$status=$invoice_status=$payment_date=$delivery_date=$price=$client_type=$cargo=$cargo_number=$location=$mark=$invoice_no=$do_no=$lpo_no=$tax=[];
 							foreach ($result as $key => $value) {
 								$username=$value['company_name'];
@@ -134,7 +132,6 @@ a:hover, a:active, a:focus {
 								$sales_expense=$value['sales_expense'];
 								$status=$value['status'];
 								$invoice_status=$value['invoice_status'];
-								
 								//tax saved for orders
 								$tax=$value['tax'];
 								if(isset($value['payment_date']) && $value['payment_date']!=''){
@@ -181,11 +178,11 @@ a:hover, a:active, a:focus {
 										if($value['item_status']==2){?>
 								    			<input type="checkbox" <?php if($val['status']==1) {?> checked="checked"<?php } ?>  id="mark_us_deliver_<?php echo $value['item_id'];?>" value="<?php echo $value['item_id'];?>" disabled readonly>
 								   			 <?php  } else {?>
-								    			<input type="checkbox" id="mark_us_deliver_<?php echo $value['item_id'];?>" name="ch[]" value="<?php echo $value['item_id'];?>" onchange="mark_check()" class="check">
+								    			<input type="checkbox" id="mark_us_deliver_<?php echo $value['item_id'];?>" name="ch[]" value="<?php echo $value['item_id'];?>" class="check">
 								    	<?php } ?>
 									</div>
 									<div class="col-md-3 col-sm-3 col-xs-3">
-
+										
 									<select class="form-control select2 product_id" name="product_id<?php echo $key+1;?>" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,<?php echo $key+1;?>)">
 									    <option value="" selected >All</option>
 									    <?php
@@ -214,7 +211,7 @@ a:hover, a:active, a:focus {
 									<div class="col-md-2 col-sm-2 col-xs-2" >
 										<input type="text" name="price_<?php echo $key+1;?>" id="rate" value="<?php echo $value['price'];?>" required="required" class=" form-control width_80 price_<?php echo $key+1;?>" onchange="order_sum()" readonly>
 									</div>
-									<div class="col-md-1 col-sm-2 col-xs-2">
+									<div class="col-md-1 col-sm-2 col-xs-2" style="font-size:12px;">
 										<?php 
 											if($value['item_status']==2){
 												echo 'Delivered';
@@ -238,315 +235,276 @@ a:hover, a:active, a:focus {
 									<a class="pull-right" data-toggle="tooltip" title="" data-original-title="Add more items" onclick="add_more_items();"><i class="fa fa-plus"></i> Add More Items</a>
 							</div>
 
-
-								<!-- Tax-->
-								<div class="col-md-1">
+							<!-- Tax-->
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Tax <font color="red"><span class="required">*</span></font> :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+									<input type="text" name="tax" id="tax" value="<?php if(isset($tax) && $tax!='' ){ echo $tax;}else{ echo Vat;}?>" class="form-control " placeholder="Enter total tax" required="required" readonly>
 								</div>
-								<div class="col-md-11">
-									<div class="form-group">
-									<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Tax <font color="red"><span class="required">*</span></font> :</label>
-									<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-										<input type="text" name="tax" id="tax" value="<?php if(isset($tax) && $tax!='' ){ echo $tax;}else{ echo Vat;}?>" class="form-control " placeholder="Enter total tax" required="required" readonly>
-									</div>
-									</div>
-								
-									<!-- Tax-->
+							</div>
+							<!-- Tax-->
 
-									<!-- Tax in (%) start-->
-									<div class="form-group">
-										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Tax in (%) <font color="red"><span class="required">*</span></font> :</label>
-										<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-										<input type="text" name="tax_percentage" id="tax_percentage" value="<?php if(isset($tax_percentage) && $tax_percentage!='' ){ echo $tax_percentage;}else{ echo Vat;}?>" class="form-control " placeholder="Enter tax percentage" required="required" onchange="taxToRateConversion()" onkeypress="return percentageCalculation(event);">
-										<!-- Add error for alert -->
-										<label id="tax_percentage_error" class="text-danger" for="tax_percentage_error" style="display: none;">Tax percentage not be less than zero.</label>
-										</div>
-									</div>
-									<!-- Tax in (%) end-->
+							<!-- Tax in (%) start-->
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Tax in (%) <font color="red"><span class="required">*</span></font> :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<input type="text" name="tax_percentage" id="tax_percentage" value="<?php if(isset($tax_percentage) && $tax_percentage!='' ){ echo $tax_percentage;}else{ echo Vat;}?>" class="form-control " placeholder="Enter tax percentage" required="required" onchange="taxToRateConversion()" onkeypress="return percentageCalculation(event);">
+								<!-- Add error for alert -->
+								<label id="tax_percentage_error" class="text-danger" for="tax_percentage_error" style="display: none;">Tax percentage not be less than zero.</label>
+								</div>
+							</div>
+							<!-- Tax in (%) end-->
 
-									<!-- Total price-->
-									<div class="form-group">
-										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Total Price <font color="red"><span class="required">*</span></font> :</label>
-										<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-											<input type="text" name="total_price" id="total_price" value="<?php echo $total_price;?>" class="form-control " placeholder="Enter total price" required="required" readonly>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">User Name :</label>
-										<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-										<select name="username" id="username">
-											<?php 
-											if(!empty($activecustomer)){
-												foreach ($activecustomer as $key => $value) { ?>
-													<option value="<?=$value['id'];?>" <?php if ($value['company_name']==$username) { ?>selected="selected"<?php } ?>><?=$value['company_name'];?></option>
-											<?php }}?>
-										</select>
-										</div>
-									</div>
-									<!-- Add lpo,do and invoice number -->
-									<div class="form-group">
-										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">LPO No :</label>
-										<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-										<?php echo $lpo_no;?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Do No :</label>
-										<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-										<?php echo $do_no;?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Invoice No :</label>
-										<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-										<?php echo $invoice_no;?>
-										</div>
-									</div>
-									<div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-						                  Cargo :
-						                </label>
+							<!-- Total price-->
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Total Price <font color="red"><span class="required">*</span></font> :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+									<input type="text" name="total_price" id="total_price" value="<?php echo $total_price;?>" class="form-control " placeholder="Enter total price" required="required" readonly>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">User Name :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+									<select name="username" id="username">
+										<?php 
+										if(!empty($activecustomer)){
+											foreach ($activecustomer as $key => $value) { ?>
+												<option value="<?=$value['id'];?>" <?php if ($value['company_name']==$username) { ?>selected="selected"<?php } ?>><?=$value['company_name'];?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+							<!-- Add lpo,do and invoice number -->
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">LPO No :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<?php echo $lpo_no;?>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Do No :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<?php echo $do_no;?>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Invoice No :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+								<?php echo $invoice_no;?>
+								</div>
+							</div>
 
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <input type="text" name="cargo" value="<?php echo $cargo;?>" class="form-control " placeholder="Enter Cargo" required="required">
-						                </div>
-						              </div>
-						              <div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-						                  Cargo Number :
-						                </label>
+							<div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Cargo :
+				                </label>
 
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <input type="text" name="cargo_number" value="<?php echo $cargo_number;?>" class="form-control " placeholder="Enter Cargo Number" required="required">
-						                </div>
-						              </div>
-						              <!-- add new feild Legacy Invoice Number -->
-						              <div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-						                  Legacy Invoice Number :
-						                </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="cargo" value="<?php echo $cargo;?>" class="form-control " placeholder="Enter Cargo" required="required">
+				                </div>
+				              </div>
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Cargo Number :
+				                </label>
 
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <input type="text" name="legacy_invoice_no" value="<?php if(!empty($result[0]['legacy_invoice_no'])) {echo $result[0]['legacy_invoice_no'];}?>" class="form-control " placeholder="Enter Legacy Invoice Number" >
-						                </div>
-						              </div>
-						              <div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-						                  Location :
-						                </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="cargo_number" value="<?php echo $cargo_number;?>" class="form-control " placeholder="Enter Cargo Number" required="required">
+				                </div>
+				              </div>
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Location :
+				                </label>
 
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <input type="text" name="location" value="<?php echo $location;?>" class="form-control " placeholder="Enter Location" required="required">
-						                </div>
-						              </div>
-						              <div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-						                  Mark :
-						                </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="location" value="<?php echo $location;?>" class="form-control " placeholder="Enter Location" required="required">
+				                </div>
+				              </div>
+				              <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Mark :
+				                </label>
 
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <input type="text" name="mark" value="<?php echo $mark;?>" class="form-control " placeholder="Enter mark" required="required">
-						                </div>
-						              </div>
-									<div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
-						                  Sales Expense :
-						                </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="mark" value="<?php echo $mark;?>" class="form-control " placeholder="Enter mark" required="required">
+				                </div>
+				              </div>
+							<div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="sales_expense">
+				                  Sales Expense :
+				                </label>
 
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <input type="text" name="sales_expense" value="<?php echo $sales_expense;?>" class="form-control " placeholder="Enter Sales Expense">
-						                </div>
-						              </div>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <input type="text" name="sales_expense" value="<?php echo $sales_expense;?>" class="form-control " placeholder="Enter Sales Expense">
+				                </div>
+				              </div>
 
-						              
-						             <!--  <div class="form-group" id="id_delivery_date" <?php if ($status != 2) { ?> style="display: none;" <?php } ?> >  if delivery status is completed then display the date div 
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="delivery_date">
-						                  Delivery Date :
-						                </label>
-
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <div class='input-group date' id='delivery_datetimepicker'>
-						                      	<?php 
-						                        if ($status != 2) 
-						                        {
-						                            $delivery_date_value="";
-						                        }else{
-						                            $delivery_date_value=date('d/m/Y h:i A',strtotime($delivery_date));
-						                        }
-						                      ?>
-						                      <input type='text' class="form-control" id="txt_deliverydate" name="deliverydate" value="<?php echo $delivery_date_value; ?>" required="required"/>
-						                      <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-calendar" id="delivery_gly"></span>
-						                      </span>
-						                  </div>
-						                </div>
-						              </div> --> 
-						            <div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-						                  Payment Status :
-						                </label>
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <select name="invoice_status" style="width: 100%;" class="form-control select2" id="payment_status">
-						                        <option value="0" <?php if($invoice_status==1){echo 'selected';}?>>Unpaid</option>
-						                        <option value="1" <?php if($invoice_status==1){echo 'selected';}?>>Paid</option>
-						                    ?> 
-						                  </select>
-						                </div>
-						            </div>
-						            <div class="form-group">
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
-						                  Payment Details :
-						                </label>
-						            </div>
-						        </div>
-						        	<div class="col-md-12">
-
-							        <table border ="1" width="100%" class="table main-table table-bordered table-hover table-striped dataTable no-footer" id="datatables1">
-							              	<thead>
-								                    <tr class="">
-								                      <th style="text-align: center">Date</th>
-								                      <th style="text-align: center">Payment Mode</th>
-								                      <th style="text-align: center">Reference Id</th>
-								                      <th style="text-align: center">Amount</th>
-								                      <th style="text-align: center">Action</th>
-								                    </tr>
-							                	</thead>
-								                <?php
-								                if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
-								              ?>
-					
-							                	<tbody>
-							                    <?php
-							                    foreach ($payment_history as $key => $payment_history_val) {
-							                    	$totalPaidAmount +=$payment_history_val['amount'];
-							                    	$delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($payment_history_val['id']));
-							                    ?>
-								                    <tr>
-									                    <td style="text-align: center" >
-									                    	<?php
-									                    	if(isset($payment_history_val['payment_date']) && $payment_history_val['payment_date']!=''){
-									                    		echo date('d/m/Y',strtotime($payment_history_val['payment_date']));
-									                    	}
-									                    	?>
-									                    </td>
-									                    <td>
-									                    	<?php
-									                    	if(isset($payment_history_val['payment_mode']) && $payment_history_val['payment_mode']!=''){
-									                    		echo $payment_history_val['payment_mode'];
-									                    	}
-									                    	?>
-									                    </td>
-									                    <td>
-									                    	<?php
-									                    	if(isset($payment_history_val['reference']) && $payment_history_val['reference']!=''){
-									                    		echo $payment_history_val['reference'];
-									                    	}
-									                    	?>
-									                    </td>
-									                    <td style="text-align: right;">
-									                    	<?php
-									                    	if(isset($payment_history_val['amount']) && $payment_history_val['amount']!=''){
-									                    		echo $this->My_model->getamount(round($payment_history_val['amount'],2));
-									                    	}
-									                    	?>
-									                    </td>
-									                    <td style="text-align: center;">
-									                    	<a onclick="edit_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>)" class="btn btn-primary btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
-									                    </td>
-								                	</tr>
-							                    <?php
-							                    }
-							                    //order tax
-							                    $orderTax= $tax ; 
-							                    ?> 
-							                	</tbody>
-							                	<tbody style="border-top: 2px solid black;">
-							                		<tr style="border: 1px solid black;">
-							                			<td></td>
-							                			<td></td>
-							                			<th>Total</th>
-							                			<td style="text-align: right;"><?php echo $this->My_model->getamount(round($totalPaidAmount,2));?></td>
-							                			<td></td>
-							                		</tr>
-							                		<tr>
-							                			<td></td>
-							                			<td></td>
-							                			<th>Balance</th>
-							                			<td style="text-align: right;">
-							                				<?php
-							                				echo $this->My_model->getamount(round($total_price + $orderTax -$totalPaidAmount,2));
-							                				?>
-							                			</td>
-							                			<td></td>
-							                		</tr>
-							                		<tr>
-							                			<td></td>
-							                			<td></td>
-							                			<th>Total Invoice Amount</th>
-							                			<td style="text-align: right;">
-							                				<?php
-							                				echo $this->My_model->getamount(round($total_price+$orderTax,2));
-							                				?>
-							                			</td>
-							                			<td></td>
-							                		</tr>
-							                	</tbody>
-							                
-						                <?php
-						            	}
-						                ?>
-				                	</table>
-					            <!-- payment date -->
-					            <?php
-				              	//balacne amount
-				              	$mpayment=$total_price-$totalPaidAmount+ $orderTax;
-				              	if($mpayment > 0){
-				              	?>
-				              	<div class="form-group" id="id_payment_date" <?php /*if ($invoice_status == 0) { ?> style="display: none;" <?php }*/?> >
-					              	<label class="control-label col-md-3 col-sm-12 col-xs-12 pull-right" for="payment_date">
-						              	<a href="javascript:void(0);" title="Make Payment" id="prevousData" class="btn btn-success" onclick="make_payment(<?php echo $id;?>)">
-						              		Make Payment
-						              	</a>
-					              	</label>
-				              	</div>
-				                <?php
-				          		}
-				                ?>
-				                <?php
-					              /*
-					              <div class="form-group" id="id_payment_date" <?php if ($invoice_status != 1) { ?> style="display: none;" <?php } ?> > 
-						                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
-						                  Payment Date :
-						                </label>
-						                <div class="col-md-9 col-sm-12 col-xs-12">
-						                  <div class='input-group date' id='payment_datetimepicker'>
-						                      <?php 
-						                            if ($invoice_status != 1){
-						                              $payment_date_value="";
-						                            }else{
-						                              $payment_date_value=date('d/m/Y h:i A',strtotime($payment_date));
-						                            }
-						                      ?>
-						                      <input type='text' class="form-control" id="paymentdate" name="paymentdate" value="<?php echo $payment_date_value; ?>" required="required"/>
-						                      <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
-						                      </span>
-						                  </div>
-						                </div>
-						              </div>
-						              */
-				              	    ?>
-				            	
-					               <input type="hidden" name="price" value="<?php echo $price;?>">
-					               <input type="hidden" name="client_type" id="client_type" value="<?php echo $client_type;?>">
 				              
-				             	<div class="form-group">
-				              		<div class="col-md-3 col-sm-12 col-xs-12"></div>
-								</div>
+				              
 
+			              <div class="form-group">
+			                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+			                  Payment Status :
+			                </label>
+			                <div class="col-md-9 col-sm-12 col-xs-12">
+			                  <select name="invoice_status" style="width: 100%;" class="form-control select2" id="payment_status">
+			                        <option value="0" <?php if($invoice_status==1){echo 'selected';}?>>Unpaid</option>
+			                        <option value="1" <?php if($invoice_status==1){echo 'selected';}?>>Paid</option>
+			                    ?> 
+			                  </select>
+			                </div>
+			              </div>
+			              <div class="form-group">
+			                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
+			                  Payment Details :
+			                </label>
+			              </div>
+			              <table border ="1" width="100%" class="table main-table table-bordered table-hover table-striped dataTable no-footer" id="datatables1">
+			              	<thead>
+				                    <tr class="">
+				                      <th style="text-align: center">Date</th>
+				                      <th style="text-align: center">Payment Mode</th>
+				                      <th style="text-align: center">Reference Id</th>
+				                      <th style="text-align: center">Amount</th>
+				                      <th style="text-align: center">Action</th>
+				                    </tr>
+			                	</thead>
+			              <?php
+			              if(isset($payment_history) && $payment_history!='' && count($payment_history) >0){
+			              ?>
+	
+			                	<tbody>
+			                    <?php
+			                    foreach ($payment_history as $key => $payment_history_val) {
+			                    	$totalPaidAmount +=$payment_history_val['amount'];
+			                    	$delete = base_url($this->controller.'/removePayment/'.$this->utility->encode($payment_history_val['id']));
+			                    ?>
+				                    <tr>
+					                    <td style="text-align: center" >
+					                    	<?php
+					                    	if(isset($payment_history_val['payment_date']) && $payment_history_val['payment_date']!=''){
+					                    		echo date('d/m/Y',strtotime($payment_history_val['payment_date']));
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td>
+					                    	<?php
+					                    	if(isset($payment_history_val['payment_mode']) && $payment_history_val['payment_mode']!=''){
+					                    		echo $payment_history_val['payment_mode'];
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td>
+					                    	<?php
+					                    	if(isset($payment_history_val['reference']) && $payment_history_val['reference']!=''){
+					                    		echo $payment_history_val['reference'];
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td style="text-align: right;">
+					                    	<?php
+					                    	if(isset($payment_history_val['amount']) && $payment_history_val['amount']!=''){
+					                    		echo $this->My_model->getamount(round($payment_history_val['amount'],2));
+					                    	}
+					                    	?>
+					                    </td>
+					                    <td style="text-align: center;">
+					                    	<a onclick="edit_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>)" class="btn btn-primary btn-sm" style="padding: 8px;margin-top:1px;" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a onclick="delete_payment(<?php echo $id;?>,<?php echo $payment_history_val['id'];?>);" class="btn btn-danger btn-sm" style="padding: 9px;margin-top:1px;" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>
+					                    </td>
+				                	</tr>
+			                    <?php
+			                    }
+			                    //order tax
+			                    $orderTax= $tax ; 
+			                    ?> 
+			                	</tbody>
+			                	<tbody style="border-top: 2px solid black;">
+			                		<tr style="border: 1px solid black;">
+			                			<td></td>
+			                			<td></td>
+			                			<th>Total</th>
+			                			<td style="text-align: right;"><?php echo $this->My_model->getamount(round($totalPaidAmount,2));?></td>
+			                			<td></td>
+			                		</tr>
+			                		<tr>
+			                			<td></td>
+			                			<td></td>
+			                			<th>Balance</th>
+			                			<td style="text-align: right;">
+			                				<?php
+			                				echo $this->My_model->getamount(round($total_price + $orderTax -$totalPaidAmount,2));
+			                				?>
+			                			</td>
+			                			<td></td>
+			                		</tr>
+			                		<tr>
+			                			<td></td>
+			                			<td></td>
+			                			<th>Total Invoice Amount</th>
+			                			<td style="text-align: right;">
+			                				<?php
+			                				echo $this->My_model->getamount(round($total_price+$orderTax,2));
+			                				?>
+			                			</td>
+			                			<td></td>
+			                		</tr>
+			                	</tbody>
+			                
+		                <?php
+		            	}
+		                ?>
+		                </table>
+			              <!-- payment date -->
+			              <?php
+			              //balacne amount
+			              $mpayment=$total_price-$totalPaidAmount+ $orderTax;
+			              if($mpayment > 0){
+			              	?>
+			              <div class="form-group" id="id_payment_date" <?php /*if ($invoice_status == 0) { ?> style="display: none;" <?php }*/?> >
+			              	<label class="control-label col-md-3 col-sm-12 col-xs-12 pull-right" for="payment_date">
+				              	<a href="javascript:void(0);" title="Make Payment" id="prevousData" class="btn btn-success" onclick="make_payment(<?php echo $id;?>)">
+				              		Make Payment
+				              	</a>
+			              	</label>
+			              </div>
+			              <?php
+			          		}
+			              ?>
+			              <?php
+			              /*
+			              <div class="form-group" id="id_payment_date" <?php if ($invoice_status != 1) { ?> style="display: none;" <?php } ?> > 
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="payment_date">
+				                  Payment Date :
+				                </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                  <div class='input-group date' id='payment_datetimepicker'>
+				                      <?php 
+				                            if ($invoice_status != 1){
+				                              $payment_date_value="";
+				                            }else{
+				                              $payment_date_value=date('d/m/Y h:i A',strtotime($payment_date));
+				                            }
+				                      ?>
+				                      <input type='text' class="form-control" id="paymentdate" name="paymentdate" value="<?php echo $payment_date_value; ?>" required="required"/>
+				                      <span class="input-group-addon">
+				                        <span class="glyphicon glyphicon-calendar" id="payment_gly"></span>
+				                      </span>
+				                  </div>
+				                </div>
+				              </div>
+				              */
+				              ?>
+				              <input type="hidden" name="price" value="<?php echo $price;?>">
+				              <input type="hidden" name="client_type" id="client_type" value="<?php echo $client_type;?>">
+				              
+				              <div class="form-group">
+				              	<div class="col-md-3 col-sm-12 col-xs-12"></div>
+					              	
+								</div>
 								<div class="box-footer">
 									<input type="submit" class="btn btn-primary" value="Save<?php //echo $btn;?>">
 								</div>
-							</div>
 						</form>
 					</div>
 				</div>
@@ -668,9 +626,9 @@ function add_more_items(){
 	$("#new_item_add").append('<div id="delete_'+total_item+'">');
 
 
-	$("#delete_"+total_item).append('<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;"><div class="col-md-5 col-sm-3 col-xs-3"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
+	$("#delete_"+total_item).append('<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;"><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-3 col-sm-3 col-xs-3"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
-?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="rate_'+total_item+'" id="rate" required="required" class=" form-control width_80 rate_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
+?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="rate_'+total_item+'" id="rate" required="required" class=" form-control width_80 rate_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
 }
 function remove_item(id){
@@ -913,21 +871,11 @@ $("#delivered").click(function(){
 	    }
 	});
 }); 
-
-// $("input[type='checkbox']").change(function () { 
-// 	if ($(this).is(":checked")) {
-//     	$(".delivered").removeAttr("disabled");
-// 	} else {
-// 		$(".delivered").attr("disabled",true);
-// 	}
-// });
-
 var checks = $(':checkbox.check');
 
 checks.change(function() {
     $('.delivered').attr('disabled', ! checks.filter(':checked').length);
 });
-    
 
 
 function taxToRateConversion() 
@@ -965,6 +913,9 @@ function taxToRateConversion()
 	// 	return false;
 	// }
 }
+
+	
+
 
 $('#datatables1').dataTable({
 		"ordering": false,
