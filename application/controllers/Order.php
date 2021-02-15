@@ -195,9 +195,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                 }
 
                 if($where == null){
-                    $where .= 'orders.status = "'.$order_status.'"';
+                    $where .= 'order_products.status = "'.$order_status.'"';
                 }else{
-                    $where .= ' AND orders.status = "'.$order_status.'"';
+                    $where .= ' AND order_products.status = "'.$order_status.'"';
                 }
             }
 
