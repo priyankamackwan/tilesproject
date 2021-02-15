@@ -99,7 +99,8 @@
             // $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price) as invoiceAmount,(IF('.$this->orders_table.'.invoice_status = 1,'.$this->orders_table.'.total_price,0.00)) as paidAmount,(IF('.$this->orders_table.'.invoice_status = 0,'.$this->orders_table.'.total_price,0.00))as unpaidAmount');
 
             //order total price * tax
-            $this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price + orders.tax ) as invoiceAmount');
+            $this->db->select($this->orders_table.'.id,
+                (sum(order_products.price) + orders.tax ) as invoiceAmount');
 
             //$this->db->select($this->orders_table.'.id,('.$this->orders_table.'.total_price + orders.tax ) as invoiceAmountWithTax,'.$this->orders_table.'.total_price as invoiceAmount');
 
@@ -305,44 +306,5 @@
 
             $Amountdata = $rr->get()->row();
             return $Amountdata;
-        }
-
-        /* NEW Changes*/
-        // Get invoice paid total and unpaid amount and current date
-        public function get_invoiceAmount_for_product($where=null,$whereDate=null,$whereDatechange='no',$monthType='all')
-        {
-           $this->db->select($this->orders_table.'.tax, sum('
-            .$this->order_products_table.'.price) as total_rate' );
-           $this->db->from($this->orders_table);
-
-            $this->db->join($this->users_table,$this->orders_table.'.user_id = '.$this->users_table.'.id');
-
-            $this->db->join($this->order_products_table,$this->order_products_table.'.order_id = '.$this->orders_table.'.id','LEFT');
-            
-            if(!empty($where)){
-                
-                // Filter condition to add where
-                $this->db->where($where);
-            }
-            if(!empty($whereDate)){
-                
-                // Filter condition to add where
-                $this->db->where($whereDate);
-            }
-
-          
-
-            $this->db->where($this->orders_table.'.is_deleted',0);
-
-            $this->db->where($this->users_table.'.is_deleted',0);
-
-            $this->db->where($this->users_table.'.status',1);
-
-             $this->db->group_by($this->order_products_table.'.order_id');
-
-            $allorderData = $this->db->get();
-            
-            $result = $allorderData->result_array();
-            return $result;
         }
     }
