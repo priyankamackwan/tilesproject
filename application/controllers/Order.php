@@ -195,9 +195,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                 }
 
                 if($where == null){
-                    $where .= 'order_products.status = "'.$order_status.'"';
+                    $where .= 'orders.status = "'.$order_status.'"';
                 }else{
-                    $where .= ' AND order_products.status = "'.$order_status.'"';
+                    $where .= ' AND orders.status = "'.$order_status.'"';
                 }
             }
 
@@ -253,10 +253,9 @@ use PHPMailer\PHPMailer\PHPMailer;
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate);
                 // Get all Amounts of Invoice.
                 $totalAmounts = $this->orders_model->get_invoiceAmount();
-               
+
                 //Get current Month amount
                 $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
-                
 
                 //total history paymnet amount
                 $get_payment_history_all = $this->orders_model->get_payment_history();
@@ -277,7 +276,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                 //Get current Month amount
                 $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange,'current');
-
                 //$totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
 
                 //total history paymnet amount
@@ -476,7 +474,9 @@ use PHPMailer\PHPMailer\PHPMailer;
             // Total invoice mamount logic change invoiceAmount is tax with 0
             // $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount + $totalAmountsCurrentMonth->invoiceAmountWithTax;
 
+
             $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount;
+
 
             //Total paid amount from paymnet hostory table
             $totalPaidAmountCurrentMonth=$get_payment_history_currnet_month->historypaidamount;
