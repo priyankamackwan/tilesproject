@@ -16,11 +16,12 @@
         }
 
         // All order Data. date condition change
-        function get_OrderDatatables($limit = NUll,$start = NUll,$order = NUll,$dir = NUll,$where = NULL,$user_id = NUll,$role = NUll,$whereDate = NULL) {    
+        function get_OrderDatatables($limit = NUll,$start = NUll,$order = NUll,$dir = NUll,$where = NULL,$user_id = NUll,$role = NUll,$whereDate = NULL,$table = NULL) {    
             
            //$this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$this->orders_table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID');
 
             //my balance
+  
         if($user_id!="" && $role!="") // required parameters for android and ios
         {
             $this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.total_price,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.location,'.$this->orders_table.'.invoice_status,'.$this->orders_table.'.created,'.$this->users_table.'.company_name,'.$this->orders_table.'.tax,'.$this->orders_table.'.legacy_invoice_no');
@@ -28,7 +29,7 @@
             
         }else{    
 
-            $this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$this->order_products_table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID,'.$this->orders_table.'.placed_by,'.$this->orders_table.'.admin_id,'.$this->users_table.'.contact_person_name,'.$this->orders_table.'.legacy_invoice_no');
+            $this->db->select($this->orders_table.'.id,'.$this->orders_table.'.user_id ,'.$this->orders_table.'.tax,'.$this->orders_table.'.total_price,'.$this->orders_table.'.lpo_no,'.$this->orders_table.'.do_no,'.$this->orders_table.'.invoice_no,'.$this->orders_table.'.sales_expense,'.$this->orders_table.'.cargo,'.$this->orders_table.'.cargo_number,'.$this->orders_table.'.location,'.$this->orders_table.'.mark,'.$this->orders_table.'.invoice_status,'.$table.'.status,'.$this->orders_table.'.is_deleted,'.$this->orders_table.'.created,'.$this->orders_table.'.modified,'.$this->users_table.'.company_name,'.$this->users_table.'.id as UsertableID,'.$this->orders_table.'.placed_by,'.$this->orders_table.'.admin_id,'.$this->users_table.'.contact_person_name,'.$this->orders_table.'.legacy_invoice_no');
         }
 
             // Select from Order main table
