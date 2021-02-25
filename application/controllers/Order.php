@@ -256,10 +256,21 @@ use PHPMailer\PHPMailer\PHPMailer;
                 // Get all records with limit for data table.
                 $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate,$table);
                 // Get all Amounts of Invoice.
-                $totalAmounts = $this->orders_model->get_invoiceAmount();
-
+                $totalProductAmounts = $this->orders_model->get_invoiceAmount_for_product();
+                $totalAmounts=0;
+                foreach ($totalProductAmounts as $key => $value) {
+                    $totalTax=($value['total_rate']*$value['tax_percentage'])/100;
+                    $productInvoiceAmount= $value['total_rate'] + $totalTax;
+                    $totalAmounts = $totalAmounts + $productInvoiceAmount; 
+                }
                 //Get current Month amount
-                $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount('',$whereDate,$whereDatechange,'current');
+                $totalProductAmountsCurrentMonth = $this->orders_model->get_invoiceAmount_for_product('',$whereDate,$whereDatechange,'current');
+                $totalAmountsCurrentMonth=0;
+                foreach ($totalProductAmountsCurrentMonth as $key => $value) {
+                    $totalTax=($value['total_rate']*$value['tax_percentage'])/100;
+                    $productInvoiceAmount= $value['total_rate'] + $totalTax;
+                    $totalAmountsCurrentMonth = $totalAmountsCurrentMonth + $productInvoiceAmount; 
+                }
 
                 //total history paymnet amount
                 $get_payment_history_all = $this->orders_model->get_payment_history();
@@ -276,12 +287,23 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
-                $totalAmounts = $this->orders_model->get_invoiceAmount($where);
-
+                $totalProductAmounts = $this->orders_model->get_invoiceAmount_for_product($where);
+                $totalAmounts=0;
+                foreach ($totalProductAmounts as $key => $value) {
+                    $totalTax=($value['total_rate']*$value['tax_percentage'])/100;
+                    $productInvoiceAmount= $value['total_rate'] + $totalTax;
+                    $totalAmounts = $totalAmounts + $productInvoiceAmount; 
+                }
+               
                 //Get current Month amount
-                $totalAmountsCurrentMonth = $this->orders_model->get_invoiceAmount($where,$whereDate,$whereDatechange,'current');
-                //$totalAmountsCurrentMonth = $this->orders_model->currentmonth_invoiceAmount($where);
-
+                $totalProductAmountsCurrentMonth = $this->orders_model->get_invoiceAmount_for_product($where,$whereDate,$whereDatechange,'current');
+                $totalAmountsCurrentMonth=0;
+                foreach ($totalProductAmountsCurrentMonth as $key => $value) {
+                    $totalTax=($value['total_rate']*$value['tax_percentage'])/100;
+                    $productInvoiceAmount= $value['total_rate'] + $totalTax;
+                    $totalAmountsCurrentMonth = $totalAmountsCurrentMonth + $productInvoiceAmount; 
+                }
+               
                 //total history paymnet amount
                 $get_payment_history_all = $this->orders_model->get_payment_history('all',$where);
 
@@ -404,7 +426,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             // Total invoice mamount logic change invoiceAmount is tax with 0
             //$totalInvoiceAmount=$totalAmounts->invoiceAmount + $totalAmounts->invoiceAmountWithTax;
 
-            $totalInvoiceAmount=$totalAmounts->invoiceAmount;
+            $totalInvoiceAmount=$totalAmounts;
 
             //Total paid amount from paymnet hostory table
             $totalPaidAmount=$get_payment_history_all->historypaidamount;
@@ -412,74 +434,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             //Total unpaid amount total invoice amount - total paid amount
             $totalUnPaidAmount=$totalInvoiceAmount - $totalPaidAmount;
 
-            /*
-            //default vat * amount
-            $invoiceVat=$paidVat=$unpaidVat=$historypaidamountVat=0;
-            if(isset($totalAmounts->invoiceAmount) && $totalAmounts->invoiceAmount!='' && $totalAmounts->invoiceAmount!=0){
-                    $invoiceVat=$totalAmounts->invoiceAmount * Vat / 100;
-                    $invoiceAmount=$totalAmounts->invoiceAmount + $invoiceVat;
-            }else{
-                $invoiceAmount=0;
-            }
-            if(isset($totalAmounts->paidAmount) && $totalAmounts->paidAmount!='' && $totalAmounts->paidAmount!=0){
-                    $paidVat=$totalAmounts->paidAmount * Vat / 100;
-                    $paidAmount=$totalAmounts->paidAmount + $paidVat;
-            }else{
-                $paidAmount=0;
-            }
-            if(isset($totalAmounts->unpaidAmount) && $totalAmounts->unpaidAmount!='' && $totalAmounts->unpaidAmount!=0){
-                    $unpaidVat=$totalAmounts->unpaidAmount * Vat / 100;
-                    $unpaidAmount=$totalAmounts->unpaidAmount + $unpaidVat;
-            }else{
-                $unpaidAmount=0;
-            }
-            if(isset($get_payment_history_all->historypaidamount) && $get_payment_history_all->historypaidamount!='' && $get_payment_history_all->historypaidamount!=0){
-                    $historypaidamountVat=$get_payment_history_all->historypaidamount * Vat / 100;
-                    $paidhistoryAmount=$get_payment_history_all->historypaidamount + $historypaidamountVat;
-            }else{
-                $paidhistoryAmount=0;
-            }
-            */
-            /*
-            //All order unpaid amount
-            $totalUnapidAmount=$invoiceAmount-$paidhistoryAmount;
-            //default vat * amount current month
-            $cMInvoiceVat=$cMPaidVat=$cMUnpaidVat=0;
-            // print_r($totalAmountsCurrentMonth);
-            if(isset($totalAmountsCurrentMonth->invoiceAmount) && $totalAmountsCurrentMonth->invoiceAmount!='' && $totalAmountsCurrentMonth->invoiceAmount!=0){
-                    $cMInvoiceVat=$totalAmountsCurrentMonth->invoiceAmount * Vat / 100;
-                    $cMInvoiceAmount=$totalAmountsCurrentMonth->invoiceAmount + $cMInvoiceVat;
-            }else{
-                $cMInvoiceAmount=0;
-            }
-            if(isset($totalAmountsCurrentMonth->paidAmount) && $totalAmountsCurrentMonth->paidAmount!='' && $totalAmountsCurrentMonth->paidAmount!=0){
-                    $cMPaidVat=$totalAmountsCurrentMonth->paidAmount * Vat / 100;
-                    $cMPaidAmount=$totalAmountsCurrentMonth->paidAmount + $cMPaidVat;
-            }else{
-                $cMPaidAmount=0;
-            }
-            if(isset($totalAmountsCurrentMonth->unpaidAmount) && $totalAmountsCurrentMonth->unpaidAmount!='' && $totalAmountsCurrentMonth->unpaidAmount!=0){
-                    $cMUnpaidVat=$totalAmountsCurrentMonth->unpaidAmount * Vat / 100;
-                    $cMUnpaidAmount=$totalAmountsCurrentMonth->unpaidAmount + $cMUnpaidVat;
-            }else{
-                $cMUnpaidAmount=0;
-            }
-            if(isset($get_payment_history_currnet_month->historypaidamount) && $get_payment_history_currnet_month->historypaidamount!='' && $get_payment_history_currnet_month->historypaidamount!=0){
-                    $curnthistorypaidamountVat=$get_payment_history_currnet_month->historypaidamount * Vat / 100;
-                    $curnthistorypaidamountAmount=$get_payment_history_currnet_month->historypaidamount + $curnthistorypaidamountVat;
-            }else{
-                $curnthistorypaidamountAmount=0;
-            }
-            //currnet month order unpaid amount
-            $totalcUnapidAmount=$cMInvoiceAmount-$curnthistorypaidamountAmount;
-            */
-
-            //total top amount for current month orders
-            // Total invoice mamount logic change invoiceAmount is tax with 0
-            // $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount + $totalAmountsCurrentMonth->invoiceAmountWithTax;
-
-
-            $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth->invoiceAmount;
+            $totalInvoiceAmountCurrentMonth=$totalAmountsCurrentMonth;
 
 
             //Total paid amount from paymnet hostory table
