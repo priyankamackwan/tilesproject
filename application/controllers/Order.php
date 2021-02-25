@@ -183,15 +183,17 @@ use PHPMailer\PHPMailer\PHPMailer;
                 }
             }
            
-            
             if(!empty($status)){
 
                 if(strtolower($status) == 'pending'){
                     $order_status = 0;
+                    $table="order_products";
                 }elseif (strtolower($status) == 'inprogress') {
                     $order_status = 1;
+                    $table="order_products";
                 }elseif (strtolower($status) == 'delivered') {
                     $order_status = 2;
+                    $table="order_products";
                 }
 
                 if($where == null){
@@ -199,10 +201,12 @@ use PHPMailer\PHPMailer\PHPMailer;
                 }else{
                     $where .= ' AND order_products.status = "'.$order_status.'"';
                 }
+            }else{
+                $table="orders";
             }
 
             // Get all records count. 
-            $totalData = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate);
+            $totalData = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate,$table);
 
             $totalFiltered = $totalData['count'];
 
@@ -250,7 +254,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             if($where == NULL){
                 
                 // Get all records with limit for data table.
-                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate);
+                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,'','','',$whereDate,$table);
                 // Get all Amounts of Invoice.
                 $totalAmounts = $this->orders_model->get_invoiceAmount();
 
@@ -265,10 +269,10 @@ use PHPMailer\PHPMailer\PHPMailer;
             }else{
                 
                 // Get all records with limit and using search for data table.
-                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,'','',$whereDate);
+                $AlltotalFiltered = $this->orders_model->get_OrderDatatables($limit,$start,$order,$dir,$where,'','',$whereDate,$table);
                       
                 // Get all records count using search for data table.
-                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate);
+                $totalFiltered = $this->orders_model->get_OrderDatatables('','','','',$where,'','',$whereDate,$table);
 
                 $totalFiltered = $totalFiltered['count'];
                 // Get all Amounts of Invoice using where conidtion
