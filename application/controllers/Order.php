@@ -373,8 +373,8 @@ use PHPMailer\PHPMailer\PHPMailer;
                     $tabledata['placed_by'] = $placed_by_name;
 
                     $tabledata['sales_expense'] =$SingleOrderData['sales_expense'];
-
-                    $tabledata['total_price'] =$SingleOrderData['total_price'];
+                    $tax=($SingleOrderData['total_rate']*$SingleOrderData['tax_percentage'])/100;
+                    $tabledata['total_price'] =$SingleOrderData['total_rate']+$tax;
                     // Checking invoice stauts.
                     if ($SingleOrderData['invoice_status'] == 0) { 
 
