@@ -88,9 +88,10 @@ use PHPMailer\PHPMailer\PHPMailer;
                 5 => 'orders.legacy_invoice_no' ,
                 6 => 'orders.placed_by',
                 7 => 'orders.sales_expense' ,
-                8 => 'orders.invoice_status' ,
-                9 => 'orders.status',
-                10 => 'orders.created' ,
+                8 => 'orders.total_price',
+                9 => 'orders.invoice_status' ,
+                10 => 'orders.status',
+                11 => 'orders.created' ,
             );
 
             /*$columnArray = array(
@@ -373,6 +374,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                     $tabledata['sales_expense'] =$SingleOrderData['sales_expense'];
 
+                    $tabledata['total_price'] =$SingleOrderData['total_price'];
                     // Checking invoice stauts.
                     if ($SingleOrderData['invoice_status'] == 0) { 
 

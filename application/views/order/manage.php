@@ -360,6 +360,7 @@
                                 <th class="text-center">Legacy Invoice No</th>
                                 <th class="text-center">Placed By</th>
                                 <th class="text-center">Sales Expense</th>
+                                <th class="text-center">Total</th>
                                 <th class="text-center">Invoice Status</th>
                                 <th class="text-center">Delivery Status</th>
                                 <th class="text-center">Created On</th>
@@ -607,6 +608,7 @@
                 { "data": "legacy_invoice_no"},
                 { "data": "placed_by"},
                 { "data": "sales_expense"},
+                { "data": "total_price"},
                 { "data": "invoice_status"},
                 { "data": "status"},
                 { "data": "created"},
