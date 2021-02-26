@@ -74,6 +74,7 @@
 </div> -->
 */
 ?>
+
 <!-- Main Container start-->
 <div class="content-wrapper">
     <section class="content-header">
@@ -608,7 +609,7 @@
                 { "data": "legacy_invoice_no"},
                 { "data": "placed_by"},
                 { "data": "sales_expense"},
-                { "data": "total_price","className": "text-nowrap"},
+                { "data": "total_price","className": "text-nowrap dt-body-right"},
                 { "data": "invoice_status"},
                 { "data": "status"},
                 { "data": "created"},
