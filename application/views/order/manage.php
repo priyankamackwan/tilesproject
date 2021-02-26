@@ -608,7 +608,7 @@
                 { "data": "legacy_invoice_no"},
                 { "data": "placed_by"},
                 { "data": "sales_expense"},
-                { "data": "total_price"},
+                { "data": "total_price","className": "text-nowrap"},
                 { "data": "invoice_status"},
                 { "data": "status"},
                 { "data": "created"},

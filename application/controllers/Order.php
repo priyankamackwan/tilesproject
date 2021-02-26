@@ -374,7 +374,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 
                     $tabledata['sales_expense'] =$SingleOrderData['sales_expense'];
                     $tax=($SingleOrderData['total_rate']*$SingleOrderData['tax_percentage'])/100;
-                    $tabledata['total_price'] =$SingleOrderData['total_rate']+$tax;
+                    $tabledata['total_price'] = $this->My_model->getamount(round($SingleOrderData['total_rate'] + $tax,2));
+                    //$tabledata['total_price'] =$SingleOrderData['total_rate']+$tax;
                     // Checking invoice stauts.
                     if ($SingleOrderData['invoice_status'] == 0) { 
 
