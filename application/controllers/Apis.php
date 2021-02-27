@@ -916,32 +916,28 @@ You can change this password from mobile application after you are logged in onc
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
 
-                                $queryrate = $this->db->where('id',$orderUserId)->get('users');
-                                $result = $queryrate->result_array();
-                                if($result[0]['client_type']==1){ // Cash
-                                    echo "test";
-                                    $productData = $this->db->select('cash_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
-                                    $rate=$productData->cash_rate;
-                                }elseif($result[0]['client_type']==2){ //  Credit
-                                    $productData = $this->db->select('credit_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
-                                    $rate=$productData->credit_rate;
-                                }elseif($result[0]['client_type']==3){ // Walkin
-                                    $productData = $this->db->select('walkin_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
-                                    $rate=$productData->walkin_rate;
-                                }elseif($result[0]['client_type']==4){  // Flexible Rate
-                                    $productData = $this->db->select('flexible_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
-                                    $rate=$productData->flexible_rate;
+                                
+                                if(isset($orderProductArray[$k]['rate']) && !empty($orderProductArray[$k]['rate'])){
+                                    $rate = $orderProductArray[$k]['rate'];
+                                }else{ // if rate filed is not found so working for old version of application and take walkin_rate as per instruction
+
+                                    $queryrate = $this->db->where('id',$orderUserId)->get('users');
+                                    $result = $queryrate->result_array();
+                                    if($result[0]['client_type']==1){ // Cash
+                                        $productData = $this->db->select('cash_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
+                                        $rate=$productData->cash_rate;
+                                    }elseif($result[0]['client_type']==2){ //  Credit
+                                        $productData = $this->db->select('credit_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
+                                        $rate=$productData->credit_rate;
+                                    }elseif($result[0]['client_type']==3){ // Walkin
+                                        $productData = $this->db->select('walkin_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
+                                        $rate=$productData->walkin_rate;
+                                    }elseif($result[0]['client_type']==4){  // Flexible Rate
+                                        $productData = $this->db->select('flexible_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
+                                        $rate=$productData->flexible_rate;
+                                    }
+                                    //$rate = number_format($orderProductArray[$k]['price']/$orderProductArray[$k]['quantity'], 2);
                                 }
-                                // if(isset($orderProductArray[$k]['rate']) && !empty($orderProductArray[$k]['rate'])){
-                                //     $rate = $orderProductArray[$k]['rate'];
-                                // }else{ // if rate filed is not found so working for old version of application and take walkin_rate as per instruction
-
-                                //     $productData = $this->db->select('walkin_rate')->from('products')->where('id',$orderProductArray[$k]['product_id'])->where('status',1)->where('is_deleted',0)->get()->row();
-
-                                //     $rate=$productData->walkin_rate;
-
-                                //     //$rate = number_format($orderProductArray[$k]['price']/$orderProductArray[$k]['quantity'], 2);
-                                // }
                                
 
                                 $product_orders = array(
