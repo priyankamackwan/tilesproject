@@ -793,7 +793,7 @@ You can change this password from mobile application after you are logged in onc
 
                         //order for particular user
                         $orderUserId=$this->user_id;
-
+                            
                         if(!empty($data['placed_by']) && isset($data['placed_by'])) // placed by is set or not
                         {
                             $placed_by=trim($data['placed_by']);
@@ -838,8 +838,9 @@ You can change this password from mobile application after you are logged in onc
                         exit();
                     }
                       
-                         $orderProductArray = json_decode($data['product_id'], true);
-
+                        $orderProductArray = json_decode($data['product_id'], true);
+                        echo $orderProductArray;
+                        exit();
                         //$orderProductArray = $this->db->get("products")->result_array();
                         // Checking Email exist in our application
                         
@@ -907,6 +908,7 @@ You can change this password from mobile application after you are logged in onc
                                     'created' => date('Y-m-d h:i:s'),
                             );
                         }
+
 
                             $this->$model->insert('orders',$orderData);
                             $lastInsertedOrderId = $this->db->insert_id();

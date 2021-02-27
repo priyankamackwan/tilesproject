@@ -2018,8 +2018,30 @@ for($p=0;$p<count($finalOrderData);$p++) {
         echo json_encode(array("status"=>$status,"price"=>$message));
         exit;
     }
-                
+
+    function next($id) {
+        $query = $this->db->query("SELECT * FROM orders ORDER BY id DESC LIMIT 1");
+        $result = $query->result_array();
+        if(!empty($result[0]['id'])==$id){
+            redirect(base_url($this->controller).'/view/'.$this->utility->encode($result[0]['id']));
+        }else {
+          $next = $id + 1;
+          redirect(base_url($this->controller).'/view/'.$this->utility->encode($next));  
+        }
+        
+    }
+    
+    function nextedit($id) {
+        $query = $this->db->query("SELECT * FROM orders ORDER BY id DESC LIMIT 1");
+        $result = $query->result_array();
+        if(!empty($result[0]['id'])==$id){
+            redirect(base_url($this->controller).'/edit/'.$this->utility->encode($result[0]['id']));
+        }else {
+          $next = $id + 1;
+          redirect(base_url($this->controller).'/edit/'.$this->utility->encode($next));  
+        }
+    }
+
 	}
 
     
-?>

@@ -204,7 +204,7 @@ echo '<pre>';print_r($result);exit;
 
   <!-- Content Header (Page header) -->
   <section class="content-header">
-  <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a> 
+  <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
   <!-- <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
     <li class="active">Users</li>

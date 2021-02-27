@@ -217,6 +217,7 @@ print_r($result); exit;*/
   <!-- Content Header (Page header) -->
   <section class="content-header">
   <a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a> 
+  <a href="<?php echo base_url($this->controller).'/next/'.$result[0]->id;?>"class="btn btn-info next" style="margin-left:60%;">Next</a> 
   <!-- <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
     <li class="active">Users</li>

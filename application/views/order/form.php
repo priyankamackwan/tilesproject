@@ -67,7 +67,7 @@ a:hover, a:active, a:focus {
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 	<a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
-	
+	<a href="<?php echo base_url($this->controller).'/nextedit/'.$id?>"class="btn btn-info next" style="margin-left:80%;">Next</a>
 	<?php
 		echo $this->session->flashdata('edit_profile');
 		echo $this->session->flashdata('Change_msg');
