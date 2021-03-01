@@ -472,9 +472,11 @@ print_r($result); exit;*/
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                     <?php
                       if ($result[0]->invoice_status == 0) { 
-                        echo 'Unpaid';
+                        echo 'Pending';
                       }elseif ($result[0]->invoice_status == 1) { 
                         echo 'Paid';
+                      }elseif ($result[0]->invoice_status == 2) { 
+                        echo 'Partial Paid';
                       }
                     ?>
                 </div>

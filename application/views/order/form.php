@@ -343,7 +343,7 @@ a:hover, a:active, a:focus {
 				              
 				              
 
-			              <div class="form-group">
+			              <!-- <div class="form-group">
 			                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
 			                  Payment Status :
 			                </label>
@@ -354,7 +354,7 @@ a:hover, a:active, a:focus {
 			                    ?> 
 			                  </select>
 			                </div>
-			              </div>
+			              </div> -->
 			              <div class="form-group">
 			                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="order_payment_status">
 			                  Payment Details :

@@ -173,8 +173,10 @@ use PHPMailer\PHPMailer\PHPMailer;
                 
                 if(strtolower($invoiceStatus) == 'paid'){
                     $invoice_status = 1;
-                }elseif (strtolower($invoiceStatus) == 'unpaid') {
+                }elseif (strtolower($invoiceStatus) == 'pending') {
                     $invoice_status = 0;
+                }elseif (strtolower($invoiceStatus) == 'parpaid') {
+                    $invoice_status = 2;
                 }
                 
                 if($where == null){
@@ -220,7 +222,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 $invoice_status=$status=strtolower($this->input->post('search')['value']);
                 if(strtolower($this->input->post('search')['value']) == 'paid'){
                     $invoice_status = 1;
-                }elseif (strtolower($this->input->post('search')['value']) == 'unpaid') {
+                }elseif (strtolower($this->input->post('search')['value']) == 'pending') {
                     $invoice_status = 0;
                 }
                 
@@ -379,12 +381,17 @@ use PHPMailer\PHPMailer\PHPMailer;
                     // Checking invoice stauts.
                     if ($SingleOrderData['invoice_status'] == 0) { 
 
-                        $tabledata['invoice_status'] = 'Unpaid';
+                        $tabledata['invoice_status'] = 'Pending';
 
                     } elseif($SingleOrderData['invoice_status'] == 1) {
 
                         $tabledata['invoice_status'] ='Paid';
-                    } 
+                    
+                    } elseif($SingleOrderData['invoice_status'] == 2) {
+
+                        $tabledata['invoice_status'] ='Partial Paid';
+
+                    }
 
                     // Checking Delivery Status.
                     if ($SingleOrderData['status'] == 0) {
@@ -1151,7 +1158,7 @@ $pdf->Output($do_no.'.pdf','D');
                         'delivery_date' => $txt_deliverydate,
                         'payment_date' => $txt_paymentdate
 			);
-            
+
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
                              
@@ -1242,6 +1249,7 @@ $pdf->Output($do_no.'.pdf','D');
 
             //Old order array from database 
             $all_order=$this->orders_model->view_all_order($id);
+            
             foreach ($all_order as $key => $value) {
 
                 // store on array for quantity and product 
@@ -1401,10 +1409,11 @@ $pdf->Output($do_no.'.pdf','D');
             }
             // For check data old data is updated or not
 
-                     // echo $id; exit;
+                     // echo $id; exit;            
             $sales_expense = $this->input->post('sales_expense');
             $status = $this->input->post('status');
             $invoice_status = $this->input->post('invoice_status');
+
             $delivery_date = $this->input->post('deliverydate');
             $payment_date = $this->input->post('paymentdate');
             //total price
@@ -1881,6 +1890,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
     //Popup for partially paid order
     //payment_id is payment history table id
     function ajax_order_payment($payment_id=null,$action='insert',$totalPaidAmount=null){
+
         $order_id=$this->input->post('order_id');
         $payment_id=$this->input->post('payment_id');
         $action=$this->input->post('action');
@@ -1895,6 +1905,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
     }
     //inserted and Update payment history  data  payment_history table
     function update_order_payment(){
+
         $action=$payment_id='';
         $message="Something went wrong..Try after sometime";
         $status='fail';
@@ -1907,7 +1918,23 @@ for($p=0;$p<count($finalOrderData);$p++) {
         $reference=$this->input->post('reference');
         $amount=$this->input->post('amount');
         $id=$this->input->post('id');
+
         if(isset($action) && $action!='' && $action='edit'){
+            $inv = $_POST['inv']; 
+            $am = array();
+            $am = explode(" ",$inv);
+            $this->db->where('order_id',$id);
+            $q = $this->db->get('payment_history');
+            $data = $q->result_array();
+            if(!empty($data)){
+                if($amount!=$am[1]){
+                    $sta = 2 ;
+                }else {
+                    $sta = 1;
+                }
+            }else{
+                $sta = 0;
+            }
             $paymentDataUdpate = array(      
                         'order_id' => $id,
                         'amount' => $amount,
@@ -1918,10 +1945,26 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $this->db->where('order_id',$id);
             $this->db->where('id',$payment_id);
             $this->db->update('payment_history',$paymentDataUdpate);
+            
             $message='Payment Updated Successfully'; 
             $status='success';
 
         }else{
+            $inv = $_POST['inv']; 
+            $am = array();
+            $am = explode(" ",$inv);
+            $this->db->where('order_id',$id);
+            $q = $this->db->get('payment_history');
+            $data = $q->result_array();
+            if(!empty($data)){
+                if($amount!=$am[1]){
+                    $sta = 2 ;
+                }else {
+                    $sta = 1;
+                }
+            }else{
+                $sta = 0;
+            }
             $paymentData = array(
                         'order_id' => $id,
                         'amount' => $amount,
@@ -1930,12 +1973,13 @@ for($p=0;$p<count($finalOrderData);$p++) {
                         'payment_date' => $payment_date,
                 );
             $insert=$this->db->insert('payment_history',$paymentData);
+            
             if($insert){
                 $message='Payment Done Successfully'; 
                 $status='success';
             }
         }
-        $orderPayment_date=array('payment_date' => $payment_date,'invoice_status' => 1);
+        $orderPayment_date=array('payment_date' => $payment_date,'invoice_status' => $sta);
         $this->db->where('id',$id);
         $this->db->update('orders',$orderPayment_date);
         echo json_encode(array("status"=>$status,"message"=>$message));

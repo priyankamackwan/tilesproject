@@ -47,7 +47,8 @@ if(isset($payment_history->tax) && $payment_history->tax!='' ){
     <div class="form-group">
         <label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">Invoice Amount :</label>
         <div class="col-md-9 col-sm-12 col-xs-12 mt_5">
-            <?php echo  $this->My_model->getamount(round($payment_history->total_price  + $orderTax,2));?>
+            <?php echo $this->My_model->getamount(round($payment_history->total_price  + $orderTax,2));?>
+            <input type="hidden" name="inv" value="<?php echo $this->My_model->getamount(round($payment_history->total_price  + $orderTax,2));?>">
         </div>
     </div>
     <div class="form-group">

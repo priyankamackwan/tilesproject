@@ -260,6 +260,16 @@
 		    }*/
 		   
 		}
+		function getamount1($amount,$convert='no',$isCurrencyFormate='yes')
+		{
+		    $firstCharacter='';
+		   if ( strpos( $amount, "." ) !== false ) {
+		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount);
+		   }else{
+		       $new_amount=preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $amount).'.00';
+		   }
+		   return number_format($amount,2);
+		}
 		//best seller count 
 		public function best_seller_count($where){
 			$this->db->select('o.id,o.user_id,SUM(o.total_price) as totalValue,SUM(o.sales_expense) as total_sales_expense,o.invoice_no,u.company_name,u.contact_person_name,o.created');
