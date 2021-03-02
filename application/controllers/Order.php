@@ -2091,11 +2091,32 @@ for($p=0;$p<count($finalOrderData);$p++) {
         exit;
     }
 
-    function next($id) {
-        $next = $id + 1;
-        redirect(base_url($this->controller).'/view/'.$this->utility->encode($next));    
+    function next() {
+        $id = intval($this->input->post('id'));
+        $query = $this->db->where('id  <',$id)->limit(1)->order_by('id','desc')->get('orders')->row();
+        $nfind =  $query->id;
+        $last  = $this->db->order_by('id','asc')->limit(1)->get('orders')->row();
+        if($last->id==$id){
+            echo json_encode($this->utility->encode($id));
+            exit();
+        }else {
+            echo json_encode($this->utility->encode($nfind));
+            exit();
+        }
     }
-    
+
+    function previous() {
+        $id = intval($this->input->post('id'));
+        $this->db->select('*');
+        $this->db->from('orders');
+        $this->db->where('id >',$id);
+        $query = $this->db->get()->row();
+        if(!empty($query->id)) {
+            $status ="success";
+            echo json_encode(array("status"=>$status,"url"=>$this->utility->encode($query->id)));
+        }
+        exit();
+    }
     function nextedit($id) {
         $next = $id + 1;
         redirect(base_url($this->controller).'/edit/'.$this->utility->encode($next));  

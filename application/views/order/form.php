@@ -66,8 +66,15 @@ a:hover, a:active, a:focus {
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-	<a href="<?php echo base_url($this->controller);?>"class="btn btn-info">Back</a>
-	<a href="<?php echo base_url($this->controller).'/nextedit/'.$id?>"class="btn btn-info next" style="margin-left:80%;">Next</a>
+	<div class="row">
+		<div class="col-md-11 col-sm-12 col-xs-12">
+			<a href="<?php echo base_url($this->controller);?>"class="btn btn-danger">Back to list</a>
+			<span style="float:right;">
+	        	<button class="btn btn-info" id="back" value="<?php echo $id;?>">Back</button>
+	        	<button class="btn btn-info" id="next" value="<?php echo $id;?>">Next</button>
+	        </span> 
+		</div>
+	</div>
 	<?php
 		echo $this->session->flashdata('edit_profile');
 		echo $this->session->flashdata('Change_msg');
@@ -926,4 +933,52 @@ $('#datatables1').dataTable({
 		"searching": false,
 		"scrollX": true
 	} );
+</script>
+<script type="text/javascript">
+  $("#next").click(function(){
+    var id = $(this).val();
+    $.ajax({
+      type : "POST",
+      url : "<?php echo base_url().$this->controller."/next/" ?>",
+      data : {id:id},
+      dataType: "json",
+      success : function (data){
+        var id =  data;
+        window.location.href = id;
+      }
+    });  
+  });
+   $("#next").click(function(e){
+    e.preventDefault();
+    var id = $(this).val();
+    $.ajax({
+      type : "POST",
+      url : "<?php echo base_url().$this->controller."/next/" ?>",
+      data : {id:id},
+      dataType: "json",
+      success : function (data){
+        $("#next").attr("disabled","true");
+      }
+    }); 
+  }); 
+  $("#back").click(function(){
+    var id = $(this).val();
+    $.ajax({
+      type : "POST",
+      url : "<?php echo base_url().$this->controller."/previous/" ?>",
+      data : {id:id},
+      dataType: "json",
+      success : function (data){
+        var id =  data.url;
+        if(data.status=="success") {
+          $("#next").prop('disabled',false);
+          window.location.href = id;
+        }
+        if(data.status="fail"){
+          $("#next").attr('disabled','disabled');
+          $("#back").removeAttr('disabled');
+        }
+      }
+    });  
+  });
 </script>
