@@ -1158,7 +1158,7 @@ $pdf->Output($do_no.'.pdf','D');
                         'delivery_date' => $txt_deliverydate,
                         'payment_date' => $txt_paymentdate
 			);
-
+            
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
                              
@@ -1167,6 +1167,7 @@ $pdf->Output($do_no.'.pdf','D');
 		}
         // For order sales update
         public function Update_order() {
+           
 
             $model = $this->model;
             // Order id
@@ -1290,11 +1291,11 @@ $pdf->Output($do_no.'.pdf','D');
                 if($quantity_arr[$value['product_id']]> $value['quantity']){
                     $update_sold_quantity=$quantity_arr[$value['product_id']]-$value['quantity'];
                     $update_oprator='+';
-                   $total_check_q=$quantity_arr[$value['product_id']]-$value['quantity'];
+                    $total_check_q=$quantity_arr[$value['product_id']]-$value['quantity'];
                 }elseif($quantity_arr[$value['product_id']]< $value['quantity']){
                     $update_sold_quantity=$value['product_id']-$quantity_arr[$value['quantity']];
-                     $update_oprator='-';
-                     $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
+                    $update_oprator='-';
+                    $total_check_q=$value['quantity']-$quantity_arr[$value['product_id']];
                 }elseif($quantity_arr[$value['product_id']]==$value['quantity']){
                     $total_check_q=$quantity_arr[$value['product_id']];
                 }
@@ -1407,12 +1408,12 @@ $pdf->Output($do_no.'.pdf','D');
 
                 }
             }
+            
             // For check data old data is updated or not
-
-                     // echo $id; exit;            
+            $inv_status = $this->db->where('id',$id)->get('orders')->row();          
             $sales_expense = $this->input->post('sales_expense');
             $status = $this->input->post('status');
-            $invoice_status = $this->input->post('invoice_status');
+            $invoice_status =  (!empty($this->input->post('invoice_status'))) ? $this->input->post('invoice_status') : $inv_status->invoice_status;
 
             $delivery_date = $this->input->post('deliverydate');
             $payment_date = $this->input->post('paymentdate');
@@ -1659,6 +1660,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                 echo "No customer found!";
             } 
 
+
             $data = array(
                     'sales_expense' => $sales_expense,
                     'status' => $status,
@@ -1675,7 +1677,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                     'legacy_invoice_no' => $legacy_invoice_no,
                     'user_id' => $username
                 );
-
+           
             $where = array($this->primary_id=>$id);
             $this->$model->update($this->table,$data,$where);
             //IF invoice status is unpaid all order payment data is deleted from payment hisory table
@@ -1926,11 +1928,15 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $this->db->where('order_id',$id);
             $q = $this->db->get('payment_history');
             $data = $q->result_array();
+            $sum = 0;
+            foreach ($data as $key => $value) {
+                $sum = $sum + $value['amount'];
+            }
             if(!empty($data)){
-                if($amount!=$am[1]){
-                    $sta = 2 ;
-                }else {
+                if($sum==$am[1]) {
                     $sta = 1;
+                }elseif($sum!=$am[1]){
+                    $sta = 2 ;
                 }
             }else{
                 $sta = 0;
@@ -1950,17 +1956,20 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $status='success';
 
         }else{
-            $inv = $_POST['inv']; 
             $am = array();
             $am = explode(" ",$inv);
             $this->db->where('order_id',$id);
             $q = $this->db->get('payment_history');
             $data = $q->result_array();
+            $sum = 0;
+            foreach ($data as $key => $value) {
+                $sum = $sum + $value['amount'];
+            }
             if(!empty($data)){
-                if($amount!=$am[1]){
-                    $sta = 2 ;
-                }else {
+                if($sum==$am[1]) {
                     $sta = 1;
+                }elseif($sum!=$am[1]){
+                    $sta = 2 ;
                 }
             }else{
                 $sta = 0;
@@ -1975,6 +1984,25 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $insert=$this->db->insert('payment_history',$paymentData);
             
             if($insert){
+                $inv = $_POST['inv']; 
+                $am = array();
+                $am = explode(" ",$inv);
+                $this->db->where('order_id',$id);
+                $q = $this->db->get('payment_history');
+                $data = $q->result_array();
+                $sum = 0;
+                foreach ($data as $key => $value) {
+                    $sum = $sum + $value['amount'];
+                }
+                if(!empty($data)){
+                    if($sum==$am[1]) {
+                        $sta = 1;
+                    }elseif($sum!=$am[1]){
+                        $sta = 2 ;
+                    }
+                }else{
+                    $sta = 0;
+                }
                 $message='Payment Done Successfully'; 
                 $status='success';
             }
