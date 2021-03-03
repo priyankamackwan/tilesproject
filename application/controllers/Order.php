@@ -594,7 +594,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 		}
         // For edit order
 		public function edit($id){
-                    
+                  
             $model = $this->model;
             $id = $this->utility->decode($id);
             //Add meta title
@@ -611,11 +611,30 @@ use PHPMailer\PHPMailer\PHPMailer;
             $data['id']=$id;
             $model = $this->model;
             $data ['result'] = $this->orders_model->view_all_order($id);
+            // Previous ann Next Button (03-03-2021)
+              $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
+              if(!empty($ninv)) {
+                $next = $ninv->invoice_no;
+                $data['next'] = $next;
+              }else  {
+                $ninvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
+                $next = $ninvs->invoice_no;
+                $data['next'] = $next;
+              }
+              $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('orders')->row();
+              if(!empty($pinv)) {
+                $prev = $pinv->invoice_no;
+                $data['prev'] = $prev;
+              }else  {
+                $pinvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
+                $prev = $pinvs->invoice_no;
+                $data['prev'] = $prev;
+              }
             $this->load->view($this->view.'/form',$data);
         }
                 
             public function view($id) {
-                    
+            
 			$model = $this->model;
 			$id = $this->utility->decode($id);
             //Add meta title
@@ -672,6 +691,26 @@ use PHPMailer\PHPMailer\PHPMailer;
                         $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
             $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
                       // print_r($data); exit;
+              
+              // Previous ann Next Button (03-03-2021)
+              $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
+              if(!empty($ninv)) {
+                $next = $ninv->invoice_no;
+                $data['next'] = $next;
+              }else  {
+                $ninvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
+                $next = $ninvs->invoice_no;
+                $data['next'] = $next;
+              }
+              $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('orders')->row();
+              if(!empty($pinv)) {
+                $prev = $pinv->invoice_no;
+                $data['prev'] = $prev;
+              }else  {
+                $pinvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
+                $prev = $pinvs->invoice_no;
+                $data['prev'] = $prev;
+              }
 			$this->load->view($this->view.'/view',$data);
 		}
         
@@ -2092,10 +2131,12 @@ for($p=0;$p<count($finalOrderData);$p++) {
     }
 
     function next() {
+
         $id = intval($this->input->post('id'));
         $this->db->select("*");
         $this->db->from('orders');
         //$this->db->join('users','users.id = orders.user_id');
+        //$this->db->order_by('users.company_name','desc');
         $query = $this->db->where('orders.id  >',$id)->limit(1)->get()->row();
         if(!empty($query)){
             $status ="success";
@@ -2103,7 +2144,8 @@ for($p=0;$p<count($finalOrderData);$p++) {
             exit();
         }else {
             $status ="fail";
-            echo json_encode(array("status"=>$status));
+            $lastinv = $this->db->where('id',$id)->get('orders')->row();
+            echo json_encode(array("status"=>$status,"inv"=> $lastinv->invoice_no));
             exit();
         }
         exit();
@@ -2118,7 +2160,8 @@ for($p=0;$p<count($finalOrderData);$p++) {
             exit();
         }else {
             $status ="fail";
-            echo json_encode(array("status"=>$status));
+            $lastinv = $this->db->where('id',$id)->get('orders')->row();
+            echo json_encode(array("status"=>$status,"inv"=> $lastinv->invoice_no));
             exit();
         }
         exit();

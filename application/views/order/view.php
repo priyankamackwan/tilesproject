@@ -220,8 +220,9 @@ print_r($result); exit;*/
       <div class="col-md-9 col-sm-12 col-xs-12">
         <a href="<?php echo base_url($this->controller);?>"class="btn btn-danger">Back to list</a> 
         <span style="float:right;">
-        <button class="btn btn-info" id="back" value="<?php echo $result[0]->id;?>">Previous</button>
-        <button class="btn btn-info" id="next" value="<?php echo $result[0]->id;?>">Next</button>
+        
+        <button class="btn btn-info" id="back" value="<?php echo $result[0]->id;?>"><< Prev <br><?= $prev?></button>
+        <button class="btn btn-info" id="next" value="<?php echo $result[0]->id;?>">Next >> <br> <?= $next?></button>
         </span> 
       </div>
     </div>
@@ -664,6 +665,7 @@ print_r($result); exit;*/
         if(data.status=="fail"){
           $("#next").attr("disabled",true);
           $("#back").attr("disabled",false);
+          $("#next").html("Next >> <br>"+data.inv);
         }else {
           var id =  data.url;
           window.location.href = id;
@@ -676,12 +678,13 @@ print_r($result); exit;*/
     $.ajax({
       type : "POST",
       url : "<?php echo base_url().$this->controller."/previous/" ?>",
-      data : {id:id},
+      data : {id:"<?php echo $result[0]->id;?>"},
       dataType: "json",
       success : function (data){
         if(data.status=="fail"){
           $("#back").attr("disabled",true);
           $("#next").attr("disabled",false);
+          $("#back").html("<<  Prev <br>"+data.inv);
         }else {
           var id =  data.url;
           window.location.href = id;

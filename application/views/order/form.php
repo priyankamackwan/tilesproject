@@ -70,8 +70,8 @@ a:hover, a:active, a:focus {
 		<div class="col-md-11 col-sm-12 col-xs-12">
 			<a href="<?php echo base_url($this->controller);?>"class="btn btn-danger">Back to list</a>
 			<span style="float:right;">
-	        	<button class="btn btn-info" id="back" value="<?php echo $id;?>">Previous</button>
-	        	<button class="btn btn-info" id="next" value="<?php echo $id;?>">Next</button>
+	        	<button class="btn btn-info" id="back" value="<?php echo $id;?>"><< Prev <br><?= $prev?></button>
+	        	<button class="btn btn-info" id="next" value="<?php echo $id;?>">Next >> <br> <?= $next?></button>
 	        </span> 
 		</div>
 	</div>
@@ -946,6 +946,7 @@ $('#datatables1').dataTable({
         if(data.status=="fail"){
           $("#next").attr("disabled",true);
           $("#back").attr("disabled",false);
+          $("#next").html("Next >> <br>"+data.inv);
         }else {
           var id =  data.url;
           window.location.href = id;
@@ -958,12 +959,13 @@ $('#datatables1').dataTable({
     $.ajax({
       type : "POST",
       url : "<?php echo base_url().$this->controller."/previous/" ?>",
-      data : {id:id},
+      data : {id:"<?php echo $id;?>"},
       dataType: "json",
       success : function (data){
         if(data.status=="fail"){
           $("#back").attr("disabled",true);
           $("#next").attr("disabled",false);
+          $("#back").html("<<  Prev <br>"+data.inv);
         }else {
           var id =  data.url;
           window.location.href = id;
