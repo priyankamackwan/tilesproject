@@ -70,7 +70,7 @@ a:hover, a:active, a:focus {
 		<div class="col-md-11 col-sm-12 col-xs-12">
 			<a href="<?php echo base_url($this->controller);?>"class="btn btn-danger">Back to list</a>
 			<span style="float:right;">
-	        	<button class="btn btn-info" id="back" value="<?php echo $id;?>">Back</button>
+	        	<button class="btn btn-info" id="back" value="<?php echo $id;?>">Previous</button>
 	        	<button class="btn btn-info" id="next" value="<?php echo $id;?>">Next</button>
 	        </span> 
 		</div>
@@ -943,24 +943,16 @@ $('#datatables1').dataTable({
       data : {id:id},
       dataType: "json",
       success : function (data){
-        var id =  data;
-        window.location.href = id;
+        if(data.status=="fail"){
+          $("#next").attr("disabled",true);
+          $("#back").attr("disabled",false);
+        }else {
+          var id =  data.url;
+          window.location.href = id;
+        }
       }
     });  
   });
-   $("#next").click(function(e){
-    e.preventDefault();
-    var id = $(this).val();
-    $.ajax({
-      type : "POST",
-      url : "<?php echo base_url().$this->controller."/next/" ?>",
-      data : {id:id},
-      dataType: "json",
-      success : function (data){
-        $("#next").attr("disabled","true");
-      }
-    }); 
-  }); 
   $("#back").click(function(){
     var id = $(this).val();
     $.ajax({
@@ -969,14 +961,12 @@ $('#datatables1').dataTable({
       data : {id:id},
       dataType: "json",
       success : function (data){
-        var id =  data.url;
-        if(data.status=="success") {
-          $("#next").prop('disabled',false);
+        if(data.status=="fail"){
+          $("#back").attr("disabled",true);
+          $("#next").attr("disabled",false);
+        }else {
+          var id =  data.url;
           window.location.href = id;
-        }
-        if(data.status="fail"){
-          $("#next").attr('disabled','disabled');
-          $("#back").removeAttr('disabled');
         }
       }
     });  
