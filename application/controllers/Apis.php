@@ -784,13 +784,15 @@ You can change this password from mobile application after you are logged in onc
                 }
                 
                 public function addOrder() {
-                    
+
                     $model = $this->model;
                     $orderData = array();
                     $data = $_POST;
                   
                     if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax']))) && (isset($data['total_price']) && (!empty($data['total_price'])))) {
 
+                        
+                        
                         //order for particular user
                         $orderUserId=$this->user_id;
                             
@@ -970,8 +972,7 @@ You can change this password from mobile application after you are logged in onc
                          $multipleWhere = ['id' =>$orderUserId];
                         $this->db->where($multipleWhere);
                         $userData= $this->db->get("users")->result_array();
-                      //  echo '<pre>';
-                       // print_r($userData); exit;
+                       
                         
                         $multipleWhere = ['order_id' => $lastInsertedOrderId];
                         $this->db->where($multipleWhere);
@@ -1316,8 +1317,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                      $companyName = $userData[0]['company_name'];
                    
                             $mail = new PHPMailer;
-                            //$mail->isSMTP();
-                            $mail->isMail();
+                            $mail->isSMTP();
+                            //$mail->isMail();
                             $mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
@@ -1332,10 +1333,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->SMTPSecure = 'tls';                           
                             $mail->Port = 587; 
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
-                   
+                            $mail->isHTML(true);  
                             $mail->Subject = "New Order from $companyName";
-                 
-                             $mail->MsgHTML('
+                            $mail->MsgHTML('
                                 Dear Admin,<br/><br/>
     You have received a new Order from '.$userData[0]['company_name'].'<br/>
     New order number is #'.$newOrder.'<br/><br/>
@@ -1357,11 +1357,11 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
-                            $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
+                            $mail->addAddress('chirag.webpatriot@gmail.com', 'PNP Admin');
                             $mail->send();
                             
-                            $new_mail = new PHPMailer;
-                            $new_mail->isMail();
+                            $mail = new PHPMailer;
+                            $mail->isSMTP(); 
                             $mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
@@ -1375,9 +1375,10 @@ $pdf2->Output($fileNL_invoice, 'F');
                             );                         
                             $mail->SMTPSecure = 'tls';                           
                             $mail->Port = 587; 
-                            $new_mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
-                            $new_mail->Subject = "Order Confirmation";
-                            $new_mail->MsgHTML('
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->isHTML(true);  
+                            $mail->Subject = "Order Confirmation";
+                            $mail->MsgHTML('
                                 Dear '.$userData[0]['company_name'].',<br/><br/>
     Thanks for your order.We hope you had a good time shopping with us.<br/>
     Your order number is #'.$newOrder.'<br/><br/>
@@ -1396,10 +1397,10 @@ $pdf2->Output($fileNL_invoice, 'F');
     www.pnptiles.com<br/><br/>
     
     This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
-                            $new_mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
-                            $new_mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
-                            $new_mail->addAddress($userData[0]['email'],$userData[0]['company_name']);
-                            $new_mail->send();
+                            $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
+                            $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
+                            $mail->addAddress($userData[0]['email'],$userData[0]['company_name']);
+                            $mail->send();
                     
                     // Returning back the response in JSON
                     echo json_encode($response);
