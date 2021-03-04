@@ -611,7 +611,7 @@ use PHPMailer\PHPMailer\PHPMailer;
             $data['id']=$id;
             $model = $this->model;
             $data ['result'] = $this->orders_model->view_all_order($id);
-            // Previous ann Next Button (03-03-2021)
+              // Previous ann Next Button (03-03-2021)
               $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
               if(!empty($ninv)) {
                 $next = $ninv->invoice_no;
@@ -1453,7 +1453,6 @@ $pdf->Output($do_no.'.pdf','D');
             $sales_expense = $this->input->post('sales_expense');
             $status = $this->input->post('status');
             $invoice_status =  (!empty($this->input->post('invoice_status'))) ? $this->input->post('invoice_status') : $inv_status->invoice_status;
-
             $delivery_date = $this->input->post('deliverydate');
             $payment_date = $this->input->post('paymentdate');
             //total price
@@ -1716,7 +1715,6 @@ for($p=0;$p<count($finalOrderData);$p++) {
                     'legacy_invoice_no' => $legacy_invoice_no,
                     'user_id' => $username
                 );
-           
             $where = array($this->primary_id=>$id);
             $this->$model->update($this->table,$data,$where);
             //IF invoice status is unpaid all order payment data is deleted from payment hisory table
@@ -1971,8 +1969,9 @@ for($p=0;$p<count($finalOrderData);$p++) {
             foreach ($data as $key => $value) {
                 $sum = $sum + $value['amount'];
             }
+            $sum = number_format((float)$sum, 2, '.', '');
             if(!empty($data)){
-                if($sum==$am[1]) {
+                if($sum==str_replace(',', '', $am[1])) {
                     $sta = 1;
                 }elseif($sum!=$am[1]){
                     $sta = 2 ;
@@ -2004,8 +2003,9 @@ for($p=0;$p<count($finalOrderData);$p++) {
             foreach ($data as $key => $value) {
                 $sum = $sum + $value['amount'];
             }
+            $sum = number_format((float)$sum, 2, '.', '');
             if(!empty($data)){
-                if($sum==$am[1]) {
+                if($sum==str_replace(',', '', $am[1])) {
                     $sta = 1;
                 }elseif($sum!=$am[1]){
                     $sta = 2 ;
@@ -2033,8 +2033,9 @@ for($p=0;$p<count($finalOrderData);$p++) {
                 foreach ($data as $key => $value) {
                     $sum = $sum + $value['amount'];
                 }
+                $sum = number_format((float)$sum, 2, '.', '');
                 if(!empty($data)){
-                    if($sum==$am[1]) {
+                    if($sum==str_replace(',', '', $am[1])) {
                         $sta = 1;
                     }elseif($sum!=$am[1]){
                         $sta = 2 ;
