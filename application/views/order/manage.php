@@ -312,7 +312,7 @@
                                     <div class="col-md-3 col-sm-12 col-xs-12">
                                         <select class="form-control" name="invoiceStatus" style="width:100%;" id="invoiceStatus">
                                             <option value="">All Invoice Status</option>
-                                            <option value="unpaid" <?php echo $dash_status;?>>Pending</option>
+                                            <option value="unpaid" <?php echo $dash_status;?>>Unpaid</option>
                                             <option value="paid">Paid</option>
                                             <option value="parpaid">Partial Paid</option>
                                         </select>

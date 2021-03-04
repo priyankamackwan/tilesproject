@@ -839,8 +839,7 @@ You can change this password from mobile application after you are logged in onc
                     }
                       
                         $orderProductArray = json_decode($data['product_id'], true);
-                        echo $orderProductArray;
-                        exit();
+                        
                         //$orderProductArray = $this->db->get("products")->result_array();
                         // Checking Email exist in our application
                         
@@ -982,8 +981,8 @@ You can change this password from mobile application after you are logged in onc
                       $finalOrderData = array();
                       $subTotal = 0;
                       for($k=0;$k<count($productOrder);$k++) {
-                              $productIdArray = $productOrder[$k]['product_id'];
-                            $multipleWhere2 = ['id' => $productIdArray];
+                        $productIdArray = $productOrder[$k]['product_id'];
+                        $multipleWhere2 = ['id' => $productIdArray];
                         $this->db->where($multipleWhere2);
                         $productData= $this->db->get("products")->result_array();
                         

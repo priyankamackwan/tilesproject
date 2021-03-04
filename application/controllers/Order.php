@@ -173,7 +173,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 
                 if(strtolower($invoiceStatus) == 'paid'){
                     $invoice_status = 1;
-                }elseif (strtolower($invoiceStatus) == 'pending') {
+                }elseif (strtolower($invoiceStatus) == 'unpaid') {
                     $invoice_status = 0;
                 }elseif (strtolower($invoiceStatus) == 'parpaid') {
                     $invoice_status = 2;
@@ -222,7 +222,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                 $invoice_status=$status=strtolower($this->input->post('search')['value']);
                 if(strtolower($this->input->post('search')['value']) == 'paid'){
                     $invoice_status = 1;
-                }elseif (strtolower($this->input->post('search')['value']) == 'pending') {
+                }elseif (strtolower($this->input->post('search')['value']) == 'unpaid') {
                     $invoice_status = 0;
                 }
                 
@@ -381,7 +381,7 @@ use PHPMailer\PHPMailer\PHPMailer;
                     // Checking invoice stauts.
                     if ($SingleOrderData['invoice_status'] == 0) { 
 
-                        $tabledata['invoice_status'] = 'Pending';
+                        $tabledata['invoice_status'] = 'Unpaid';
 
                     } elseif($SingleOrderData['invoice_status'] == 1) {
 
@@ -1197,7 +1197,6 @@ $pdf->Output($do_no.'.pdf','D');
                         'delivery_date' => $txt_deliverydate,
                         'payment_date' => $txt_paymentdate
 			);
-            
 			$where = array($this->primary_id=>$id);
 			$this->$model->update($this->table,$data,$where);
                              
@@ -1206,7 +1205,7 @@ $pdf->Output($do_no.'.pdf','D');
 		}
         // For order sales update
         public function Update_order() {
-           
+
 
             $model = $this->model;
             // Order id
@@ -1441,13 +1440,13 @@ $pdf->Output($do_no.'.pdf','D');
                                         'price'=>$price,
                                         'rate' =>$rate
                                 );
+
                     $this->$model->insert('order_products',$insert_data);
                    // echo $this->db->last_query();die();
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
 
                 }
             }
-            
             // For check data old data is updated or not
             $inv_status = $this->db->where('id',$id)->get('orders')->row();          
             $sales_expense = $this->input->post('sales_expense');
@@ -1466,7 +1465,7 @@ $pdf->Output($do_no.'.pdf','D');
 
             //add leagacy invoice number
             $legacy_invoice_no = $this->input->post('legacy_invoice_no');
-
+            
             // find old customer
             $this->db->select('*');
             $this->db->from('orders oo');
@@ -1698,6 +1697,24 @@ for($p=0;$p<count($finalOrderData);$p++) {
                 echo "No customer found!";
             } 
 
+            $items = $this->db->get_where("order_products",array('order_id =' => $id))->result_array();
+            $pending=0;
+            foreach ($items as $key => $val) {
+                if($val['status']==0) {
+                    $pending = $pending + 1;
+                }
+            }
+            if($pending!=0) {
+                $current = date('Y-m-d H:i:s');
+                $this->db->where('id',$id);
+                $this->db->update('orders',['status' => 0,'delivery_date' => $current]);
+            }else {
+                $current = date('Y-m-d H:i:s');
+                $this->db->where('id',$id);
+                $this->db->update('orders',['status' => 2,'delivery_date' => $current]);
+            }
+            $intatus = $this->db->where('id',$id)->get('orders')->row(); 
+            $status =   (!empty($this->input->post('invoice_status'))) ? $this->input->post('invoice_status') : $intatus->status;
 
             $data = array(
                     'sales_expense' => $sales_expense,
@@ -1959,6 +1976,16 @@ for($p=0;$p<count($finalOrderData);$p++) {
         $id=$this->input->post('id');
 
         if(isset($action) && $action!='' && $action='edit'){
+            $paymentDataUdpate = array(      
+                        'order_id' => $id,
+                        'amount' => $amount,
+                        'reference'=>$reference,
+                        'payment_mode' =>  $payment_mode,
+                        'payment_date' => $payment_date,
+                );
+            $this->db->where('order_id',$id);
+            $this->db->where('id',$payment_id);
+            $this->db->update('payment_history',$paymentDataUdpate);
             $inv = $_POST['inv']; 
             $am = array();
             $am = explode(" ",$inv);
@@ -1979,21 +2006,11 @@ for($p=0;$p<count($finalOrderData);$p++) {
             }else{
                 $sta = 0;
             }
-            $paymentDataUdpate = array(      
-                        'order_id' => $id,
-                        'amount' => $amount,
-                        'reference'=>$reference,
-                        'payment_mode' =>  $payment_mode,
-                        'payment_date' => $payment_date,
-                );
-            $this->db->where('order_id',$id);
-            $this->db->where('id',$payment_id);
-            $this->db->update('payment_history',$paymentDataUdpate);
-            
             $message='Payment Updated Successfully'; 
             $status='success';
 
         }else{
+
             $am = array();
             $am = explode(" ",$inv);
             $this->db->where('order_id',$id);
@@ -2013,6 +2030,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
             }else{
                 $sta = 0;
             }
+
             $paymentData = array(
                         'order_id' => $id,
                         'amount' => $amount,
@@ -2074,11 +2092,11 @@ for($p=0;$p<count($finalOrderData);$p++) {
     
     // item status update
     public function price_fetch1() { 
+
         foreach($_POST['checked'] as $page_id) {
             $this->db->where('id',$page_id);
             $order_status = $this->db->update('order_products',['status' => 2]);
         }
-
         $order_id = $_POST['id'];
         $items = $this->db->get_where("order_products",array('order_id =' => $order_id))->result_array();
         $pending=0;

@@ -285,7 +285,7 @@
 									                    } elseif($value['status'] == 1) {
 									                        $status ='In Progress';
 									                    } else {
-									                        $status ='Completed';
+									                        $status ='Delivered';
 									                    }
 									                    // Checking Delivery Status.
 									                    if ($value['invoice_status'] == 0) {
@@ -295,6 +295,10 @@
 									                    } elseif($value['invoice_status'] == 1) {
 
 									                        $invoice_status ='Paid';
+
+									                    } elseif($value['invoice_status'] == 2) {
+
+									                        $invoice_status ='Partial Paid';
 
 									                    }
 									                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
@@ -369,7 +373,7 @@
 									                    } elseif($value['status'] == 1) {
 									                        $status ='In Progress';
 									                    } else {
-									                        $status ='Completed';
+									                        $status ='Delivered';
 									                    }
 									                    // Checking Delivery Status.
 									                    if ($value['invoice_status'] == 0) {
@@ -380,7 +384,12 @@
 
 									                        $invoice_status ='Paid';
 
+									                	} elseif($value['invoice_status'] == 2) {
+
+									                        $invoice_status ='Partial Paid';
+
 									                    }
+
 									                    $view = base_url('Order/view/'.$this->utility->encode($value['id']));
 												?>
 												<tr role="row" class="odd">
