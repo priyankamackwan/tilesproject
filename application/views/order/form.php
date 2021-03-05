@@ -804,6 +804,7 @@ function delete_payment(order_id,payment_id){
 //price fetch on change prouct itemid is product id and itemNumber for div if balnck fetch last item_nmuber
 function price_fetch(itemId,itemNumber=null){
 	var item_nmuber=$("#ordercount").val();
+	var itemId =  parseInt(itemId);
 	if(itemNumber==null){
 		var total_item= parseInt(item_nmuber);	
 	}else{

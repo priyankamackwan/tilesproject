@@ -1830,10 +1830,10 @@ for($p=0;$p<count($finalOrderData);$p++) {
             require('spreadsheet-reader-master/SpreadsheetReader.php');
 
             $Reader = new SpreadsheetReader(FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.'/'.$image);
-          
+
             $i=0;
             foreach ($Reader as $Row)
-            {
+            {   
                 if ($i!=0) //Headers has been skipped and start to insert value
                 {
                     $this->db->select('*');
@@ -1842,13 +1842,15 @@ for($p=0;$p<count($finalOrderData);$p++) {
                     $this->db->where('is_deleted',0); // user is not deleted
                     $q = $this->db->get('users');
                     $userData = $q->result_array();
+
                     if (!empty($userData) && count($userData) > 0) //if user is exist,active and not deleted
-                    {
+                    {   
+
                         $this->db->select('id');
                         $q = $this->db->get('orders');
                         $orderLast = $q->result_array();
                         $newOrder = end($orderLast)['id'] + 1;
-
+                        
                         if (date('m') <= 3) {//Upto June 2014-2015
                             $financial_year = (date('y')-1) . '-' . date('y');
                         } else {//After June 2015-2016
@@ -1879,12 +1881,14 @@ for($p=0;$p<count($finalOrderData);$p++) {
 
                         $this->$model->insert('orders',$data); 
                         $lastInsertedOrderId = $this->db->insert_id();
+
                         $countProducts = explode(',', $Row[1]);
                         $countQuantity = explode(',', $Row[2]);
                         $countPrice = explode(',', $Row[3]);
-                     
+                
                         for($k=0;$k<count($countPrice);$k++)
                         {
+                            
                             $this->db->select('*');
                             $this->db->where('id', $countProducts[$k]);
                             $q = $this->db->get('products');
@@ -1914,7 +1918,7 @@ for($p=0;$p<count($finalOrderData);$p++) {
                             $updatedSoldQuantity = $productData[0]['sold_quantity'] + $countQuantity[$k]; 
                             $this->db->set('sold_quantity',$updatedSoldQuantity);
                             $this->db->where('id',$productData[0]['id']);
-                            $this->db->update('products',$newdata);
+                            $this->db->update('products',$newdata);                            
                         }
                     }
                     else // invalid email id or user is inactive or deleted

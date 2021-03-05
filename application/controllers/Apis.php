@@ -1317,7 +1317,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                      $companyName = $userData[0]['company_name'];
                    
                             $mail = new PHPMailer;
-                            $mail->isSMTP();
+                            //$mail->isSMTP();
                             //$mail->isMail();
                             $mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
@@ -1361,7 +1361,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->send();
                             
                             $mail = new PHPMailer;
-                            $mail->isSMTP(); 
+                            //$mail->isSMTP(); 
                             $mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
