@@ -1318,8 +1318,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                    
                             $mail = new PHPMailer;
                             //$mail->isSMTP();
-                            //$mail->isMail();
-                            $mail->Host = Mail_Host;                      
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
                             $mail->Password = Mail_Password;                    
@@ -1331,7 +1331,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 )
                             );                         
                             $mail->SMTPSecure = 'tls';                           
-                            $mail->Port = 587; 
+                            $mail->Port = 587; */
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "New Order from $companyName";
@@ -1357,12 +1357,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->AddAttachment($fileNL_invoice, $name = 'INVOICE',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_lpo, $name = 'LPO',  $encoding = 'base64', $type = 'application/pdf');
                             $mail->AddAttachment($fileNL_do, $name = 'DO',  $encoding = 'base64', $type = 'application/pdf');
-                            $mail->addAddress('chirag.webpatriot@gmail.com', 'PNP Admin');
+                            $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
                             $mail->send();
                             
                             $mail = new PHPMailer;
                             //$mail->isSMTP(); 
-                            $mail->Host = Mail_Host;                      
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
                             $mail->Password = Mail_Password;                    
@@ -1374,7 +1375,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 )
                             );                         
                             $mail->SMTPSecure = 'tls';                           
-                            $mail->Port = 587; 
+                            $mail->Port = 587; */
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "Order Confirmation";
