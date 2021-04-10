@@ -52,9 +52,13 @@
 
                 if (in_array('6',$this->userhelper->current('rights'))) {
             ?>
-                    <li class="treeview <?php echo $url == 'Order'?'active':'';?>">
-                        <a href="<?php echo base_url();?>Order"><i class="fa fa-shopping-cart"></i><span>Sales Orders</span></a>
-                    </li>
+                <li class="treeview <?php echo $url == 'Order'?'active':'';?>">
+                    <a href="<?php echo base_url();?>Order"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sales Orders</span></a>
+                    <!-- <ul class="sidebar-menu" id="sub-menu">
+                        <li class="treeview"><a href="<?php echo base_url();?>Order/neworder"><i class="fa fa-shopping-basket" aria-hidden="true"></i>&nbsp;&nbsp;<span>Create New Order</span></a></li>
+                        <li class="treeview"><a href="<?php echo base_url();?>Order"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sales Orders</span></a></li> 
+                    </ul> -->
+                </li>
             <?php
                 }
 
@@ -81,3 +85,16 @@
 </aside>
 
 
+|<script type="text/javascript">
+    $(function() {
+    $('#MainMenu > li').click(function(e) {
+        e.stopPropagation();
+        var $el = $('ul',this);
+        $('#MainMenu > li > ul').not($el).slideUp();
+        $el.stop(true, true).slideToggle(400);
+    });
+        $('#MainMenu > li > ul > li').click(function(e) {
+        e.stopImmediatePropagation();  
+    });
+});
+</script>
