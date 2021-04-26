@@ -3,7 +3,7 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
-    defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
     class Apis extends CI_Controller
     {
@@ -1408,6 +1408,247 @@ $pdf2->Output($fileNL_invoice, 'F');
                     exit();
                 }
                 
+                public function sampleRequest() {
+
+                    $model = $this->model;
+                    $orderData = array();
+                    $data = $_POST;
+    
+                        /* Sample Request Section Start */              
+                        if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax'])))) {
+
+                                //order for particular user
+                                $orderUserId=$this->user_id;
+                                 
+                                // placed by is set or not               
+                                if(!empty($data['placed_by']) && isset($data['placed_by'])) {
+
+                                    $placed_by=trim($data['placed_by']);
+                                    $placed_by=strtolower($placed_by);
+                                    if($placed_by=='admin'){
+                                        $orderUserId=trim($data['customer_id']);
+                                    }
+                                } else {
+                                    $placed_by="customer";
+                                }
+
+                                // customer id is set or not
+                                if(!empty($data['customer_id']) && isset($data['customer_id'])) {
+                                    
+                                    $customer_id=trim($data['customer_id']);
+                                } else {
+                                    $customer_id="0";
+                                }
+
+                                $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
+
+                                // if order is placed by admin then need to check customer is exist or not and status
+                                if($placed_by=="admin" && $customercheck=="0") {
+                                    $response['status'] = 'failure';
+                                    $response['message'] = 'Please provide customer id who is exist and active';
+                                    echo json_encode($response);
+                                    exit();
+                                }
+                              
+                                
+                                if($placed_by=='admin') {
+
+                                    $sampleData = array(
+                                            'user_id' => $customer_id,
+                                            'product_id' => $data['product_id'],
+                                            'tax' => $data['tax'],
+                                            'cargo' => $data['cargo'],
+                                            'cargo_number' => $data['cargo_number'],
+                                            'location' => $data['location'],
+                                            'mark' => $data['mark'],
+                                            'placed_by'=>$placed_by,
+                                            'admin_id'=>$this->user_id,
+                                            'status' => 1,
+                                            'created' => date('Y-m-d h:i:s'),
+                                    );
+                                } else {
+                                    $sampleData = array(
+                                        'user_id' => $this->user_id,
+                                        'product_id' => $data['product_id'],
+                                        'tax' => $data['tax'],
+                                        'cargo' => $data['cargo'],
+                                        'cargo_number' => $data['cargo_number'],
+                                        'location' => $data['location'],
+                                        'mark' => $data['mark'],
+                                        'placed_by'=>$placed_by,
+                                        'status' => 1,
+                                        'created' => date('Y-m-d h:i:s')
+                                    );
+                                }
+
+                                $this->$model->insert('sample_requests',$sampleData);
+                                $lastInsertedSampleRequestId = $this->db->insert_id();
+
+                                $this->db->select('*');
+                                $this->db->where('login_status', 1);
+                                $this->db->where('role', 2);
+                                $q = $this->db->get('user_login_details');
+                                $adminUserdata = $q->result_array();
+                      
+                                $productId = $data['product_id'];
+                                $userId = $this->user_id;
+
+                                $tax = $data['tax'];
+                                $created = date('Y-m-d h:i:s');
+                     
+                                if ($adminUserdata) {
+                                    for ($k=0;$k<count($adminUserdata);$k++) {
+                                      if ($adminUserdata[$k]['device_type'] == 1) {
+                                          // For Android
+                                           $notificationArray = array(
+                                              "notification_type" => 2,
+                                              "product_id" => $productId,
+                                              "user_id" => $userId,
+                                              "tax" => $tax,
+                                              "created" => $created
+                                          );
+                                          $arr = array(
+                                                  "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+                                                  "data" => [
+                                                  "body" => $notificationArray,
+                                                  "title" => "New Sample Request Added",
+                                                  // "icon" => "ic_launcher"
+                                                  ],
+                                          );
+                                          $data = json_encode($arr);
+                                          $this->android_ios_notification($data,'Android');
+                                      } else {
+                                          // For IOS
+                                          //for ios
+                                          $notificationArray = array(
+                                              "notification_type" => 2,
+                                              "product_id" => $productId,
+                                              "user_id" => $userId,
+                                              "tax" => $tax,
+                                              "created" => $created,
+                                          );   
+                                          // New array
+                                          $arr = array(
+                                              "registration_ids" => array($adminUserdata[$k]['firebase_token']),
+                                              
+                                              "notification" => [
+                                              // "body" => $notificationArray,
+                                              "body" => "",
+                                              //"title" => "New Order Added",
+                                              "title" => "New order has been placed. Please check admin portal to check this order."
+                                              ],
+                                              "priority"=> "high",
+                                              "content_available"=> true,
+                                              "mutable_content"=> true,
+                                              "data" => $notificationArray
+                                          );
+                                          $data = json_encode($arr);
+                                          $this->android_ios_notification($data,'Ios');
+                                      }
+                                    }
+                                }
+
+                                $orderData['id'] = $lastInsertedSampleRequestId;
+                                $response['status'] = 'success';
+                                $response['data'] = $orderData;
+                                                   
+                        } else {             
+                            // If any of the mandatory parameters are missing
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Please provide product id, tax and total price ';
+                        }
+                        /* Sample Request Section Section Start */
+
+                        /* Send Email Section Start */
+
+                            //1. Admin Email Send
+                            
+                            $companyName = $userData[0]['company_name'];   
+                            $mail = new PHPMailer;
+                            //$mail->isSMTP();
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
+                            $mail->SMTPAuth = true;                               
+                            $mail->Username = Mail_Username;     
+                            $mail->Password = Mail_Password;                    
+                            $mail->SMTPOptions = array(
+                              'ssl' => array(
+                              'verify_peer' => false,
+                              'verify_peer_name' => false,
+                                'allow_self_signed' => true
+                                )
+                            );                         
+                            $mail->SMTPSecure = 'tls';                           
+                            $mail->Port = 587; */
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->isHTML(true);  
+                            $mail->Subject = "New Order from $companyName";
+                            $mail->MsgHTML('Dear Admin,<br/><br/>
+                                You have received a new Order from '.$userData[0]['company_name'].'<br/>
+                                New order number is #'.$newOrder.'<br/><br/>
+                                
+                                Order Grand Total is '.$finalTotal.'<br/><br/>
+                                
+                                Your order is now being processed.<br/>
+                                We are attaching a copy of LPO,DO and Invoice in this email. And your merchandise will be delivered to :<br/>
+                                '.$userData[0]['company_address'].'<br/>
+                                '.$userData[0]['phone_no'].'<br/><br/>
+                                
+                                For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+                                
+                                Best Regards,<br/>
+                                Customer Service<br/>
+                                www.pnptiles.com<br/><br/>
+                                
+                                This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
+                            $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
+                            $mail->send();
+
+                            //2. User Email Send
+                            $mail = new PHPMailer;
+                            //$mail->isSMTP(); 
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
+                            $mail->SMTPAuth = true;                               
+                            $mail->Username = Mail_Username;     
+                            $mail->Password = Mail_Password;                    
+                            $mail->SMTPOptions = array(
+                              'ssl' => array(
+                              'verify_peer' => false,
+                              'verify_peer_name' => false,
+                                'allow_self_signed' => true
+                                )
+                            );                         
+                            $mail->SMTPSecure = 'tls';                           
+                            $mail->Port = 587; */
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->isHTML(true);  
+                            $mail->Subject = "Order Confirmation";
+                            $mail->MsgHTML('Dear '.$userData[0]['company_name'].',<br/><br/>
+                                Thanks for your order.We hope you had a good time shopping with us.<br/>
+                                Your order number is #'.$newOrder.'<br/><br/>
+                                
+                                Order Grand Total is '.$finalTotal.'<br/><br/>
+                                
+                                Your order is now being processed.<br/>
+                                We are attaching a copy of LPO and Invoice in this email.And we will deliver your merchandise to :<br/>
+                                '.$userData[0]['company_address'].'<br/>
+                                '.$userData[0]['phone_no'].'<br/><br/>
+                                
+                                For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
+                                
+                                Best Regards,<br/>
+                                Customer Service<br/>
+                                www.pnptiles.com<br/><br/>
+                                
+                                This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
+                            $mail->send();
+                            echo json_encode($response);
+                            exit();
+                        
+                        /* Send Email Section End */
+                }
+
                 public function removeFiles() {
                     
                     $data = $_POST;
