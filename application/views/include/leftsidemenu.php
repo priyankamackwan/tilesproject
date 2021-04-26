@@ -64,9 +64,9 @@
 
                    if (in_array('7',$this->userhelper->current('rights'))) {
             ?>
-                <!-- <li class="treeview <?php echo $url == 'SampleRequest'?'active':'';?>">
+                <li class="treeview <?php echo $url == 'SampleRequest'?'active':'';?>">
                     <a href="<?php echo base_url();?>SampleRequest"><i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sample Request</span></a>
-                </li> -->
+                </li>
             <?php
                 }
                 if ($this->userhelper->current('role_id') == 1) {

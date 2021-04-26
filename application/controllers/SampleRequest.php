@@ -62,56 +62,96 @@ class SampleRequest extends CI_Controller {
 
     public function server_data() {
 
-        $model = $this->model;
-        // Column array
-        $columnArray = array(
-            1 => 'users.company_name' ,
-            2 => 'sample_requests.product_id' ,
-            3 => 'sample_requests.tax' ,
-            4 => 'sample_requests.cargo' ,
-            5 => 'sample_requests.cargo_number' ,
-            6 => 'sample_requests.location',
-            7 => 'sample_requests.mark' ,
-            8 => 'sample_requests.status',
-            9 => 'sample_requests.created' ,
-        );
-
-        $model = $this->model;
-        $data = array();
-        $srNo = $startNo + 1;
-        $q = $this->db->get('sample_requests')->result();
-
-        foreach ($q as $key=>$value) {
-            
-            $id = $this->primary_id;
-            $multipleWhere2 = ['id' => $value->user_id];
-            $this->db->where($multipleWhere2);
-            $userData = $this->db->get("users")->result_array();
-    
-            $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
-
-            $nestedData['id'] = $srNo;
-            $nestedData['user_name'] = $userData[0]['company_name'];
-            $nestedData['product_id'] = $value->product_id;
-            $nestedData['tax'] = $value->tax;
-            $nestedData['cargo'] = $value->cargo;
-            $nestedData['cargo_number'] = $value->cargo_number;
-            $nestedData['location'] = $value->location;
-            $nestedData['mark'] = $value->mark;
-            
-            if ($value->status == 0) { 
-                $nestedData['status'] = 'Pending';
-            } elseif($value->status == 1) {
-                $nestedData['status'] ='In Progress';
-            } else {
-                $nestedData['status'] ='Completed';
+            $model = $this->model;
+            $order_col_id = $_POST['order'][0]['column'];
+            $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
+            $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
+            $statusFilter = $_POST['columns'][2]['search']['value'];
+            $start = $_POST['start'];
+            $limit = $_POST['length'];
+            // User username for filter
+            $username = $this->input->post('userName');
+            // User productId for filter
+            $productId = $this->input->post('productId');
+            // User salesOrderDate for filter
+            $salesOrderDate = $this->input->post('salesOrderDate');
+            if(!empty($username)){
+                if($where == null){
+                    $where .= 'LOWER(users.company_name) = "'.strtolower($username).'" ';
+                }else{
+                    $where .= ' AND LOWER(users.company_name) = "'.strtolower($username).'" ';
+                }
             }
-            $nestedData['manage'] = "<a href='$view' class='btn btn-primary btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+           
+            if(!empty($productId) && $productId > 0){
+                if($where == null){
+                    $where .= 'order_products.product_id = "'.$productId.'"';
+                }else{
+                    $where .= ' AND order_products.product_id = "'.$productId.'"';
+                }
+            }
 
-            $data[] = $nestedData;
-            $srNo++;
-        }
-        echo json_encode($data);
+            if(!empty($salesOrderDate) && isset($_POST['startdate'])){
+
+                $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+                $whereDatechange='yes';
+            }
+            $totalData = $this->samples_model->get_SampleDatatables('','','','',$where,'','',$whereDate,$this->table);
+            //$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+            $data = array();
+            $q = $this->db->where(['status' => 1,'is_deleted' => 0 ])->get("sample_requests")->result();
+            if(!empty($q))
+            {
+                $startNo = $_POST['start'];
+                $srNo = $startNo + 1;
+                foreach ($q as $key=>$value)
+                {
+                    $model = $this->model;
+                    $id = $this->primary_id;
+                    // End of rights
+                    if($value->created=="0000-00-00 00:00:00") // if date is not set
+                    {
+                        $date_value="00/00/0000"."<br>"." 00:00:00";
+                    }
+                    else
+                    {
+                        $date_value=$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
+                    }
+                    
+                    $edit = base_url($this->controller.'/edit/'.$this->utility->encode($value->$id));
+                    $delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
+                    $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
+                    $username = $this->db->where('id',$value->user_id)->get("users")->result();
+                    $item = $this->db->where('id',$value->product_id)->get("products")->result();
+                    $nestedData['id'] = $srNo;
+                    $nestedData['product_id'] = $item[0]->name;
+                    $nestedData['user_name'] = $username[0]->company_name;
+                    $nestedData['tax'] = 
+                    $nestedData['cargo'] = $value->cargo;$value->tax;
+                    $nestedData['cargo_number']= $value->cargo_number;
+                    $nestedData['location'] = $value->location;
+                    $nestedData['mark'] = $value->mark;
+                    $nestedData['status'] = $statusText;
+                    $nestedData['created'] = $date_value;
+                    if ($value->status == 1){
+                        $nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='".$view."' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+                        
+                        
+                    } else {
+                        $nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='".$view."' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
+                    }
+                    $data[] = $nestedData;
+                    $srNo++;
+                }
+            }
+
+            $json_data = array(
+                        "draw"            => intval($this->input->post('draw')),
+                        "recordsTotal"    => intval($totalData),
+                        "recordsFiltered" => intval(10),
+                        "data"            => $data
+                        );
+            echo json_encode($json_data);
     }
 
     function newsample() {
@@ -141,6 +181,167 @@ class SampleRequest extends CI_Controller {
         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button> Sample Request has been added successfully!</div>');
         redirect($this->controller);
     }
+
+    public function edit($id){
+                  
+            $model = $this->model;
+            $id = $this->utility->decode($id);
+            //Add meta title
+            $data['meta_tital']='Sample Request | PNP Building Materials Trading L.L.C';
+            $data['action'] = "update";
+            $data['msgName'] = $this->msgName;
+            $data['primary_id'] = $this->primary_id;
+            $data['controller'] = $this->controller;
+            $data['activeProducts'] = $this->db->get("products")->result_array();
+            $data['activecustomer'] = $this->db->where('status',1)->get("users")->result_array();
+            $data['id']=$id;
+            $model = $this->model;
+            $data ['result'] = $this->samples_model->view_all_sample_request($id);
+              //Previous ann Next Button (03-03-2021)
+              $ninv = $this->db->where('id  >',$id)->limit(1)->get('sample_requests')->row();
+              if(!empty($ninv)) {
+                $next = $ninv->invoice_no;
+                $data['next'] = $next;
+              }else  {
+                $ninvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
+                $next = $ninvs->invoice_no;
+                $data['next'] = $next;
+              }
+              $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('sample_requests')->row();
+              if(!empty($pinv)) {
+                $prev = $pinv->invoice_no;
+                $data['prev'] = $prev;
+              }else  {
+                $pinvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
+                $prev = $pinvs->invoice_no;
+                $data['prev'] = $prev;
+              }
+            $this->load->view($this->view.'/form',$data);
+    }
+
+    public function Update() {
+
+        $model = $this->model;
+        $id = $this->input->post('id');
+        $username = $this->input->post('username');
+        $product_id = $this->input->post('product_id');
+        $tax = $this->input->post('tax');
+        $cargo = $this->input->post('cargo');
+        $cargo_number = $this->input->post('cargo_number');
+        $location = $this->input->post('location');
+        $mark = $this->input->post('mark');
+
+        $data = array(
+            'product_id' => $product_id,
+            'user_id' => $username,
+            'tax' => $tax,
+            'cargo' => $cargo,
+            'cargo_number' => $cargo_number,
+            'location' => $location,
+            'mark' => $mark
+        );
+        $where = array($this->primary_id=>$id);
+        $this->$model->update($this->table,$data,$where);
+        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Sample Request has been updated successfully!</div>');
+        redirect($this->controller);
+    }
+
+    public function remove($id) {
+
+        $model = $this->model;
+        $company_name=array();
+        $user_data_name='';
+        //id
+        $id = $this->utility->decode($id);
+        $delete_sample_request = $this->samples_model->view_all_sample_request($id);
+        foreach ($delete_sample_request as $key => $value) {
+            if(isset($value['company_name']) && $value['company_name']!=''){
+                $user_data_name=$value['company_name'];
+            }
+        }
+        //is delete 1 for order delete
+        $this->db->set('is_deleted','1');
+        $this->db->where('id',$id);
+        $this->db->update('sample_requests'); 
+        $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$user_data_name.' has been deleted successfully!</div>');
+        redirect($this->controller);    
+    }
+
+     public function view($id) {
+            
+            $model = $this->model;
+            $id = $this->utility->decode($id);
+            //Add meta title
+            $data['meta_tital']='Sample Request | PNP Building Materials Trading L.L.C';
+            $data['action'] = "update";
+            $data['msgName'] = $this->msgName;
+            $data['primary_id'] = $this->primary_id;
+            $data['controller'] = $this->controller;
+
+            $model = $this->model;
+
+            $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
+   
+              // Previous ann Next Button (03-03-2021)
+              $ninv = $this->db->where('id  >',$id)->limit(1)->get('sample_requests')->row();
+              if(!empty($ninv)) {
+                $next = $ninv->invoice_no;
+                $data['next'] = $next;
+              }else  {
+                $ninvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
+                $next = $ninvs->invoice_no;
+                $data['next'] = $next;
+              }
+              $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('sample_requests')->row();
+              if(!empty($pinv)) {
+                $prev = $pinv->invoice_no;
+                $data['prev'] = $prev;
+              }else  {
+                $pinvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
+                $prev = $pinvs->invoice_no;
+                $data['prev'] = $prev;
+              }
+            $this->load->view($this->view.'/view',$data);
+        }
+        
+    function next() {
+
+        $id = intval($this->input->post('id'));
+        $this->db->select("*");
+        $this->db->from('sample_requests');
+        //$this->db->join('users','users.id = orders.user_id');
+        //$this->db->order_by('users.company_name','desc');
+        $query = $this->db->where('sample_requests.id  >',$id)->limit(1)->get()->row();
+        if(!empty($query)){
+            $status ="success";
+            echo json_encode(array("status"=>$status,"url"=>$this->utility->encode($query->id)));
+            exit();
+        }else {
+            $status ="fail";
+            $lastinv = $this->db->where('id',$id)->get('sample_requests')->row();
+            echo json_encode(array("status"=>$status,"inv"=> $lastinv->id));
+            exit();
+        }
+        exit();
+    }
+
+    function previous() {
+        $id = intval($this->input->post('id'));
+        $query = $this->db->where('id  <',$id)->order_by('id','desc')->get('sample_requests')->row();
+        if(!empty($query)){
+            $status ="success";
+            echo json_encode(array("status"=>$status,"url"=>$this->utility->encode($query->id)));
+            exit();
+        }else {
+            $status ="fail";
+            $lastinv = $this->db->where('id',$id)->get('sample_requests')->row();
+            echo json_encode(array("status"=>$status,"inv"=> $lastinv->id));
+            exit();
+        }
+        exit();
+    }
+
+           
 }
         
                 

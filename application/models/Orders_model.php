@@ -216,6 +216,8 @@
             return $result;
 
         }
+
+       
         // Update on delete
         //oprator is for increse(+) and decrease(-) quantity
         function update_items($table_name,$fieldname,$product_id, $quantity,$oprator){

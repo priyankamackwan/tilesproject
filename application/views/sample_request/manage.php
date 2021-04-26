@@ -110,40 +110,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="row">
-
-                                    <!-- Invoice Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <!-- <label class="control-label" style="margin-top:7px;">Invoice Status:</label> -->
-                                    </div>
-
-                                    <!-- Invoice Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="invoiceStatus" style="width:100%;" id="invoiceStatus">
-                                            <option value="">All Invoice Status</option>
-                                            <option value="unpaid" <?php echo $dash_status;?>>Unpaid</option>
-                                            <option value="paid">Paid</option>
-                                            <option value="parpaid">Partial Paid</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Delivery Status Filter -->
-                                    <div class="col-md-1 col-sm-12 col-xs-12">
-                                        <!-- <label class="control-label" style="margin-top:7px;">Delivery Status:</label> -->
-                                    </div>
-
-                                    <!-- Delivery Status Filter Dropdown -->
-                                    <div class="col-md-3 col-sm-12 col-xs-12">
-                                        <select class="form-control" name="status" style="width:100%;" id="status">
-                                            <option value="">All Delivery Status</option>
-                                            <option value="pending">Pending</option>
-                                            <option value="inprogress">In Progress</option>
-                                            <option value="delivered">Delivered</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -164,8 +130,8 @@
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
                             <thead>
                                 <th class="text-center">Sr No.</th>
-                                <th class="text-center">Company Name</th>
-                                <th class="text-center">Product Name</th>
+                                <th class="text-center">Item Name</th>
+                                <th class="text-center">Comapny Name</th>
                                 <th class="text-center">Tax</th>
                                 <th class="text-center">Cargo</th>
                                 <th class="text-center">Cargo Number</th>
@@ -190,14 +156,110 @@
 ?>
 
 <script>
-    jQuery(document).ready(function(){    
-        $.ajax({
-            "url": "<?php echo base_url().$this->controller."/server_data/" ?>",
-            "dataType": "json",
-            "type": "POST",
-            "data":function(data) {
-               
+    jQuery(document).ready(function(){
+        var dataTable2 = $('#datatables').dataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+                "url": "<?php echo base_url().$this->controller."/server_data/" ?>",
+                "dataType": "json",
+                "type": "POST"
+                },
+            "columns": [
+                { "data": "id"},      
+                { "data": "product_id"},
+                { "data": "user_name"},
+                { "data": "tax"},
+                { "data": "cargo"},
+                { "data": "cargo_number"},
+                { "data": "location"},
+                { "data": "mark"},
+                { "data": "created"},
+                { "data": "status"},
+                { "data": "manage"}
+            ],
+            "columnDefs": [ {
+                "targets": [8],
+                "orderable": false,  
+            },{
+        "targets": [6],
+        "orderable": true,  
+      },{
+        "className": 'text-center',
+        "targets":   [0],
+        "orderable": false
+      },{
+        "className": 'text-center',
+        "targets":   [5,6,7,8],
+        "orderable": true
+      }],
+
+            "order": [[ 0, "DESC"]],
+        });
+            
+             $('.search-input-select').on('change', function (e) {   
+                // for dropdown
+                var i =$(this).attr('data-column');  // getting column index
+                var v =$(this).val();  // getting search input value
+                dataTable2.api().columns(i).search(v).draw();
+            });
+    });
+
+    // Filter for User list
+    $(document).on("change","#clientList",function(evt){
+        // dataTable1.rows().deselect();
+        dataTable1.draw();
+    });
+
+    // Filter for Product list
+    $(document).on("change","#productsList",function(evt){
+        dataTable1.draw();
+    });
+
+     function resetDatePicker(){
+        $("#salesOrderDate").val('');
+    }
+    var dataTable1 = '';
+
+    $(function(){
+
+        //Date range picker
+        $('#salesOrderDate').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY',
             },
         });
+
+        // ,function(start, end, label) {
+        //     daterangeStartValue = start.format('YYYY-MM-DD');
+        //     daterangeEndValue= end.format('YYYY-MM-DD');
+        //     dataTable1.draw();
+        // }
+
+        $('#salesOrderDate').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+
+            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
+            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
+
+            dataTable1.draw();
+        });
+
+        $('#salesOrderDate').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            dataTable1.draw();
+        });
+
+        daterangeStartValue = moment($('#salesOrderDate').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
+        daterangeEndValue = moment($('#salesOrderDate').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+    });
+    // On reset date range
+    $(document).on("click","#resetDatePicker",function(evt){
+        //blank start and end date
+        daterangeStartValue="";
+        daterangeEndValue="";
+
+        dataTable1.draw();
     });
 </script>

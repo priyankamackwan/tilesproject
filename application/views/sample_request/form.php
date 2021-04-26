@@ -91,20 +91,82 @@ a:hover, a:active, a:focus {
 					<div class="box-header">
 						<h3 class="box-title"><?php echo $btn.' '.$this->msgName;?></h3>
 						&nbsp;&nbsp;
-						<input type="submit" name="delivered" id="delivered" class="btn btn-primary delivered" value="Mark as Delivered" disabled="disabled">
 					</div>
 
 					<div class="box-body">
-						<form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update_order';?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-							
+						<form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/'.$action;?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
 							<input type="hidden" id="id" name="id" value="<?php echo $id;?>">
 							<input type="hidden" id="action" name="action" value="<?php echo $action;?>">
-							<input type="hidden" id="ordercount" name="ordercount" value="<?php echo count($result);?>">
-								
-							
-			                <input type="hidden" name="price" value="<?php echo $price;?>">
-			                <input type="hidden" name="client_type" id="client_type" value="<?php echo $client_type;?>">
-		             
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="category_name">User Name :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12 mt_5">
+									<select name="username" id="username">
+										<?php 
+										if(!empty($activecustomer)){
+											foreach ($activecustomer as $key => $value) { ?>
+												<option value="<?=$value['id'];?>" <?php if ($value['company_name']==$result[0]['company_name']) { ?>selected="selected"<?php } ?>><?=$value['company_name'];?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="tax">Item  Name <font color="red"><span class="required">*</span></font> :</label>
+								<div class="col-md-9 col-sm-12 col-xs-12">
+									<select class="form-control select2 product_id" name="product_id" style="width:100%;" id="product_id" required="required">
+										<option value="" selected >All</option>
+											<?php
+										        if(!empty($activeProducts) && count($activeProducts) > 0 ){
+										            foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {?>
+										                <option value="<?php echo $activeProductsValue['id']; ?>" <?php if(isset($result[0]['product_id']) && $result[0]['product_id']!='' && $result[0]['product_id']==$activeProductsValue['id']){echo 'selected';}?>><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
+										    <?php
+										            }
+										        }else{
+										    ?>
+										        <option value="">-- No Item Available --</option>
+										    <?php
+										        }
+										    ?>
+									</select>
+								</div>
+							</div>				
+							<div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="tax">Tax <font color="red"><span class="required">*</span></font> :</label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                    <input type="text" name="tax" value="<?php if(isset($post['tax']) && $post['tax']!=''){echo $post['tax'];}else{ echo $result[0]['tax'];}?>" class="form-control" placeholder="Tax">
+				                </div>
+				            </div>
+				            <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="cargo">Cargo <font color="red"><span class="required">*</span></font> :
+				                 </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                    <input type="text" name="cargo" value="<?php if(isset($post['cargo']) && $post['cargo']!=''){echo $post['cargo'];}else{ echo $result[0]['cargo'];}?>" class="form-control" placeholder="Cargo">
+				                </div>
+				            </div>
+				            <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="cargo">Cargo Number <font color="red"><span class="required">*</span></font> :
+				                 </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                    <input type="text" name="cargo_number" value="<?php if(isset($post['cargo']) && $post['cargo_number']!=''){echo $post['cargo_number'];}else{ echo $result[0]['cargo_number'];}?>" class="form-control" placeholder="Cargo Number">
+				                </div>
+				            </div>
+				            <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="cargo">Location <font color="red"><span class="required">*</span></font> :
+				                 </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                    <input type="text" name="location" value="<?php if(isset($post['location']) && $post['location']!=''){echo $post['location'];}else{ echo $result[0]['location'];}?>" class="form-control" placeholder="Location">
+				                </div>
+				            </div>
+				            <div class="form-group">
+				                <label class="control-label col-md-3 col-sm-12 col-xs-12" for="cargo">Mark <font color="red"><span class="required">*</span></font> :
+				                 </label>
+				                <div class="col-md-9 col-sm-12 col-xs-12">
+				                    <input type="text" name="mark" value="<?php if(isset($post['mark']) && $post['mark']!=''){echo $post['mark'];}else{ echo $result[0]['mark'];}?>" class="form-control" placeholder="Mark">
+				                </div>
+				            </div>  
+				            <div class="box-footer">
+			                	<input type="submit" id="submit1" name="submit" class="btn btn-primary" value="<?php //echo $btn;?> Save" style="float:right;">
+			                </div> 
 						</form>
 					</div>
 				</div>
