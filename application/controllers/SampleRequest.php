@@ -60,6 +60,7 @@ class SampleRequest extends CI_Controller {
         $this->load->view($this->view.'/manage',$data);
     }
 
+
     public function server_data() {
 
             $model = $this->model;

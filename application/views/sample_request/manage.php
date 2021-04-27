@@ -122,7 +122,7 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title"><?php echo $msgName;?></h3>
-                        <a href="<?php echo base_url($this->controller);?>/uploadOrders" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Import Sample Request</a>
+                        <a href="<?php echo base_url($this->controller);?>/newsample" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>New Sample Request</a><br><br>
                     </div>
 
                     <!-- Order table -->
