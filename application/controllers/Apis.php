@@ -7,7 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     class Apis extends CI_Controller
     {
-                public $model;
+        public $model;
+        
         public function __construct() {
                     
             $this->model = "My_model";
@@ -83,7 +84,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }
         }
                 
-                public function userRegister() {
+        public function userRegister() {
                     $model = $this->model;
                     $data = $_POST;
                         
@@ -1647,6 +1648,25 @@ $pdf2->Output($fileNL_invoice, 'F');
                             exit();
                         
                         /* Send Email Section End */
+                }
+
+                public function  getallsampleRequest() {
+
+                    $this->db->select('p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                    $this->db->from('sample_requests as s');
+                    $this->db->join('products as p', 's.product_id = p.id');
+                    $this->db->join('users as u', 's.user_id = u.id');
+                    $sampleData = $this->db->get()->result_array();
+                    if ($sampleData) {
+                        $response['status'] = 'success';
+                        $response['data'] = $sampleData;
+                    } else {
+                        $response['status'] = 'success';
+                        $response['message'] = 'No orders found';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
                 }
 
                 public function removeFiles() {
