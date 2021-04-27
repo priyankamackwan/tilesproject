@@ -1652,7 +1652,7 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function  getallsampleRequest() {
 
-                    $this->db->select('p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                    $this->db->select('s.id,p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                     $this->db->from('sample_requests as s');
                     $this->db->join('products as p', 's.product_id = p.id');
                     $this->db->join('users as u', 's.user_id = u.id');
