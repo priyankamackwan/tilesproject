@@ -1581,7 +1581,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             );                         
                             $mail->SMTPSecure = 'tls';                           
                             $mail->Port = 587; 
-                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->setFrom('chirag.webpatriot@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "New Order from $companyName";
                             $mail->MsgHTML('Dear Admin,<br/><br/>
@@ -1602,7 +1602,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 www.pnptiles.com<br/><br/>
                                 
                                 This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
-                            $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
+                            $mail->addAddress('chirag.webpatriot@gmail.com', 'PNP Admin');
                             $mail->send();
 
                             //2. User Email Send
@@ -1622,7 +1622,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                             );                         
                             $mail->SMTPSecure = 'tls';                           
                             $mail->Port = 587; 
-                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
+                            $mail->setFrom('chirag.webpatriot@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "Order Confirmation";
                             $mail->MsgHTML('Dear '.$userData[0]['company_name'].',<br/><br/>
