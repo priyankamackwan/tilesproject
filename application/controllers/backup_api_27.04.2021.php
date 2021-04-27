@@ -1566,9 +1566,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                             
                             $companyName = $userData[0]['company_name'];   
                             $mail = new PHPMailer;
-                            $mail->isSMTP();
-                            //$mail->isMail();
-                            $mail->Host = Mail_Host;                      
+                            //$mail->isSMTP();
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
                             $mail->Password = Mail_Password;                    
@@ -1580,7 +1580,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 )
                             );                         
                             $mail->SMTPSecure = 'tls';                           
-                            $mail->Port = 587; 
+                            $mail->Port = 587; */
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "New Order from $companyName";
@@ -1607,9 +1607,9 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                             //2. User Email Send
                             $mail = new PHPMailer;
-                            $mail->isSMTP(); 
-                            //$mail->isMail();
-                            $mail->Host = Mail_Host;                      
+                            //$mail->isSMTP(); 
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
                             $mail->Password = Mail_Password;                    
@@ -1621,7 +1621,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 )
                             );                         
                             $mail->SMTPSecure = 'tls';                           
-                            $mail->Port = 587; 
+                            $mail->Port = 587; */
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "Order Confirmation";
