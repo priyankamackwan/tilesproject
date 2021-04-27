@@ -82,7 +82,6 @@ class SampleRequest extends CI_Controller {
                     $where .= ' AND LOWER(users.company_name) = "'.strtolower($username).'" ';
                 }
             }
-           
             if(!empty($productId) && $productId > 0){
                 if($where == null){
                     $where .= 'order_products.product_id = "'.$productId.'"';
@@ -90,7 +89,6 @@ class SampleRequest extends CI_Controller {
                     $where .= ' AND order_products.product_id = "'.$productId.'"';
                 }
             }
-
             if(!empty($salesOrderDate) && isset($_POST['startdate'])){
 
                 $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
@@ -100,12 +98,14 @@ class SampleRequest extends CI_Controller {
             //$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
             $data = array();
             $q = $this->db->where(['status' => 1,'is_deleted' => 0 ])->get("sample_requests")->result();
-            if(!empty($q))
-            {
+            
+            if(!empty($q)) {
+
                 $startNo = $_POST['start'];
                 $srNo = $startNo + 1;
-                foreach ($q as $key=>$value)
-                {
+
+                foreach ($q as $key=>$value) {
+
                     $model = $this->model;
                     $id = $this->primary_id;
                     // End of rights
@@ -121,6 +121,7 @@ class SampleRequest extends CI_Controller {
                     $edit = base_url($this->controller.'/edit/'.$this->utility->encode($value->$id));
                     $delete = base_url($this->controller.'/remove/'.$this->utility->encode($value->$id));
                     $view = base_url($this->controller.'/view/'.$this->utility->encode($value->$id));
+
                     $username = $this->db->where('id',$value->user_id)->get("users")->result();
                     $item = $this->db->where('id',$value->product_id)->get("products")->result();
                     $nestedData['id'] = $srNo;
@@ -133,10 +134,9 @@ class SampleRequest extends CI_Controller {
                     $nestedData['mark'] = $value->mark;
                     $nestedData['status'] = $statusText;
                     $nestedData['created'] = $date_value;
+                    
                     if ($value->status == 1){
                         $nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='".$view."' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
-                        
-                        
                     } else {
                         $nestedData['manage'] = "<a class='btn btn-sm btn-primary' href='".$edit."' style='padding: 8px;margin-top:1px;' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>&nbsp;<a href='".$delete."' style='padding: 8px;margin-top:1px;' class='btn btn-danger btn-xs confirm-delete' data-toggle='tooltip' title='Delete'><i class='fa fa-trash'></i></a>&nbsp;<a href='".$view."' class='btn btn-info btn-sm' style='padding:8px;' data-toggle='tooltip' title='View'><i class='fa fa-eye'></i></a>";
                     }
@@ -200,20 +200,20 @@ class SampleRequest extends CI_Controller {
               //Previous ann Next Button (03-03-2021)
               $ninv = $this->db->where('id  >',$id)->limit(1)->get('sample_requests')->row();
               if(!empty($ninv)) {
-                $next = $ninv->invoice_no;
+                $next = $ninv->id;
                 $data['next'] = $next;
               }else  {
                 $ninvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
-                $next = $ninvs->invoice_no;
+                $next = $ninvs->id;
                 $data['next'] = $next;
               }
               $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('sample_requests')->row();
               if(!empty($pinv)) {
-                $prev = $pinv->invoice_no;
+                $prev = $pinv->id;
                 $data['prev'] = $prev;
               }else  {
                 $pinvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
-                $prev = $pinvs->invoice_no;
+                $prev = $pinvs->id;
                 $data['prev'] = $prev;
               }
             $this->load->view($this->view.'/form',$data);
@@ -281,24 +281,25 @@ class SampleRequest extends CI_Controller {
             $model = $this->model;
 
             $data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
-   
-              // Previous ann Next Button (03-03-2021)
+            $data['activeProducts'] = $this->db->where('id',$data['result'][0]->product_id)->get("products")->result();
+            $data['activecustomer'] = $this->db->where(['status'=> 1,'id' => $data['result'][0]->user_id])->get("users")->result();
+            // Previous ann Next Button (03-03-2021)
               $ninv = $this->db->where('id  >',$id)->limit(1)->get('sample_requests')->row();
               if(!empty($ninv)) {
-                $next = $ninv->invoice_no;
+                $next = $ninv->id;
                 $data['next'] = $next;
               }else  {
                 $ninvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
-                $next = $ninvs->invoice_no;
+                $next = $ninvs->id;
                 $data['next'] = $next;
               }
               $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('sample_requests')->row();
               if(!empty($pinv)) {
-                $prev = $pinv->invoice_no;
+                $prev = $pinv->id;
                 $data['prev'] = $prev;
               }else  {
                 $pinvs = $this->db->where('id',$id)->limit(1)->get('sample_requests')->row();
-                $prev = $pinvs->invoice_no;
+                $prev = $pinvs->id;
                 $data['prev'] = $prev;
               }
             $this->load->view($this->view.'/view',$data);

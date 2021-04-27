@@ -157,14 +157,19 @@
 
 <script>
     jQuery(document).ready(function(){
-        var dataTable2 = $('#datatables').dataTable({
+        var dataTable1 = $('#datatables').dataTable({
             "processing": true,
             "serverSide": true,
             "ajax":{
                 "url": "<?php echo base_url().$this->controller."/server_data/" ?>",
                 "dataType": "json",
-                "type": "POST"
+                "type": "POST",
+                "data":function(data) {
+                    data.userName = $('#clientList').val();
+                    data.productId = $('#productsList').val();
+                    data.salesOrderDate = $('#salesOrderDate').val();
                 },
+            },
             "columns": [
                 { "data": "id"},      
                 { "data": "product_id"},
@@ -181,85 +186,29 @@
             "columnDefs": [ {
                 "targets": [8],
                 "orderable": false,  
-            },{
-        "targets": [6],
-        "orderable": true,  
-      },{
-        "className": 'text-center',
-        "targets":   [0],
-        "orderable": false
-      },{
-        "className": 'text-center',
-        "targets":   [5,6,7,8],
-        "orderable": true
-      }],
-
+            },
+            {
+            "targets": [6],
+            "orderable": true,  
+            },
+            {
+                "className": 'text-center',
+                "targets":   [0],
+                "orderable": false
+            },
+            {
+                "className": 'text-center',
+                "targets":   [5,6,7,8],
+                "orderable": true
+            }],
             "order": [[ 0, "DESC"]],
         });
-            
-             $('.search-input-select').on('change', function (e) {   
-                // for dropdown
-                var i =$(this).attr('data-column');  // getting column index
-                var v =$(this).val();  // getting search input value
-                dataTable2.api().columns(i).search(v).draw();
-            });
-    });
 
-    // Filter for User list
-    $(document).on("change","#clientList",function(evt){
-        // dataTable1.rows().deselect();
-        dataTable1.draw();
-    });
-
-    // Filter for Product list
-    $(document).on("change","#productsList",function(evt){
-        dataTable1.draw();
-    });
-
-     function resetDatePicker(){
-        $("#salesOrderDate").val('');
-    }
-    var dataTable1 = '';
-
-    $(function(){
-
-        //Date range picker
-        $('#salesOrderDate').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                format: 'DD-MM-YYYY',
-            },
+        $('.search-input-select').on('change', function (e) {   
+            // for dropdown
+            var i =$(this).attr('data-column');  // getting column index
+            var v =$(this).val();  // getting search input value
+            dataTable2.api().columns(i).search(v).draw();
         });
-
-        // ,function(start, end, label) {
-        //     daterangeStartValue = start.format('YYYY-MM-DD');
-        //     daterangeEndValue= end.format('YYYY-MM-DD');
-        //     dataTable1.draw();
-        // }
-
-        $('#salesOrderDate').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-
-            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
-            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
-
-            dataTable1.draw();
-        });
-
-        $('#salesOrderDate').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-            dataTable1.draw();
-        });
-
-        daterangeStartValue = moment($('#salesOrderDate').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
-        daterangeEndValue = moment($('#salesOrderDate').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
-    });
-    // On reset date range
-    $(document).on("click","#resetDatePicker",function(evt){
-        //blank start and end date
-        daterangeStartValue="";
-        daterangeEndValue="";
-
-        dataTable1.draw();
     });
 </script>

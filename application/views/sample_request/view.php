@@ -50,7 +50,11 @@ print_r($result); exit;*/
                 </label>
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $item[0]['name'];?>
+                  <?php 
+                    if(!empty($activeProducts[0]->name)) {
+                      echo $activeProducts[0]->name; 
+                    }
+                  ?>
                 </div>
               </div>
 
@@ -60,7 +64,11 @@ print_r($result); exit;*/
                 </label>
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $User[0]['company_name'];?>
+                  <?php 
+                    if(!empty($activecustomer[0]->company_name)) {
+                      echo $activecustomer[0]->company_name;
+                    }
+                  ?>
                 </div>
               </div>
 
@@ -70,8 +78,11 @@ print_r($result); exit;*/
                 </label>
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $this->My_model->getamount(round($result[0]->tax,2));?>
-                  <?php echo "  ( ".$result[0]->tax_percentage. " % )"; ?> <!-- display tax in percentage -->
+                  <?php 
+                  if(!empty($result[0]->tax)){
+                    echo $this->My_model->getamount(round($result[0]->tax,2));
+                  }
+                  ?>
                 </div>
               </div>
       
@@ -81,7 +92,11 @@ print_r($result); exit;*/
                 </label>
               
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $result[0]->cargo;?>
+                  <?php 
+                    if(!empty($result[0]->cargo)){  
+                      echo $result[0]->cargo;
+                    }
+                  ?>
                 </div>
               </div>
 
@@ -91,7 +106,11 @@ print_r($result); exit;*/
                 </label>
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $result[0]->cargo_number;?>
+                  <?php 
+                    if(!empty($result[0]->cargo_number)){  
+                      echo $result[0]->cargo_number;
+                    }
+                  ?>
                 </div>
               </div>
              
@@ -101,7 +120,11 @@ print_r($result); exit;*/
                 </label>
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $result[0]->location;?>
+                  <?php 
+                    if(!empty($result[0]->location)) {
+                      echo $result[0]->location;
+                    }
+                  ?>
                 </div>
               </div>
 
@@ -111,7 +134,11 @@ print_r($result); exit;*/
                 </label>
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
-                  <?php echo $result[0]->mark;?>
+                  <?php 
+                    if(!empty($result[0]->mark))  {
+                      echo $result[0]->mark;
+                    }
+                  ?>
                 </div>
               </div>
                            
@@ -122,9 +149,11 @@ print_r($result); exit;*/
 
                 <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
                   <div class='input-group date' id='payment_datetimepicker'>
-                      <?php 
+                    <?php 
+                    if(!empty($result[0]->created)) {
                       echo $this->My_model->date_conversion($result[0]->created,'d/m/Y H:i:s',' ');
-                      ?>
+                    } 
+                    ?>
                   </div>
                 </div>
               </div>    
