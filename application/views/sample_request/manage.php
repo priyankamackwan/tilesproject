@@ -211,4 +211,5 @@
             dataTable2.api().columns(i).search(v).draw();
         });
     });
+    
 </script>

@@ -1566,9 +1566,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                             
                             $companyName = $userData[0]['company_name'];   
                             $mail = new PHPMailer;
-                            $mail->isSMTP();
-                            //$mail->isMail();
-                            $mail->Host = Mail_Host;                      
+                            //$mail->isSMTP();
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
                             $mail->Password = Mail_Password;                    
@@ -1580,8 +1580,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 )
                             );                         
                             $mail->SMTPSecure = 'tls';                           
-                            $mail->Port = 587; 
-                            $mail->setFrom('chirag.webpatriot@gmail.com', 'Tiles Admin');
+                            $mail->Port = 587; */
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "New Order from $companyName";
                             $mail->MsgHTML('Dear Admin,<br/><br/>
@@ -1602,14 +1602,14 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 www.pnptiles.com<br/><br/>
                                 
                                 This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
-                            $mail->addAddress('chirag.webpatriot@gmail.com', 'PNP Admin');
+                            $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
                             $mail->send();
 
                             //2. User Email Send
                             $mail = new PHPMailer;
-                            $mail->isSMTP(); 
-                            //$mail->isMail();
-                            $mail->Host = Mail_Host;                      
+                            //$mail->isSMTP(); 
+                            $mail->isMail();
+                            /*$mail->Host = Mail_Host;                      
                             $mail->SMTPAuth = true;                               
                             $mail->Username = Mail_Username;     
                             $mail->Password = Mail_Password;                    
@@ -1621,8 +1621,8 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 )
                             );                         
                             $mail->SMTPSecure = 'tls';                           
-                            $mail->Port = 587; 
-                            $mail->setFrom('chirag.webpatriot@gmail.com', 'Tiles Admin');
+                            $mail->Port = 587; */
+                            $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
                             $mail->Subject = "Order Confirmation";
                             $mail->MsgHTML('Dear '.$userData[0]['company_name'].',<br/><br/>
@@ -1654,6 +1654,26 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                     $this->db->select('p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                     $this->db->from('sample_requests as s');
+                    $this->db->join('products as p', 's.product_id = p.id');
+                    $this->db->join('users as u', 's.user_id = u.id');
+                    $sampleData = $this->db->get()->result_array();
+                    if ($sampleData) {
+                        $response['status'] = 'success';
+                        $response['data'] = $sampleData;
+                    } else {
+                        $response['status'] = 'success';
+                        $response['message'] = 'No orders found';
+                    }
+                    // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+                }
+
+                public function  getsinglesampleRequest($id) {
+                
+                    $this->db->select('p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                    $this->db->from('sample_requests as s');
+                    $this->db->where('s.id',$id);
                     $this->db->join('products as p', 's.product_id = p.id');
                     $this->db->join('users as u', 's.user_id = u.id');
                     $sampleData = $this->db->get()->result_array();
