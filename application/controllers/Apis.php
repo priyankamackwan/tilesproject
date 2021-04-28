@@ -1442,30 +1442,26 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 $customercheck=$this->db->select('id')->from('users')->where('id',$customer_id)->where('status',1)->get()->num_rows();
 
                                 // if order is placed by admin then need to check customer is exist or not and status
-                                if($placed_by=="admin" && $customercheck=="0") {
-                                    $response['status'] = 'failure';
-                                    $response['message'] = 'Please provide customer id who is exist and active';
-                                    echo json_encode($response);
-                                    exit();
-                                }
-                              
-                                
-                                if($placed_by=='admin') {
+                                $this->db->where('id',$this->user_id);
+                                $users = $this->db->get('users');
+                                $checkUserExist = $users->result_array();
 
+                                if(!empty($checkUserExist)) {
+                                    // normal user
                                     $sampleData = array(
-                                            'user_id' => $data['user_id'],
-                                            'product_id' => $data['product_id'],
-                                            'tax' => $data['tax'],
-                                            'cargo' => $data['cargo'],
-                                            'cargo_number' => $data['cargo_number'],
-                                            'location' => $data['location'],
-                                            'mark' => $data['mark'],
-                                            'placed_by'=>$placed_by,
-                                            'admin_id'=>$this->user_id,
-                                            'status' => 1,
-                                            'created' => date('Y-m-d h:i:s'),
+                                        'user_id' => $this->user_id,
+                                        'product_id' => $data['product_id'],
+                                        'tax' => $data['tax'],
+                                        'cargo' => $data['cargo'],
+                                        'cargo_number' => $data['cargo_number'],
+                                        'location' => $data['location'],
+                                        'mark' => $data['mark'],
+                                        'placed_by'=> "customer",
+                                        'status' => 1,
+                                        'created' => date('Y-m-d h:i:s')
                                     );
                                 } else {
+                                    // Admin User
                                     $sampleData = array(
                                         'user_id' => $data['user_id'],
                                         'product_id' => $data['product_id'],
@@ -1474,9 +1470,10 @@ $pdf2->Output($fileNL_invoice, 'F');
                                         'cargo_number' => $data['cargo_number'],
                                         'location' => $data['location'],
                                         'mark' => $data['mark'],
-                                        'placed_by'=>$placed_by,
+                                        'placed_by'=> "admin",
+                                        'admin_id'=>$this->user_id,
                                         'status' => 1,
-                                        'created' => date('Y-m-d h:i:s')
+                                        'created' => date('Y-m-d h:i:s'),
                                     );
                                 }
 
