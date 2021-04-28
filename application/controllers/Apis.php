@@ -1648,7 +1648,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $checkUserExist = $users->result_array();
 
                     if(!empty($checkUserExist)) {
-                        $this->db->select('s.id,u.company_name,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                        $this->db->select('s.id,u.company_name,u.id as user_id,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                         $this->db->from('sample_requests as s');
                         $this->db->where('s.is_deleted',0);
                         $this->db->join('products as p', 's.product_id = p.id');
@@ -1656,7 +1656,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $this->db->where('s.user_id',$this->user_id);
                         $sampleData = $this->db->get()->result_array();
                     }else {
-                        $this->db->select('s.id,u.company_name,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                        $this->db->select('s.id,u.company_name,u.id as user_id,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                         $this->db->from('sample_requests as s');
                         $this->db->where('s.is_deleted',0);
                         $this->db->join('products as p', 's.product_id = p.id');

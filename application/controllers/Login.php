@@ -40,7 +40,7 @@
 					{
                                           
 						$user_row = $check_user->result();
-                                                $rights = explode(',', $user_row[0]->rights);
+                        $rights = explode(',', $user_row[0]->rights);
 						$session_arr = array(
 							"id" => $user_row[0]->id,
 							"first_name" => $user_row[0]->first_name,
