@@ -1646,14 +1646,27 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function  getallsampleRequest() {
 
-                    $this->db->select('s.id,u.company_name,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
-                    $this->db->from('sample_requests as s');
-                    $this->db->where('s.is_deleted',0);
-                    $this->db->join('products as p', 's.product_id = p.id');
-                    $this->db->join('users as u', 's.user_id = u.id','left');
-                    //$this->db->join('admin_users as au','s.user_id = au.id');
-                    $sampleData = $this->db->get()->result_array();
-                    
+                    $this->db->where('id',$this->user_id);
+                    $users = $this->db->get('users');
+                    $checkUserExist = $users->result_array();
+
+                    if(!empty($checkUserExist)) {
+                        $this->db->select('s.id,u.company_name,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                        $this->db->from('sample_requests as s');
+                        $this->db->where('s.is_deleted',0);
+                        $this->db->join('products as p', 's.product_id = p.id');
+                        $this->db->join('users as u', 's.user_id = u.id','left');
+                        $this->db->where('s.user_id',$this->user_id);
+                        $sampleData = $this->db->get()->result_array();
+                    }else {
+                        $this->db->select('s.id,u.company_name,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                        $this->db->from('sample_requests as s');
+                        $this->db->where('s.is_deleted',0);
+                        $this->db->join('products as p', 's.product_id = p.id');
+                        $this->db->join('users as u', 's.user_id = u.id','left');
+                        $sampleData = $this->db->get()->result_array();
+                    }
+
                     if ($sampleData) {
                         $response['status'] = 'success';
                         $response['data'] = $sampleData;
@@ -1678,10 +1691,41 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $response['status'] = 'success';
                         $response['data'] = $sampleData;
                     } else {
-                        $response['status'] = 'success';
-                        $response['message'] = 'No orders found';
+                        $response['status'] = 'failure';
+                        $response['message'] = 'No sample request found';
                     }
                     // Returning back the response in JSON
+                    echo json_encode($response);
+                    exit();
+                }
+
+                public function cancelsamplerequest($id) {
+
+                    $this->db->where('id',$id);
+                    $users = $this->db->get('sample_requests');
+                    $checkRequestExist = $users->row();
+                    if(!empty($checkRequestExist)) {
+
+                        $this->db->where('id',$this->user_id);
+                        $users = $this->db->get('users');
+                        $checkUserExist = $users->result_array();
+                        if(!empty($checkUserExist)) {
+                            $this->db->where('id',$id);
+                            $this->db->update('sample_requests',['is_deleted' => 1]);
+                            if($this->db->affected_rows() > 0){
+                                $response['status'] = 'success';
+                                $response['data'] = array('id' => $id);
+                            }   
+                           
+                        } else {
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Login User Not Exist';  
+                        }
+                    } else {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'Sample Request ID Inserted Not Exist';
+                    }
+
                     echo json_encode($response);
                     exit();
                 }
