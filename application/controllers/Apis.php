@@ -1676,6 +1676,34 @@ $pdf2->Output($fileNL_invoice, 'F');
                     exit();
                 }
 
+                public function getallusers() {
+
+                    $this->db->select('u.id,u.company_name');
+                    $users = $this->db->get('users as u');
+
+                    $this->db->select('*');
+                    $this->db->from('users as au');
+                    $this->db->where('au.id',$this->user_id);
+                    $Roleusers = $this->db->get()->result_array();
+                    if(!empty($Roleusers)) {
+                        $response['current_user'] = "customer";
+                    } else {
+                        $response['current_user'] = "admin";
+                    }
+                    $checkUserExist = $users->result_array();
+                    if (!empty($checkUserExist)) {
+                        $response['status'] = 'success';
+                        $response['data'] = $checkUserExist;
+
+                    } else {
+                        $response['status'] = 'failure';
+                        $response['message'] = 'No User List Found';
+                    }
+
+                    echo json_encode($response);
+                    exit();
+                }
+
                 public function  getsinglesampleRequest($id) {
                 
                     $this->db->select('p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
