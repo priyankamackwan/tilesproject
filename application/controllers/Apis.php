@@ -846,7 +846,7 @@ You can change this password from mobile application after you are logged in onc
                         //$orderProductArray = $this->db->get("products")->result_array();
                         // Checking Email exist in our application
                         
-                        $this->db->select('id');
+                            $this->db->select('id');
                         
                        
                             $q = $this->db->get('orders');
@@ -915,11 +915,8 @@ You can change this password from mobile application after you are logged in onc
                             $this->$model->insert('orders',$orderData);
                             $lastInsertedOrderId = $this->db->insert_id();
 
-                            
-
                             for($k=0;$k<count($orderProductArray);$k++) {
                                 $product_orders= array();
-
                                 
                                 if(isset($orderProductArray[$k]['rate']) && !empty($orderProductArray[$k]['rate'])){
                                     $rate = $orderProductArray[$k]['rate'];
@@ -1484,7 +1481,8 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                                 $this->$model->insert('sample_requests',$sampleData);
                                 $lastInsertedSampleRequestId = $this->db->insert_id();
-
+                                $newOrder =  $lastInsertedSampleRequestId;
+                               
                                 $this->db->select('*');
                                 $this->db->where('login_status', 1);
                                 $this->db->where('role', 2);
@@ -1583,25 +1581,23 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->Port = 587; */
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
-                            $mail->Subject = "New Order from $companyName";
+                            $mail->Subject = "New Sample Request from $companyName";
                             $mail->MsgHTML('Dear Admin,<br/><br/>
-                                You have received a new Order from '.$userData[0]['company_name'].'<br/>
-                                New order number is #'.$newOrder.'<br/><br/>
-                                
-                                Order Grand Total is '.$finalTotal.'<br/><br/>
-                                
-                                Your order is now being processed.<br/>
-                                We are attaching a copy of LPO,DO and Invoice in this email. And your merchandise will be delivered to :<br/>
-                                '.$userData[0]['company_address'].'<br/>
-                                '.$userData[0]['phone_no'].'<br/><br/>
-                                
-                                For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
-                                
-                                Best Regards,<br/>
-                                Customer Service<br/>
-                                www.pnptiles.com<br/><br/>
-                                
-                                This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
+                            You have received a new Order from '.$userData[0]['company_name'].'<br/>
+                            New Sample Request number is #'.$newOrder.'<br/><br/>
+
+                            Your Sample Request is now being processed.<br/>
+                            We are info  you in this email.<br/>
+                            '.$userData[0]['company_address'].'<br/>
+                            '.$userData[0]['phone_no'].'<br/><br/>
+
+                            For more  updates, please get in touch with us from our mobile application.<br/><br/>
+
+                            Best Regards,<br/>
+                            Customer Service<br/>
+                            www.pnptiles.com<br/><br/>
+
+                            This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/sample request, please contact us.');
                             $mail->addAddress('pnpsales2019@gmail.com', 'PNP Admin');
                             $mail->send();
 
@@ -1624,25 +1620,22 @@ $pdf2->Output($fileNL_invoice, 'F');
                             $mail->Port = 587; */
                             $mail->setFrom('pnpsales2019@gmail.com', 'Tiles Admin');
                             $mail->isHTML(true);  
-                            $mail->Subject = "Order Confirmation";
+                            $mail->Subject = "Sample Request Confirmation";
                             $mail->MsgHTML('Dear '.$userData[0]['company_name'].',<br/><br/>
-                                Thanks for your order.We hope you had a good time shopping with us.<br/>
-                                Your order number is #'.$newOrder.'<br/><br/>
-                                
-                                Order Grand Total is '.$finalTotal.'<br/><br/>
-                                
-                                Your order is now being processed.<br/>
-                                We are attaching a copy of LPO and Invoice in this email.And we will deliver your merchandise to :<br/>
-                                '.$userData[0]['company_address'].'<br/>
-                                '.$userData[0]['phone_no'].'<br/><br/>
-                                
-                                For more order details and updates, please get in touch with us from our mobile application.<br/><br/>
-                                
-                                Best Regards,<br/>
-                                Customer Service<br/>
-                                www.pnptiles.com<br/><br/>
-                                
-                                This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/order, please contact us.');
+                            Thanks for your sample request.We hope you had a good time shopping with us.<br/>
+                            Your sample request number is #'.$newOrder.'<br/><br/>
+
+                            We are info  you in this email.<br/>
+                            '.$userData[0]['company_address'].'<br/>
+                            '.$userData[0]['phone_no'].'<br/><br/>
+
+                            For more  updates, please get in touch with us from our mobile application.<br/><br/>
+
+                            Best Regards,<br/>
+                            Customer Service<br/>
+                            www.pnptiles.com<br/><br/>
+
+                            This is an automatically generated mail.Please do not reply.If you have any queries regarding your account/sample request, please contact us.');
                             $mail->send();
                             echo json_encode($response);
                             exit();
