@@ -1415,6 +1415,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         /* Sample Request Section Start */              
                         if ((isset($data['product_id']) && (!empty($data['product_id']))) && (isset($data['mark']) && (!empty($data['mark']))) && (isset($data['location']) && (!empty($data['location']))) && (isset($data['cargo_number']) && (!empty($data['cargo_number']))) && (isset($data['cargo']) && (!empty($data['cargo']))) && (isset($data['tax']) && (!empty($data['tax'])))) {
 
+
                                 //order for particular user
                                 $orderUserId=$this->user_id;
                                  
@@ -1452,7 +1453,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                 if($placed_by=='admin') {
 
                                     $sampleData = array(
-                                            'user_id' => $customer_id,
+                                            'user_id' => $data['user_id'],
                                             'product_id' => $data['product_id'],
                                             'tax' => $data['tax'],
                                             'cargo' => $data['cargo'],
@@ -1466,7 +1467,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                     );
                                 } else {
                                     $sampleData = array(
-                                        'user_id' => $this->user_id,
+                                        'user_id' => $data['user_id'],
                                         'product_id' => $data['product_id'],
                                         'tax' => $data['tax'],
                                         'cargo' => $data['cargo'],
@@ -1534,7 +1535,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                                               // "body" => $notificationArray,
                                               "body" => "",
                                               //"title" => "New Order Added",
-                                              "title" => "New order has been placed. Please check admin portal to check this order."
+                                              "title" => "New Sample Request has been placed. Please check admin portal to check this order."
                                               ],
                                               "priority"=> "high",
                                               "content_available"=> true,
@@ -1645,17 +1646,22 @@ $pdf2->Output($fileNL_invoice, 'F');
 
                 public function  getallsampleRequest() {
 
-                    $this->db->select('s.id,p.name,u.company_name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
+                    $this->db->select('s.id,u.company_name,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                     $this->db->from('sample_requests as s');
+                    $this->db->where('s.is_deleted',0);
                     $this->db->join('products as p', 's.product_id = p.id');
-                    $this->db->join('users as u', 's.user_id = u.id');
+                    $this->db->join('users as u', 's.user_id = u.id','left');
+                    //$this->db->join('admin_users as au','s.user_id = au.id');
                     $sampleData = $this->db->get()->result_array();
+                    echo "<pre>";
+                    print_r($sampleData);
+                    exit();
                     if ($sampleData) {
                         $response['status'] = 'success';
                         $response['data'] = $sampleData;
                     } else {
-                        $response['status'] = 'success';
-                        $response['message'] = 'No orders found';
+                        $response['status'] = 'failure';
+                        $response['message'] = 'No Sample Request found';
                     }
                     // Returning back the response in JSON
                     echo json_encode($response);
