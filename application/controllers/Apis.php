@@ -1653,9 +1653,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $this->db->join('users as u', 's.user_id = u.id','left');
                     //$this->db->join('admin_users as au','s.user_id = au.id');
                     $sampleData = $this->db->get()->result_array();
-                    echo "<pre>";
-                    print_r($sampleData);
-                    exit();
+                    
                     if ($sampleData) {
                         $response['status'] = 'success';
                         $response['data'] = $sampleData;
