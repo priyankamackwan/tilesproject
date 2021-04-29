@@ -565,14 +565,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			// echo json_encode($json_data);
 		}
                 
-		public function add() {
-                    //echo '3'; exit;
+		public function add() {   
             //Add meta title
             $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
 			$data['action'] = "insert";
 			$model = $this->model;
-                        $data['controller'] = $this->controller;
-
+            $data['controller'] = $this->controller;
 			$this->load->view($this->view.'/form',$data);
 		}
                 
@@ -580,143 +578,124 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   
 			$model = $this->model;
 			$name = $this->input->post('name');
-                        $description = $this->input->post('description');
-                       
+            $description = $this->input->post('description');      
 			$data = array(
-
 				'name' => $name,
-                                'description' => $description,
-                                'created' => date('Y-m-d h:i:s'),
+                'description' => $description,
+                'created' => date('Y-m-d h:i:s'),
 			);
 			$this->$model->insert($this->table,$data);
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$name.' has been added successfully!</div>');
 			redirect($this->controller);
 		}
+
         // For edit order
 		public function edit($id){
-                  
+        
             $model = $this->model;
             $id = $this->utility->decode($id);
             //Add meta title
             $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
-            
             $data['action'] = "update";
             $data['msgName'] = $this->msgName;
             $data['primary_id'] = $this->primary_id;
             $data['controller'] = $this->controller;
             $data['activeProducts'] = $this->db->get("products")->result_array();
-
             $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
             $data['activecustomer'] = $this->db->where('status',1)->get("users")->result_array();
             $data['id']=$id;
             $model = $this->model;
             $data ['result'] = $this->orders_model->view_all_order($id);
               // Previous ann Next Button (03-03-2021)
-              $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
-              if(!empty($ninv)) {
+            $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
+            if(!empty($ninv)) {
                 $next = $ninv->invoice_no;
                 $data['next'] = $next;
-              }else  {
+            }else  {
                 $ninvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
                 $next = $ninvs->invoice_no;
                 $data['next'] = $next;
-              }
-              $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('orders')->row();
-              if(!empty($pinv)) {
+            }
+            $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('orders')->row();
+            if(!empty($pinv)) {
                 $prev = $pinv->invoice_no;
                 $data['prev'] = $prev;
-              }else  {
+            }else  {
                 $pinvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
                 $prev = $pinvs->invoice_no;
                 $data['prev'] = $prev;
-              }
+            }
             $this->load->view($this->view.'/form',$data);
         }
                 
-            public function view($id) {
+        public function view($id) {
             
 			$model = $this->model;
 			$id = $this->utility->decode($id);
             //Add meta title
             $data['meta_tital']='Sales Orders | PNP Building Materials Trading L.L.C';
-
-            //echo $id;
-            //exit();
-                       // echo $id; exit;
 			$data['action'] = "update";
 			$data['msgName'] = $this->msgName;
 			$data['primary_id'] = $this->primary_id;
 			$data['controller'] = $this->controller;
-
 			$model = $this->model;
-                      /*  $multipleWhere = ['id' => $value->product_id];
-                        $this->db->where($multipleWhere);
-                        $data['Product'] = $this->db->get("products")->result_array();
-                    
-                         $multipleWhere2 = ['id' => $value->user_id];
-                        $this->db->where($multipleWhere2);
-                        $data['User'] = $this->db->get("orders")->result_array(); */
-
+        
 			$data ['result'] = $this->$model->select(array(),$this->table,array($this->primary_id=>$id),'','');
-   
-                        $multipleWhere = ['order_id' => $id];
-                        $this->db->where($multipleWhere);
-                        $data['Product'] = $this->db->get("order_products")->result_array();
-                        for($k=0;$k<count($data['Product']);$k++) {
-                            $productIdArray = $data['Product'][$k]['product_id'];
-                            $multipleWhere2 = ['id' => $productIdArray];
-                        $this->db->where($multipleWhere2);
-                        $productData= $this->db->get("products")->result_array();
-                        $productNameArray[] = $productData[0]['name'];
-                        $designNoArray[] = $productData[0]['design_no'];
-                        $quantityArray[]= $data['Product'][$k]['quantity'];
-                        $priceArray[]= $data['Product'][$k]['price'];
-                        $rateArray[]= $data['Product'][$k]['rate'];
-                        }
+            $multipleWhere = ['order_id' => $id];
+            $this->db->where($multipleWhere);
+            $data['Product'] = $this->db->get("order_products")->result_array();
+                for($k=0;$k<count($data['Product']);$k++) {
 
-                        $data['productData'] = array();
-                        for($p=0;$p<count($productNameArray);$p++) {
-                            $data['productData'][$p]['name']= $productNameArray[$p];
-                            $data['productData'][$p]['design_no']= $designNoArray[$p];
-                             $data['productData'][$p]['quantity']= $quantityArray[$p];
-                             $data['productData'][$p]['price']= $priceArray[$p];
-                             $data['productData'][$p]['rate']= $rateArray[$p];
-                        }
+                    $productIdArray = $data['Product'][$k]['product_id'];
+                    $multipleWhere2 = ['id' => $productIdArray];
+                    $this->db->where($multipleWhere2);
+                    $productData= $this->db->get("products")->result_array();
+                    $productNameArray[] = $productData[0]['name'];
+                    $designNoArray[] = $productData[0]['design_no'];
+                    $quantityArray[]= $data['Product'][$k]['quantity'];
+                    $priceArray[]= $data['Product'][$k]['price'];
+                    $rateArray[]= $data['Product'][$k]['rate'];
+                }
+
+            $data['productData'] = array();
+                for($p=0;$p<count($productNameArray);$p++) {
+                    $data['productData'][$p]['name']= $productNameArray[$p];
+                    $data['productData'][$p]['design_no']= $designNoArray[$p];
+                     $data['productData'][$p]['quantity']= $quantityArray[$p];
+                     $data['productData'][$p]['price']= $priceArray[$p];
+                     $data['productData'][$p]['rate']= $rateArray[$p];
+                }
                        
-                        $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
-                        $this->db->where($multipleWhere2);
-                        $data['User'] = $this->db->get("users")->result_array();
-
-                        //$this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
-                        $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
+            $multipleWhere2 = ['id' => $data ['result'][0]->user_id];
+            $this->db->where($multipleWhere2);
+            $data['User'] = $this->db->get("users")->result_array();
+            $data['customer_lpo'] = $this->db->select('customer_lpo')->from('orders')->where('id',$id)->get()->result_array();
             $data['payment_history'] = $this->db->where('order_id',$id)->order_by('payment_history.id','desc')->get("payment_history")->result_array();
-                      // print_r($data); exit;
-              
-              // Previous ann Next Button (03-03-2021)
-              $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
-              if(!empty($ninv)) {
+            // Previous and Next Button (03-03-2021)
+            $ninv = $this->db->where('id  >',$id)->limit(1)->get('orders')->row();
+            if(!empty($ninv)) {
                 $next = $ninv->invoice_no;
                 $data['next'] = $next;
-              }else  {
+            }else  {
                 $ninvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
                 $next = $ninvs->invoice_no;
                 $data['next'] = $next;
-              }
-              $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('orders')->row();
-              if(!empty($pinv)) {
+            }
+            $pinv =  $this->db->where('id  <',$id)->order_by('id','desc')->get('orders')->row();
+            if(!empty($pinv)) {
                 $prev = $pinv->invoice_no;
                 $data['prev'] = $prev;
-              }else  {
+            }else  {
                 $pinvs = $this->db->where('id',$id)->limit(1)->get('orders')->row();
                 $prev = $pinvs->invoice_no;
                 $data['prev'] = $prev;
-              }
+            }
 			$this->load->view($this->view.'/view',$data);
 		}
         
                 
                 
-            public function downloadinvoice($id) {
+        public function downloadinvoice($id) {
               
 			$model = $this->model;
 			$id = $this->utility->decode($id);
@@ -1176,9 +1155,10 @@ $pdf->Output($do_no.'.pdf','D');
                       //  print_r($data); exit;
 			$this->load->view($this->view.'/view',$data);
 		}
-                
-		public function Update() 
-        {
+
+        //update          
+		public function Update() {
+
 			$model = $this->model;
 			$id = $this->input->post('id');
 			$sales_expense = $this->input->post('sales_expense');
@@ -1186,26 +1166,23 @@ $pdf->Output($do_no.'.pdf','D');
             $invoice_status = $this->input->post('invoice_status');
             $txt_deliverydate = $this->input->post('txt_deliverydate');
             $txt_paymentdate = $this->input->post('txt_paymentdate');
-
             $txt_deliverydate=date('Y-m-d H:i:00',strtotime($txt_deliverydate));
             $txt_paymentdate=date('Y-m-d H:i:00',strtotime($txt_paymentdate));
 
 			$data = array(
-                        'sales_expense' => $sales_expense,
-                        'status' => $status,
-                        'invoice_status' => $invoice_status,
-                        'delivery_date' => $txt_deliverydate,
-                        'payment_date' => $txt_paymentdate
+                'sales_expense' => $sales_expense,
+                'status' => $status,
+                'invoice_status' => $invoice_status,
+                'delivery_date' => $txt_deliverydate,
+                'payment_date' => $txt_paymentdate
 			);
 			$where = array($this->primary_id=>$id);
-			$this->$model->update($this->table,$data,$where);
-                             
+			$this->$model->update($this->table,$data,$where);              
 			$this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>Order has been updated successfully!</div>');
 			redirect($this->controller);
 		}
         // For order sales update
         public function Update_order() {
-
 
             $model = $this->model;
             // Order id
@@ -1232,9 +1209,7 @@ $pdf->Output($do_no.'.pdf','D');
 
             //Rate array for update
             $rateArr=array();
-            
             $quantity_update=array();
-
             //Store request data in array for quantity and product 
             $product_count=$this->input->post('ordercount');
             for($i=1;$i<=$product_count;$i++){
@@ -2153,6 +2128,54 @@ for($p=0;$p<count($finalOrderData);$p++) {
         exit;
     }
 
+    function newratefetch(){
+        $message="Something went wrong..Try after sometime";
+        $status='fail';
+        //Product id from onchange event
+        $itemId = $this->input->post('itemId');
+        $user_id = $this->input->post('users_id');
+        $q = $this->db->where('id',$user_id)->get('users')->row();
+
+        if(!empty($q->client_type==1)){
+            $rate = $this->db->where('cash_rate',1)->get('products')->row();
+            $price = $rate->cash_rate;
+            $client_type = 'cash_rate';
+        }elseif(!empty($q->client_type==2)){
+            $rate = $this->db->where('credit_rate',2)->get('products')->row();
+            $price = $rate->credit_rate;
+            $client_type =  'credit_rate';
+        }elseif(!empty($q->client_type==3)){
+            $rate = $this->db->where('walkin_rate',3)->get('products')->row();
+            $price = $rate->walkin_rate;
+            $client_type = 'walkin_rate';
+        }elseif(!empty($q->client_type==4)){
+            $rate = $this->db->where('flexible_rate',4)->get('products')->row();
+            $price = $rate->flexible_rate;
+            $client_type = 'flexible_rate';
+        }else{
+            $client_type='flexible_rate';
+        }
+
+        if(isset($client_type) && $client_type!=''){
+            $client_type=$client_type;
+        }else{
+            $client_type="flexible_rate";
+        }
+
+        $this->db->select($client_type);
+        $this->db->from('products');
+        $this->db->where('products.is_deleted',0);
+        $this->db->where('id', $itemId);
+        $priceData = $this->db->get()->row();
+        
+        if(isset($priceData) && $priceData!='' && count($priceData)> 0){
+            $message=$priceData->$client_type; 
+            $status='success';   
+        }        
+        echo json_encode(array("status"=>$status,"price"=>$message));
+        exit;
+    }
+
     function next() {
 
         $id = intval($this->input->post('id'));
@@ -2191,9 +2214,18 @@ for($p=0;$p<count($finalOrderData);$p++) {
     }
 
     function neworder() {
+       
         $this->msgName = "New Order";
-        $data['activecustomer'] = $this->db->where('status',1)->get("users")->result_array();
-        $data['activeProducts'] = $this->db->where('status',1)->where('is_deleted',0)->get("products")->result_array();
+        $id = $this->utility->decode($id);
+        //Add meta title
+        $data['meta_tital']='New Order | PNP Building Materials Trading L.L.C';
+        $data['action'] = "insert";
+        $data['msgName'] = $this->msgName;
+        $data['primary_id'] = $this->primary_id;
+        $data['controller'] = $this->controller;
+        $model = $this->model;
+        $data['activecustomer'] = $this->db->where(['status'=> 1,'is_deleted'=> 0])->get("users")->result_array();
+        $data['activeProducts'] = $this->db->where(['status'=> 1,'is_deleted'=> 0])->get("products")->result_array();
         $this->load->view($this->view.'/neworder',$data);
     }
 

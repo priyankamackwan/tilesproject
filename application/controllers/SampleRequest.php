@@ -65,6 +65,11 @@ class SampleRequest extends CI_Controller {
 
             $model = $this->model;
             $order_col_id = $_POST['order'][0]['column'];
+            $dir = $this->input->post('order')[0]['dir'];
+            $tableFieldData = [];
+            $where = $whereDate ='';
+            //date change 
+            $whereDatechange='no';
             $order = $_POST['columns'][$order_col_id]['data'] . ' ' . $_POST['order'][0]['dir'];
             $s = (isset($_POST['search']['value'])) ? $_POST['search']['value'] : '';
             $statusFilter = $_POST['columns'][2]['search']['value'];
@@ -96,9 +101,10 @@ class SampleRequest extends CI_Controller {
                 $whereDatechange='yes';
             }
             $totalData = $this->samples_model->get_SampleDatatables('','','','',$where,'','',$whereDate,$this->table);
-            //$totalData = $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
+            $totalFiltered = $totalData['count'];
+            $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
             $data = array();
-            $q = $this->db->where(['status' => 1,'is_deleted' => 0 ])->get("sample_requests")->result();
+            $q = $this->db->where(['is_deleted' => 0 ])->get("sample_requests")->result();
             
             if(!empty($q)) {
 
@@ -109,13 +115,18 @@ class SampleRequest extends CI_Controller {
 
                     $model = $this->model;
                     $id = $this->primary_id;
-                    // End of rights
-                    if($value->created=="0000-00-00 00:00:00") // if date is not set
-                    {
-                        $date_value="00/00/0000"."<br>"." 00:00:00";
+
+                    if($value->status=="1") {
+                        $status = "New";
+                    } else if($value->status=="2") {
+                        $status = "Approved";
+                    } else if($value->status=="3") {
+                        $status = "Cancelled";
                     }
-                    else
-                    {
+
+                    if($value->created=="0000-00-00 00:00:00") {
+                        $date_value="00/00/0000"."<br>"." 00:00:00";
+                    } else {
                         $date_value=$this->$model->date_conversion($value->created,'d/m/Y H:i:s');
                     }
                     
@@ -133,7 +144,7 @@ class SampleRequest extends CI_Controller {
                     $nestedData['cargo_number']= $value->cargo_number;
                     $nestedData['location'] = $value->location;
                     $nestedData['mark'] = $value->mark;
-                    $nestedData['status'] = $statusText;
+                    $nestedData['status'] = $status;
                     $nestedData['created'] = $date_value;
                     
                     if ($value->status == 1){
@@ -147,11 +158,11 @@ class SampleRequest extends CI_Controller {
             }
 
             $json_data = array(
-                        "draw"            => intval($this->input->post('draw')),
-                        "recordsTotal"    => intval($totalData),
-                        "recordsFiltered" => intval(10),
-                        "data"            => $data
-                        );
+                "draw"            => intval($this->input->post('draw')),
+                "recordsTotal"    => intval($totalData['count']),
+                "recordsFiltered" => intval($totalFiltered),
+                "data"            => $data
+            );
             echo json_encode($json_data);
     }
 
@@ -231,6 +242,7 @@ class SampleRequest extends CI_Controller {
         $cargo_number = $this->input->post('cargo_number');
         $location = $this->input->post('location');
         $mark = $this->input->post('mark');
+        $status = $this->input->post('status');
 
         $data = array(
             'product_id' => $product_id,
@@ -239,7 +251,8 @@ class SampleRequest extends CI_Controller {
             'cargo' => $cargo,
             'cargo_number' => $cargo_number,
             'location' => $location,
-            'mark' => $mark
+            'mark' => $mark,
+            'status' => $status
         );
         $where = array($this->primary_id=>$id);
         $this->$model->update($this->table,$data,$where);

@@ -103,17 +103,6 @@
 									<label id="mark-error" class="error" for="mark"></label>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="description">Status <font color="red"><span class="required">*</span></font>:</label>			
-								<div class="col-md-9 col-sm-12 col-xs-12">
-									<select class="form-control select2" name="status" style="width:100%;" id="status">
-										<option value="0">Deactive</option>
-										<option value="1">Active</option>
-										<option value="2">Pending</option>
-									</select>
-									<label id="mark-error" class="error" for="mark"></label>
-								</div>
-							</div>
 							<div class="box-footer">
 								<input type="submit" class="btn btn-primary" style="float:right;font-size:16px;" value="Save Sample Request">
 							</div>

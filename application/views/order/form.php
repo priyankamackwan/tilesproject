@@ -97,7 +97,6 @@ a:hover, a:active, a:focus {
 						&nbsp;&nbsp;
 						<input type="submit" name="delivered" id="delivered" class="btn btn-primary delivered" value="Mark as Delivered" disabled="disabled">
 					</div>
-
 					<div class="box-body">
 						<form enctype="multipart/form-data" action="<?php echo base_url().$this->controller.'/Update_order';?>" method="post" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 							

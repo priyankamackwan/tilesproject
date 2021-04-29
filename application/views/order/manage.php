@@ -346,8 +346,8 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title"><?php echo $msgName;?></h3>
-                        <a href="<?php echo base_url($this->controller);?>/neworder" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>New Order</a><br><br>
-                        <a href="<?php echo base_url($this->controller);?>/uploadOrders" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Import Orders</a>
+                        <a href="<?php echo base_url($this->controller);?>/neworder" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>&nbsp;New Order</a><br><br>
+                        <a href="<?php echo base_url($this->controller);?>/uploadOrders" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>&nbsp;Import Orders</a>
                     </div>
 
                     <!-- Order table -->

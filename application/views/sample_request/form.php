@@ -163,9 +163,20 @@ a:hover, a:active, a:focus {
 				                <div class="col-md-9 col-sm-12 col-xs-12">
 				                    <input type="text" name="mark" value="<?php if(isset($post['mark']) && $post['mark']!=''){echo $post['mark'];}else{ echo $result[0]['mark'];}?>" class="form-control" placeholder="Mark">
 				                </div>
-				            </div>  
+				            </div>
+				            <div class="form-group">
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="description">Status <font color="red"><span class="required">*</span></font>:</label>			
+								<div class="col-md-9 col-sm-12 col-xs-12">
+									<select class="form-control select2" name="status" style="width:100%;" id="status">
+										<option value="1" <?php if(!empty($result[0]['item_status']== "1")){echo 'selected';}?>>New</option>
+										<option value="2" <?php if(!empty($result[0]['item_status']== "2")){echo 'selected';}?>>Approved</option>
+										<option value="3" <?php if(!empty($result[0]['item_status']== "3")){echo 'selected';}?>>Cancelled</option>
+									</select>
+									<label id="mark-error" class="error" for="mark"></label>
+								</div>
+							</div>  
 				            <div class="box-footer">
-			                	<input type="submit" id="submit1" name="submit" class="btn btn-primary" value="<?php //echo $btn;?> Save" style="float:right;">
+			                	<input type="submit" id="submit1" name="submit" class="btn btn-success" value="<?php //echo $btn;?> Update Sample Request" style="float:right;">
 			                </div> 
 						</form>
 					</div>

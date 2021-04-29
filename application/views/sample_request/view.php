@@ -141,6 +141,26 @@ print_r($result); exit;*/
                   ?>
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-6 col-xs-6" for="category_name">
+                  Status :
+                </label>
+
+                <div class="col-md-9 col-sm-6 col-xs-6 mt_5">
+                  <?php 
+                    if(!empty($result[0]->status))  {
+                      if($result[0]->status=="1") {
+                        echo "New";
+                      }elseif ($result[0]->status=="2") {
+                        echo "Approved";
+                      }elseif ($result[0]->status=="3") {
+                        echo "Cancelled";
+                      }
+                    }
+                  ?>
+                </div>
+              </div>
                            
               <div class="form-group" id="id_payment_date"> <!-- if payment status is completed then display the date div -->
                 <label class="control-label col-md-3 col-sm-6 col-xs-6 " for="payment_date">

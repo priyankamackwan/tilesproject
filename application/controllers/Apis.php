@@ -1732,7 +1732,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     if(!empty($checkRequestExist)) {
 
                         $this->db->where('id',$id);
-                        $this->db->update('sample_requests',['is_deleted' => 1]);
+                        $this->db->update('sample_requests',['status' => 3]);
                         if($this->db->affected_rows() > 0){
                             $response['status'] = 'success';
                             $response['data'] = array('id' => $id);

@@ -98,7 +98,7 @@
                                         <!-- Date Range Filter Dropdown -->
                                         <div class="col-md-4 col-sm-12 col-xs-12 ">
                                             <div class="input-group">
-                                                <input class="form-control" placeholder="Order Date" required="" id="salesOrderDate" name="salesOrderDate" type="text" value="<?php echo $from_dateshow.' - '.$to_dateshow; ?>">
+                                                <input class="form-control" placeholder="Sample Request Date" required="" id="salesOrderDate" name="salesOrderDate" type="text" value="<?php echo $from_dateshow.' - '.$to_dateshow; ?>">
                                                 <label class="input-group-addon btn" for="salesOrderDate">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
@@ -122,9 +122,8 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title"><?php echo $msgName;?></h3>
-                        <a href="<?php echo base_url($this->controller);?>/newsample" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>New Sample Request</a><br><br>
+                        <a href="<?php echo base_url($this->controller);?>/newsample" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>&nbsp;New Sample Request</a><br><br>
                     </div>
-
                     <!-- Order table -->
                     <div class="box-body table-responsive">
                         <table id="datatables" class="table main-table  table-bordered table-hover  table-striped " width="100%">
@@ -156,8 +155,40 @@
 ?>
 
 <script>
+    function resetDatePicker(){
+        $("#salesOrderDate").val('');
+    }
+    var dataTable1 = '';
+    $(function(){
+        //Date range picker
+        $('#salesOrderDate').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY',
+            },
+        });
+
+        $('#salesOrderDate').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+
+            daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
+            daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
+
+            dataTable1.draw();
+        });
+
+        $('#salesOrderDate').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            dataTable1.draw();
+        });
+
+        daterangeStartValue = moment($('#salesOrderDate').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
+        daterangeEndValue = moment($('#salesOrderDate').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
+    });
+
     jQuery(document).ready(function(){
-        var dataTable1 = $('#datatables').dataTable({
+        
+        dataTable1 = $('#datatables').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax":{
@@ -168,6 +199,8 @@
                     data.userName = $('#clientList').val();
                     data.productId = $('#productsList').val();
                     data.salesOrderDate = $('#salesOrderDate').val();
+                    data.startdate = daterangeStartValue;
+                    data.enddate = daterangeEndValue;
                 },
             },
             "columns": [
@@ -179,8 +212,8 @@
                 { "data": "cargo_number"},
                 { "data": "location"},
                 { "data": "mark"},
-                { "data": "created"},
                 { "data": "status"},
+                { "data": "created"},
                 { "data": "manage"}
             ],
             "columnDefs": [ {
@@ -203,13 +236,22 @@
             }],
             "order": [[ 0, "DESC"]],
         });
+        $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
-        $('.search-input-select').on('change', function (e) {   
+        $('.search-input-select').on( 'change', function (e) {   
             // for dropdown
             var i =$(this).attr('data-column');  // getting column index
             var v =$(this).val();  // getting search input value
-            dataTable2.api().columns(i).search(v).draw();
+            dataTable1.api().columns(i).search(v).draw();
         });
     });
-    
+    // Filter for User list
+    $(document).on("change","#clientList",function(evt){
+        // dataTable1.rows().deselect();
+        dataTable1.draw();
+    });
+    // Filter for Product list
+    $(document).on("change","#productsList",function(evt){
+        dataTable1.draw();
+    });
 </script>

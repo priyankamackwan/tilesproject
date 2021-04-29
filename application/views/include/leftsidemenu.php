@@ -52,20 +52,16 @@
 
                 if (in_array('6',$this->userhelper->current('rights'))) {
             ?>
-                <li class="treeview <?php echo $url == 'Order'?'active':'';?>">
-                    <a href="<?php echo base_url();?>Order"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sales Orders</span></a>
-                    <!-- <ul class="sidebar-menu" id="sub-menu">
-                        <li class="treeview"><a href="<?php echo base_url();?>Order/neworder"><i class="fa fa-shopping-basket" aria-hidden="true"></i>&nbsp;&nbsp;<span>Create New Order</span></a></li>
-                        <li class="treeview"><a href="<?php echo base_url();?>Order"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sales Orders</span></a></li> 
-                    </ul> -->
+                <li class="treeview <?php echo $url == 'SampleRequest'?'active':'';?>">
+                    <a href="<?php echo base_url();?>SampleRequest"><i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sample Requests</span></a>
                 </li>
             <?php
                 }
 
-                   if (in_array('7',$this->userhelper->current('rights'))) {
+               if (in_array('7',$this->userhelper->current('rights'))) {
             ?>
-                <li class="treeview <?php echo $url == 'SampleRequest'?'active':'';?>">
-                    <a href="<?php echo base_url();?>SampleRequest"><i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sample Request</span></a>
+                <li class="treeview <?php echo $url == 'Order'?'active':'';?>">
+                    <a href="<?php echo base_url();?>Order"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;<span>Sales Orders</span></a>
                 </li>
             <?php
                 }
