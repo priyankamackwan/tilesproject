@@ -1731,21 +1731,13 @@ $pdf2->Output($fileNL_invoice, 'F');
                     $checkRequestExist = $users->row();
                     if(!empty($checkRequestExist)) {
 
-                        $this->db->where('id',$this->user_id);
-                        $users = $this->db->get('users');
-                        $checkUserExist = $users->result_array();
-                        if(!empty($checkUserExist)) {
-                            $this->db->where('id',$id);
-                            $this->db->update('sample_requests',['is_deleted' => 1]);
-                            if($this->db->affected_rows() > 0){
-                                $response['status'] = 'success';
-                                $response['data'] = array('id' => $id);
-                            }   
-                           
-                        } else {
-                            $response['status'] = 'failure';
-                            $response['message'] = 'Login User Not Exist';  
-                        }
+                        $this->db->where('id',$id);
+                        $this->db->update('sample_requests',['is_deleted' => 1]);
+                        if($this->db->affected_rows() > 0){
+                            $response['status'] = 'success';
+                            $response['data'] = array('id' => $id);
+                        }   
+                        
                     } else {
                         $response['status'] = 'failure';
                         $response['message'] = 'Sample Request ID Inserted Not Exist';
