@@ -1736,6 +1736,9 @@ $pdf2->Output($fileNL_invoice, 'F');
                         if($this->db->affected_rows() > 0){
                             $response['status'] = 'success';
                             $response['data'] = array('id' => $id);
+                        } else {
+                            $response['status'] = 'failure';
+                            $response['message'] = 'Sample Request ID Already Cancelled';
                         }   
                         
                     } else {
