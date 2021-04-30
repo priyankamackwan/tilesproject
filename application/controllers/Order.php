@@ -782,7 +782,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                       $vat = $ordersData[0]['tax'];
                       $tax_percentage = $ordersData[0]['tax_percentage'];
-                      $finalTotal = $subTotal+$vat;
+                      $tax = ($subTotal * $vat ) / 100;
+                      $finalTotal = $subTotal + $tax;
                       $address = "Saja'a Industrial Area, Sharjah, U.A.E";
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -947,7 +948,8 @@ $pdf->Output($ordersData[0]['invoice_no'].'.pdf','D');
                       $vat =$ordersData[0]['tax'];
                       $tax_percentage =$ordersData[0]['tax_percentage'];
                       
-                      $finalTotal = $subTotal+$vat;
+                      $tax = ($subTotal * $vat ) / 100;
+                      $finalTotal = $subTotal + $tax;
                       $address = "Saja'a Industrial Area, Sharjah, U.A.E";
                         include 'TCPDF/tcpdf.php';
 $pdf = new TCPDF();
@@ -1374,52 +1376,21 @@ $pdf->Output($do_no.'.pdf','D');
             if(isset($array_added) && $array_added!='' && count($array_added) >0){
                 foreach ($array_added as $key => $value) {
                     $check_quantity=$this->orders_model->check_items_quantity($value);
-                    
-                    //rate form form input to update
-                   // $rate_type=$priceArr[$value];
-
-                    // rate type for calculate amount
-                    /*
-                    if(isset($client_type) && $client_type!='' && $client_type=="cash_rate"){
-
-                        $rate_type=$check_quantity->cash_rate;
-
-                    }elseif(isset($client_type) && $client_type!='' && $client_type=="credit_rate"){
-
-                        $rate_type=$check_quantity->credit_rate;
-
-                    }elseif(isset($client_type) && $client_type!='' && $client_type=="walkin_rate"){
-
-                        $rate_type=$check_quantity->walkin_rate;
-
-                    }elseif(isset($client_type) && $client_type!='' && $client_type=="flexible_rate"){
-                            $rate_type=$check_quantity->flexible_rate;
-                        
-                    }
-                    */
-                    // total of all product amount
-                    // $amount=$quantity_arr[$value] * $rate_type;
-                    // $total_order_price+=$amount;
-                    
                     //price form form input to update
                     $price=$priceArr[$value];
-
                     //rate form form input to update
                     $rate=$rateArr[$value];
-
-
                     // insert in order prodcuts table
                     $insert_data=array('order_id'=>$id,
                                         'product_id'=>$value,
                                         'quantity'=>$quantity_arr[$value],
                                         'price'=>$price,
                                         'rate' =>$rate
-                                );
+                    );
 
                     $this->$model->insert('order_products',$insert_data);
                    // echo $this->db->last_query();die();
                     $this->orders_model->update_items('products','sold_quantity',$value,$quantity_arr[$value],'+');
-
                 }
             }
             // For check data old data is updated or not
@@ -1524,7 +1495,8 @@ $pdf->Output($do_no.'.pdf','D');
                     }
                     $vat = $ordersData[0]['tax'];
                     $tax_percentage = $ordersData[0]['tax_percentage'];
-                    $finalTotal = $subTotal+$vat;
+                    $tax = ($subTotal * $vat ) / 100;
+                    $finalTotal = $subTotal + $tax;
 
                     // generate PDF
 
@@ -2162,17 +2134,17 @@ for($p=0;$p<count($finalOrderData);$p++) {
             $client_type="flexible_rate";
         }
 
-        $this->db->select($client_type);
+        $this->db->select($client_type.',quantity');
         $this->db->from('products');
         $this->db->where('products.is_deleted',0);
         $this->db->where('id', $itemId);
         $priceData = $this->db->get()->row();
-        
         if(isset($priceData) && $priceData!='' && count($priceData)> 0){
-            $message=$priceData->$client_type; 
+            $message=$priceData->$client_type;
+            $qty =  $priceData->quantity;
             $status='success';   
         }        
-        echo json_encode(array("status"=>$status,"price"=>$message));
+        echo json_encode(array("status"=>$status,"price"=>$message,"qty"=>$qty));
         exit;
     }
 
@@ -2285,8 +2257,6 @@ for($p=0;$p<count($finalOrderData);$p++) {
         
         $model = $this->model;
         $orderData = array();
-        
-        $orderProductArray = json_decode($_POST['hidpid'], true);
         $this->db->select('id');              
         $q = $this->db->get('orders');               
         $orderLast = $q->result_array();
@@ -2302,19 +2272,23 @@ for($p=0;$p<count($finalOrderData);$p++) {
         } else {//After June 2015-2016
             $financial_year = date('y') . '-' . (date('y') + 1);
         }
+        
+        $multipleWhere = ['id' =>  $_POST['username']];
+        $this->db->where($multipleWhere);
+        $userData= $this->db->get("users")->result_array();
 
         $lpo = 'LPO/'.$newOrder.'/'.$financial_year;
         $do = 'DO/'.$newOrder.'/'.$financial_year;
         $invoice = 'Invoice/'.$newOrder.'/'.$financial_year;
-        $customer_lpo = $_POST['clpo'];       
+        $customer_lpo = null;       
         $orderData = array(
-                'user_id' => $_POST['usersList'],
+                'user_id' => $_POST['username'],
                 'lpo_no' => $lpo,
                 'do_no' => $do,
                 'invoice_no' => $invoice,
                 'tax' => Vat,
                 'tax_percentage' => Vat,
-                'total_price' => $_POST['hidprice'],
+                'total_price' => $_POST['total_price'],
                 'cargo' => $_POST['cargo'],
                 'cargo_number' => $_POST['cargo_number'],
                 'location' => $_POST['location'],
@@ -2325,235 +2299,75 @@ for($p=0;$p<count($finalOrderData);$p++) {
                 'invoice_status' => 0,
                 'created' => date('Y-m-d h:i:s')
         );
-       
+        
         $this->$model->insert('orders',$orderData);  
         $lastInsertedOrderId = $this->db->insert_id();              
-
-        for($k=0;$k<count($orderProductArray);$k++) {
-
-            $product_orders= array();  
-
-            $product_orders = array(
-                'order_id'  => $lastInsertedOrderId,
-                'product_id'=> $_POST['hidpid'],
-                'quantity'  => $_POST['qty'],
-                'price'     => $_POST['hidprice'],
-                'rate'      => $_POST['hidrate'],
-                'created'   => date('Y-m-d h:i:s'));
+        $product_count=$this->input->post('ordercount');
         
-            $this->$model->insert('order_products', $product_orders); 
-        }
-            $do_no = $do;
-            $orderUserId = $_POST['usersList'];
-            $finalDate = date("d-M-Y");
+        for($i=1;$i<=$product_count;$i++){
 
-            $multipleWhere = ['id' => $_POST['usersList']];
-            $this->db->where($multipleWhere);
-            $userData= $this->db->get("users")->result_array();  
-            $multipleWhere = ['order_id' => $lastInsertedOrderId];
-            $this->db->where($multipleWhere);
-            $productOrder = $this->db->get("order_products")->result_array();
-                    
-            $finalOrderData = array();
-            $subTotal = 0;
-                for($k=0;$k<count($productOrder);$k++) {
-
-                    $productIdArray = $productOrder[$k]['product_id'];
-                    $multipleWhere2 = ['id' => $productIdArray];
-                    $this->db->where($multipleWhere2);
-                    $productData= $this->db->get("products")->result_array();
-                        
-                    $finalOrderData[$k]['description'] = $productData[0]['name'];
-                    $finalOrderData[$k]['size'] = $productData[0]['size'];
-                    $finalOrderData[$k]['design_no'] = $productData[0]['design_no'];
-                        
-                        //product price from order products table
-                        $finalOrderData[$k]['rate'] = $productOrder[$k]['rate'];
-                       
-                        if ($productData[0]['unit'] == 1) {
-                            $finalOrderData[$k]['unit'] = 'CTN';
-                        }
-                        if ($productData[0]['unit'] == 2) {
-                            $finalOrderData[$k]['unit'] = 'SQM';
-                        }
-                        if ($productData[0]['unit'] == 3) {
-                            $finalOrderData[$k]['unit'] = 'PCS';
-                        }
-                        if ($productData[0]['unit'] == 4) {
-                            $finalOrderData[$k]['unit'] = 'SET';
-                        }
-
-                        $finalOrderData[$k]['quanity'] = $productOrder[$k]['quantity'];
-                        $finalOrderData[$k]['amount'] = $productOrder[$k]['price'];
-                        $subTotal = $subTotal+ $finalOrderData[$k]['amount'];
-
-                        $vat = Vat;
-                        $address = "Saja'a Industrial Area, Sharjah, U.A.E";
-                        $finalTotal = $subTotal+$vat;
-                        include 'TCPDF/tcpdf.php';
-                        $pdf = new TCPDF();
-                        $pdf->AddPage('P', 'A4');
-                        $html = '<html>
-                        <head>Delivery Note</head>
-                        <body>
-                        <p align="center"><img src = "'.base_url().'image1.png"></p>
-                        <h2><b><p align="center">Delivery Note</p></b></h2>
-                        <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">D.O. No. : '.$do_no.'</td><td style="width:40%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
-
-                        <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer : '.$userData[0]['company_name'].'</td><td style="width:40%; text-align:right;">Tel : '.$userData[0]['phone_no'].'</td></tr></table>
-                        <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">LPO No. : '.$lpo.'</td><td style="width:40%; text-align:right;">Invoice No. : '.$invoice.'</td></tr></table>
-                            <br><br/>';
-
-                        if(trim($customer_lpo)!="") // if customer lpo field not null then display it'
-                        {
-                            $html.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$customer_lpo.'</td><td style="width:40%; text-align:right;"></td></tr></table>';
-                        }
-
-                        $html.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Cargo : '.$_POST['cargo'].'</td><td style="width:40%; text-align:right;">Cargo Number : '.$_POST['cargo_number'].'</td></tr></table>
-                         <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Location : '.$_POST['location'].'</td><td style="width:40%; text-align:right;">Mark : '.$_POST['mark'].'</td></tr></table> 
-                        <br><br/>
-                        <table style="width:100%;"><tr><td style="width:60%;">THE FOLLOWING ITEMS HAVE BEEN DELIVERED</td></tr></table>
-                        <table style="width:100%;" border="1"><tr><th style="text-align: center">DESCRIPTION</th><th style="text-align: center">SIZE</th><th style="text-align: center">DESIGN</th><th style="text-align: center">QUANTITY</th><th style="text-align: center">UNIT</th></tr>';
-                            for($p=0;$p<count($finalOrderData);$p++) {
-                                $html .= '<tr><td style="text-align: center" width="60%">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center" width="10%">'.$finalOrderData[$p]['unit'].'</td></tr>';
-                                                      }
-                                                      $html .= '<tr><td></td><td></td><td colspan="2"></td><td></td></tr></table>';
-
-                            $html .= '<table style="width:100%;"><tr><td style="width:60%;">Received the above goods in good condition</td></tr></table>
-                            <br><br/>
-                            <table style="width:100%;"><tr><td style="width:50%;">Receivers Sign : </td><td style="width:50%; ">Delivered By [Sign] : </td></tr></table> 
-                            <br><br/>
-                            <table style="width:100%;"><tr><td style="width:50%;">Name : </td><td style="width:50%;">Name : </td></tr></table>
-                            <br>
-                            <table style="width:100%;"><tr><td style="width:100%;">Mobile : </td></tr></table>
-                            <br><br/><br><br/><br>
-                            <table style="width:100%;"><tr><td style="text-align:center">Tel: 06-5952061/ Mob: 055-8532631/050-4680842 | '.$address.'</td></tr>
-                                                        <tr><td style="text-align:center">Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr></table>
-
-                            </body></html>';
-
-                            $pdf->writeHTML($html, true, false, true, false, '');
-
-                            $filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
-                            $filename_do = str_replace('/','_', $do_no).'.pdf';
-
-                                $fileNL_do = $filelocation.DIRECTORY_SEPARATOR.$filename_do;
-                               //echo $fileNL; exit;
-                            $pdf->Output($fileNL_do, 'F');
-
-                            //  In- 2
-
-                              $pdf1 = new TCPDF();
-                        $pdf1->AddPage('P', 'A4');
-                        $html1 = '<html>
-                        <head>Local Purchase Order</head>
-                        <body>
-                        <h2><b><p align="center">Local Purchase Order</p></b></h2>
-                        <table style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
-                        <br><br/>
-                        <table style="width:100%;"><tr><td style="width:40%;">From</td><td style="width:60%; text-align:center;">To</td> </tr></table>
-                        <table style="width:100%;"><tr><td style="width:40%;">Buyer : '.$userData[0]['company_name'].'</td><td style="width:60%; text-align:right;">Seller : PNP BUILDING MATERIAL TRADING LLC </td></tr></table>
-                        <table style="width:100%;"><tr><td style="width:40%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:60%; text-align:right;">Tel. : +97143531040 / +971558532631</td> </tr></table>
-                        <table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br>
-                            RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
-                            <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
-                        <br><br/>';
-
-                        if(trim($customer_lpo)!="") { // if customer lpo is exist then display it.
-                        $html1.='<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,</td></tr></table>
-                        <table style="width:100%;"><tr><td style="width:40%;">Customer LPO No. : '.$customer_lpo.'</td><td style="width:60%; text-align:right;">RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
-                            <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
-                            <br><br/>'; } else {
-
-                        $html1.='<table style="width:100%;"><tr><td style="width:40%;">LPO : '.$lpo.'</td><td style="width:60%; text-align:right;">Address : INDUSTRIAL AREA 2,<br/>
-                            RAS AL KHOR, PO BOX: 103811 DUBAI-UAE</td> </tr>
-                            <tr><td style="width:100%; text-align:right;">Email : info@pnptiles.com</td></tr></table>
-                            <br><br/>';
-                        }
-
-
-                        $html1.='<table style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
-                        <br><br/>
-                        <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="30%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="13%">QUANTITY</th><th style="text-align: center" width="10%".>RATE</th><th style="text-align: center" width="12%">AMOUNT</th></tr>';
-                        $count = 0;
-                        for($p=0;$p<count($finalOrderData);$p++) {
-                            $count++;
-                            $html1 .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
-                                                        
-                                                  }
-                                                  $html1 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
-                                                          
-                                                          <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td>'.$vat.'</td></tr>
-                                                          
-                        <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
-                            <br><br/>
-                                                          <table style="width:100%;" border="1"><tr><th style="text-align:center">Terms and Conditions</th></tr>
-                                                          <tr><td>1) Goods subject to lien of seller till full payment is made by buyer.</td></tr>
-                                                          <tr><td>2) NO CLAIM for shortage/damage will be entertained after 24 hours of delivery.</td></tr>
-                                                          <tr><td>3) Payment should be made by cash or A/C payees cheque only in the name of our company.</td></tr>
-                                                          <tr><td></td></tr>
-                        </table><br><br/>
-                        <table style="width:100%;"><tr><td width="50%";>Buyer Signature:</td><td width="50%";>For PNP Building Materials Trading L.L.C</td></tr></table>
-                        <br><br/><br><br/>';
-                        $html1 .='</body></html>';
-
-                        $pdf1->writeHTML($html1, true, false, true, false, '');
-                        $filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
-                        $filename_lpo = str_replace('/','_', $lpo).'.pdf';
-                            $fileNL_lpo = $filelocation.DIRECTORY_SEPARATOR.$filename_lpo;
-                           //echo $fileNL; exit;
-                        $pdf1->Output($fileNL_lpo, 'F');
-
-                        $address = "Saja'a Industrial Area, Sharjah, U.A.E";
-                    $pdf2 = new TCPDF();
-                    $pdf2->AddPage('P', 'A4');
-                    $html2 = '<html>
-                    <head>Tax Invoice</head>
-                    <body>
-                    <p align="center"><img src = "'.base_url().'image1.png"></p>
-                    <h2><b><p align="center" style="margin-top:5px;">Tax Invoice</p></b></h2>
-                    <table cellspacing="2px" style="width:100%;"><tr><td style="width:100%; text-align:right;">Date : '.$finalDate.'</td></tr></table>
-                    <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Invoice No. : '.$invoice.'</td><td style="width:40%; text-align:right;">Customer : '.$userData[0]['company_name'].'</td> </tr></table>
-                    <table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Tel. : '.$userData[0]['phone_no'].'</td><td style="width:40%; text-align:right;">LPO : '.$lpo.'</td> </tr></table>';
-
-                    if(trim($customer_lpo)!="") // if customer lpo field not null then display it.
-                    {
-                        $html2.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer LPO No. : '.$customer_lpo.'</td><td style="width:40%; text-align:right;"></td></tr></table>';
-                    }
-
-                    $html2.='<table cellspacing="2px" style="width:100%;"><tr><td style="width:60%;">Customer VAT # : '.$userData[0]['vat_number'].'</td><td style="width:40%; text-align:right;">VAT ID # : 100580141800003</td> </tr></table>
-                    <br><br/>
-                    <table style="width:100%;" border="1"><tr><th style="text-align: center" width="5%">SR No.</th><th style="text-align: center" width="35%">DESCRIPTION</th><th style="text-align: center" width="10%">SIZE</th><th style="text-align: center" width="10%">DESIGN</th><th style="text-align: center" width="10%">UNIT</th><th style="text-align: center" width="10%">QUANTITY</th><th style="text-align: center" width="10%">RATE</th><th style="text-align: center" width="10%">AMOUNT</th></tr>';
-                    $count = 0;
-                    for($p=0;$p<count($finalOrderData);$p++) {
-                        $count++;
-                        $html2 .= '<tr><td style="text-align: center">'.$count.'</td><td style="text-align: center">'.$finalOrderData[$p]['description'].'</td><td style="text-align: center">'.$finalOrderData[$p]['size'].'</td><td style="text-align: center">'.$finalOrderData[$p]['design_no'].'</td><td style="text-align: center">'.$finalOrderData[$p]['unit'].'</td><td style="text-align: center">'.$finalOrderData[$p]['quanity'].'</td><td style="text-align: center">'.$finalOrderData[$p]['rate'].'</td><td style="text-align: center">'.$finalOrderData[$p]['amount'].'</td></tr>';
-                                              }
-                                              $html2 .= '<tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">SubTotal</td><td>'.$subTotal.'</td></tr>
-
-                                                      <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Vat '.Vat.'%</td><td>'.$vat.'</td></tr>
-                                                      
-                    <tr><td></td><td></td><td></td><td></td><td></td><td colspan="2" style="text-align: center">Grand Total(AED)</td><td>'.$finalTotal.'</td></tr></table>
-                        <br><br/>
-                                                      <table style="width:100%;" border="1"><tr><th style="text-align:center">Terms and Conditions</th></tr>
-                                                      <tr><td>1) Goods subject to lien of seller till full payment is made by buyer.</td></tr>
-                                                      <tr><td>2) NO CLAIM for shortage/damage will be entertained after 24 hours of delivery.</td></tr>
-                                                      <tr><td>3) Payment should be made by cash or A/C payees cheque only in the name of our company.</td></tr>
-                                                      <tr><td></td></tr>
-                    </table><br><br/>
-                    <table style="width:100%;"><tr><td width="50%";>Buyer Signature:</td><td width="50%";>For PNP Building Materials Trading L.L.C</td></tr></table>
-                    <br><br/><br><br/>
-                    <table style="width:100%;"><tr><td style="text-align:center">Tel: 06-5952061/ Mob: 055-8532631/050-4680842 | '.$address.'</td></tr>
-                                                <tr><td style="text-align:center">Website: www.pnptiles.com | Email: info@pnptiles.com</td></tr></table>';
-                    $html2 .='</body></html>';
-                    $pdf2->writeHTML($html2, true, false, true, false, '');
-                    $filelocation = FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads';
-                    $filename_invoice = str_replace('/','_', $invoice).'.pdf';
-                        $fileNL_invoice = $filelocation.DIRECTORY_SEPARATOR.$filename_invoice;
-                       //echo $fileNL; exit;
-                    $pdf2->Output($fileNL_invoice, 'F');
+            $p_id=$this->input->post('product_id'.$i);;
+            $quantity=$this->input->post('quantity_'.$i);
+            $price=$this->input->post('price_'.$i);
+            $rate=$this->input->post('rate_'.$i);
+            $product_arr[$p_id]=$p_id;
+            if(array_key_exists($p_id, $quantity_arr)){
+                $total_quantity=$quantity+$quantity_arr[$p_id];
+                $quantity_arr[$p_id]=$total_quantity;
+            }else{
+                $quantity_arr[$p_id]=$quantity;
+            }
+            if(array_key_exists($p_id, $priceArr)){
+                if(isset($priceArr[$p_id]) && $priceArr[$p_id]!='' && $priceArr[$p_id]!=$price){
+                    $totalprice=$price+$priceArr[$p_id];
+                    $priceArr[$p_id]=$totalprice;
+                }else{
+                    $priceArr[$p_id]=$price;
                 }
+            }else{
+                $priceArr[$p_id]=$price;
+            }
+            if(array_key_exists($p_id, $rateArr)){
+                $rateArr[$p_id]=$priceArr[$p_id]/$quantity_arr[$p_id];
+            }else{
+                $rateArr[$p_id]=$rate;
+            }
+            $product_orde = array(
+                'order_id'  => $lastInsertedOrderId,
+                'product_id'=> $product_arr[$p_id],
+                'quantity'  => $quantity_arr[$p_id],
+                'price'     => $priceArr[$p_id],
+                'rate'      => $rateArr[$p_id],
+                'created'   => date('Y-m-d h:i:s')
+            );
+            $this->$model->insert('order_products', $product_orde);
+        }
 
+        $this->db->select('*');
+        $this->db->where('order_id',$lastInsertedOrderId);
+        $q = $this->db->get('order_products');
+        $oldprod = $q->result_array();
+        
+        foreach ($oldprod as $key => $value) {
+            
+            $this->db->select('*');
+            $this->db->where('id',$value['product_id']);
+            $q = $this->db->get('products');
+            $productData = $q->result_array();
+
+            foreach ($productData as $key => $val) {
+                $oldSoldQuantity = $val['sold_quantity'];
+                $newSoldQuantity = $oldSoldQuantity + $value['quantity'];
+                $qtyavailable = $val['quantity'] - $value['quantity'];
+                $data = array(
+                    'sold_quantity' => $newSoldQuantity,
+                    'quantity' =>  $qtyavailable
+                );
+                $this->db->where(['id' => $value['product_id']]);
+                $this->db->update('products',$data);
+            }
+        }
+       
         $this->session->set_flashdata($this->msgDisplay,'<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'.$userData[0]['company_name'].' has been added successfully!</div>');
         redirect($this->controller);
         
@@ -2561,4 +2375,5 @@ for($p=0;$p<count($finalOrderData);$p++) {
 
 }
 
-    
+
+            

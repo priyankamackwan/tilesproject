@@ -625,6 +625,7 @@ function readURL(input) {
   }
 }
 function add_more_items(){
+	
 	var item_nmuber=$("#ordercount").val();
 	var add_item=1;
 	var total_item= parseInt(item_nmuber) + parseInt(add_item);
