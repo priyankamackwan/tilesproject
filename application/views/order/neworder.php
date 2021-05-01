@@ -108,7 +108,7 @@ a:hover, a:active, a:focus {
 											&nbsp;
 										</div>
 										<div class="col-md-3 col-sm-3 col-xs-3">
-											<select class="form-control select2 product_id" name="product_id<?php echo $key+1;?>" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,<?php echo $key+1;?>)">
+											<select class="form-control select2 product_id<?php echo $key+1;?>" name="product_id<?php echo $key+1;?>" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,<?php echo $key+1;?>)">
 											    <option value="" selected >All</option>
 											    <?php
 											        if(!empty($activeProducts) && count($activeProducts) > 0 ) {
@@ -128,7 +128,7 @@ a:hover, a:active, a:focus {
 											<input type="text" name="quantity_<?php echo $key+1;?>" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_<?php echo $key+1;?>" onchange="order_sum()">
 										</div>
 										<div class="col-md-2 col-sm-2 col-xs-2" >
-											<input type="text" name="rate_<?php echo $key+1;?>" id="price"  required="required" class=" form-control width_80 rate_<?php echo $key+1;?>" onchange="order_sum()" ><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title="tooltip" data-original-title="tooltip" data-id="tooltip_<?php echo $key+1;?>" style="color:#00acd6;"></i>
+											<input type="text" name="rate_<?php echo $key+1;?>" id="price"  required="required" class=" form-control width_80 rate_<?php echo $key+1;?>" onchange="order_sum()" ><a data-toggle="tooltip" title="tooltip" class="tooltip_<?php echo $key+1;?>"><i class="fa fa-info-circle" aria-hidden="true" style="color:#00acd6;"></i></a>
 										</div>
 										<div class="col-md-2 col-sm-2 col-xs-2" >
 											<input type="text" name="price_<?php echo $key+1;?>" id="rate"  required="required" class=" form-control width_80 price_<?php echo $key+1;?>" onchange="order_sum()" readonly>
@@ -231,18 +231,62 @@ a:hover, a:active, a:focus {
 <?php
 	$this->load->view('include/footer');
 ?>
+<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+         rel = "stylesheet">
+<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script>
 var item_nmuber= 1;
-function add_more_items(){
 
+$('#product_id').on('change', function() {
+	var pid = this.value;
+	var uid = $("#username").val();
+	$.ajax({
+	    type : "POST",
+	    url : "<?php echo base_url().$this->controller."/tooltip/" ?>",
+	    data : {pid:pid,uid:uid},
+	    dataType: "json",
+	    success : function (data){
+	    	if(data.status="success"){
+	    		$(function() {
+		    		$(".tooltip_"+item_nmuber).tooltip({
+	               		content: "Cash Rate:"+data.item.cash_rate+'<br>'+"Credit Rate:"+data.item.credit_rate+'<br>'+"Flexible Rate:"+data.item.flexible_rate+'<br>'+"Walking Rate:"+data.item.walkin_rate,
+	               		track:true
+	            	});
+	            });
+	    	}
+	    }
+	});
+});
+
+function add_more_items(){
 	var add_item=1;
 	var total_item= parseInt(item_nmuber) + parseInt(add_item);
 	$("#ordercount").val(total_item);
 	$("#new_item_add").append('<div id="delete_'+total_item+'">');
-	$("#delete_"+total_item).append('<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;"><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-3 col-sm-3 col-xs-3"><select class="form-control select2 product_id" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
+	$("#delete_"+total_item).append('<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;"><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-3 col-sm-3 col-xs-3"><select class="form-control select2 product_id'+total_item+'" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
-?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="rate_'+total_item+'" id="rate" required="required" class=" form-control width_80 rate_'+total_item+'" onchange="order_sum()"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title="tooltip" data-original-title="tooltip" data-id="tooltip_'+total_item+'" style="color:#00acd6;"></i></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
+?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="rate_'+total_item+'" id="rate" required="required" class=" form-control width_80 rate_'+total_item+'" onchange="order_sum()"><a data-toggle="tooltip" title="tooltip" class="tooltip_'+total_item+'"><i class="fa fa-info-circle" aria-hidden="true" style="color:#00acd6;"></i></a></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
+	$('.product_id'+total_item).on('change', function() {
+		var pid = this.value;
+		var uid = $("#username").val();
+		$.ajax({
+		    type : "POST",
+		    url : "<?php echo base_url().$this->controller."/tooltip/" ?>",
+		    data : {pid:pid,uid:uid},
+		    dataType: "json",
+		    success : function (data){
+		    	if(data.status="success"){
+		    		$(function() {
+			    		$(".tooltip_"+total_item).tooltip({
+		               		content: "Cash Rate:"+data.item.cash_rate+'<br>'+"Credit Rate:"+data.item.credit_rate+'<br>'+"Flexible Rate:"+data.item.flexible_rate+'<br>'+"Walking Rate:"+data.item.walkin_rate,
+		               		track:true
+		            	});
+		            });
+		    	}
+		    }
+		});
+	});
 	item_nmuber = item_nmuber + 1;
 }
 

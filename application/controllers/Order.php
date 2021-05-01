@@ -2373,6 +2373,26 @@ for($p=0;$p<count($finalOrderData);$p++) {
         
     }
 
+    function tooltip() {
+
+        $pid = intval($this->input->post('pid'));
+        $userid = intval($this->input->post('uid'));
+        $queryrate = $this->db->where('id',$userid)->get('users');
+        $result = $queryrate->result_array();
+        $productData = array();
+        $query = $this->db->where('id',$pid)->get('products')->row();
+        if(!empty($query)){
+            $status ="success";
+            echo json_encode(array("status"=>$status,"item"=>$query));
+            exit();
+        }else {
+            $status ="fail";
+            echo json_encode(array("status"=>$status));
+            exit();
+        }
+        exit();
+    }
+
 }
 
 
