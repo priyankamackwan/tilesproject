@@ -379,7 +379,24 @@ function price_fetch(itemId,itemNumber=null){
 		    		$(".rate_"+total_item).val(data.price);
 		    		$(".quantity_"+total_item).val(data.qty);
 		    		$(".price_"+total_item).val($(".rate_"+total_item).val() * $(".quantity_"+total_item).val());
+		    		var totalPrice = 0;
+					var totalItem= parseInt(total_item);
+		    		for (var i = 1; i < totalItem+1; i++) {
+						totalPrice +=$(".rate_"+i).val() * $(".quantity_"+i).val();
+						$(".price_"+i).val($(".rate_"+i).val() * $(".quantity_"+i).val());
+					}
+					$("#total_price").val(totalPrice);
+					var tax_percentage = $("#tax_percentage").val();
+					var amountAfterTax = ((totalPrice * parseFloat(tax_percentage))/100);
+					if((amountAfterTax - Math.floor(amountAfterTax)) !== 0) {
+						$("#tax").val('');
+						$("#tax").val(amountAfterTax.toFixed(2));
+					} else {
+						$("#tax").val('');
+						$("#tax").val(amountAfterTax);
+					}
 		    	}
+		    	
 		    }
 		});
 	}else{
