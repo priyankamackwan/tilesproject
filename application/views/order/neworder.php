@@ -47,7 +47,13 @@ a:hover, a:active, a:focus {
 		display: none;
 	}
 }
-
+.iinfo {
+  font-size:15px;
+  position: absolute;
+  padding-top: 10px;
+  padding-left: 5px;
+  cursor: pointer !important; 
+}
 </style>
 <!-- Main Container start-->
 <div class="content-wrapper">
@@ -133,7 +139,7 @@ a:hover, a:active, a:focus {
 													<input type="text" name="rate_<?php echo $key+1;?>" id="price"  required="required" class=" form-control rate_<?php echo $key+1;?>" onchange="order_sum()" style="width:75px;">
 												</div>
 												<div class="col-md-6">
-													<a data-toggle="tooltip" title="tooltip" class="tooltip_<?php echo $key+1;?>"><i class="fa fa-info-circle" aria-hidden="true" style="color:#00acd6;"></i></a>
+													<a data-toggle="tooltip" title="tooltip" class="tooltip_<?php echo $key+1;?>"><i class="fa fa-info-circle iinfo" aria-hidden="true" style="color:#00acd6;"></i></a>
 												</div>
 											</div>
 										</div>
@@ -272,7 +278,7 @@ function add_more_items(){
 	$("#new_item_add").append('<div id="delete_'+total_item+'">');
 	$("#delete_"+total_item).append('<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;"><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-3 col-sm-3 col-xs-3"><select class="form-control select2 product_id'+total_item+'" name="product_id'+total_item+'" style="width:100%;" id="product_id" required="required" onchange="price_fetch(this.value,'+total_item+')"><option value="" selected >All</option><?php if(!empty($activeProducts) && count($activeProducts) > 0 ){
     foreach ($activeProducts as $activeProductsKey => $activeProductsValue){
-?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><div  class="form-group"><div class="col-md-6"><input type="text" name="rate_'+total_item+'" id="price"  required="required" class=" form-control rate_'+total_item+'" onchange="order_sum()" style="width:75px;"></div><div class="col-md-6"><a data-toggle="tooltip" title="tooltip" class="tooltip_'+total_item+'"><i class="fa fa-info-circle" aria-hidden="true" style="color:#00acd6;"></i></a></div></div></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2" style="font-size:12px;"><?php echo "Pending";?></div><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
+?><option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option><?php } }else{ ?><option value="">-- No Item Available --</option><?php } ?></select></div><div class="col-md-2 col-sm-3 col-xs-3"><input type="text" name="quantity_'+total_item+'" id="quantity" required="required" onkeypress="return IsNumeric(event);" class=" form-control width_80 quantity_'+total_item+'" onchange="order_sum()"></div><div class="col-md-2 col-sm-2 col-xs-2"><div  class="form-group"><div class="col-md-6"><input type="text" name="rate_'+total_item+'" id="price"  required="required" class=" form-control rate_'+total_item+'" onchange="order_sum()" style="width:75px;"></div><div class="col-md-6"><a data-toggle="tooltip" title="tooltip" class="tooltip_'+total_item+'"><i class="fa fa-info-circle iinfo" aria-hidden="true" style="color:#00acd6;"></i></a></div></div></div><div class="col-md-2 col-sm-2 col-xs-2"><input type="text" name="price_'+total_item+'" id="rate_" required="required" readonly class=" form-control width_80 price_'+total_item+'" onchange="order_sum()"></div><div class="col-md-1 col-sm-2 col-xs-2" style="font-size:12px;"><?php echo "Pending";?></div><div class="col-md-1 col-sm-2 col-xs-2"></div><div class="col-md-1 col-sm-2 col-xs-2 marginright_20px"><a class="btn btn-danger" onclick="remove_item('+total_item+')" data-toggle="tooltip" title="Delete"><i class="fa fa-close"></i></a></div></div>');
 	$('select').select2();
 	$('.product_id'+total_item).on('change', function() {
 		var pid = this.value;
