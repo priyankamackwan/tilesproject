@@ -3,7 +3,7 @@
     $this->load->view('include/leftsidemenu');
     // Save Status from dashboard page unpaid orders
     $dash_status=$client_name='';
-    if(isset($_GET['status']) && $_GET['status']!='' && $_GET['status']=="unpaid"){
+    if(isset($_GET['status']) && $_GET['status']!='' && $_GET['status']=="new"){
         $dash_status='selected';
     }
     if(isset($_GET['client_name']) && $_GET['client_name']!='' ){
@@ -13,7 +13,6 @@
     $from_dateshow = date("d/m/Y", strtotime("first day of this month"));
     $to_dateshow = date("d/m/Y");
 ?>
-
 <!-- Main Container start-->
 <div class="content-wrapper">
     <section class="content-header">
@@ -23,9 +22,7 @@
             echo $this->session->flashdata($this->msgDisplay);
         ?>
     </section>
-
     <section class="content">
-
         <div class="box">
             <div class="box-body">
                 <div class="row form-group">
@@ -37,12 +34,6 @@
                             <div class="col-md-11 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <div class="row">
-
-                                        <!-- Client Filter  -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12" >
-                                            <!-- <label class="control-label" style="margin-top:7px;">Company Name:</label> -->
-                                        </div>
-
                                         <!-- Client Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select name="clientList" class="form-control select2" style="width: 100%;" id="clientList">
@@ -63,12 +54,6 @@
                                                 ?>
                                             </select>
                                         </div>
-
-                                        <!-- Item Filter -->
-                                        <div class="col-md-1 col-sm-12 col-xs-12">
-                                            <!-- <label class="control-label" style="margin-top:7px;">Item:</label> -->
-                                        </div>
-
                                         <!-- Item Filter Dropdown -->
                                         <div class="col-md-3 col-sm-12 col-xs-12">
                                             <select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
@@ -89,14 +74,15 @@
                                                 ?>
                                             </select>
                                         </div>
-
-                                        <!-- Date Range Filter -->
-                                        <!-- <div class="col-md-1 col-sm-12 col-xs-12"> -->
-                                            <!-- <label class="control-label" style="margin-top:7px;">Date:</label> -->
-                                        <!-- </div> -->
-
-                                        <!-- Date Range Filter Dropdown -->
-                                        <div class="col-md-4 col-sm-12 col-xs-12 ">
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <select class="form-control" name="status" style="width:100%;" id="status">
+                                                <option value="">All Status</option>
+                                                <option value="new" <?php echo $dash_status;?>>New</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 col-xs-12 ">
                                             <div class="input-group">
                                                 <input class="form-control" placeholder="Sample Request Date" required="" id="salesOrderDate" name="salesOrderDate" type="text" value="<?php echo $from_dateshow.' - '.$to_dateshow; ?>">
                                                 <label class="input-group-addon btn" for="salesOrderDate">
@@ -110,15 +96,14 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-            
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title"><?php echo $msgName;?></h3>
@@ -153,7 +138,6 @@
 <?php
 	$this->load->view('include/footer');
 ?>
-
 <script>
     function resetDatePicker(){
         $("#salesOrderDate").val('');
@@ -167,27 +151,21 @@
                 format: 'DD-MM-YYYY',
             },
         });
-
         $('#salesOrderDate').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-
             daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
             daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
-
             dataTable1.draw();
         });
-
         $('#salesOrderDate').on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
             dataTable1.draw();
         });
-
         daterangeStartValue = moment($('#salesOrderDate').val().split(" - ")[0],'DD/MM/YYYY').format('YYYY-MM-DD');
         daterangeEndValue = moment($('#salesOrderDate').val().split(" - ")[1],'DD/MM/YYYY').format('YYYY-MM-DD');
     });
 
     jQuery(document).ready(function(){
-        
         dataTable1 = $('#datatables').DataTable({
             "processing": true,
             "serverSide": true,
@@ -199,6 +177,7 @@
                     data.userName = $('#clientList').val();
                     data.productId = $('#productsList').val();
                     data.salesOrderDate = $('#salesOrderDate').val();
+                    data.status = $('#status').val();
                     data.startdate = daterangeStartValue;
                     data.enddate = daterangeEndValue;
                 },
@@ -247,11 +226,21 @@
     });
     // Filter for User list
     $(document).on("change","#clientList",function(evt){
-        // dataTable1.rows().deselect();
         dataTable1.draw();
     });
     // Filter for Product list
     $(document).on("change","#productsList",function(evt){
+        dataTable1.draw();
+    });
+    // Filter for Status
+    $(document).on("change","#status",function(evt){
+        dataTable1.draw();
+    });
+    // On reset date range
+    $(document).on("click","#resetDatePicker",function(evt){
+        //blank start and end date
+        daterangeStartValue="";
+        daterangeEndValue="";
         dataTable1.draw();
     });
 </script>

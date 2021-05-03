@@ -409,10 +409,8 @@
 
         $('#salesOrderDate').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-
             daterangeStartValue = picker.startDate.format('YYYY-MM-DD');
             daterangeEndValue= picker.endDate.format('YYYY-MM-DD');
-
             dataTable1.draw();
         });
 
@@ -471,7 +469,6 @@
 	    dataTable1 = $('#datatables').DataTable({
             "processing": true,
             "serverSide": true,
-            'dom': 'lBfrtip',
             "buttons": 
             [{
                 extend:'excel',

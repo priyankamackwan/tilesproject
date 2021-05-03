@@ -81,6 +81,9 @@ class SampleRequest extends CI_Controller {
             $productId = $this->input->post('productId');
             // User salesOrderDate for filter
             $salesOrderDate = $this->input->post('salesOrderDate');
+
+            $Status = $this->input->post('Status');
+
             if(!empty($username)){
                 if($where == null){
                     $where .= 'LOWER(users.company_name) = "'.strtolower($username).'" ';
@@ -97,10 +100,48 @@ class SampleRequest extends CI_Controller {
             }
             if(!empty($salesOrderDate) && isset($_POST['startdate'])){
 
-                $whereDate .= '(DATE_FORMAT(orders.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
+                $whereDate .= '(DATE_FORMAT(sample_requests.created,"%Y-%m-%d") BETWEEN "'.$_POST['startdate'].'" AND "'.$_POST['enddate'].'")';
                 $whereDatechange='yes';
             }
+            if(!empty($Status)){
+                
+                if(strtolower($Status) == 'new'){
+                    $smp_status = 1;
+                }elseif (strtolower($Status) == 'approved') {
+                    $smp_status = 2;
+                }elseif (strtolower($Status) == 'cancelled') {
+                    $smp_status = 3;
+                }
+                
+                if($where == null){
+                    $where .= 'sample_requests.status = "'.$smp_status.'"';
+                }else{
+                    $where .= ' AND sample_requests.status = "'.$smp_status.'" ';
+                }
+            }
             $totalData = $this->samples_model->get_SampleDatatables('','','','',$where,'','',$whereDate,$this->table);
+            // Filter data using serach.
+            if(!empty($this->input->post('search')['value']))
+            {
+                if($where != null){
+                    $where.= ' AND ';
+                }
+                $status=$status=strtolower($this->input->post('search')['value']);
+                if(strtolower($this->input->post('search')['value']) == 'new'){
+                    $status = 1;
+                }elseif (strtolower($this->input->post('search')['value']) == 'approved') {
+                    $status = 2;
+                }elseif (strtolower($this->input->post('search')['value']) == 'cancelled') {
+                    $statuss = 3;
+                }
+                // Serch bar value
+                $search=$this->input->post('search')['value'];
+
+                $where .= '(users.company_name LIKE "'.$search.'%" or ';
+
+                $where .= 'sample_requests.status LIKE "'.$status.'%" )';
+            }
+            $AlltotalFiltered = $this->samples_model->get_SampleDatatables($limit,$start,$dir,'','',$whereDate,$table);
             $totalFiltered = $totalData['count'];
             $this->$model->countTableRecords($this->table,array('is_deleted'=>0));
             $data = array();

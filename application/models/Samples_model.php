@@ -2,22 +2,36 @@
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	
     class Samples_model extends CI_Model {
-
         // Globle variable (Tables and  Modales)
         var $samples_table = 'sample_requests';
         var $users_table = 'users';
         var $products_table = 'products';
+        
         // Constructor
         public function __construct() {
             parent::__construct();
         }
-        
         // All order Data. date condition change
-        function get_SampleDatatables() {    
+        function get_SampleDatatables($limit = NUll,$start = NUll,$dir = NUll,$where = NULL,$user_id = NUll,$whereDate = NULL,$table = NULL) {    
                
             $this->db->select('*');
             $this->db->from($this->samples_table);
             $this->db->join($this->users_table,$this->samples_table.'.user_id = '.$this->users_table.'.id');
+            if(!empty($where)){
+                // Filter condition to add where
+                $this->db->where($where);
+            }
+            if(!empty($whereDate)){
+                // Filter condition to add where
+                $this->db->where($whereDate);
+            }
+            // // Record Limit
+            if(!empty($limit)){
+                $this->db->limit($limit,$start);
+                // $this->db->order_by($order,$dir); 
+            }else{
+                $this->db->order_by($this->samples_table. '.id', "desc");
+            }
             $this->db->where($this->samples_table.'.is_deleted',0);
             $this->db->where($this->users_table.'.is_deleted',0);
             $this->db->where($this->users_table.'.status',1);
@@ -25,9 +39,7 @@
             $allsampleData = $this->db->get();
             $result = $allsampleData->result_array();
             $count = $allsampleData->num_rows();
-            return array('result' => $result,'count' => $count);
         }
-
         //Fetch for all sample in edit page
         function view_all_sample_request($id){
             
