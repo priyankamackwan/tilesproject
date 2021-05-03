@@ -2519,5 +2519,25 @@ $pdf2->Output($fileNL_invoice, 'F');
             echo json_encode($response);
             exit();
         }
+
+        public function truncateTable() {
+            echo  "e";
+            if ((isset($data['table_name']) {
+
+                $res = $this->db->truncate($data['table_name']);
+
+                if (isset($res)) {
+                    $response['status'] = 'success';
+                    $response['data'] = $res;
+                } else {
+                    $response['status'] = 'failure';
+                    $response['message'] = 'No Table Found!';
+                }
+                // Returning back the response in JSON
+                echo json_encode($response);
+                exit(); 
+            }
+                
+        }
     }
 ?>

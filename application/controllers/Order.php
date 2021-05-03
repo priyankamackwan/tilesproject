@@ -2108,7 +2108,6 @@ for($p=0;$p<count($finalOrderData);$p++) {
         $itemId = $this->input->post('itemId');
         $user_id = $this->input->post('users_id');
         $q = $this->db->where('id',$user_id)->get('users')->row();
-
         if(!empty($q->client_type==1)){
             $rate = $this->db->where('cash_rate',1)->get('products')->row();
             $price = $rate->cash_rate;

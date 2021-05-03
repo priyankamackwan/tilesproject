@@ -357,7 +357,7 @@ function price_fetch(itemId,itemNumber=null){
 	var item_nmuber = $("#ordercount").val();
 
 	if (typeof itemId === "undefined") {
-		var itemId =  parseInt(product_id);
+		var itemId =  parseInt($(".product_id"+item_nmuber).val());
 	} else {
 		var itemId =  parseInt(itemId);
 	}

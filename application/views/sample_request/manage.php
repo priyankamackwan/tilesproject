@@ -40,9 +40,7 @@
                                                 <option value="" selected="selected">All Companies</option>
                                                 <?php
                                                     if(!empty($activeUsers) && count($activeUsers) > 0 ){
-                                                    
-                                                        foreach ($activeUsers as $activeUsersKey => $activeUsersValue) {
-                                                ?>
+                                                        foreach ($activeUsers as $activeUsersKey => $activeUsersValue) {?>
                                                             <option value="<?php echo $activeUsersValue['company_name']; ?>" <?php if(isset($client_name) && $client_name!='' && $client_name==$activeUsersValue['company_name']){ echo 'selected';}?>><?php echo $activeUsersValue['company_name']; ?></option>
                                                 <?php
                                                         }
@@ -60,18 +58,13 @@
                                                 <option value="" selected >All Items</option>
                                                 <?php
                                                     if(!empty($activeProducts) && count($activeProducts) > 0 ){
-                                                    
-                                                    foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {
-                                                ?>
-                                                    <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
+                                                    foreach ($activeProducts as $activeProductsKey => $activeProductsValue) {?>
+                                                        <option value="<?php echo $activeProductsValue['id']; ?>"><?php echo $activeProductsValue['name'].' ( '.$activeProductsValue['design_no'].' )'; ?></option>
                                                 <?php
                                                     }
-                                                    }else{
-                                                ?>
+                                                    }else{?>
                                                     <option value="">-- No Item Available --</option>
-                                                <?php
-                                                    }
-                                                ?>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                         <div class="col-md-3 col-sm-12 col-xs-12">
@@ -167,63 +160,61 @@
 
     jQuery(document).ready(function(){
         dataTable1 = $('#datatables').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax":{
-                "url": "<?php echo base_url().$this->controller."/server_data/" ?>",
-                "dataType": "json",
-                "type": "POST",
-                "data":function(data) {
-                    data.userName = $('#clientList').val();
-                    data.productId = $('#productsList').val();
-                    data.salesOrderDate = $('#salesOrderDate').val();
-                    data.status = $('#status').val();
-                    data.startdate = daterangeStartValue;
-                    data.enddate = daterangeEndValue;
+                "processing": true,
+                "serverSide": true,
+                "ajax":{
+                    "url": "<?php echo base_url().$this->controller."/server_data/" ?>",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data":function(data) {
+                        data.userName = $('#clientList').val();
+                        data.productId = $('#productsList').val();
+                        data.salesOrderDate = $('#salesOrderDate').val();
+                        data.status = $('#status').val();
+                        data.startdate = daterangeStartValue;
+                        data.enddate = daterangeEndValue;
+                    },
                 },
-            },
-            "columns": [
-                { "data": "id"},      
-                { "data": "product_id"},
-                { "data": "user_name"},
-                { "data": "tax"},
-                { "data": "cargo"},
-                { "data": "cargo_number"},
-                { "data": "location"},
-                { "data": "mark"},
-                { "data": "status"},
-                { "data": "created"},
-                { "data": "manage"}
-            ],
-            "columnDefs": [ {
-                "targets": [8],
-                "orderable": false,  
-            },
-            {
-            "targets": [6],
-            "orderable": true,  
-            },
-            {
-                "className": 'text-center',
-                "targets":   [0],
-                "orderable": false
-            },
-            {
-                "className": 'text-center',
-                "targets":   [5,6,7,8],
-                "orderable": true
-            }],
-            "order": [[ 0, "DESC"]],
+                "columns": [
+                    { "data": "id"},      
+                    { "data": "product_id"},
+                    { "data": "user_name"},
+                    { "data": "tax"},
+                    { "data": "cargo"},
+                    { "data": "cargo_number"},
+                    { "data": "location"},
+                    { "data": "mark"},
+                    { "data": "status"},
+                    { "data": "created"},
+                    { "data": "manage"}
+                ],
+                "columnDefs": [ {
+                    "targets": [8],
+                    "orderable": false,  
+                },{
+                "targets": [6],
+                "orderable": true,  
+                },{
+                    "className": 'text-center',
+                    "targets":   [0],
+                    "orderable": false
+                },{
+                    "className": 'text-center',
+                    "targets":   [5,6,7,8],
+                    "orderable": true
+                }],
+                "order": [[ 0, "DESC"]], 
         });
         $(".dt-buttons").css("margin-top", "-4px"); // for manage margin of excel button
 
         $('.search-input-select').on( 'change', function (e) {   
-            // for dropdown
+                // for dropdown
             var i =$(this).attr('data-column');  // getting column index
             var v =$(this).val();  // getting search input value
             dataTable1.api().columns(i).search(v).draw();
         });
     });
+
     // Filter for User list
     $(document).on("change","#clientList",function(evt){
         dataTable1.draw();
