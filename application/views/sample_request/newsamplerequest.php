@@ -23,11 +23,9 @@
 		          	<div class="box-body">
 		          		<form action="<?php echo base_url().$this->controller?>/submitRequest" method="post" id="listform" data-parsley-validate class="form-horizontal form-label-left">
 		          			<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="product_name">
-									User List<font color="red"><span class="required">*</span></font> :
-								</label>
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="product_name">User List<font color="red"><span class="required">*</span></font> :</label>
 								<div class="col-md-9 col-sm-12 col-xs-12">
-									<p><select class="form-control select2" name="usersList" style="width:100%;" id="usersList">
+									<select class="form-control select2" name="usersList" style="width:100%;" id="usersList">
                                         <option value="" selected >All Users</option>
                                         <?php
                                             if(!empty($activecustomer) && count($activecustomer) > 0 ){
@@ -46,15 +44,12 @@
                                     </select>
                                     <input type="hidden" name="userid" id="userid">
                                     <label id="usersList-error" class="error" for="usersList"></label>
-                                	</p>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="product_name">
-									Items<font color="red"><span class="required">*</span></font> :
-								</label>
+								<label class="control-label col-md-3 col-sm-12 col-xs-12" for="product_name">Items<font color="red"><span class="required">*</span></font> :</label>
 								<div class="col-md-9 col-sm-12 col-xs-12">
-									<p><select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
+									<select class="form-control select2" name="productsList" style="width:100%;" id="productsList">
                                         <option value="" selected >All Items</option>
                                         <?php
                                             if(!empty($activeProducts) && count($activeProducts) > 0 ){
@@ -72,7 +67,6 @@
                                         ?>
                                     </select>
                                     <label id="productsList-error" class="error" for="productsList"></label>
-                                	</p>
 								</div>
 							</div>
 							<div class="form-group">
