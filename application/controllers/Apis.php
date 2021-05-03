@@ -1651,6 +1651,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                         $this->db->select('s.id,u.company_name,u.id as user_id,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                         $this->db->from('sample_requests as s');
                         $this->db->where('s.is_deleted',0);
+                        $this->db->where(['s.status' => 1]);
                         $this->db->join('products as p', 's.product_id = p.id');
                         $this->db->join('users as u', 's.user_id = u.id','left');
                         $this->db->where('s.user_id',$this->user_id);
@@ -1658,6 +1659,7 @@ $pdf2->Output($fileNL_invoice, 'F');
                     }else {
                         $this->db->select('s.id,u.company_name,u.id as user_id,p.name,s.tax,s.cargo,s.cargo_number,s.location,s.mark');
                         $this->db->from('sample_requests as s');
+                        $this->db->where(['s.status' => 1]);
                         $this->db->where('s.is_deleted',0);
                         $this->db->join('products as p', 's.product_id = p.id');
                         $this->db->join('users as u', 's.user_id = u.id','left');
