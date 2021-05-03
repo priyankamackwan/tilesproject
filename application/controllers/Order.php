@@ -2093,10 +2093,11 @@ for($p=0;$p<count($finalOrderData);$p++) {
         $this->db->where('id', $itemId);
         $priceData = $this->db->get()->row();
         if(isset($priceData) && $priceData!='' && count($priceData)> 0){
-            $message=$priceData->$client_type; 
+            $message=$priceData->$client_type;
+            $qty=$priceData->quantity; 
             $status='success';   
         }        
-        echo json_encode(array("status"=>$status,"price"=>$message));
+        echo json_encode(array("status"=>$status,"price"=>$message,"qty"=>$qty));
         exit;
     }
 

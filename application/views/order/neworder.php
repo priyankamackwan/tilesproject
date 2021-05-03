@@ -371,6 +371,8 @@ function price_fetch(itemId,itemNumber=null){
 		    success : function (data){
 		    	if(data.status="success"){
 		    		$(".rate_"+total_item).val(data.price);
+		    		$(".quantity_"+total_item).val(data.qty);
+		    		$(".price_"+total_item).val($(".rate_"+total_item).val() * $(".quantity_"+total_item).val());
 		    	}
 		    }
 		});
@@ -404,9 +406,6 @@ function order_sum(){
 		$("#tax").val(amountAfterTax);
 	}
 }
-
-
-
 
 function taxToRateConversion() 
 { // enter tax % and tax amount reflex on basis of it
